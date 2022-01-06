@@ -17,13 +17,11 @@ import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Tooltip from "@mui/material/Tooltip";
-import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import { mainListItems } from "../components/ListItemComponent";
@@ -157,7 +155,7 @@ const DashboardPage = () => {
                 aria-haspopup="true"
                 aria-expanded={openDropDown ? "true" : undefined}
               >
-                <Avatar sx={{ width: 32, height: 32 }}></Avatar>
+            <Avatar sx={{ width: 32, height: 32 }}></Avatar>
               </IconButton>
             </Tooltip>
             <Menu

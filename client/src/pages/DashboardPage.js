@@ -172,6 +172,12 @@ const DashboardPage = () => {
             >
               <MenuItem>
                 <ListItemIcon>
+                  <Settings fontSize="small" />
+                </ListItemIcon>
+                Settings
+              </MenuItem>
+              <MenuItem>
+                <ListItemIcon>
                   <Logout fontSize="small" />
                 </ListItemIcon>
                 Logout

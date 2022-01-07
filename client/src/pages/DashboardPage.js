@@ -175,10 +175,12 @@ const DashboardPage = () => {
                 Settings
               </MenuItem>
               <MenuItem>
+                <a href="/login" className="text-decoration-none text-dark">
                 <ListItemIcon>
                   <Logout fontSize="small" />
                 </ListItemIcon>
-                Logout
+                Logout 
+                </a>
               </MenuItem>
             </Menu>
           </Toolbar>

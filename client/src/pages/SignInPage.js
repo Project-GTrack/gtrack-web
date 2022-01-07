@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
 
 function Copyright(props) {
   return (
@@ -23,6 +24,7 @@ function Copyright(props) {
 
 const theme = createTheme();
 const SignInPage = () => {
+    const navigate = useNavigate();
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -80,6 +82,7 @@ const SignInPage = () => {
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
                   color='success'
+                  onClick={()=>navigate('/dashboard')}
                 >
                   Sign In
                 </Button>

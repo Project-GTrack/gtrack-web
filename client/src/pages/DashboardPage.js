@@ -1,33 +1,26 @@
 import * as React from "react";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
-import MuiDrawer from "@mui/material/Drawer";
-import Box from "@mui/material/Box";
-import MuiAppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import Badge from "@mui/material/Badge";
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
-import Link from "@mui/material/Link";
-import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import Avatar from "@mui/material/Avatar";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import Tooltip from "@mui/material/Tooltip";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import { mainListItems } from "../components/ListItemComponent";
 import Chart from "../components/ChartComponent";
 import Deposits from "../components/DepositComponent";
 import Orders from "../components/OrderComponent";
+import DashboardCard from "../components/DashboardCardComponents";
+import MuiAppBar from "@mui/material/AppBar";
+import MuiDrawer from "@mui/material/Drawer";
+import MenuIcon from "@mui/icons-material/Menu"
+import ArticleIcon from "@mui/icons-material/Article";
+import PersonIcon from "@mui/icons-material/Person";
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import DeleteIcon from "@mui/icons-material/Delete";
+import AutoDeleteIcon from '@mui/icons-material/AutoDelete';
+import { Card, ListItemIcon, MenuItem, Avatar, Link, Toolbar, Box, CssBaseline,Paper,
+        Grid, Container, Badge, IconButton, Divider, Typography, List, Menu, Tooltip,
+        CardContent,CardActions,Button
+} from '@mui/material';
 
 function Copyright(props) {
   return (
@@ -109,8 +102,15 @@ const DashboardPage = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const dashcards = [
+        {title: "Available Drivers", count: 5, icon:<PersonIcon style={{float:'right'}} fontSize="large"/>},
+        {title: "Available Trucks", count: 5, icon:<LocalShippingIcon style={{float:'right'}} fontSize="large"/>},
+        {title: "Dumpsters", count: 14,icon:<DeleteIcon style={{float:'right'}} fontSize="large"/>},
+        {title: "Number of Collections", count: 10,icon:<AutoDeleteIcon style={{float:'right'}} fontSize="large"/>}
+  ];
 
   return (
+    
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
@@ -132,6 +132,8 @@ const DashboardPage = () => {
             >
               <MenuIcon />
             </IconButton>
+            {/* <TextField id="filled-search" label="Search field" type="search" /> */}
+       
             <Typography
               component="h1"
               variant="h6"
@@ -237,7 +239,14 @@ const DashboardPage = () => {
         >
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+            <Button variant="contained" style={{float: 'right'}} startIcon={<ArticleIcon/>} color="success">Generate Report</Button>
             <Grid container spacing={3}>
+            {dashcards.map(dashcard => (
+                <Grid item key={dashcard.id} xs={12} md={6} lg={3}>
+                   <DashboardCard dashcard={dashcard}/>
+                 </Grid>
+              ))}
+
               {/* Chart */}
               <Grid item xs={12} md={8} lg={9}>
                 <Paper
@@ -251,25 +260,7 @@ const DashboardPage = () => {
                   <Chart />
                 </Paper>
               </Grid>
-              {/* Recent Deposits */}
-              <Grid item xs={12} md={4} lg={3}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: "flex",
-                    flexDirection: "column",
-                    height: 240,
-                  }}
-                >
-                  <Deposits />
-                </Paper>
-              </Grid>
-              {/* Recent Orders */}
-              <Grid item xs={12}>
-                <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-                  <Orders />
-                </Paper>
-              </Grid>
+           
             </Grid>
             <Copyright sx={{ pt: 4 }} />
           </Container>

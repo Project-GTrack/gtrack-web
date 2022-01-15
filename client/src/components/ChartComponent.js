@@ -25,7 +25,7 @@ export default function Chart() {
 
   return (
     <React.Fragment>
-      <Title>Today</Title>
+      <Title>Total Garbage Weight(in tons) Per Week In A Monthly Basis</Title>
       <ResponsiveContainer>
         <LineChart
           data={data}

@@ -8,11 +8,14 @@ import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
+import TextField from '@mui/material/TextField';
 import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
+import PropTypes from 'prop-types';
+import CloseIcon from '@mui/icons-material/Close';
 import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -22,12 +25,23 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Tooltip from "@mui/material/Tooltip";
+import Modal from '@mui/material/Modal';
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import MainListItems from "../components/ListItemComponent";
-import Chart from "../components/ChartComponent";
-import Deposits from "../components/DepositComponent";
-import Orders from "../components/OrderComponent";
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import DriversComponent from "../components/employees/DriversComponent";
+import AdminsComponent from "../components/employees/AdminsComponent";
+import InactiveAccountsComponent from "../components/employees/InactiveAccountsComponent";
+import AddNewEmployeeModal from "../components/employees/modals/AddNewEmployeeModal";
 
 function Copyright(props) {
   return (
@@ -92,24 +106,41 @@ const Drawer = styled(MuiDrawer, {
     }),
   },
 }));
-
+const pages = ['Drivers', 'Admins', 'Inactive Accounts'];
 const mdTheme = createTheme();
 
-const DashboardPage = () => {
+const EmployeesPage = () => {
+  var accounts;
+  const [gender, setGender] = React.useState('Male');
+  const [openModal, setOpenModal] = React.useState(false);
+  const [anchorElNav, setAnchorElNav] = React.useState("Drivers");
   const [open, setOpen] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const openDropDown = Boolean(anchorEl);
   const toggleDrawer = () => {
     setOpen(!open);
   };
-
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+  const handleGender = (event) => {
+    setGender(
+      // @ts-expect-error autofill of arbitrary value is not handled.
+      event.target.value,
+    );
+  };
+  if(anchorElNav === "Drivers"){
+    accounts = <DriversComponent/>
+  }else if(anchorElNav === "Admins"){
+    accounts = <AdminsComponent/>
+  }else{
+    accounts = <InactiveAccountsComponent/>
+  }
   return (
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: "flex" }}>
@@ -139,7 +170,7 @@ const DashboardPage = () => {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              Dashboard
+              Employees
             </Typography>
             <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
@@ -238,36 +269,31 @@ const DashboardPage = () => {
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
-              {/* Chart */}
-              <Grid item xs={12} md={8} lg={9}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: "flex",
-                    flexDirection: "column",
-                    height: 240,
-                  }}
-                >
-                  <Chart />
-                </Paper>
+            <Grid item padding={3}>
+                <button className='btn btn-success position-absolute -mr-5' onClick={handleOpenModal}>Add New Employee</button>
+             <AddNewEmployeeModal openModal={openModal} handleCloseModal={handleCloseModal} handleOpenModal={handleOpenModal} gender={gender} handleGender={handleGender}/>
               </Grid>
-              {/* Recent Deposits */}
-              <Grid item xs={12} md={4} lg={3}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: "flex",
-                    flexDirection: "column",
-                    height: 240,
-                  }}
-                >
-                  <Deposits />
-                </Paper>
-              </Grid>
-              {/* Recent Orders */}
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-                  <Orders />
+                <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, marginTop: -3 }}>
+            {pages.map((page) => (
+              (anchorElNav === page)? 
+              <Button
+                key={page}
+                onClick={()=>setAnchorElNav(page)}
+                sx={{ my: 2, color: 'black', display: 'block', borderBottom: 5, borderBottomColor: 'black'}}
+              >
+                {page}
+              </Button>:<Button
+                key={page}
+                onClick={()=>setAnchorElNav(page)}
+                sx={{ my: 2, color: 'black', display: 'block' }}
+              >
+                {page}
+              </Button>
+            ))}
+          </Box>
+              {accounts}
                 </Paper>
               </Grid>
             </Grid>
@@ -306,4 +332,16 @@ const styles = {
   },
 };
 
-export default DashboardPage;
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
+
+export default EmployeesPage;

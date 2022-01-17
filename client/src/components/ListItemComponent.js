@@ -11,11 +11,14 @@ import ScheduleIcon from '@mui/icons-material/Schedule';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AssessmentIcon from '@mui/icons-material/Assessment';
+import { useNavigate } from 'react-router-dom';
 
 
-export const mainListItems = (
+const MainListItems = () => {
+  const navigate = useNavigate();
+  return (
   <div>
-    <ListItem button>
+    <ListItem button onClick={()=>navigate('/dashboard')}>
       <ListItemIcon>
         <DashboardIcon />
       </ListItemIcon>
@@ -45,7 +48,7 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Schedules" />
     </ListItem>
-    <ListItem button>
+    <ListItem button onClick={()=>navigate('/employees')} >
       <ListItemIcon>
         <PeopleIcon />
       </ListItemIcon>
@@ -70,4 +73,7 @@ export const mainListItems = (
       <ListItemText primary="Reports" />
     </ListItem>
   </div>
-);
+)
+}
+
+export default MainListItems;

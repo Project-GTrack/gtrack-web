@@ -80,6 +80,15 @@ export default function AddNewDumpsterModal(props) {
       <TextField
         autoFocus
         margin="dense"
+        id="postal"
+        label="Postal Code"
+        type="text"
+        fullWidth
+        variant="standard"
+      />
+      <TextField
+        autoFocus
+        margin="dense"
         id="longitude"
         label="Longitude"
         type="text"

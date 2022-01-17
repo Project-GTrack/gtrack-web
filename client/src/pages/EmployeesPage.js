@@ -1,98 +1,68 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
-import Button from "@mui/material/Button";
-import DriversComponent from "../components/employees/DriversComponent";
-import AdminsComponent from "../components/employees/AdminsComponent";
-import InactiveAccountsComponent from "../components/employees/InactiveAccountsComponent";
-import AddNewEmployeeModal from "../components/employees/modals/AddNewEmployeeModal";
-import PageLayout from "./PageLayout";
-
-const pages = ["Drivers", "Admins", "Inactive Accounts"];
-
+import React,{useState} from 'react';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
+import PropTypes from 'prop-types';
+import PageLayout from './PageLayout';
+import DriversComponent from '../components/employees/DriversComponent'
+import AdminsComponent from '../components/employees/AdminsComponent'
+import InactiveAccountsComponent from '../components/employees/InactiveAccountsComponent'
 const EmployeesPage = () => {
-  var accounts;
-  const [gender, setGender] = React.useState("Male");
-  const [openModal, setOpenModal] = React.useState(false);
-  const [anchorElNav, setAnchorElNav] = React.useState("Drivers");
-  const [open, setOpen] = React.useState(true);
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const handleOpenModal = () => setOpenModal(true);
-  const handleCloseModal = () => setOpenModal(false);
-  const handleGender = (event) => {
-    setGender(
-      // @ts-expect-error autofill of arbitrary value is not handled.
-      event.target.value
-    );
-  };
-  if (anchorElNav === "Drivers") {
-    accounts = <DriversComponent />;
-  } else if (anchorElNav === "Admins") {
-    accounts = <AdminsComponent />;
-  } else {
-    accounts = <InactiveAccountsComponent />;
-  }
-  return (
-    <PageLayout headerTitle={"Employees"}>
-      <Grid container spacing={3}>
-        <Grid item padding={3}>
-          <button
-            className="btn btn-success position-absolute -mr-5"
-            onClick={handleOpenModal}
+    const [value, setValue] = useState(0);
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
+    function a11yProps(index) {
+        return {
+            id: `simple-tab-${index}`,
+            'aria-controls': `simple-tabpanel-${index}`,
+        };
+    }
+    function TabPanel(props) {
+        const { children, value, index, ...other } = props;
+      
+        return (
+          <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+            {...other}
           >
-            Add New Employee
-          </button>
-          <AddNewEmployeeModal
-            openModal={openModal}
-            handleCloseModal={handleCloseModal}
-            handleOpenModal={handleOpenModal}
-            gender={gender}
-            handleGender={handleGender}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-            <Box
-              sx={{
-                flexGrow: 1,
-                display: { xs: "none", md: "flex" },
-                marginTop: -3,
-              }}
-            >
-              {pages.map((page) =>
-                anchorElNav === page ? (
-                  <Button
-                    key={page}
-                    onClick={() => setAnchorElNav(page)}
-                    sx={{
-                      my: 2,
-                      color: "black",
-                      display: "block",
-                      borderBottom: 3,
-                      borderRadius: 0,
-                      borderBottomColor: "black",
-                    }}
-                  >
-                    {page}
-                  </Button>
-                ) : (
-                  <Button
-                    key={page}
-                    onClick={() => setAnchorElNav(page)}
-                    sx={{ my: 2, color: "black", display: "block" }}
-                  >
-                    {page}
-                  </Button>
-                )
-              )}
+            {value === index && (
+              <Box sx={{ p: 3 }}>
+                {children}
+              </Box>
+            )}
+          </div>
+        );
+      }
+      
+      TabPanel.propTypes = {
+        children: PropTypes.node,
+        index: PropTypes.number.isRequired,
+        value: PropTypes.number.isRequired,
+      };
+    return (
+        <PageLayout headerTitle={"Employees"}>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                <Tab style={{ fontWeight: 600 }} label="Drivers" {...a11yProps(0)} />
+                <Tab style={{ fontWeight: 600 }} label="Admins" {...a11yProps(1)} />
+                <Tab style={{ fontWeight: 600 }} label="Inactive Accounts" {...a11yProps(2)} />
+            </Tabs>
             </Box>
-            {accounts}
-          </Paper>
-        </Grid>
-      </Grid>
-    </PageLayout>
-  );
-};
+            <TabPanel value={value} index={0}>
+                <DriversComponent />
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+            <AdminsComponent />
+            </TabPanel>
+            <TabPanel value={value} index={2}>
+            <InactiveAccountsComponent />
+            </TabPanel>
+        </PageLayout>
+    )
+}
 
-export default EmployeesPage;
+export default EmployeesPage

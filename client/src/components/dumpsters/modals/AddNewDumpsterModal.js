@@ -64,16 +64,34 @@ export default function AddNewDumpsterModal(props) {
     open={props.openModal}
   >
     <BootstrapDialogTitle id="customized-dialog-title" onClose={props.handleCloseModal}>
-      Add New Dumpster/Pickup Point
+      Add New Dumpster
     </BootstrapDialogTitle>
     <DialogContent dividers>
     <Box sx={{ width: '100%' }}>
   <TextField
         autoFocus
         margin="dense"
-        id="location"
-        label="Location"
-        type="location"
+        id="address"
+        label="Address"
+        type="text"
+        fullWidth
+        variant="standard"
+      />
+      <TextField
+        autoFocus
+        margin="dense"
+        id="longitude"
+        label="Longitude"
+        type="text"
+        fullWidth
+        variant="standard"
+      />
+      <TextField
+        autoFocus
+        margin="dense"
+        id="latitude"
+        label="Latitude"
+        type="text"
         fullWidth
         variant="standard"
       />

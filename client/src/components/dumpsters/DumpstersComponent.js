@@ -1,6 +1,6 @@
 import React from 'react'
 import MUIDataTable from "mui-datatables";
-import CustomSelectToolbar from '../CustomSelectToolbar';
+import DumpsterCustomToolbar from './DumpsterCustomToolbar';
 import AddNewDumpsterModal from './modals/AddNewDumpsterModal';
 const DumpstersComponent = () => {
   const [openModal, setOpenModal] = React.useState(false);
@@ -25,7 +25,7 @@ const DumpstersComponent = () => {
     filter: true,
     filterType: 'dropdown',
     customToolbarSelect:(selectedRows,displayData)=>(
-        <CustomSelectToolbar selectedRows={selectedRows} displayData={displayData}/>
+        <DumpsterCustomToolbar selectedRows={selectedRows} displayData={displayData}/>
     )
     };
     return (

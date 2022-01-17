@@ -1,6 +1,6 @@
 import React from 'react'
 import MUIDataTable from "mui-datatables";
-import CustomSelectToolbar from '../CustomSelectToolbar';
+import EmployeeCustomToolbar from './EmployeeCustomToolbar';
 import AddNewEmployeeModal from './modals/AddNewEmployeeModal';
 const DriversComponent = () => {
   const [openModal, setOpenModal] = React.useState(false);
@@ -13,10 +13,10 @@ const DriversComponent = () => {
       event.target.value
     );
   };
-    const columns = ["Last Name", "First Name", "Email", "Contact Number","Address","Age","Gender","Date Added","Status"];
+    const columns = ["Last Name", "First Name", "Email", "Contact Number","Address","Age","Gender","Date Added","Status","Image"];
 
     const data = [
-    ["Stark", "Tony", "ironman@gmail.com", "09123456789","America","52","Male","01/02/22","Active"],
+    ["Stark", "Tony", "ironman@gmail.com", "09123456789","America","52","Male","01/02/22","Active","/images/gtrack-logo-1.png"],
     ];
 
     const options = {
@@ -25,7 +25,7 @@ const DriversComponent = () => {
     filter: true,
     filterType: 'dropdown',
     customToolbarSelect:(selectedRows,displayData)=>(
-        <CustomSelectToolbar selectedRows={selectedRows} displayData={displayData}/>
+        <EmployeeCustomToolbar selectedRows={selectedRows} displayData={displayData}/>
     )
     };
     return (

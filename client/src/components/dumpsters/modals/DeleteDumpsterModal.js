@@ -61,7 +61,7 @@ export default function DeleteDumpsterModal(props) {
       <BootstrapDialogTitle
         id="customized-dialog-title"
       >
-        Are you sure you want to delete this Dumpster/Pickup Point?
+        Are you sure you want to delete this Dumpster Record?
       </BootstrapDialogTitle>
       <DialogContent dividers>
         <Box sx={{ width: "100%" }}>

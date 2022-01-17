@@ -69,36 +69,36 @@ export default function ViewEmployeeModal(props) {
             width={400}
             className="mb-4"
             marginLeft={20}
-            src={props.data.image}
+            src={props.data[9]}
           ></img>
           <h2>
             <i>
-              {props.data.firstname} {props.data.lastname}
+              {props.data[1]} {props.data[0]}
             </i>
           </h2>
           <Typography variant="body2" color="text.secondary">
-            <b>Email:</b> {props.data.email}
+            <b>Email:</b> {props.data[2]}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            <b>Contact Number:</b> {props.data.connum}
+            <b>Contact Number:</b> {props.data[3]}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            <b>Address:</b> {props.data.address}
+            <b>Address:</b> {props.data[4]}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            <b>Age:</b> {props.data.age}
+            <b>Age:</b> {props.data[5]}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            <b>Gender:</b> {props.data.gender}
+            <b>Gender:</b> {props.data[6]}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            <b>Status:</b> {props.data.status}
+            <b>Status:</b> {props.data[7]}
           </Typography>
         </Box>
       </DialogContent>
       <DialogActions>
         <Button autoFocus onClick={props.handleCloseModal}>
-          Add Employee
+          Close
         </Button>
       </DialogActions>
     </BootstrapDialog>

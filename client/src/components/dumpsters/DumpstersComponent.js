@@ -7,12 +7,6 @@ const DumpstersComponent = () => {
   const [gender, setGender] = React.useState("Male");
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
-  const handleGender = (event) => {
-    setGender(
-      // @ts-expect-error autofill of arbitrary value is not handled.
-      event.target.value
-    );
-  };
     const columns = ["Address", "Postal Code", "Longitude", "Latitude"];
 
     const data = [

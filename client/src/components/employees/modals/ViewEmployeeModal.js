@@ -10,6 +10,7 @@ import PropTypes from "prop-types";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
+import { Avatar } from "@mui/material";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -64,12 +65,18 @@ export default function ViewEmployeeModal(props) {
       </BootstrapDialogTitle>
       <DialogContent dividers>
         <Box sx={{ width: "100%" }}>
-          <img
+         <img
             alt="GTrack Logo"
-            width={400}
             className="mb-4"
-            marginLeft={20}
-            src={props.data[9]}
+            borderWidth=""
+            style={{
+              borderRadius: "50%",
+              width: 330,
+              height: 330,
+              border: '2px solid black',
+              display: "block"
+            }}
+            src={props.avatar}
           ></img>
           <h2>
             <i>
@@ -92,7 +99,7 @@ export default function ViewEmployeeModal(props) {
             <b>Gender:</b> {props.data[6]}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            <b>Status:</b> {props.data[7]}
+            <b>Status:</b> {props.data[8]}
           </Typography>
         </Box>
       </DialogContent>

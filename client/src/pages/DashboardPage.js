@@ -19,7 +19,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AutoDeleteIcon from '@mui/icons-material/AutoDelete';
 import { Card, ListItemIcon, MenuItem, Avatar, Link, Toolbar, Box, CssBaseline,Paper,
         Grid, Container, Badge, IconButton, Divider, Typography, List, Menu, Tooltip,
-        CardContent,CardActions,Button
+        CardContent,CardActions,Button, Modal
 } from '@mui/material';
 
 function Copyright(props) {
@@ -85,6 +85,17 @@ const Drawer = styled(MuiDrawer, {
     }),
   },
 }));
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
 const mdTheme = createTheme();
 
@@ -102,6 +113,12 @@ const DashboardPage = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const handleModalOpen = () => setModalOpen(true);
+  const handleModalClose = () => setModalOpen(false);
+
   const dashcards = [
         {title: "Available Drivers", count: 5, icon:<PersonIcon style={{float:'right'}} fontSize="large"/>},
         {title: "Available Trucks", count: 5, icon:<LocalShippingIcon style={{float:'right'}} fontSize="large"/>},
@@ -243,18 +260,34 @@ const DashboardPage = () => {
             <Grid container spacing={3}>
             {dashcards.map(dashcard => (
                 <Grid item key={dashcard.id} xs={12} md={6} lg={3}>
-                   <DashboardCard dashcard={dashcard}/>
+                   <DashboardCard onClick={handleModalOpen} dashcard={dashcard}/>
+                   <Modal
+                    open={modalOpen}
+                    onClose={handleModalClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                  >
+                    <Box sx={style}>
+                      <Typography id="modal-modal-title" variant="h6" component="h2">
+                        Text in a modal
+                      </Typography>
+                      <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                        Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+                      </Typography>
+                      </Box>
+                   </Modal>
                  </Grid>
               ))}
 
               {/* Chart */}
-              <Grid item xs={12} md={8} lg={9}>
+              <Grid item xs={12} sx={{mt:4, mb:4}}>
                 <Paper
                   sx={{
                     p: 2,
                     display: "flex",
                     flexDirection: "column",
-                    height: 240,
+                    height: 280,
+                    maxWidth: 'lg'
                   }}
                 >
                   <Chart />

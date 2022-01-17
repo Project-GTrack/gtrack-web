@@ -11,6 +11,7 @@ import ScheduleIcon from '@mui/icons-material/Schedule';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AssessmentIcon from '@mui/icons-material/Assessment';
+import { useNavigate } from 'react-router-dom';
 
 export const mainListItems = (
   <div>
@@ -44,7 +45,7 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Schedules" />
     </ListItem>
-    <ListItem button>
+    <ListItem component="a" href="/employees" >
       <ListItemIcon>
         <PeopleIcon />
       </ListItemIcon>
@@ -56,7 +57,7 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Garbage Trucks" />
     </ListItem>
-    <ListItem button>
+    <ListItem component="a" href="/dumpsters">
       <ListItemIcon>
         <DeleteIcon />
       </ListItemIcon>
@@ -69,4 +70,4 @@ export const mainListItems = (
       <ListItemText primary="Reports" />
     </ListItem>
   </div>
-);
+)

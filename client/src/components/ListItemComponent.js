@@ -57,7 +57,7 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Garbage Trucks" />
     </ListItem>
-    <ListItem button>
+    <ListItem component="a" href="/dumpsters">
       <ListItemIcon>
         <DeleteIcon />
       </ListItemIcon>

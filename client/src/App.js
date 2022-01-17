@@ -4,6 +4,7 @@ import LandingPage from './pages/LandingPage';
 import SignInPage from './pages/SignInPage';
 import DashboardPage from './pages/DashboardPage';
 import EmployeesPage from './pages/EmployeesPage';
+import SchedulesPage from './pages/SchedulesPage';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/login" element={<SignInPage/>} />
         <Route path="/dashboard" element={<DashboardPage/>} />
         <Route path="/employees" element={<EmployeesPage/>} />
+        <Route path="/schedules" element={<SchedulesPage/>} />
       </Routes>
     </div>
   );

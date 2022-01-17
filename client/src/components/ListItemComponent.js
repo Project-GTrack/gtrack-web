@@ -12,10 +12,9 @@ import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 
-
 export const mainListItems = (
   <div>
-    <ListItem button>
+    <ListItem component="a" href="/dashboard">
       <ListItemIcon>
         <DashboardIcon />
       </ListItemIcon>
@@ -39,7 +38,7 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Events" />
     </ListItem>
-    <ListItem button>
+    <ListItem component="a" href="/schedules">
       <ListItemIcon>
         <ScheduleIcon />
       </ListItemIcon>

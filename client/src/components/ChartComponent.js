@@ -34,7 +34,6 @@ export default function Chart() {
             right: 16,
             bottom: 0,
             left: 24,
-            width:"100%"
           }}
         >
           <XAxis

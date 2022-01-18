@@ -6,8 +6,6 @@ import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import { mainListItems } from "../components/ListItemComponent";
 import Chart from "../components/ChartComponent";
-import Deposits from "../components/DepositComponent";
-import Orders from "../components/OrderComponent";
 import DashboardCard from "../components/DashboardCardComponents";
 import MuiAppBar from "@mui/material/AppBar";
 import MuiDrawer from "@mui/material/Drawer";
@@ -17,10 +15,12 @@ import PersonIcon from "@mui/icons-material/Person";
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import DeleteIcon from "@mui/icons-material/Delete";
 import AutoDeleteIcon from '@mui/icons-material/AutoDelete';
-import { Card, ListItemIcon, MenuItem, Avatar, Link, Toolbar, Box, CssBaseline,Paper,
+import {ListItemIcon, MenuItem, Avatar, Link, Toolbar, Box, CssBaseline,Paper,
         Grid, Container, Badge, IconButton, Divider, Typography, List, Menu, Tooltip,
-        CardContent,CardActions,Button, Modal
+        Button, Modal, TableRow, TableHead, 
+        TableBody, Table, TableContainer
 } from '@mui/material';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 
 function Copyright(props) {
   return (
@@ -104,6 +104,46 @@ const DashboardPage = () => {
     setAnchorEl(null);
   };
 
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '90%',
+    bgcolor: 'background.paper',
+    p: 4,
+  };
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+  
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    '&:last-child td, &:last-child th': {
+      border: 0,
+    },
+  }));
+  
+  function createData(plate, model, date, status) {
+    return { plate,model,date, status };
+  }
+  
+  const rows = [
+    createData('AZM1234','XFCE 4010','10/11/2020', 'Active'),
+    createData('MYX4567', 'XFCE 4010','10/11/2020', 'Active'),
+    createData('ABC2904', 'XFCE 4010', '10/11/2021', 'Active'),
+    createData('BST3203', 'XFCE 4010', '10/11/2021', 'Active'),
+    createData('LGP2012', 'XFCE 4010', '10/11/2021', 'Active'),
+  ];
 
 
   const dashcards = [
@@ -112,7 +152,9 @@ const DashboardPage = () => {
         {title: "Dumpsters", count: 14,icon:<DeleteIcon style={{float:'right'}} fontSize="large"/>},
         {title: "Number of Collections", count: 10,icon:<AutoDeleteIcon style={{float:'right'}} fontSize="large"/>}
   ];
-
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const handleModalOpen = () => setModalOpen(true);
+  const handleModalClose = () => setModalOpen(false);
   return (
     
     <ThemeProvider theme={mdTheme}>
@@ -248,9 +290,42 @@ const DashboardPage = () => {
             {dashcards.map(dashcard => (
                 <Grid item key={dashcard.id} xs={12} md={6} lg={3}>
                    <DashboardCard dashcard={dashcard}/>
-                  
                  </Grid>
               ))}
+              <Modal
+                    open={modalOpen}
+                    onClose={handleModalClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                 
+                   >
+                    <Box sx={style}>
+                        <TableContainer component={Paper}>
+                            <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                              <TableHead>
+                                <TableRow>
+                                  <StyledTableCell align="justify">Plate Number</StyledTableCell>
+                                  <StyledTableCell align="justify">Model</StyledTableCell>
+                                  <StyledTableCell align="justify">Date Added</StyledTableCell>
+                                  <StyledTableCell align="justify">Status</StyledTableCell>
+                                </TableRow>
+                              </TableHead>
+                              <TableBody>
+                                {rows.map((row) => (
+                                  <StyledTableRow key={row.name}>
+                                    <StyledTableCell align="justify" component="th" scope="row">
+                                      {row.plate}
+                                    </StyledTableCell>
+                                    <StyledTableCell align="justify">{row.model}</StyledTableCell>
+                                    <StyledTableCell align="justify">{row.date}</StyledTableCell>
+                                    <StyledTableCell align="justify">{row.status}</StyledTableCell>
+                                  </StyledTableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                        </TableContainer>
+                      </Box>
+                   </Modal>
 
               {/* Chart */}
               <Grid item xs={12} sx={{mt:4, mb:4}}>

@@ -4,7 +4,6 @@ import AnnouncementCustomToolbar from './AnnouncementCustomToolbar';
 import AddNewAnnouncementModal from './modals/AddNewAnnouncementModal';
 const AnnouncementsComponent = () => {
   const [openModal, setOpenModal] = React.useState(false);
-  const [gender, setGender] = React.useState("Male");
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
     const columns = ["Title", "Content", "Date Added"];

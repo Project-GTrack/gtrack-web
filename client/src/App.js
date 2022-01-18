@@ -8,6 +8,7 @@ import SchedulesPage from './pages/SchedulesPage';
 import DumpstersPage from './pages/DumpstersPage';
 import ReportsPage from './pages/ReportsPage';
 import AnnouncementsPage from './pages/AnnouncementsPage';
+import EventsPage from './pages/EventsPage';
 function App() {
   return (
     <div className='App'>
@@ -16,6 +17,7 @@ function App() {
         <Route path="/login" element={<SignInPage/>} />
         <Route path="/dashboard" element={<DashboardPage/>} />
         <Route path="/announcements" element={<AnnouncementsPage/>} />
+        <Route path="/events" element={<EventsPage/>} />
         <Route path="/employees" element={<EmployeesPage/>} />
         <Route path="/schedules" element={<SchedulesPage/>} />
         <Route path="/dumpsters" element={<DumpstersPage/>} />

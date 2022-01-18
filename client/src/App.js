@@ -7,7 +7,9 @@ import EmployeesPage from './pages/EmployeesPage';
 import SchedulesPage from './pages/SchedulesPage';
 import DumpstersPage from './pages/DumpstersPage';
 import ReportsPage from './pages/ReportsPage';
+import TrackCollectorPage from './pages/TrackCollectorPage';
 import AnnouncementsPage from './pages/AnnouncementsPage';
+
 function App() {
   return (
     <div className='App'>
@@ -20,6 +22,7 @@ function App() {
         <Route path="/schedules" element={<SchedulesPage/>} />
         <Route path="/dumpsters" element={<DumpstersPage/>} />
         <Route path="/reports" element={<ReportsPage/>} />
+        <Route path="/track" element={<TrackCollectorPage/>} />
       </Routes>
     </div>
   );

@@ -21,7 +21,7 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Dashboard" />
     </ListItem>
-    <ListItem button>
+    <ListItem component="a" href="/track">
       <ListItemIcon>
         <FmdGoodIcon />
       </ListItemIcon>

@@ -8,6 +8,7 @@ import SchedulesPage from './pages/SchedulesPage';
 import DumpstersPage from './pages/DumpstersPage';
 import ReportsPage from './pages/ReportsPage';
 import TrackCollectorPage from './pages/TrackCollectorPage';
+import AnnouncementsPage from './pages/AnnouncementsPage';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/" element={<LandingPage/>} />
         <Route path="/login" element={<SignInPage/>} />
         <Route path="/dashboard" element={<DashboardPage/>} />
+        <Route path="/announcements" element={<AnnouncementsPage/>} />
         <Route path="/employees" element={<EmployeesPage/>} />
         <Route path="/schedules" element={<SchedulesPage/>} />
         <Route path="/dumpsters" element={<DumpstersPage/>} />

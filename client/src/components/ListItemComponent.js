@@ -27,7 +27,7 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Track Collection" />
     </ListItem>
-    <ListItem button>
+    <ListItem component="a" href="/announcements">
       <ListItemIcon>
         <CampaignIcon />
       </ListItemIcon>

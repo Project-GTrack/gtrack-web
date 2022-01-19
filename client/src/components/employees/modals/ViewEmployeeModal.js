@@ -8,6 +8,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import PropTypes from "prop-types";
 import CloseIcon from "@mui/icons-material/Close";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { Avatar } from "@mui/material";
@@ -53,6 +54,7 @@ BootstrapDialogTitle.propTypes = {
 export default function ViewEmployeeModal(props) {
   return (
     <BootstrapDialog
+    fullWidth="true"
       onClose={props.handleCloseModal}
       aria-labelledby="customized-dialog-title"
       open={props.openModal}
@@ -63,9 +65,11 @@ export default function ViewEmployeeModal(props) {
       >
         View Employee Details
       </BootstrapDialogTitle>
-      <DialogContent dividers>
-        <Box sx={{ width: "100%" }}>
-         <img
+      <DialogContent dividers >
+        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} >
+          <Grid item xs={2}></Grid>
+          <Grid item xs={2} >
+            <img
             alt="GTrack Logo"
             className="mb-4"
             borderWidth=""
@@ -74,15 +78,19 @@ export default function ViewEmployeeModal(props) {
               width: 330,
               height: 330,
               border: '2px solid black',
-              display: "block"
             }}
             src={props.avatar}
-          ></img>
-          <h2>
+          ></img></Grid>
+          <Grid item xs={4} ></Grid>
+        </Grid>
+      
+        <Box sx={{ width: "100%" }}>
+        
+          <h1>
             <i>
               {props.data[1]} {props.data[0]}
             </i>
-          </h2>
+          </h1>
           <Typography variant="body2" color="text.secondary">
             <b>Email:</b> {props.data[2]}
           </Typography>

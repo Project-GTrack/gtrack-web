@@ -14,7 +14,7 @@ const InactiveAccountsComponent = () => {
     filter: true,
     filterType: 'dropdown',
     customToolbarSelect:(selectedRows,displayData)=>(
-        <EmployeeCustomToolbar avatar={data[0][9]} selectedRows={selectedRows} displayData={displayData}/>
+        <EmployeeCustomToolbar avatar={data[displayData[selectedRows.data[0].dataIndex].dataIndex][9]} selectedRows={selectedRows} displayData={displayData}/>   
     )
     };
     return (

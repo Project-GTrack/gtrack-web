@@ -6,7 +6,8 @@ const DriversComponent = () => {
   const columns = ["Last Name", "First Name", "Email", "Contact Number","Address","Age","Gender","Date Added","Status"];
 
   const data = [
-  ["Stark", "Tony", "ironman@gmail.com", "09123456789","America","52","Male","01/02/22","Active","/images/gtrack-logo-1.png"],
+  ["Stark", "Tony", "ironman@gmail.com", "09123456789","America","52","Male","01/02/22","Active","/images/gtrack-logo-1.png","Driver"],
+  ["Rogers", "Steve", "capamerica@gmail.com", "09123456789","America","75","Male","01/02/22","Active","/images/gtrack-logo-1.png","Driver"],
   ];
 
   const [openModal, setOpenModal] = React.useState(false);
@@ -26,7 +27,7 @@ const DriversComponent = () => {
     filter: true,
     filterType: 'dropdown',
     customToolbarSelect:(selectedRows,displayData)=>(
-        <EmployeeCustomToolbar avatar={data[0][9]} selectedRows={selectedRows} displayData={displayData}/>
+      <EmployeeCustomToolbar avatar={data[displayData[selectedRows.data[0].dataIndex].dataIndex][9]} selectedRows={selectedRows} displayData={displayData}/>    
     )
     };
     return (

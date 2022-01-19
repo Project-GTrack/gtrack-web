@@ -51,7 +51,7 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Employees" />
     </ListItem>
-    <ListItem button>
+    <ListItem component="a" href="/trucks">
       <ListItemIcon>
         <LocalShippingIcon />
       </ListItemIcon>

@@ -21,6 +21,7 @@ import {ListItemIcon, MenuItem, Avatar, Link, Toolbar, Box, CssBaseline,Paper,
         TableBody, Table, TableContainer
 } from '@mui/material';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import PageLayout from "./PageLayout";
 
 function Copyright(props) {
   return (
@@ -150,141 +151,14 @@ const DashboardPage = () => {
         {title: "Available Drivers", count: 5, icon:<PersonIcon style={{float:'right'}} fontSize="large"/>},
         {title: "Available Trucks", count: 5, icon:<LocalShippingIcon style={{float:'right'}} fontSize="large"/>},
         {title: "Dumpsters", count: 14,icon:<DeleteIcon style={{float:'right'}} fontSize="large"/>},
-        {title: "Number of Collections", count: 10,icon:<AutoDeleteIcon style={{float:'right'}} fontSize="large"/>}
+        {title: "Collections", count: 10,icon:<AutoDeleteIcon style={{float:'right'}} fontSize="large"/>}
   ];
   const [modalOpen, setModalOpen] = React.useState(false);
   const handleModalOpen = () => setModalOpen(true);
   const handleModalClose = () => setModalOpen(false);
   return (
-    
-    <ThemeProvider theme={mdTheme}>
-      <Box sx={{ display: "flex" }}>
-        <CssBaseline />
-        <AppBar position="absolute" open={open} color="success">
-          <Toolbar
-            sx={{
-              pr: "24px", // keep right padding when drawer closed
-            }}
-          >
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              onClick={toggleDrawer}
-              sx={{
-                marginRight: "36px",
-                ...(open && { display: "none" }),
-              }}
-            >
-              <MenuIcon />
-            </IconButton>
-            {/* <TextField id="filled-search" label="Search field" type="search" /> */}
-       
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              sx={{ flexGrow: 1 }}
-            >
-              Dashboard
-            </Typography>
-            <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-            <Tooltip title="Account settings">
-              <IconButton
-                onClick={handleClick}
-                size="small"
-                sx={{ ml: 2 }}
-                aria-controls={openDropDown ? "account-menu" : undefined}
-                aria-haspopup="true"
-                aria-expanded={openDropDown ? "true" : undefined}
-              >
-            <Avatar sx={{ width: 32, height: 32 }}></Avatar>
-              </IconButton>
-            </Tooltip>
-            <Menu
-              anchorEl={anchorEl}
-              id="account-menu"
-              open={openDropDown}
-              onClose={handleClose}
-              onClick={handleClose}
-              PaperProps={styles}
-              transformOrigin={{ horizontal: "right", vertical: "top" }}
-              anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-            >
-              <MenuItem>
-                <ListItemIcon>
-                  <Settings fontSize="small" />
-                </ListItemIcon>
-                Settings
-              </MenuItem>
-              <MenuItem>
-                <a href="/login" className="text-decoration-none text-dark">
-                <ListItemIcon>
-                  <Logout fontSize="small" />
-                </ListItemIcon>
-                Logout 
-                </a>
-              </MenuItem>
-            </Menu>
-          </Toolbar>
-        </AppBar>
-        <Drawer variant="permanent" open={open}>
-          <Toolbar
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-end",
-              px: [1],
-            }}
-          >
-            <Grid
-              container
-              spacing={0}
-              direction="column"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <Grid item xs={3}>
-                <Link color="inherit" href="/">
-                  <img
-                    alt="GTrack Logo"
-                    width={105}
-                    height={45}
-                    className="mb-2"
-                    src="/images/gtrack-logo-1.png"
-                  ></img>
-                </Link>
-              </Grid>
-            </Grid>
-
-            <IconButton onClick={toggleDrawer}>
-              <ChevronLeftIcon />
-            </IconButton>
-          </Toolbar>
-
-          <Divider />
-          <List>{mainListItems}</List>
-          <Divider />
-        </Drawer>
-        <Box
-          component="main"
-          sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === "light"
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
-            flexGrow: 1,
-            height: "100vh",
-            overflow: "auto",
-          }}
-        >
-          <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+    <PageLayout headerTitle={"Dashboard"}>
+          <div>
             <Button variant="contained" style={{float: 'right'}} startIcon={<ArticleIcon/>} color="success">Generate Report</Button>
             <Grid container spacing={3}>
             {dashcards.map(dashcard => (
@@ -343,39 +217,9 @@ const DashboardPage = () => {
               </Grid>
            
             </Grid>
-            <Copyright sx={{ pt: 4 }} />
-          </Container>
-        </Box>
-      </Box>
-    </ThemeProvider>
+          </div>
+      </PageLayout>
   );
-};
-
-const styles = {
-  elevation: 0,
-  sx: {
-    overflow: "visible",
-    filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-    mt: 1.5,
-    "& .MuiAvatar-root": {
-      width: 32,
-      height: 32,
-      ml: -0.5,
-      mr: 1,
-    },
-    "&:before": {
-      content: '""',
-      display: "block",
-      position: "absolute",
-      top: 0,
-      right: 14,
-      width: 10,
-      height: 10,
-      bgcolor: "background.paper",
-      transform: "translateY(-50%) rotate(45deg)",
-      zIndex: 0,
-    },
-  },
 };
 
 export default DashboardPage;

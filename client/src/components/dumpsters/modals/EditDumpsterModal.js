@@ -86,7 +86,7 @@ export default function EditDumpsterModal(props) {
       Edit Dumpster
     </BootstrapDialogTitle>
     <DialogContent dividers>
-    <div style={{ height: '40vh', width: '100%' }}>
+    <div style={{ height: '38vh', width: '100%' }}>
                 <GoogleMapReact
                     defaultCenter={defaultProps.center}
                     defaultZoom={defaultProps.zoom}

@@ -2,8 +2,8 @@ import React,{useState} from 'react';
 import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
 import PageLayout from './PageLayout';
-import AnnouncementsComponent from '../components/announcements/AnnouncementsComponent';
-const AnnouncementsPage = () =>{
+import EventsComponent from '../components/events/EventsComponent';
+const EventsPage = () =>{
     const [value, setValue] = useState(0);
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -40,9 +40,9 @@ const AnnouncementsPage = () =>{
         value: PropTypes.number.isRequired,
       };
     return (
-        <PageLayout headerTitle={"Announcements"}>
-           <AnnouncementsComponent/>
+        <PageLayout headerTitle={"Events"}>
+           <EventsComponent/>
         </PageLayout>
     )
 }
-export default AnnouncementsPage;
+export default EventsPage;

@@ -33,7 +33,7 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Announcements" />
     </ListItem>
-    <ListItem button>
+    <ListItem component="a" href="/events">
       <ListItemIcon>
         <EventIcon />
       </ListItemIcon>

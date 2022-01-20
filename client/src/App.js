@@ -9,6 +9,7 @@ import DumpstersPage from './pages/DumpstersPage';
 import ReportsPage from './pages/ReportsPage';
 import TrackCollectorPage from './pages/TrackCollectorPage';
 import AnnouncementsPage from './pages/AnnouncementsPage';
+import EventsPage from './pages/EventsPage';
 import TrucksPage from './pages/TrucksPage';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
         <Route path="/login" element={<SignInPage/>} />
         <Route path="/dashboard" element={<DashboardPage/>} />
         <Route path="/announcements" element={<AnnouncementsPage/>} />
+        <Route path="/events" element={<EventsPage/>} />
         <Route path="/employees" element={<EmployeesPage/>} />
         <Route path="/schedules" element={<SchedulesPage/>} />
         <Route path="/dumpsters" element={<DumpstersPage/>} />

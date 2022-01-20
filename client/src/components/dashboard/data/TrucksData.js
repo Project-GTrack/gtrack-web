@@ -1,4 +1,4 @@
-const DriversData = [
+const TrucksData = [
     {
         id: 1,
         plateNumber: "AZM1234",
@@ -35,3 +35,4 @@ const DriversData = [
         status: "Active"
     }
 ];
+export default TrucksData;

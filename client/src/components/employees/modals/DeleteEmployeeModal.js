@@ -61,7 +61,7 @@ export default function DeleteEmployeeModal(props) {
       <BootstrapDialogTitle
         id="customized-dialog-title"
       >
-        Are you sure you want to delete this Employee Record?
+        Are you sure you want to Deactivate this Employee Record?
       </BootstrapDialogTitle>
       <DialogContent dividers>
         <Box sx={{ width: "100%" }}>
@@ -85,7 +85,7 @@ export default function DeleteEmployeeModal(props) {
       </DialogContent>
       <DialogActions>
       <button className='btn' onClick={props.handleCloseDeleteModal}>Close</button>
-        <button className='btn btn-danger' onClick={props.handleCloseDeleteModal}>Delete</button>
+        <button className='btn btn-danger' onClick={props.handleCloseDeleteModal}>Deactivate</button>
       </DialogActions>
     </BootstrapDialog>
   );

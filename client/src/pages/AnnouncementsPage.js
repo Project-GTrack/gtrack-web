@@ -1,10 +1,7 @@
 import React,{useState} from 'react';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
 import PageLayout from './PageLayout';
-import DumpstersComponent from '../components/dumpsters/DumpstersComponent';
 import AnnouncementsComponent from '../components/announcements/AnnouncementsComponent';
 const AnnouncementsPage = () =>{
     const [value, setValue] = useState(0);

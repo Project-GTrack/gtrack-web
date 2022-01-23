@@ -70,7 +70,7 @@ export default function AddNewAnnouncementModal(props) {
     </BootstrapDialogTitle>
     <DialogContent dividers>
     <Box sx={{ width: '100%' }}>
-  <TextField
+      <TextField
         autoFocus
         margin="dense"
         id="title"

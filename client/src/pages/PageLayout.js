@@ -164,10 +164,12 @@ const PageLayout = ({headerTitle,children}) => {
                 anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
               >
                 <MenuItem>
+                  <a href="/settings" className="text-decoration-none text-dark">
                   <ListItemIcon>
                     <Settings fontSize="small" />
                   </ListItemIcon>
                   Settings
+                  </a>
                 </MenuItem>
                 <MenuItem>
                   <a href="/login" className="text-decoration-none text-dark">

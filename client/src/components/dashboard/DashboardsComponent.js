@@ -19,9 +19,7 @@ const dashcards = [
 
 const DashboardsComponent = () => {
 
-    const [openDriverModal,setDriverModal] = useState(false);
-    const handleDriverOpenModal = () => setDriverModal(true);
-    const handleDriverCloseModal = () => setDriverModal(false);
+
 
 
     const dashboardCardComponents = dashcards.map(dashcard => 

@@ -8,8 +8,24 @@ function DashboardCard(dashcard){
     const [openDriver, setOpenDriver] = React.useState(false);
     const handleOpenDriver = () => setOpenDriver(true);
     const handleCloseDriver = () => setOpenDriver(false);
- 
+    
+    const [openTruck, setOpenTruck] = React.useState(false);
+    const handleOpenTruck = () => setOpenTruck(true);
+    const handleCloseTruck = () => setOpenTruck(false);
+
+    const [openDumpster, setOpenDumpster] = React.useState(false);
+    const handleOpenDumpster = () => setOpenDumpster(true);
+    const handleCloseDumpster = () => setOpenDumpster(false);
+
+    const [openCollection, setOpenCollection] = React.useState(false);
+    const handleOpenCollection = () => setOpenCollection(true);
+    const handleCloseCollection = () => setOpenCollection(false);
+
+
+    console.log(dashcard)
+
     return(
+    
         <div>
             <Card onClick={handleOpenDriver} elevation={1}>
                 <CardHeader title={dashcard.title}/>
@@ -28,21 +44,21 @@ function DashboardCard(dashcard){
             /> : null}
             {dashcard.id === 2 ?  
             <TrucksModal
-              openModal={openDriver}
-              handleCloseModal={handleCloseDriver}
-              handleOpenModal={handleOpenDriver}
+              openModal={openTruck}
+              handleCloseModal={handleCloseTruck}
+              handleOpenModal={handleOpenTruck}
             /> : null}
             {dashcard.id === 3 ?  
             <DumpsterModal
-              openModal={openDriver}
-              handleCloseModal={handleCloseDriver}
-              handleOpenModal={handleOpenDriver}
+              openModal={openDumpster}
+              handleCloseModal={handleCloseDumpster}
+              handleOpenModal={handleOpenDumpster}
             /> : null}
             {dashcard.id === 4 ?  
             <CollectionsModal
-              openModal={openDriver}
-              handleCloseModal={handleCloseDriver}
-              handleOpenModal={handleOpenDriver}
+              openModal={openCollection}
+              handleCloseModal={handleCloseCollection}
+              handleOpenModal={handleOpenCollection}
             /> : null}
 
            

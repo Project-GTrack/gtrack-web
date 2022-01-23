@@ -11,12 +11,13 @@ import TrackCollectorPage from './pages/TrackCollectorPage';
 import AnnouncementsPage from './pages/AnnouncementsPage';
 import EventsPage from './pages/EventsPage';
 import TrucksPage from './pages/TrucksPage';
-
+import AccountSettingsPage from './pages/AccountSettingsPage';
 function App() {
   return (
     <div className='App'>
       <Routes>
         <Route path="/" element={<LandingPage/>} />
+        <Route path="/settings" element={<AccountSettingsPage/>} />
         <Route path="/login" element={<SignInPage/>} />
         <Route path="/dashboard" element={<DashboardPage/>} />
         <Route path="/announcements" element={<AnnouncementsPage/>} />

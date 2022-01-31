@@ -11,6 +11,7 @@ function TabPanel(props) {
     return (
       <div
         role="tabpanel"
+        className="mx-auto"
         hidden={value !== index}
         id={`vertical-tabpanel-${index}`}
         aria-labelledby={`vertical-tab-${index}`}
@@ -47,7 +48,8 @@ const AccountSettingsPage = () => {
 
     return (
     <Box
-      sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex',width:'100%', height: '100%' }}
+      sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex',width:'100%', height: '100%',padding:'2rem',
+    }}
     >
       <Tabs
         orientation="vertical"

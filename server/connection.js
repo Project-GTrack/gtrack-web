@@ -1,5 +1,5 @@
 const {Sequelize} = require("sequelize");
-const sequelize = new Sequelize("gtrackweb","root","",{
+const sequelize = new Sequelize("gtrack","root","",{
     host:"localhost",
     dialect:"mysql",
     pool:{

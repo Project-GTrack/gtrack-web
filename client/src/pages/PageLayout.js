@@ -16,6 +16,7 @@ import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import EmailIcon from '@mui/icons-material/Email';
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -139,6 +140,11 @@ const PageLayout = ({headerTitle,children}) => {
               <IconButton color="inherit">
                 <Badge badgeContent={4} color="secondary">
                   <NotificationsIcon />
+                </Badge>
+              </IconButton>
+              <IconButton color="inherit">
+                <Badge badgeContent={4} color="secondary">
+                  <EmailIcon />
                 </Badge>
               </IconButton>
               <Tooltip title="Account settings">

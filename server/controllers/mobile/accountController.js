@@ -52,13 +52,13 @@ exports.login=async (req,res)=>{
 
 exports.verifyEmail=async (req,res)=>{
     let account=await user.model.findOne({ where: { email: req.body.email } });
-    if(account.length!==0){
-        await user.model.update({email_verified_at:moment()},{
+    if(account){
+        let acc=await user.model.update({email_verified_at:moment()},{
             where:{
                 email:req.body.email
             }
         })
-        res.send({success:true,message:"Account verified.",data:account});
+        res.send({success:true,message:"Account verified.",data:acc});
     }else{
         res.send({success:false,message:"Account not found.",data:null});
     }

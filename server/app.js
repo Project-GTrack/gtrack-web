@@ -13,7 +13,9 @@ app.listen(8000);
 
 //INCLUDE MODULES HERE
 const accountRoutes=require('./routes/mobile/accountRoutes');
+const announcementRoutes=require('./routes/mobile/announcementRoutes');
 
 //MOBILE ROUTES HERE
 app.use("/mobile",accountRoutes);
+app.use("/mobile/announcement",announcementRoutes);
 //WEB ROUTES HERE

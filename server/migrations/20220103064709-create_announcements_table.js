@@ -19,7 +19,7 @@ module.exports = {
           type:Sequelize.BIGINT,
           allowNull:false
       },
-      attachment_id:{
+      attachment_line_id:{
           type:Sequelize.BIGINT,
           allowNull:false
       },

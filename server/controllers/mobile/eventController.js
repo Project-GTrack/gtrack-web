@@ -6,7 +6,7 @@ const admin=require("../../models/user");
 admin.model.hasMany(event.model, {foreignKey: 'admin_id', as: 'adminEvent'});
 event.model.belongsTo(admin.model, {foreignKey: 'admin_id', as: 'eventAdmin'});
 
-exports.getAnnouncements=async (req,res)=>{
+exports.getEvents=async (req,res)=>{
     let posts=await event.model.findAll({
         where:{
             deletedAt:null

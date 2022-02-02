@@ -45,6 +45,10 @@ const user = instance.sequelize.define("users",{
         type: DataTypes.STRING,
         allowNull: false
     },
+    user_type:{
+        type:DataTypes.ENUM('Admin','Driver','Resident'),
+        allowNull:false
+    },
     remember_token:{
         type: DataTypes.STRING,
         allowNull: false

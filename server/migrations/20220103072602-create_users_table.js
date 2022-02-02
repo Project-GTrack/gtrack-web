@@ -52,7 +52,7 @@ module.exports = {
           allowNull:false
       },
       user_type:{
-        type:Sequelize.ENUM('Admin','Driver'),
+        type:Sequelize.ENUM('Admin','Driver','Resident'),
         allowNull:false
       },
       remember_token:{

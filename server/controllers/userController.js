@@ -5,10 +5,10 @@ const bcrypt=require("bcrypt");
 const jwt = require('jsonwebtoken');
 
 var saltRounds = 10;
-let refreshTokens = []
+
 
 const generateAccessToken = (user) =>{
-    return jwt.sign({user_id: user.user_id},process.env.ACCESS_TOKEN_SECRET,{expireIn:'15m'})
+    return jwt.sign({user_id: user.user_id},process.env.ACCESS_TOKEN_SECRET)
 }
 
 exports.registerUser = async(req, res) => {
@@ -28,35 +28,26 @@ exports.registerUser = async(req, res) => {
     }
 }
 exports.login = async(req, res) => {
-    let user = await user.model.findAll({
+    console.log(req.body.email);
+    let data = await user.model.findOne({
         where:{
             email:req.body.email
         }
     })
-    if(user.length != 0 ){
-        if(bcrypt.compareSync(req.body.password, user.password) && user.password != ""){
-            const accessToken = generateAccessToken(user);
-            const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET)
-            refreshTokens.push(refreshToken);
-            res.json({accessToken:accessToken, refreshToken:refreshToken});
+    console.log(data);
+    if(data !== null ){
+        if(bcrypt.compareSync(req.body.password, data.password) && data.password != ""){
+            const accessToken = generateAccessToken(data);
+            res.cookie("user_id",accessToken,{maxAge:100000000,httpOnly:true,path:"/"});
+            res.status(200).send("Successfuly login");
         }else{
-            return res.status(201).json({});
+            res.send("Incorrect Password")
         }
     }else{
-        return res.status(202).json({});
+        res.send("Email not found!");
     }
 }
 exports.logout = async(req, res)=>{
-    refreshTokens = refreshTokens.filter(token => token !== req.body.token);
+    res.clearCookie("user_id");
     res.status(200).json("You logged out Successfully");
-}
-exports.token = async(req, res)=>{
-    const refreshToken = req.body.token;
-    if(refreshToken  == null) return res.sendStatus(401);
-    if(!refreshTokens.includes(refreshToken)) return res.sendStatus(403);
-    jwt.verify(refreshToken,process.env.REFRESH_TOKEN_SECRET,(err, user)=>{
-        if(err) return res.sendStatus(403);
-        const accessToken = generateAccessToken(user);
-        res.json({ accessToken: accessToken })
-    })
 }

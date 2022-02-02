@@ -23,55 +23,59 @@ const user = instance.sequelize.define("users",{
     },
     image:{
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
     contact_no:{
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
     birthday:{
         type: DataTypes.DATEONLY,
-        allowNull: false
+        allowNull: true
     },
     gender:{
         type: DataTypes.ENUM('Male','Female'),
-        allowNull: false
+        allowNull: true
     },
     email_verified_at:{
-        type: DataTypes.TIME,
-        allowNull: false
+        type: DataTypes.DATE,
+        allowNull: true
     },
     password:{
         type: DataTypes.STRING,
         allowNull: false
     },
+    google_auth:{
+      type: DataTypes.BOOLEAN,
+      allowNull:true
+    },
     user_type:{
-        type:DataTypes.ENUM('Admin','Driver','Resident'),
-        allowNull:false
+      type: DataTypes.ENUM('Resident','Driver','Admin'),
+      allowNull:true
     },
     remember_token:{
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
     street:{
         type:DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
     purok:{
         type:DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
     barangay:{
         type:DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
     town:{
         type:DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
     postal_code:{
         type:DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     }
 
 },{

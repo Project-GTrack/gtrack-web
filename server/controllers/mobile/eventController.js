@@ -7,6 +7,7 @@ const admin=require("../../models/user");
 const attLine=require("../../models/attachment_line");
 const attachment=require("../../models/attachment");
 const eventParticipant=require("../../models/event_participant");
+const report=require("../../models/report");
 
 admin.model.hasMany(event.model, {foreignKey: 'admin_id', as: 'adminEvent'});
 event.model.belongsTo(admin.model, {foreignKey: 'admin_id', as: 'eventAdmin'});
@@ -22,6 +23,8 @@ eventParticipant.model.hasOne(event.model, {foreignKey: 'event_id', as: 'partiEv
 event.model.hasMany(eventParticipant.model, {foreignKey: 'event_id', as: 'eventParti'});
 eventParticipant.model.hasOne(admin.model, {foreignKey: 'user_id', as: 'partiUser'});
 admin.model.hasMany(eventParticipant.model, {foreignKey: 'user_id', as: 'userPari'});
+report.model.hasOne(attLine.model, {foreignKey: 'attachment_line_id', as: 'reportLine'});
+attLine.model.hasOne(report.model, {foreignKey: 'attachment_line_id', as: 'lineReport'});
 
 exports.getEvents=async (req,res)=>{
     let posts=await event.model.findAll({

@@ -17,10 +17,15 @@ const announcementRoutes=require('./routes/mobile/announcementRoutes');
 const eventRoutes=require('./routes/mobile/eventRoutes');
 const profileRoutes=require('./routes/mobile/profileRoutes');
 const concernRoutes=require('./routes/mobile/concernRoutes');
+const wasteCollectionRoutes=require('./routes/mobile/wasteCollectionRoutes');
+const reportRoutes=require('./routes/mobile/reportRoutes');
+
 //MOBILE ROUTES HERE
 app.use("/mobile",accountRoutes);
 app.use("/mobile/announcement",announcementRoutes);
 app.use("/mobile/event",eventRoutes);
 app.use("/mobile/profile",profileRoutes);
 app.use("/mobile/concern",concernRoutes);
+app.use("/mobile/waste-collection",wasteCollectionRoutes);
+app.use("/mobile/report",reportRoutes);
 //WEB ROUTES HERE

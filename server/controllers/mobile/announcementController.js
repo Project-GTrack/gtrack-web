@@ -10,7 +10,7 @@ announcement.model.belongsTo(admin.model, {foreignKey: 'admin_id', as: 'announce
 announcement.model.hasOne(attLine.model, {foreignKey: 'attachment_line_id', as: 'announcementLine'});
 attLine.model.hasOne(announcement.model, {foreignKey: 'attachment_line_id', as: 'lineAnnouncement'});
 attLine.model.hasMany(attachment.model, {foreignKey: 'attachment_line_id', as:'lineAttachment'});
-attachment.model.belongsTo(attLine.model, {foreignKey: 'attachment_line_id', as: 'attachementLine'});
+attachment.model.belongsTo(attLine.model, {foreignKey: 'attachment_line_id', as: 'attachmentLine'});
 
 
 exports.getAnnouncements=async (req,res)=>{

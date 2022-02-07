@@ -32,7 +32,7 @@ module.exports = {
         allowNull:false
     },
     status:{
-        type:Sequelize.TINYINT,
+        type:Sequelize.BOOLEAN,
         allowNull:false
     },
     classification:{

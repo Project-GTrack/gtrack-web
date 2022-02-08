@@ -26,7 +26,7 @@ const concern = instance.sequelize.define("concerns",{
         allowNull: false
     },
     status:{
-        type:DataTypes.TINYINT,
+        type:DataTypes.BOOLEAN,
         allowNull: false
     },
     classification:{

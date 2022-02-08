@@ -28,7 +28,7 @@ module.exports = {
           allowNull:false
       },
       schedule:{
-          type:Sequelize.DATE,
+          type:Sequelize.TEXT,
           allowNull:false
       },
       garbage_type:{
@@ -69,7 +69,37 @@ module.exports = {
       deletedAt:{
         type:Sequelize.DATE,
       },
-    })
+    }).then(() => queryInterface.addConstraint('schedules',{
+      fields:['admin_id'],
+      type: 'FOREIGN KEY',
+      name: 'FK_schedules_1', // useful if using queryInterface.removeConstraint
+      references: {
+        table: 'users',
+        field: 'user_id',
+      },
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
+    })).then(() => queryInterface.addConstraint('schedules',{
+      fields:['driver_id'],
+      type: 'FOREIGN KEY',
+      name: 'FK_schedules_2', // useful if using queryInterface.removeConstraint
+      references: {
+        table: 'users',
+        field: 'user_id',
+      },
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
+    })).then(() => queryInterface.addConstraint('schedules',{
+      fields:['assignment_id'],
+      type: 'FOREIGN KEY',
+      name: 'FK_schedules_3', // useful if using queryInterface.removeConstraint
+      references: {
+        table: 'truck_assignments',
+        field: 'assignment_id',
+      },
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
+    }))
   },
 
   down: async (queryInterface, Sequelize) => {

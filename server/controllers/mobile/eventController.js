@@ -4,10 +4,15 @@ var C = require("crypto-js");
 const event=require("../../models/event");
 const announcement=require("../../models/announcement");
 const admin=require("../../models/user");
+const user=require("../../models/user");
 const attLine=require("../../models/attachment_line");
 const attachment=require("../../models/attachment");
 const eventParticipant=require("../../models/event_participant");
 const report=require("../../models/report");
+const schedule=require("../../models/report");
+const truck=require("../../models/report");
+const truck_assignment=require("../../models/report");
+
 
 admin.model.hasMany(event.model, {foreignKey: 'admin_id', as: 'adminEvent'});
 event.model.belongsTo(admin.model, {foreignKey: 'admin_id', as: 'eventAdmin'});

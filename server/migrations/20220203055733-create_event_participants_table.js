@@ -34,7 +34,27 @@ module.exports = {
         type:Sequelize.DATE,
       },
 
-    })
+    }).then(() => queryInterface.addConstraint('event_participants',{
+      fields:['user_id'],
+      type: 'FOREIGN KEY',
+      name: 'FK_event_participants_1', // useful if using queryInterface.removeConstraint
+      references: {
+        table: 'users',
+        field: 'user_id',
+      },
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
+    })).then(() => queryInterface.addConstraint('event_participants',{
+      fields:['event_id'],
+      type: 'FOREIGN KEY',
+      name: 'FK_event_participants_2', // useful if using queryInterface.removeConstraint
+      references: {
+        table: 'events',
+        field: 'event_id',
+      },
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
+    }))
   },
 
   down: async (queryInterface, Sequelize) => {

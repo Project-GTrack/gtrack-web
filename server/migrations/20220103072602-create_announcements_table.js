@@ -41,7 +41,28 @@ module.exports = {
       deletedAt:{
         type:Sequelize.DATE,
       },
-    })
+    }).then(() => queryInterface.addConstraint('announcements',{
+      fields:['admin_id'],
+      type: 'FOREIGN KEY',
+      name: 'FK_announcements_1', // useful if using queryInterface.removeConstraint
+      references: {
+        table: 'users',
+        field: 'user_id',
+      },
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
+    })).then(() => queryInterface.addConstraint('announcements',{
+      fields:['attachment_line_id'],
+      type: 'FOREIGN KEY',
+      name: 'FK_announcements_2', // useful if using queryInterface.removeConstraint
+      references: {
+        table: 'attachment_lines',
+        field: 'attachment_line_id',
+      },
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
+    }))
+
   },
 
   down: async (queryInterface, Sequelize) => {

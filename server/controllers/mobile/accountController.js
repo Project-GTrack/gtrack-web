@@ -10,7 +10,7 @@ exports.register=async (req,res)=>{
         if(!req.body.google_auth){
             acc=await user.model.create({email:req.body.email,password:req.body.password,fname:req.body.fname,lname:req.body.lname,user_type:"Resident"});
         }else{
-            acc=await user.model.create({email:req.body.email,password:req.body.fname+req.body.lname,fname:req.body.fname,lname:req.body.lname,google_auth:true,user_type:"Resident"});
+            acc=await user.model.create({email:req.body.email,password:req.body.fname+req.body.lname,fname:req.body.fname,lname:req.body.lname,image:req.body.image,google_auth:true,user_type:"Resident"});
         }
         res.send({success:true,data:acc});
     }else{
@@ -43,7 +43,7 @@ exports.login=async (req,res)=>{
             res.send({success:false,message:"Account already existed.",data:null});
         }
     }else if(!account && req.body.google_auth){
-        let acc=await user.model.create({email:req.body.email,password:req.body.fname+req.body.lname,fname:req.body.fname,lname:req.body.lname,google_auth:true,user_type:"Resident"});
+        let acc=await user.model.create({email:req.body.email,password:req.body.fname+req.body.lname,fname:req.body.fname,lname:req.body.lname,image:req.body.image,google_auth:true,user_type:"Resident"});
         res.send({success:true,message:"Login Successful!",data:acc});
     }else{
         res.send({success:false,message:"Account not found.",data:null});
@@ -58,6 +58,7 @@ exports.verifyEmail=async (req,res)=>{
                 email:req.body.email
             }
         })
+        acc=await user.model.findOne({ where: { email: req.body.email } });
         res.send({success:true,message:"Account verified.",data:acc});
     }else{
         res.send({success:false,message:"Account not found.",data:null});

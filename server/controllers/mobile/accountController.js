@@ -1,6 +1,7 @@
 const { Sequelize } = require("sequelize");
 require('dotenv').config("../../.env");
 const user=require("../../models/user");
+const schedule=require("../../models/schedule");
 var C = require("crypto-js");
 var moment = require('moment');
 exports.register=async (req,res)=>{
@@ -19,14 +20,20 @@ exports.register=async (req,res)=>{
 }
 
 exports.login=async (req,res)=>{
-    let account=await user.model.findOne({ where: { email: req.body.email } });
+    let account=await user.model.findOne({ where: { email: req.body.email }});
+    let sched=await schedule.model.findOne({
+        where:{
+            driver_id:account.user_id,
+        }
+    })
+    console.log("YEAHHBOI", account);
     if(account && !req.body.google_auth){
         if(!account.google_auth){
             var decrypted = C.AES.decrypt(account.password,process.env.SECRET_KEY);
             console.log(req.body.password,decrypted.toString(C.enc.Utf8))
             if(req.body.password===decrypted.toString(C.enc.Utf8)){
                 if(account.email_verified_at){
-                    res.send({success:true,verified:true,message:"Login Successful!",data:account});
+                    res.send({success:true,verified:true,message:"Login Successful!",data:account,sched:sched});
                 }else{
                     res.send({success:false,verified:false,message:"Account not yet verified.",data:null});
                 }
@@ -59,7 +66,10 @@ exports.verifyEmail=async (req,res)=>{
             }
         })
         acc=await user.model.findOne({ where: { email: req.body.email } });
-        res.send({success:true,message:"Account verified.",data:acc});
+        let sched=await schedule.model.findOne({
+            driver_id:acc.user_id
+        });
+        res.send({success:true,message:"Account verified.",data:acc,sched:sched});
     }else{
         res.send({success:false,message:"Account not found.",data:null});
     }

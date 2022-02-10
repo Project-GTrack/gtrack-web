@@ -53,4 +53,4 @@ const dumpster = instance.sequelize.define("dumpsters",{
 }
 
 );
-exports.model = concern;
+exports.model = dumpster;

@@ -11,6 +11,7 @@ const report=require("../../models/report");
 const schedule=require("../../models/schedule");
 const truck=require("../../models/truck");
 const truck_assignment=require("../../models/truck_assignment");
+const dumpster=require("../../models/dumpster");
 
 
 user.model.hasMany(event.model, {foreignKey: 'admin_id', as: 'adminEvent'});
@@ -29,8 +30,10 @@ eventParticipant.model.hasOne(user.model, {foreignKey: 'user_id', as: 'partiUser
 user.model.hasMany(eventParticipant.model, {foreignKey: 'user_id', as: 'userPari'});
 report.model.hasOne(attLine.model, {foreignKey: 'attachment_line_id', as: 'reportLine'});
 attLine.model.hasOne(report.model, {foreignKey: 'attachment_line_id', as: 'lineReport'});
-// user.model.hasMany(schedule.model, {foreignKey: 'driver_id', targetKey:'user_id', as: 'userSchedule'});
-// schedule.model.hasOne(user.model, {foreignKey:'driver_id', targetKey:'user_id', as:'schedUser'});
+dumpster.model.belongsTo(user.model, {foreignKey:'admin_id', as: 'dumpsterAdmin'});
+user.model.hasMany(dumpster.model, {foreignKey:'admin_id', as: 'adminDumpster'});
+user.model.hasMany(schedule.model, {foreignKey: 'driver_id', as: 'userSchedule'});
+schedule.model.belongsTo(user.model, {foreignKey:'driver_id', as:'schedUser'});
 
 exports.getEvents=async (req,res)=>{
     let posts=await event.model.findAll({

@@ -20,6 +20,7 @@ const concernRoutes=require('./routes/mobile/concernRoutes');
 const wasteCollectionRoutes=require('./routes/mobile/wasteCollectionRoutes');
 const reportRoutes=require('./routes/mobile/reportRoutes');
 const scheduleRoutes=require('./routes/mobile/scheduleRoutes');
+const dumpsterRoutes=require('./routes/mobile/dumpsterRoutes');
 
 //MOBILE ROUTES HERE
 app.use("/mobile",accountRoutes);
@@ -30,4 +31,5 @@ app.use("/mobile/concern",concernRoutes);
 app.use("/mobile/waste-collection",wasteCollectionRoutes);
 app.use("/mobile/report",reportRoutes);
 app.use("/mobile/schedule",scheduleRoutes);
+app.use("/mobile/dumpster",dumpsterRoutes);
 //WEB ROUTES HERE

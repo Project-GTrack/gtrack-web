@@ -59,3 +59,22 @@ exports.change_password=async (req,res)=>{
         res.send({success:false,data:null});
     }
 }
+
+exports.change_photo=async (req,res)=>{
+    let account=await user.model.findOne({ where: { email: req.body.email } });
+    if(account){
+        let acc=await user.model.update({image:req.body.image},{
+            where:{
+                email:req.body.email
+            }
+        });
+        if(acc){
+            acc=await user.model.findOne({ where: { email: req.body.email } });
+            res.send({success:true,message:"Profile changed successfully.",data:acc});
+        }else{
+            res.send({success:false,message:"Error updating profile",data:null});
+        }
+    }else{
+        res.send({success:false,data:null});
+    }
+}

@@ -20,12 +20,9 @@ exports.register=async (req,res)=>{
 }
 
 exports.login=async (req,res)=>{
-    let account=await user.model.findOne({ where: { email: req.body.email }});
-    let sched=await schedule.model.findOne({
-        where:{
-            driver_id:account.user_id,
-        }
-    })
+    let account=await user.model.findOne({ where: { email: req.body.email }, include:[{
+        model: schedule.model, as: 'userSchedule'
+    }]});
     console.log("YEAHHBOI", account);
     if(account && !req.body.google_auth){
         if(!account.google_auth){
@@ -33,7 +30,7 @@ exports.login=async (req,res)=>{
             console.log(req.body.password,decrypted.toString(C.enc.Utf8))
             if(req.body.password===decrypted.toString(C.enc.Utf8)){
                 if(account.email_verified_at){
-                    res.send({success:true,verified:true,message:"Login Successful!",data:account,sched:sched});
+                    res.send({success:true,verified:true,message:"Login Successful!",data:account});
                 }else{
                     res.send({success:false,verified:false,message:"Account not yet verified.",data:null});
                 }
@@ -65,11 +62,10 @@ exports.verifyEmail=async (req,res)=>{
                 email:req.body.email
             }
         })
-        acc=await user.model.findOne({ where: { email: req.body.email } });
-        let sched=await schedule.model.findOne({
-            driver_id:acc.user_id
-        });
-        res.send({success:true,message:"Account verified.",data:acc,sched:sched});
+        acc=await user.model.findOne({ where: { email: req.body.email }, include:[{
+            model: schedule.model, as: 'userSchedule'
+        }] });
+        res.send({success:true,message:"Account verified.",data:acc});
     }else{
         res.send({success:false,message:"Account not found.",data:null});
     }

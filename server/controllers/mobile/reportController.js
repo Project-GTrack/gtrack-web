@@ -13,10 +13,12 @@ exports.submitReport = async (req, res) => {
     // })
     // console.log("GOOOOD",JSON.stringify(latest));
     if(attLine){
-        let img = await attachment.model.create({
-            attachment_line_id:attLine.attachment_line_id,
-            filename:req.body.image
-        });
+        for(var x = 0; x < req.body.image.length; x++){
+            let img = await attachment.model.create({
+                attachment_line_id:attLine.attachment_line_id,
+                filename:req.body.image[x]
+            });
+        }
         let doc = await report.model.create({
             driver_id:req.params.id,
             attachment_line_id:attLine.attachment_line_id,

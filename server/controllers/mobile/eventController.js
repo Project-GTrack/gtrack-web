@@ -33,7 +33,6 @@ attLine.model.hasOne(report.model, {foreignKey: 'attachment_line_id', as: 'lineR
 dumpster.model.belongsTo(user.model, {foreignKey:'admin_id', as: 'dumpsterAdmin'});
 user.model.hasMany(dumpster.model, {foreignKey:'admin_id', as: 'adminDumpster'});
 user.model.hasMany(schedule.model, {foreignKey: 'driver_id', as: 'userSchedule'});
-schedule.model.belongsTo(user.model, {foreignKey:'driver_id', as:'schedUser'});
 
 exports.getEvents=async (req,res)=>{
     let posts=await event.model.findAll({

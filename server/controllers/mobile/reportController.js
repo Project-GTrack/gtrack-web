@@ -30,5 +30,7 @@ exports.submitReport = async (req, res) => {
             status:1
         });
         res.send({success:true,message:"Report Submitted Successfully"});
+    }else{
+        res.send({success:false,message:"Attachment not created.",data:null});
     }
 }

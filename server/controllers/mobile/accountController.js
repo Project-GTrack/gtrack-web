@@ -22,20 +22,19 @@ exports.register=async (req,res)=>{
 
 exports.login=async (req,res)=>{
     let account;
+    let x;
     let sched = await schedule.model.findAll();
-        for(var x = 0;x < sched.length;x++){
-            if(sched[x].schedule.toISOString().split('T')[0] === moment().toISOString().split('T')[0]){
-                account = await user.model.findOne({where:{email:req.body.email}, include:[{
-                    model: schedule.model, as: "userSchedule",
-                    where:{
-                        schedule_id:sched[x].schedule_id,
-                    }
-                }]});
-                break;
-            }else{
-                account = await user.model.findOne({where:{email:req.body.email}});
+    for(x = 0;x<sched.length&&sched[x].schedule.toISOString().split('T')[0] !== moment().toISOString().split('T')[0];x++){}
+    if(x!=sched.length){
+        account = await user.model.findOne({where:{email:req.body.email}, include:[{
+            model: schedule.model, as: "userSchedule",
+            where:{
+                schedule_id:sched[x].schedule_id,
             }
-        }
+        }]});
+    }else{
+        account = await user.model.findOne({where:{email:req.body.email}});
+    }
     console.log("YEAHHBOI", account);
     if(account && !req.body.google_auth){
         if(!account.google_auth){
@@ -75,19 +74,18 @@ exports.verifyEmail=async (req,res)=>{
                 email:req.body.email
             }
         })
+        let x;
         let sched = await schedule.model.findAll();
-        for(var x = 0;x < sched.length;x++){
-            if(sched[x].schedule.toISOString().split('T')[0] === moment().toISOString().split('T')[0]){
-                acc = await user.model.findOne({where:{email:req.body.email}, include:[{
-                    model: schedule.model, as: "userSchedule",
-                    where:{
-                        schedule_id:sched[x].schedule_id,
-                    }
-                }]});
-                break;
-            }else{
-                acc = await user.model.findOne({where:{email:req.body.email}});
-            }
+        for(x = 0;x<sched.length&&sched[x].schedule.toISOString().split('T')[0] !== moment().toISOString().split('T')[0];x++){}
+        if(x!=sched.length){
+            acc = await user.model.findOne({where:{email:req.body.email}, include:[{
+                model: schedule.model, as: "userSchedule",
+                where:{
+                    schedule_id:sched[x].schedule_id,
+                }
+            }]});
+        }else{
+            acc = await user.model.findOne({where:{email:req.body.email}});
         }
         res.send({success:true,message:"Account verified.",data:acc});
     }else{

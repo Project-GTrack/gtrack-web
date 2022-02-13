@@ -1,6 +1,7 @@
 const { Sequelize } = require("sequelize");
 require('dotenv').config("../../.env");
 const user=require("../../models/user");
+const { Op } = require("sequelize");
 const schedule=require("../../models/schedule");
 var C = require("crypto-js");
 var moment = require('moment');
@@ -20,9 +21,21 @@ exports.register=async (req,res)=>{
 }
 
 exports.login=async (req,res)=>{
-    let account=await user.model.findOne({ where: { email: req.body.email }, include:[{
-        model: schedule.model, as: 'userSchedule'
-    }]});
+    let account;
+    let sched = await schedule.model.findAll();
+        for(var x = 0;x < sched.length;x++){
+            if(sched[x].schedule.toISOString().split('T')[0] === moment().toISOString().split('T')[0]){
+                account = await user.model.findOne({where:{email:req.body.email}, include:[{
+                    model: schedule.model, as: "userSchedule",
+                    where:{
+                        schedule_id:sched[x].schedule_id,
+                    }
+                }]});
+                break;
+            }else{
+                account = await user.model.findOne({where:{email:req.body.email}});
+            }
+        }
     console.log("YEAHHBOI", account);
     if(account && !req.body.google_auth){
         if(!account.google_auth){
@@ -62,9 +75,20 @@ exports.verifyEmail=async (req,res)=>{
                 email:req.body.email
             }
         })
-        acc=await user.model.findOne({ where: { email: req.body.email }, include:[{
-            model: schedule.model, as: 'userSchedule'
-        }] });
+        let sched = await schedule.model.findAll();
+        for(var x = 0;x < sched.length;x++){
+            if(sched[x].schedule.toISOString().split('T')[0] === moment().toISOString().split('T')[0]){
+                acc = await user.model.findOne({where:{email:req.body.email}, include:[{
+                    model: schedule.model, as: "userSchedule",
+                    where:{
+                        schedule_id:sched[x].schedule_id,
+                    }
+                }]});
+                break;
+            }else{
+                acc = await user.model.findOne({where:{email:req.body.email}});
+            }
+        }
         res.send({success:true,message:"Account verified.",data:acc});
     }else{
         res.send({success:false,message:"Account not found.",data:null});

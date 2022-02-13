@@ -25,7 +25,8 @@ import Tooltip from "@mui/material/Tooltip";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import { mainListItems } from "../components/ListItemComponent";
-
+import Cookies from 'js-cookie';
+import { useNavigate } from "react-router-dom";
 function Copyright(props) {
   return (
     <Typography
@@ -105,6 +106,12 @@ const PageLayout = ({headerTitle,children}) => {
     const handleClose = () => {
       setAnchorEl(null);
     };
+    
+    const navigate = useNavigate();
+    const handleLogout = (event) => {
+      Cookies.remove('user_id');
+      navigate("/login");
+    };
   
     return (
       <ThemeProvider theme={mdTheme}>
@@ -178,7 +185,7 @@ const PageLayout = ({headerTitle,children}) => {
                   </a>
                 </MenuItem>
                 <MenuItem>
-                  <a href="/login" className="text-decoration-none text-dark">
+                  <a onClick={handleLogout} className="btn text-decoration-none text-dark">
                   <ListItemIcon>
                     <Logout fontSize="small" />
                   </ListItemIcon>

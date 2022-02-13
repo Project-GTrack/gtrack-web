@@ -1,23 +1,12 @@
 import * as React from 'react';
-import Grid from "@mui/material/Grid";
 import { styled } from '@mui/material/styles';
 import Box from "@mui/material/Box";
-import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import InputLabel from '@mui/material/InputLabel';
-import Select from '@mui/material/Select';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
 import PropTypes from 'prop-types';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from "@mui/material/IconButton";
-import MenuItem from "@mui/material/MenuItem";
-import { Input } from '@mui/material';
-import TextareaAutosize from '@mui/base/TextareaAutosize';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -26,7 +15,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Dumpsters from "../data/DumpstersData";
-
+import moment from 'moment';
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
       padding: theme.spacing(2),
@@ -88,15 +77,15 @@ export default function DumpsterModal(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-            {Dumpsters.map((dumpster) => (
+            {props.data.map((dumpster) => (
                 <TableRow
-                key={dumpster.id}
+                key={dumpster.dumpster_id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
                 <TableCell align="justify">{dumpster.purok}</TableCell>
                 <TableCell align="justify">{dumpster.street}</TableCell>
                 <TableCell align="justify">{dumpster.barangay}</TableCell>
-                <TableCell align="justify">{dumpster.date}</TableCell>
+                <TableCell align="justify">{moment(dumpster.createdAt).format("LL")}</TableCell>
                 </TableRow>
             ))}
         </TableBody>

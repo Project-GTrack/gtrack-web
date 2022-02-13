@@ -2,27 +2,25 @@ import * as React from 'react';
 import { useTheme } from '@mui/material/styles';
 import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer } from 'recharts';
 import Title from './TitleComponent';
+import moment from 'moment';
 
-// Generate Sales Data
-function createData(time, amount) {
-  return { time, amount };
+
+
+
+export default function Chart(chartData) {
+  const theme = useTheme();
+  // Generate Collection Data
+function createData(date, volume) {
+  return { date, volume };
 }
 
 const data = [
-  createData('00:00', 0),
-  createData('03:00', 300),
-  createData('06:00', 600),
-  createData('09:00', 800),
-  createData('12:00', 1500),
-  createData('15:00', 2000),
-  createData('18:00', 2400),
-  createData('21:00', 2400),
-  createData('24:00', undefined),
+  createData(moment(chartData.data[0].collection_date).format("LL"), chartData.data[0].collection_weight_volume),
+  createData(moment(chartData.data[1].collection_date).format("LL"), chartData.data[1].collection_weight_volume),
+  createData(moment(chartData.data[2].collection_date).format("LL"), chartData.data[2].collection_weight_volume),
+  createData(moment(chartData.data[3].collection_date).format("LL"), chartData.data[3].collection_weight_volume),
 ];
-
-export default function Chart() {
-  const theme = useTheme();
-
+ 
   return (
     <React.Fragment>
       <Title>Total Garbage Weight(in tons) Per Week In A Monthly Basis</Title>
@@ -37,7 +35,7 @@ export default function Chart() {
           }}
         >
           <XAxis
-            dataKey="time"
+            dataKey="date"
             stroke={theme.palette.text.secondary}
             style={theme.typography.body2}
           />
@@ -49,7 +47,7 @@ export default function Chart() {
           <Line
             isAnimationActive={false}
             type="monotone"
-            dataKey="amount"
+            dataKey="volume"
             stroke={theme.palette.primary.main}
             dot={false}
           />

@@ -32,7 +32,7 @@ module.exports = {
         allowNull:false
     },
     status:{
-        type:Sequelize.TINYINT,
+        type:Sequelize.BOOLEAN,
         allowNull:false
     },
     classification:{
@@ -49,7 +49,27 @@ module.exports = {
     deletedAt:{
       type:Sequelize.DATE,
     },
-    })
+    }).then(() => queryInterface.addConstraint('concerns',{
+      fields:['resident_id'],
+      type: 'FOREIGN KEY',
+      name: 'FK_concerns_1', // useful if using queryInterface.removeConstraint
+      references: {
+        table: 'users',
+        field: 'user_id',
+      },
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
+    })).then(() => queryInterface.addConstraint('concerns',{
+      fields:['attachment_line_id'],
+      type: 'FOREIGN KEY',
+      name: 'FK_concerns_2', // useful if using queryInterface.removeConstraint
+      references: {
+        table: 'attachment_lines',
+        field: 'attachment_line_id',
+      },
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
+    }))
   },
 
   down: async (queryInterface, Sequelize) => {

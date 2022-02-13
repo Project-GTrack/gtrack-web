@@ -8,19 +8,19 @@ module.exports = {
      * Example:
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
-    await queryInterface.createTable("truck_assignments",{
-      assignment_id:{
-          type: Sequelize.BIGINT,
-          primaryKey:true,
-          autoIncrement:true,
+     await queryInterface.createTable("event_participants",{
+      event_participant_id:{
+          type:Sequelize.BIGINT,
+          autoIncrement: true,
+          primaryKey: true,
+          allowNull:false,
+      },
+      event_id:{
+          type:Sequelize.BIGINT,
           allowNull:false
       },
-      driver_id:{
-          type: Sequelize.BIGINT,
-          allowNull:false
-      },
-      truck_id:{
-          type: Sequelize.BIGINT,
+      user_id:{
+          type:Sequelize.BIGINT,
           allowNull:false
       },
       createdAt:{
@@ -33,23 +33,24 @@ module.exports = {
       deletedAt:{
         type:Sequelize.DATE,
       },
-    }).then(() => queryInterface.addConstraint('truck_assignments',{
-      fields:['driver_id'],
+
+    }).then(() => queryInterface.addConstraint('event_participants',{
+      fields:['user_id'],
       type: 'FOREIGN KEY',
-      name: 'FK_truck_assignments_1', // useful if using queryInterface.removeConstraint
+      name: 'FK_event_participants_1', // useful if using queryInterface.removeConstraint
       references: {
         table: 'users',
         field: 'user_id',
       },
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE',
-    })).then(() => queryInterface.addConstraint('truck_assignments',{
-      fields:['truck_id'],
+    })).then(() => queryInterface.addConstraint('event_participants',{
+      fields:['event_id'],
       type: 'FOREIGN KEY',
-      name: 'FK_truck_assignments_2', // useful if using queryInterface.removeConstraint
+      name: 'FK_event_participants_2', // useful if using queryInterface.removeConstraint
       references: {
-        table: 'trucks',
-        field: 'truck_id',
+        table: 'events',
+        field: 'event_id',
       },
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE',
@@ -63,6 +64,6 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
-    await queryInterface.dropTable("truck_assignments");
+     await queryInterface.dropTable("event_participants");
   }
 };

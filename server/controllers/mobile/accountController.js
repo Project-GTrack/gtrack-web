@@ -1,6 +1,8 @@
 const { Sequelize } = require("sequelize");
 require('dotenv').config("../../.env");
 const user=require("../../models/user");
+const { Op } = require("sequelize");
+const schedule=require("../../models/schedule");
 var C = require("crypto-js");
 var moment = require('moment');
 exports.register=async (req,res)=>{
@@ -10,7 +12,7 @@ exports.register=async (req,res)=>{
         if(!req.body.google_auth){
             acc=await user.model.create({email:req.body.email,password:req.body.password,fname:req.body.fname,lname:req.body.lname,user_type:"Resident"});
         }else{
-            acc=await user.model.create({email:req.body.email,password:req.body.fname+req.body.lname,fname:req.body.fname,lname:req.body.lname,google_auth:true,user_type:"Resident"});
+            acc=await user.model.create({email:req.body.email,password:req.body.fname+req.body.lname,fname:req.body.fname,lname:req.body.lname,image:req.body.image,google_auth:true,user_type:"Resident"});
         }
         res.send({success:true,data:acc});
     }else{
@@ -19,7 +21,21 @@ exports.register=async (req,res)=>{
 }
 
 exports.login=async (req,res)=>{
-    let account=await user.model.findOne({ where: { email: req.body.email } });
+    let account;
+    let x;
+    let sched = await schedule.model.findAll();
+    for(x = 0;x<sched.length&&sched[x].schedule.toISOString().split('T')[0] !== moment().toISOString().split('T')[0];x++){}
+    if(x!=sched.length){
+        account = await user.model.findOne({where:{email:req.body.email}, include:[{
+            model: schedule.model, as: "userSchedule",
+            where:{
+                schedule_id:sched[x].schedule_id,
+            }
+        }]});
+    }else{
+        account = await user.model.findOne({where:{email:req.body.email}});
+    }
+    console.log("YEAHHBOI", account);
     if(account && !req.body.google_auth){
         if(!account.google_auth){
             var decrypted = C.AES.decrypt(account.password,process.env.SECRET_KEY);
@@ -43,7 +59,7 @@ exports.login=async (req,res)=>{
             res.send({success:false,message:"Account already existed.",data:null});
         }
     }else if(!account && req.body.google_auth){
-        let acc=await user.model.create({email:req.body.email,password:req.body.fname+req.body.lname,fname:req.body.fname,lname:req.body.lname,google_auth:true,user_type:"Resident"});
+        let acc=await user.model.create({email:req.body.email,password:req.body.fname+req.body.lname,fname:req.body.fname,lname:req.body.lname,image:req.body.image,google_auth:true,user_type:"Resident"});
         res.send({success:true,message:"Login Successful!",data:acc});
     }else{
         res.send({success:false,message:"Account not found.",data:null});
@@ -58,6 +74,19 @@ exports.verifyEmail=async (req,res)=>{
                 email:req.body.email
             }
         })
+        let x;
+        let sched = await schedule.model.findAll();
+        for(x = 0;x<sched.length&&sched[x].schedule.toISOString().split('T')[0] !== moment().toISOString().split('T')[0];x++){}
+        if(x!=sched.length){
+            acc = await user.model.findOne({where:{email:req.body.email}, include:[{
+                model: schedule.model, as: "userSchedule",
+                where:{
+                    schedule_id:sched[x].schedule_id,
+                }
+            }]});
+        }else{
+            acc = await user.model.findOne({where:{email:req.body.email}});
+        }
         res.send({success:true,message:"Account verified.",data:acc});
     }else{
         res.send({success:false,message:"Account not found.",data:null});

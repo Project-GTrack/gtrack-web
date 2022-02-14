@@ -5,6 +5,16 @@ const { Op } = require("sequelize");
 const schedule=require("../../models/schedule");
 var C = require("crypto-js");
 var moment = require('moment');
+const days = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday'
+]  
+var x,y;
 exports.register=async (req,res)=>{
     let account=await user.model.findOne({ where: { email: req.body.email } });
     if(account===null){
@@ -21,19 +31,32 @@ exports.register=async (req,res)=>{
 }
 
 exports.login=async (req,res)=>{
-    let account;
-    let x;
-    let sched = await schedule.model.findAll();
-    for(x = 0;x<sched.length&&sched[x].schedule.toISOString().split('T')[0] !== moment().toISOString().split('T')[0];x++){}
-    if(x!=sched.length){
-        account = await user.model.findOne({where:{email:req.body.email}, include:[{
-            model: schedule.model, as: "userSchedule",
-            where:{
-                schedule_id:sched[x].schedule_id,
+    let account = await user.model.findOne({where:{email:req.body.email}});
+    let sched = await schedule.model.findAll({
+        where:{
+            driver_id:account.user_id,
+        }
+    });
+    if(sched.length != 0){
+        for(x = 0;x < sched.length;x++){
+            if(JSON.parse(sched[x].schedule).type === "weekly"){
+                for(y = 0;y<JSON.parse(sched[x].schedule).when.length && days.indexOf(JSON.parse(sched[x].schedule).when[y].schedule) !== moment().day();y++){}
+                console.log("weekly",y);
+            }else{
+                for(y = 0;y<JSON.parse(sched[x].schedule).when.length && moment(JSON.parse(sched[x].schedule).when[y].schedule).format('YYYY-MM-DD') !== moment().toISOString().split('T')[0];y++){}
+                console.log("specific",y);
             }
-        }]});
-    }else{
-        account = await user.model.findOne({where:{email:req.body.email}});
+            console.log(y,JSON.parse(sched[x].schedule).when.length)
+            if(y!==JSON.parse(sched[x].schedule).when.length){
+                account = await user.model.findOne({where:{email:req.body.email}, include:[{
+                    model: schedule.model, as: "userSchedule",
+                    where:{
+                        schedule_id:sched[x].schedule_id,
+                    }
+                }]});
+            }
+          
+        }
     }
     console.log("YEAHHBOI", account);
     if(account && !req.body.google_auth){
@@ -74,18 +97,32 @@ exports.verifyEmail=async (req,res)=>{
                 email:req.body.email
             }
         })
-        let x;
-        let sched = await schedule.model.findAll();
-        for(x = 0;x<sched.length&&sched[x].schedule.toISOString().split('T')[0] !== moment().toISOString().split('T')[0];x++){}
-        if(x!=sched.length){
-            acc = await user.model.findOne({where:{email:req.body.email}, include:[{
-                model: schedule.model, as: "userSchedule",
-                where:{
-                    schedule_id:sched[x].schedule_id,
+        acc = await user.model.findOne({where:{email:req.body.email}});
+        let sched = await schedule.model.findAll({
+            where:{
+                driver_id:acc.user_id,
+            }
+        });
+        if(sched.length != 0){
+            for(x = 0;x < sched.length;x++){
+                if(JSON.parse(sched[x].schedule).type === "weekly"){
+                    for(y = 0;y<JSON.parse(sched[x].schedule).when.length && days.indexOf(JSON.parse(sched[x].schedule).when[y].schedule) !== moment().day();y++){}
+                    console.log("weekly",y);
+                }else{
+                    for(y = 0;y<JSON.parse(sched[x].schedule).when.length && moment(JSON.parse(sched[x].schedule).when[y].schedule).format('YYYY-MM-DD') !== moment().toISOString().split('T')[0];y++){}
+                    console.log("specific",y);
                 }
-            }]});
-        }else{
-            acc = await user.model.findOne({where:{email:req.body.email}});
+                console.log(y,JSON.parse(sched[x].schedule).when.length)
+                if(y!==JSON.parse(sched[x].schedule).when.length){
+                    acc = await user.model.findOne({where:{email:req.body.email}, include:[{
+                        model: schedule.model, as: "userSchedule",
+                        where:{
+                            schedule_id:sched[x].schedule_id,
+                        }
+                    }]});
+                }
+            
+            }
         }
         res.send({success:true,message:"Account verified.",data:acc});
     }else{

@@ -128,7 +128,7 @@ export default function AddNewEmployeeModal(props) {
         fullWidth
         variant="standard"
       />
-      <FormControl sx={{ mt: 2, minWidth: 120 }}>
+      <FormControl sx={{ m: 1, minWidth: 120 }}>
           <InputLabel htmlFor="gender">Gender</InputLabel>
           <Select
             autoFocus
@@ -144,6 +144,23 @@ export default function AddNewEmployeeModal(props) {
             <MenuItem value="female">Female</MenuItem>
           </Select>
         </FormControl>
+        <FormControl sx={{ m: 1, minWidth: 120 }}>
+            <InputLabel htmlFor="employee">Type</InputLabel>
+              <Select
+                autoFocus
+                value={props.employee}
+                onChange={props.handleEmployee}
+                label="Employee"
+                inputProps={{
+                  name: 'employee',
+                  id: 'employee',
+                }}
+              >
+                <MenuItem value="Admin">Admin</MenuItem>
+                <MenuItem value="Driver">Driver</MenuItem>
+              </Select>
+          </FormControl>
+    
       
 </Box>
     </DialogContent>

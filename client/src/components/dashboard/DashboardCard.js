@@ -1,47 +1,68 @@
-import React from "react";
+import React, { useState, useEffect } from 'react'
 import { Card,CardHeader,CardContent,Typography} from "@mui/material"; 
 import DriversModal from "./modals/DriversModal";
 import TrucksModal from "./modals/TrucksModal";
 import CollectionsModal from "./modals/CollectionsModal";
 import DumpsterModal from "./modals/DumpstersModal";
-function DashboardCard(dashcard){
+import Axios from "axios";
+
+function DashboardCard(props){
     const [openModal, setOpenModal] = React.useState(false);
     const handleOpenModal = () => setOpenModal(true);
     const handleCloseModal = () => setOpenModal(false);
+
+    const [driver, setDriver] = useState([]);
+    const [truck, setTruck] = useState([]);
+    const [collection, setCollection] = useState([]);
+    const [dumpster, setDumpster] = useState([]);
+
+    const {drivers, trucks, collections,dumpsters} = props.data;
   
+    useEffect(()=>{
+      setDriver(drivers);
+      setTruck(trucks);
+      setDumpster(dumpsters);
+      setCollection(collections);
+    },[props.data]);
+
+ 
 
     return(
     
         <div>
             <Card onClick={handleOpenModal} elevation={1}>
-                <CardHeader title={dashcard.title}/>
+                <CardHeader title={props.title}/>
                 <CardContent>
-                    <Typography  id={dashcard.id}  variant="h5" color="textSecondary">
-                        {dashcard.count}
-                        {dashcard.icon}
+                    <Typography  id={props.id}  variant="h5" color="textSecondary">
+                        {props.count}
+                        {props.icon}
                     </Typography>
                 </CardContent>
             </Card>
-            {dashcard.id === 1 ?  
+            { driver && props.id === 1 ?  
             <DriversModal
+              data = {driver}
               openModal={openModal}
               handleCloseModal={handleCloseModal}
               handleOpenModal={handleOpenModal}
             /> : null}
-            {dashcard.id === 2 ?  
+            {truck && props.id === 2 ?  
             <TrucksModal
+              data = {truck}
               openModal={openModal}
               handleCloseModal={handleCloseModal}
               handleOpenModal={handleOpenModal}
             /> : null}
-            {dashcard.id === 3 ?  
+            {dumpster && props.id === 3 ?  
             <DumpsterModal
+              data = {dumpster}
               openModal={openModal}
               handleCloseModal={handleCloseModal}
               handleOpenModal={handleOpenModal}
             /> : null}
-            {dashcard.id === 4 ?  
+            {collection && props.id === 4 ?  
             <CollectionsModal
+              data = {collection}
               openModal={openModal}
               handleCloseModal={handleCloseModal}
               handleOpenModal={handleOpenModal}

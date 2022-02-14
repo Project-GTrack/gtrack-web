@@ -1,7 +1,6 @@
 const { Sequelize } = require("sequelize");
 require('dotenv').config("../../.env");
 const user=require("../../models/user");
-const { Op } = require("sequelize");
 const schedule=require("../../models/schedule");
 var C = require("crypto-js");
 var moment = require('moment');

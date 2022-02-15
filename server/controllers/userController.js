@@ -51,3 +51,21 @@ exports.logout = async(req, res)=>{
     res.clearCookie("user_id");
     res.status(200).json("You logged out Successfully");
 }
+
+
+
+// Additional user functions (For Employees)
+
+exports.deleteUser = async(req,res) => {
+    user.model.destroy({
+        where:{
+            user_id: req.body.id //Id of the user I wanna delete will be passed (this id should be stored in the delete button)
+        }
+    }).then(function(rowDeleted){
+        if(rowDeleted===1){
+            console.log('Record Deleted Successfully')
+        }
+    }, function(err){
+        console.log(err);
+    })
+}

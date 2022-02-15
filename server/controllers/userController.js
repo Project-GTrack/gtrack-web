@@ -56,10 +56,12 @@ exports.logout = async(req, res)=>{
 
 // Additional user functions (For Employees)
 
+//Need to test this first
 exports.deleteUser = async(req,res) => {
     user.model.destroy({
         where:{
-            user_id: req.body.id //Id of the user I wanna delete will be passed (this id should be stored in the delete button)
+            user_id: req.body.id //Id of the user I wanna delete will be passed (this id should be stored in the delete button) 
+                                // or is this req.params.id
         }
     }).then(function(rowDeleted){
         if(rowDeleted===1){
@@ -68,4 +70,22 @@ exports.deleteUser = async(req,res) => {
     }, function(err){
         console.log(err);
     })
+}
+
+
+//Need to test this first
+exports.updateUser = async(req,res) => {
+    //add the needed data to do the updates
+
+    const user = await user.model.findOne({
+        attributes: ['email', 'Firstname'], //figure this out
+        where:{
+            user_id:req.body.id,
+            email:req.body.email
+        }
+    })
+    if(user !== null){
+        
+
+    }
 }

@@ -51,6 +51,10 @@ module.exports = {
           type: Sequelize.STRING,
           allowNull:false
       },
+      user_type:{
+        type:Sequelize.ENUM('Admin','Driver','Resident'),
+        allowNull:false
+      },
       remember_token:{
           type: Sequelize.STRING,
           allowNull:true

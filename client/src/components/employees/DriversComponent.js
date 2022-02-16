@@ -11,7 +11,8 @@ const DriversComponent = () => {
   ];
 
   const [openModal, setOpenModal] = React.useState(false);
-  const [gender, setGender] = React.useState("Male");
+  const [gender, setGender] = React.useState("");
+  const [employee,setEmployee] = React.useState("");
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
   const handleGender = (event) => {
@@ -20,6 +21,9 @@ const DriversComponent = () => {
       event.target.value
     );
   };
+  const handleEmployee = (event)=>{
+    setEmployee(event.target.value);
+  }
   
     const options = {
     selectableRowsHeader: false,
@@ -33,13 +37,15 @@ const DriversComponent = () => {
     return (
         <div>
             <div className='mb-3'>
-                <button className='btn btn-success' onClick={handleOpenModal}><i class="fa fa-plus" aria-hidden="true"></i> Add New Driver</button>            </div>
+                <button className='btn btn-success' onClick={handleOpenModal}><i class="fa fa-plus" aria-hidden="true"></i> Add New Employee</button>            </div>
                 <AddNewEmployeeModal
             openModal={openModal}
             handleCloseModal={handleCloseModal}
             handleOpenModal={handleOpenModal}
             gender={gender}
+            employee={employee}
             handleGender={handleGender}
+            handleEmployee={handleEmployee}
           />
             <MUIDataTable
                 title={"Drivers List"}

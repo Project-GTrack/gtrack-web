@@ -29,6 +29,8 @@ import { useState } from "react";
 import ReportNotifications from "../components/ReportNotifications";
 import { useEffect } from "react";
 import Firebase from "../components/helpers/Firebase";
+import Cookies from 'js-cookie';
+import { useNavigate } from "react-router-dom";
 
 const database=Firebase.database();
 function Copyright(props) {
@@ -148,7 +150,12 @@ const PageLayout = ({headerTitle,children}) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  
+  const navigate = useNavigate();
+  const handleLogout = (event) => {
+    Cookies.remove('user_id');
+    navigate("/login");
+  };
+
   return (
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: "flex" }}>
@@ -205,39 +212,39 @@ const PageLayout = ({headerTitle,children}) => {
                 aria-haspopup="true"
                 aria-expanded={openDropDown ? "true" : undefined}
               >
-            <Avatar sx={{ width: 32, height: 32 }}></Avatar>
+                <Avatar sx={{ width: 32, height: 32 }}></Avatar>
               </IconButton>
             </Tooltip>
-            <Menu
-              anchorEl={anchorEl}
-              id="account-menu"
-              open={openDropDown}
-              onClose={handleClose}
-              onClick={handleClose}
-              PaperProps={styles}
-              transformOrigin={{ horizontal: "right", vertical: "top" }}
-              anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-            >
-              <MenuItem>
-                <a href="/settings" className="text-decoration-none text-dark">
-                <ListItemIcon>
-                  <Settings fontSize="small" />
-                </ListItemIcon>
-                Settings
-                </a>
-              </MenuItem>
-              <MenuItem>
-                <a href="/login" className="text-decoration-none text-dark">
-                <ListItemIcon>
-                  <Logout fontSize="small" />
-                </ListItemIcon>
-                Logout 
-                </a>
-              </MenuItem>
-            </Menu>
-          </Toolbar>
-        </AppBar>
-        <Drawer variant="permanent" open={open}>
+              <Menu
+                anchorEl={anchorEl}
+                id="account-menu"
+                open={openDropDown}
+                onClose={handleClose}
+                onClick={handleClose}
+                PaperProps={styles}
+                transformOrigin={{ horizontal: "right", vertical: "top" }}
+                anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+              >
+                <MenuItem>
+                  <a href="/settings" className="text-decoration-none text-dark">
+                  <ListItemIcon>
+                    <Settings fontSize="small" />
+                  </ListItemIcon>
+                  Settings
+                  </a>
+                </MenuItem>
+                <MenuItem>
+                  <a onClick={handleLogout} className="btn text-decoration-none text-dark">
+                  <ListItemIcon>
+                    <Logout fontSize="small" />
+                  </ListItemIcon>
+                  Logout 
+                  </a>
+                </MenuItem>
+              </Menu>
+            </Toolbar>
+          </AppBar>
+          <Drawer variant="permanent" open={open}>
           <Toolbar
             sx={{
               display: "flex",

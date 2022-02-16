@@ -8,7 +8,7 @@ const jwt=require("jsonwebtoken");
 const bcrypt=require("bcrypt");
 const {QueryTypes, Op} = require('sequelize');
 const { sequelize } = require('../connection');
-
+const moment = require('moment')
 user.model.hasMany(collection.model,{
     foreignKey:'driver_id',as:'userCollection'
 });
@@ -82,11 +82,6 @@ exports.viewDashboard= async(req, res)=>{
                include: {
                    model : user.model, as:"collectionDriver",
                    required: true,
-                //    attributes:{
-                //     exclude:['$collectionDriver.image$','$collectionDriver.birthday$','$collectionDriver.gender$','$collectionDriver.postal_code$',
-                //     '$collectionDriver.email_verified_at$','$collectionDriver.password$','$collectionDriver.remember_token$',
-                //     '$collectionDriver.google_auth$','$collectionDriver.updatedAt$','$collectionDriver.deletedAt$']
-                // },
                     attributes:['fname','lname']
                 
                },
@@ -97,24 +92,44 @@ exports.viewDashboard= async(req, res)=>{
                     ]    
                }
             });
-            console.log(collectionsCount);
+
             // let chartDataCount = await sequelize.query("SELECT collection_date, collection_weight_volume"+
             // " FROM waste_collections"+
             // " WHERE DAYNAME(collection_date) IN ('Sunday')")
 
-            let chartDataCount = await collection.model.findAll({
-                attributes:{
-                    exclude:['driver_id','weight_id','collection_route','createdAt','updatedAt','deletedAt']
-                },
-                where:{
-                    [Op.and]:[
-                     sequelize.literal(`DAYNAME(collection_date) IN ('Sunday')`),
-                     sequelize.literal('collection_date >= LAST_DAY(NOW()) + INTERVAL 1 DAY - INTERVAL 1 MONTH'),
-                     sequelize.literal('collection_date < LAST_DAY(NOW())')
-                    ]
-                 }
-            })
+            // let chartDataCount = await collection.model.findAll({
+            //     attributes:{
+            //         exclude:['driver_id','weight_id','collection_route','createdAt','updatedAt','deletedAt']
+            //     },
+            //     where:{
+            //         [Op.and]:[
+            //          sequelize.literal(`DAYNAME(collection_date) IN ('Sunday')`),
+            //          sequelize.literal('collection_date >= LAST_DAY(NOW()) + INTERVAL 1 DAY - INTERVAL 1 MONTH'),
+            //          sequelize.literal('collection_date < LAST_DAY(NOW())')
+            //         ]
+            //      }
+            // })
 
+                var day = moment()
+                        .startOf('month')
+                        .day('Sunday');
+                if (day.date() > 7) day.add(7,'d');
+                var month = day.month();
+                var chartDataCount=[];
+                let startDate = moment().startOf('month');
+                while(month === day.month()){
+                    const total_price = await collection.model.sum('collection_weight_volume',{
+                        where: {
+                            collection_date: {
+                              [Op.between]: [startDate, day]
+                            }
+                        }
+                    })
+                    chartDataCount.push({collection_weight_volume:total_price,date:day})
+                    day.add(7,'d');
+                    startDate=day;
+                }
+                console.log(chartDataCount);
 
             res.send({data:admin, drivers:driversCount, trucks:trucksCount, dumpsters:dumpstersCount,
                         collections:collectionsCount,chartData:chartDataCount});

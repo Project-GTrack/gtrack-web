@@ -16,6 +16,7 @@ app.listen(8000,()=> console.log("Back end is running at port 8000"));
 //INCLUDE MODULES HERE
 const adminDashboarRoutes  = require("./routes/adminDashboardRoutes");
 const adminRoutes = require("./routes/adminRoutes");
+const adminDumpsterRoutes = require("./routes/adminDumpsterRoutes");
 const accountRoutes=require('./routes/mobile/accountRoutes');
 const announcementRoutes=require('./routes/mobile/announcementRoutes');
 const eventRoutes=require('./routes/mobile/eventRoutes');
@@ -39,3 +40,4 @@ app.use("/mobile/dumpster",dumpsterRoutes);
 //WEB ROUTES HERE
 app.use("/admin", adminRoutes);
 app.use("/admin/dashboard", adminDashboarRoutes);
+app.use("/admin/dumpster", adminDumpsterRoutes);

@@ -13,9 +13,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.listen(8000,()=> console.log("Back end is running at port 8000"));
 
-//INCLUDE MODULES HERE
-const adminDashboarRoutes  = require("./routes/adminDashboardRoutes");
-const adminRoutes = require("./routes/adminRoutes");
+//INCLUDE MODULES HERE (MOBILE)
 const accountRoutes=require('./routes/mobile/accountRoutes');
 const announcementRoutes=require('./routes/mobile/announcementRoutes');
 const eventRoutes=require('./routes/mobile/eventRoutes');
@@ -25,6 +23,11 @@ const wasteCollectionRoutes=require('./routes/mobile/wasteCollectionRoutes');
 const reportRoutes=require('./routes/mobile/reportRoutes');
 const scheduleRoutes=require('./routes/mobile/scheduleRoutes');
 const dumpsterRoutes=require('./routes/mobile/dumpsterRoutes');
+
+//INCLUDE MODULES HERE (WEB)
+const scheduleWebRoutes=require('./routes/web/scheduleRoutes');
+const adminDashboarRoutes  = require("./routes/adminDashboardRoutes");
+const adminRoutes = require("./routes/adminRoutes");
 
 //MOBILE ROUTES HERE
 app.use("/mobile",accountRoutes);
@@ -36,6 +39,8 @@ app.use("/mobile/waste-collection",wasteCollectionRoutes);
 app.use("/mobile/report",reportRoutes);
 app.use("/mobile/schedule",scheduleRoutes);
 app.use("/mobile/dumpster",dumpsterRoutes);
+
 //WEB ROUTES HERE
+app.use("/web/schedule",scheduleWebRoutes);
 app.use("/admin", adminRoutes);
 app.use("/admin/dashboard", adminDashboarRoutes);

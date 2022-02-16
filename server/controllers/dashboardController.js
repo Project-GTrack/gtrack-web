@@ -6,8 +6,15 @@ const dumpster = require("../models/dumpster");
 const collection = require("../models/waste_collection");
 const jwt=require("jsonwebtoken");
 const bcrypt=require("bcrypt");
-const {QueryTypes} = require('sequelize');
+const {QueryTypes, Op} = require('sequelize');
 const { sequelize } = require('../connection');
+
+user.model.hasMany(collection.model,{
+    foreignKey:'driver_id',as:'userCollection'
+});
+collection.model.belongsTo(user.model,{
+    foreignKey:'driver_id',as:'collectionDriver'
+});
 
 exports.viewDashboard= async(req, res)=>{
     if(req.body.accessToken!= undefined){
@@ -18,25 +25,99 @@ exports.viewDashboard= async(req, res)=>{
                 }
             })
              
-            let driversCount = await sequelize.query("SELECT user_id,fname,lname,email,contact_no,street,purok,barangay,town,createdAt FROM users"+ 
-            " WHERE createdAt >= LAST_DAY(NOW()) + INTERVAL 1 DAY - INTERVAL 1 MONTH AND createdAt < LAST_DAY(NOW())"+ 
-            " AND user_type = 'Driver' ");
-           
-            let trucksCount = await sequelize.query("SELECT truck_id,plate_no,model,createdAt FROM trucks"+
-            " WHERE createdAt >= LAST_DAY(NOW()) + INTERVAL 1 DAY - INTERVAL 1 MONTH AND createdAt < LAST_DAY(NOW()) AND active = 1");
+            // let driversCount = await sequelize.query("SELECT user_id,fname,lname,email,contact_no,street,purok,barangay,town,createdAt FROM users"+ 
+            // " WHERE createdAt >= LAST_DAY(NOW()) + INTERVAL 1 DAY - INTERVAL 1 MONTH AND createdAt < LAST_DAY(NOW())"+ 
+            // " AND user_type = 'Driver' ");
+            let driversCount = await user.model.findAll({
+                attributes :{
+                    exclude:['image','birthday','gender','postal_code','email_verified_at','password','remember_token','google_auth','updatedAt','deletedAt']
+                },
+                where:{
+                   [Op.and]:[
+                    sequelize.literal('createdAt >= LAST_DAY(NOW()) + INTERVAL 1 DAY - INTERVAL 1 MONTH'),
+                    sequelize.literal('createdAt < LAST_DAY(NOW())'),
+                    {user_type: 'Driver'}
+                   ]
+                }
+            });
 
-            let dumpstersCount = await sequelize.query("SELECT dumpster_id,purok,street,barangay,createdAt FROM dumpsters"+
-            " WHERE createdAt >= LAST_DAY(NOW()) + INTERVAL 1 DAY - INTERVAL 1 MONTH AND createdAt < LAST_DAY(NOW())");
+            // let trucksCount = await sequelize.query("SELECT truck_id,plate_no,model,createdAt FROM trucks"+
+            // " WHERE createdAt >= LAST_DAY(NOW()) + INTERVAL 1 DAY - INTERVAL 1 MONTH AND createdAt < LAST_DAY(NOW()) AND active = 1");
+            let trucksCount = await truck.model.findAll({
+                attributes:{
+                    exclude:['user_id','updatedAt','active','deletedAt']
+                },
+                where:{
+                    [Op.and]:[
+                     sequelize.literal('createdAt >= LAST_DAY(NOW()) + INTERVAL 1 DAY - INTERVAL 1 MONTH'),
+                     sequelize.literal('createdAt < LAST_DAY(NOW())'),
+                     {active: 1}
+                    ]
+                 }
 
-            let collectionsCount = await sequelize.query("SELECT w.weight_id,w.collection_date,w.collection_route,w.collection_weight_volume,u.fname,u.lname,w.createdAt FROM waste_collections w"+
-            " INNER JOIN users u ON w.driver_id = u.user_id"+
-            " WHERE w.createdAt >= LAST_DAY(NOW()) + INTERVAL 1 DAY - INTERVAL 1 MONTH AND w.createdAt < LAST_DAY(NOW())");
+            })
 
-            let chartDataCount = await sequelize.query("SELECT collection_date, collection_weight_volume"+
-            " FROM waste_collections"+
-            " WHERE DAYNAME(collection_date) IN ('Sunday')")
-            res.send({data:admin, drivers:driversCount[0], trucks:trucksCount[0], dumpsters:dumpstersCount[0],
-                        collections:collectionsCount[0],chartData:chartDataCount[0]});
+            // let dumpstersCount = await sequelize.query("SELECT dumpster_id,purok,street,barangay,createdAt FROM dumpsters"+
+            // " WHERE createdAt >= LAST_DAY(NOW()) + INTERVAL 1 DAY - INTERVAL 1 MONTH AND createdAt < LAST_DAY(NOW())");
+            let dumpstersCount = await dumpster.model.findAll({
+                attributes:{
+                    exclude:['admin_id','town','postal_code','latitude','longitude','complete','updatedAt','deletedAt']
+                },
+                where:{
+                    [Op.and]:[
+                     sequelize.literal('createdAt >= LAST_DAY(NOW()) + INTERVAL 1 DAY - INTERVAL 1 MONTH'),
+                     sequelize.literal('createdAt < LAST_DAY(NOW())')
+                    ]
+                 }
+            })
+
+
+            // let collectionsCount = await sequelize.query("SELECT w.weight_id,w.collection_date,w.collection_route,w.collection_weight_volume,u.fname,u.lname,w.createdAt FROM waste_collections w"+
+            // " INNER JOIN users u ON w.driver_id = u.user_id"+
+            // " WHERE w.collection_date >= LAST_DAY(NOW()) + INTERVAL 1 DAY - INTERVAL 1 MONTH AND w.collection_date < LAST_DAY(NOW())");
+            let collectionsCount = await collection.model.findAll({
+                attributes:{
+                    exclude:['collection_route','createdAt','updatedAt','deletedAt']
+                },
+               include: {
+                   model : user.model, as:"collectionDriver",
+                   required: true,
+                //    attributes:{
+                //     exclude:['$collectionDriver.image$','$collectionDriver.birthday$','$collectionDriver.gender$','$collectionDriver.postal_code$',
+                //     '$collectionDriver.email_verified_at$','$collectionDriver.password$','$collectionDriver.remember_token$',
+                //     '$collectionDriver.google_auth$','$collectionDriver.updatedAt$','$collectionDriver.deletedAt$']
+                // },
+                    attributes:['fname','lname']
+                
+               },
+               where:{
+                    [Op.and]:[
+                        sequelize.literal('collection_date >= LAST_DAY(NOW()) + INTERVAL 1 DAY - INTERVAL 1 MONTH'),
+                        sequelize.literal('collection_date < LAST_DAY(NOW())')
+                    ]    
+               }
+            });
+            console.log(collectionsCount);
+            // let chartDataCount = await sequelize.query("SELECT collection_date, collection_weight_volume"+
+            // " FROM waste_collections"+
+            // " WHERE DAYNAME(collection_date) IN ('Sunday')")
+
+            let chartDataCount = await collection.model.findAll({
+                attributes:{
+                    exclude:['driver_id','weight_id','collection_route','createdAt','updatedAt','deletedAt']
+                },
+                where:{
+                    [Op.and]:[
+                     sequelize.literal(`DAYNAME(collection_date) IN ('Sunday')`),
+                     sequelize.literal('collection_date >= LAST_DAY(NOW()) + INTERVAL 1 DAY - INTERVAL 1 MONTH'),
+                     sequelize.literal('collection_date < LAST_DAY(NOW())')
+                    ]
+                 }
+            })
+
+
+            res.send({data:admin, drivers:driversCount, trucks:trucksCount, dumpsters:dumpstersCount,
+                        collections:collectionsCount,chartData:chartDataCount});
             
         })
     }else{

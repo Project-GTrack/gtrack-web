@@ -30,7 +30,7 @@ exports.register=async (req,res)=>{
 }
 
 exports.login=async (req,res)=>{
-    let account = await user.model.findOne({where:{email:req.body.email}});
+    let account = await user.model.findOne({where:{email:req.body.email,user_type:{ $not: 'Admin'}}});
     let sched = await schedule.model.findAll({
         where:{
             driver_id:account.user_id,

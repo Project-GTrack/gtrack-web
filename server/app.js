@@ -28,7 +28,7 @@ const dumpsterRoutes=require('./routes/mobile/dumpsterRoutes');
 const scheduleWebRoutes=require('./routes/web/scheduleRoutes');
 const adminDashboarRoutes  = require("./routes/adminDashboardRoutes");
 const adminRoutes = require("./routes/adminRoutes");
-const adminDumpsterRoutes = require("./routes/adminDumpsterRoutes");
+const adminDumpsterRoutes = require("./routes/web/adminDumpsterRoutes");
 
 //MOBILE ROUTES HERE
 app.use("/mobile",accountRoutes);

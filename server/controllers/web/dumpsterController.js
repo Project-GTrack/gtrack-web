@@ -1,10 +1,10 @@
 const { Sequelize } = require("sequelize");
 require('dotenv').config("../../.env");
-const dumpster = require("../models/dumpster");
-const user = require("../models/user");
+const dumpster = require("../../models/dumpster");
+const user = require("../../models/user");
 const bcrypt=require("bcrypt");
 const jwt=require("jsonwebtoken");
-const { sequelize } = require('../connection');
+const { sequelize } = require('../../connection');
 
 exports.getDumpsters = async (req,res) => {
     let dumps = await dumpster.model.findAll();

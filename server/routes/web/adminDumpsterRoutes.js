@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const auth = require("../auth");
-const dumpsterController = require("../controllers/dumpsterController");
+const auth = require("../../auth");
+const dumpsterController = require("../../controllers/web/dumpsterController");
 
 router.get("/get-dumpsters",dumpsterController.getDumpsters);
 router.get("/get-dumpster/:id",dumpsterController.getDumpster);

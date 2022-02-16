@@ -14,12 +14,12 @@ function createData(date, volume) {
   return { date, volume };
 }
 
-const data = [
-  createData(moment(chartData.data[0].collection_date).format("LL"), chartData.data[0].collection_weight_volume),
-  createData(moment(chartData.data[1].collection_date).format("LL"), chartData.data[1].collection_weight_volume),
-  createData(moment(chartData.data[2].collection_date).format("LL"), chartData.data[2].collection_weight_volume),
-  createData(moment(chartData.data[3].collection_date).format("LL"), chartData.data[3].collection_weight_volume),
-];
+const data = [];
+for(let i = 0; i < chartData.data.length; i++ ){
+ 
+  data.push(createData(moment(chartData.data[i].collection_date).format("LL"), chartData.data[i].collection_weight_volume));
+}
+
  
   return (
     <React.Fragment>

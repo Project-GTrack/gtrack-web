@@ -1,38 +1,101 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import PageLayout from './PageLayout'
-import GoogleMapReact from 'google-map-react';
-const TrackCollectorPage = () => {
-    const AnyReactComponent = ({ text }) => <div>{text}</div>;
-    const defaultProps = {
-        center: {
-          lat: 10.99835602,
-          lng: 77.01502627
-        },
-        zoom: 11
-    };
-    const controlButtonDiv = document.createElement('button');
-    controlButtonDiv.style.cursor = 'pointer';
-    controlButtonDiv.setAttribute('class','btn btn-light rounded mx-2 mt-2')
-    controlButtonDiv.innerHTML='<i class="fa fa-location-arrow" aria-hidden="true"></i>'
-    const handleOnLoad = map => {
-        map.controls[window.google.maps.ControlPosition.TOP_RIGHT].push(controlButtonDiv);
-    };
+import Firebase from '../components/helpers/Firebase';
+import ReactMapboxGl, { Marker} from 'react-mapbox-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
+import DumpsterPopup from '../components/DumpsterPopup';
+import CollectorPopup from '../components/CollectorPopup';
+import CollectionAlertDialog from '../components/CollectionAlertDialog';
 
+const Map = ReactMapboxGl({
+    accessToken:
+      'pk.eyJ1IjoicmpvbGl2ZXJpbyIsImEiOiJja2ZhanZrZnkwajFjMnJwN25mem1tenQ0In0.fpQUiUyn3J0vihGxhYA2PA'
+});
+const database=Firebase.database();
+const TrackCollectorPage = () => {
+    const [open,setOpen]=useState(false);
+    const [position,setPosition]=useState([0,0]);
+    const [collectorPopup,setCollectorPopup]=useState({
+        isOpen:false,
+        data:null
+    });
+    const [dumpsterPopup,setDumpsterPopup]=useState({
+        isOpen:false,
+        data:null
+    });
+    const [drivers,setDrivers]=useState(null);
+    const [dumpsters,setDumpsters]=useState(null);
+    const getFirebaseDrivers = () => {
+        database.ref(`Drivers/`).on('value', function (snapshot) {
+            if(snapshot.val()){
+                var snap=snapshot.val();
+                var temp=Object.keys(snap).map((key) => snap[key]);
+                setDrivers([...temp]);
+            }else{
+                setOpen(true);
+            }
+        });
+     }
+     const getFirebaseDumpsters = () => {
+        database.ref(`Dumpsters/`).on('value', function (snapshot) {
+            if(snapshot.val()){
+                var snap=snapshot.val();
+                var temp=Object.keys(snap).map((key) => snap[key]);
+                setDumpsters([...temp]);
+            }
+        });
+     }
+    useEffect(() => {
+        getFirebaseDrivers();
+        getFirebaseDumpsters();
+        navigator.geolocation.getCurrentPosition(function(position) {
+            setPosition([position.coords.longitude,position.coords.latitude])
+        });
+    }, []);
+    const handleCollectorPopup=(data)=>{
+        setCollectorPopup({isOpen: true,data:data });
+    }
+    const handleDumpsterPopup=(data)=>{
+        setDumpsterPopup({isOpen: true,data:data });
+    }
     return (
         <PageLayout headerTitle={"Track Collector"}>
-            <div style={{ height: '80vh', width: '100%' }}>
-                <GoogleMapReact
-                    defaultCenter={defaultProps.center}
-                    defaultZoom={defaultProps.zoom}
-                    yesIWantToUseGoogleMapApiInternals
-                    onGoogleApiLoaded={({ map, maps }) => handleOnLoad(map, maps)}
+            <div style={{ height: '100vh', width: '100%' }}>
+                <Map
+                    // eslint-disable-next-line react/style-prop-object
+                    style="mapbox://styles/mapbox/streets-v9"
+                    containerStyle={{
+                        height: '100%',
+                        width: '100%'
+                    }}
+                    center={position}
                 >
-                    <AnyReactComponent
-                        lat={10.99835602}
-                        lng={77.01502627}
-                        text="My Marker"
-                    />
-                </GoogleMapReact>
+                    {drivers && drivers.map((value,i)=>{
+                        return <Marker
+                                style={{cursor:'pointer'}}
+                                key={i}
+                                coordinates={[value.longitude, value.latitude]}
+                                anchor="bottom">
+                                    <div onClick={()=>handleCollectorPopup(value)}>
+                                        <img src={'/images/collector_marker_icon.png'} width={50} height={50} alt="Collector Icon" />
+                                    </div>
+                                </Marker>
+                    })}
+                    {dumpsters && dumpsters.map((value,i)=>{
+                        return <Marker
+                                style={{cursor:'pointer'}}
+                                key={i}
+                                coordinates={[value.longitude, value.latitude]}
+                                anchor="bottom">
+                                    <div onClick={()=>handleDumpsterPopup(value)}>
+                                        <img width={50} height={50} src={value.complete!==1?'/images/dumpster_marker_icon.png':'/images/dumpster_complete_icon.png'} alt="Marker Icon" />
+                                    </div>
+                                </Marker>
+                    })}
+                    {collectorPopup.isOpen && <CollectorPopup data={collectorPopup} setData={setCollectorPopup}/>}
+                    {dumpsterPopup.isOpen && <DumpsterPopup data={dumpsterPopup} setData={setDumpsterPopup}/>}
+                </Map>
+                <CollectionAlertDialog open={open} setOpen={setOpen}/>
             </div>
         </PageLayout>
     )

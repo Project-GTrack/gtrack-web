@@ -8,8 +8,9 @@ exports.userAuthorization = (req, res, next)=>{
 
 
 exports.adminChecking = (req, res, next)=>{
-    if(req.cookies.user_id !== undefined){
-        jwt.verify(req.cookies.user_id, process.env.ACCESS_TOKEN_SECRET, async(err, decoded)=>{
+    if(req.body.accesToken != undefined){
+        jwt.verify(req.body.accesToken, process.env.ACCESS_TOKEN_SECRET, async(err, decoded)=>{
+
             let data = await user.model.findOne({
                 where:{
                     user_id:decoded.user_id
@@ -18,10 +19,10 @@ exports.adminChecking = (req, res, next)=>{
             if(data.user_type == "Admin"){
                 next();
             }else{
-                res.status(400).send("You are not allowed");
+                res.send({success:false});
             }
         })
     }else{
-        res.status(400);
+        res.send("NO TOKEN FOUND");
     }
 }

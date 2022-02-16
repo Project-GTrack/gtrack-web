@@ -13,7 +13,7 @@ const event = instance.sequelize.define("events",{
         type:DataTypes.BIGINT,
         allowNull: false
     },
-    attachment_id:{
+    attachment_line_id:{
         type:DataTypes.BIGINT,
         allowNull: false
     },

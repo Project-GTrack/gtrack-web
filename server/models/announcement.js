@@ -13,7 +13,7 @@ const announcement = instance.sequelize.define("announcements",{
         type:DataTypes.BIGINT,
         allowNull: false
     },
-    attachment_id:{
+    attachment_line_id:{
         type:DataTypes.BIGINT,
         allowNull: false
     },

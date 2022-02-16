@@ -25,7 +25,14 @@ import Tooltip from "@mui/material/Tooltip";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import { mainListItems } from "../components/ListItemComponent";
+import { useState } from "react";
+import ReportNotifications from "../components/ReportNotifications";
+import { useEffect } from "react";
+import Firebase from "../components/helpers/Firebase";
+import Cookies from 'js-cookie';
+import { useNavigate } from "react-router-dom";
 
+const database=Firebase.database();
 function Copyright(props) {
   return (
     <Typography
@@ -90,75 +97,124 @@ const Drawer = styled(MuiDrawer, {
   },
 }));
 const mdTheme = createTheme();
-
 const PageLayout = ({headerTitle,children}) => {
-    const [open, setOpen] = React.useState(true);
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const openDropDown = Boolean(anchorEl);
-    const toggleDrawer = () => {
-      setOpen(!open);
-    };
+  const [concerns, setConcerns] = useState(null);
+  const [alerts, setAlerts] = useState(null);
+  const getFirebaseConcerns = () => {
+    database.ref(`Concerns/`).on('value', function (snapshot) {
+        if(snapshot.val()){
+            var snap=snapshot.val();
+            var temp=Object.keys(snap).map((key) => snap[key]);
+            setConcerns([...temp]);
+        }else{
+          setConcerns([]);
+        }
+    });
+  }
+  const getFirebaseReports = () => {
+    database.ref(`Reports/`).on('value', function (snapshot) {
+        if(snapshot.val()){
+            var snap=snapshot.val();
+            var temp=Object.keys(snap).map((key) => snap[key]);
+            setAlerts([...temp]);
+        }else{
+          setAlerts([]);
+        }
+    });
+  }
+  useEffect(() => {
+    getFirebaseConcerns();
+    getFirebaseReports();
+  }, [])
   
-    const handleClick = (event) => {
-      setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-      setAnchorEl(null);
-    };
-  
-    return (
-      <ThemeProvider theme={mdTheme}>
-        <Box sx={{ display: "flex" }}>
-          <CssBaseline />
-          <AppBar position="absolute" open={open} color="success">
-            <Toolbar
+  const [type, setType] = useState(null);
+  const [anchorNotificationEl, setAnchorNotificationEl] = useState(null);
+  const openNotification = Boolean(anchorNotificationEl);
+  const handleNotificationClick = (event,notifType) => {
+    setType(notifType);
+    setAnchorNotificationEl(event.currentTarget);
+  };
+  const handleNotificationClose = () => {
+    setAnchorNotificationEl(null);
+  };
+  const [open, setOpen] = useState(true);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const openDropDown = Boolean(anchorEl);
+  const toggleDrawer = () => {
+    setOpen(!open);
+  };
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const navigate = useNavigate();
+  const handleLogout = (event) => {
+    Cookies.remove('user_id');
+    navigate("/login");
+  };
+
+  return (
+    <ThemeProvider theme={mdTheme}>
+      <Box sx={{ display: "flex" }}>
+        <CssBaseline />
+        <AppBar position="absolute" open={open} color="success">
+          <Toolbar
+            sx={{
+              pr: "24px", // keep right padding when drawer closed
+            }}
+          >
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+              onClick={toggleDrawer}
               sx={{
-                pr: "24px", // keep right padding when drawer closed
+                marginRight: "36px",
+                ...(open && { display: "none" }),
               }}
             >
+              <MenuIcon />
+            </IconButton>
+            <Typography
+              component="h1"
+              variant="h6"
+              color="inherit"
+              noWrap
+              sx={{ flexGrow: 1 }}
+            >
+              {headerTitle}
+            </Typography>
+            <IconButton
+              color="inherit"
+              onClick={(e)=>handleNotificationClick(e,"alert")}
+            >
+              <Badge badgeContent={alerts?alerts.length:0} color="secondary">
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
+            <IconButton 
+            onClick={(e)=>handleNotificationClick(e,"concern")}
+            color="inherit">
+              <Badge badgeContent={concerns?concerns.length:0} color="secondary">
+                <EmailIcon/>
+              </Badge>
+            </IconButton>
+            <ReportNotifications open={openNotification} reports={type==='concern'?concerns:alerts} type={type} anchorEl={anchorNotificationEl} handleClose={handleNotificationClose}/>
+            <Tooltip title="Account settings">
               <IconButton
-                edge="start"
-                color="inherit"
-                aria-label="open drawer"
-                onClick={toggleDrawer}
-                sx={{
-                  marginRight: "36px",
-                  ...(open && { display: "none" }),
-                }}
+                onClick={handleClick}
+                size="small"
+                sx={{ ml: 2 }}
+                aria-controls={openDropDown ? "account-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={openDropDown ? "true" : undefined}
               >
-                <MenuIcon />
+                <Avatar sx={{ width: 32, height: 32 }}></Avatar>
               </IconButton>
-              <Typography
-                component="h1"
-                variant="h6"
-                color="inherit"
-                noWrap
-                sx={{ flexGrow: 1 }}
-              >
-                {headerTitle}
-              </Typography>
-              <IconButton color="inherit">
-                <Badge badgeContent={4} color="secondary">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
-              <IconButton color="inherit">
-                <Badge badgeContent={4} color="secondary">
-                  <EmailIcon />
-                </Badge>
-              </IconButton>
-              <Tooltip title="Account settings">
-                <IconButton
-                  onClick={handleClick}
-                  size="small"
-                  sx={{ ml: 2 }}
-                  aria-controls={openDropDown ? "account-menu" : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={openDropDown ? "true" : undefined}
-                >
-              <Avatar sx={{ width: 32, height: 32 }}></Avatar>
-                </IconButton>
-              </Tooltip>
+            </Tooltip>
               <Menu
                 anchorEl={anchorEl}
                 id="account-menu"
@@ -178,7 +234,7 @@ const PageLayout = ({headerTitle,children}) => {
                   </a>
                 </MenuItem>
                 <MenuItem>
-                  <a href="/login" className="text-decoration-none text-dark">
+                  <a onClick={handleLogout} className="btn text-decoration-none text-dark">
                   <ListItemIcon>
                     <Logout fontSize="small" />
                   </ListItemIcon>
@@ -189,92 +245,92 @@ const PageLayout = ({headerTitle,children}) => {
             </Toolbar>
           </AppBar>
           <Drawer variant="permanent" open={open}>
-            <Toolbar
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "flex-end",
-                px: [1],
-              }}
-            >
-              <Grid
-                container
-                spacing={0}
-                direction="column"
-                alignItems="center"
-                justifyContent="center"
-              >
-                <Grid item xs={3}>
-                  <Link color="inherit" href="/">
-                    <img
-                      alt="GTrack Logo"
-                      width={105}
-                      height={45}
-                      className="mb-2"
-                      src="/images/gtrack-logo-1.png"
-                    ></img>
-                  </Link>
-                </Grid>
-              </Grid>
-  
-              <IconButton onClick={toggleDrawer}>
-                <ChevronLeftIcon />
-              </IconButton>
-            </Toolbar>
-  
-            <Divider />
-            <List>{mainListItems}</List>
-            <Divider />
-          </Drawer>
-          <Box
-            component="main"
+          <Toolbar
             sx={{
-              backgroundColor: (theme) =>
-                theme.palette.mode === "light"
-                  ? theme.palette.grey[100]
-                  : theme.palette.grey[900],
-              flexGrow: 1,
-              height: "100vh",
-              overflow: "auto",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
+              px: [1],
             }}
           >
-            <Toolbar />
-            <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-              <>
-                {children}
-              </>
-              <Copyright sx={{ pt: 4 }} />
-            </Container>
-          </Box>
+            <Grid
+              container
+              spacing={0}
+              direction="column"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Grid item xs={3}>
+                <Link color="inherit" href="/">
+                  <img
+                    alt="GTrack Logo"
+                    width={105}
+                    height={45}
+                    className="mb-2"
+                    src="/images/gtrack-logo-1.png"
+                  ></img>
+                </Link>
+              </Grid>
+            </Grid>
+
+            <IconButton onClick={toggleDrawer}>
+              <ChevronLeftIcon />
+            </IconButton>
+          </Toolbar>
+
+          <Divider />
+          <List>{mainListItems}</List>
+          <Divider />
+        </Drawer>
+        <Box
+          component="main"
+          sx={{
+            backgroundColor: (theme) =>
+              theme.palette.mode === "light"
+                ? theme.palette.grey[100]
+                : theme.palette.grey[900],
+            flexGrow: 1,
+            height: "100vh",
+            overflow: "auto",
+          }}
+        >
+          <Toolbar />
+          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+            <>
+              {children}
+            </>
+            <Copyright sx={{ pt: 4 }} />
+          </Container>
         </Box>
-      </ThemeProvider>
-    );
-  };
-  
-  const styles = {
-    elevation: 0,
-    sx: {
-      overflow: "visible",
-      filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-      mt: 1.5,
-      "& .MuiAvatar-root": {
-        width: 32,
-        height: 32,
-        ml: -0.5,
-        mr: 1,
-      },
-      "&:before": {
-        content: '""',
-        display: "block",
-        position: "absolute",
-        top: 0,
-        right: 14,
-        width: 10,
-        height: 10,
-        bgcolor: "background.paper",
-        transform: "translateY(-50%) rotate(45deg)",
-        zIndex: 0,
-      },
+      </Box>
+    </ThemeProvider>
+  );
+};
+
+const styles = {
+  elevation: 0,
+  sx: {
+    overflow: "visible",
+    filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+    mt: 1.5,
+    "& .MuiAvatar-root": {
+      width: 32,
+      height: 32,
+      ml: -0.5,
+      mr: 1,
     },
+    "&:before": {
+      content: '""',
+      display: "block",
+      position: "absolute",
+      top: 0,
+      right: 14,
+      width: 10,
+      height: 10,
+      bgcolor: "background.paper",
+      transform: "translateY(-50%) rotate(45deg)",
+      zIndex: 0,
+    },
+  },
 };
 export default PageLayout

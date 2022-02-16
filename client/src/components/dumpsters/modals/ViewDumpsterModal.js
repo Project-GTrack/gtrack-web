@@ -9,8 +9,11 @@ import DialogActions from "@mui/material/DialogActions";
 import PropTypes from "prop-types";
 import CloseIcon from "@mui/icons-material/Close";
 import GoogleMapReact from 'google-map-react';
+import axios from "axios";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
+import ReactMapboxGl, { Layer, Feature, Marker } from "react-mapbox-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -20,7 +23,10 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     padding: theme.spacing(1),
   },
 }));
-
+const Map = ReactMapboxGl({
+  accessToken:
+    "pk.eyJ1IjoicmpvbGl2ZXJpbyIsImEiOiJja2ZhanZrZnkwajFjMnJwN25mem1tenQ0In0.fpQUiUyn3J0vihGxhYA2PA",
+});
 const BootstrapDialogTitle = (props) => {
   const { children, onClose, ...other } = props;
 
@@ -50,7 +56,7 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-export default function ViewDumpsterModal(props) {
+const ViewDumpsterModal = (props) => {
   const AnyReactComponent = ({ text }) => <div>{text}</div>;
     const defaultProps = {
         center: {
@@ -68,7 +74,7 @@ export default function ViewDumpsterModal(props) {
     };
   return (
     <Dialog
-     fullWidth="true"
+     fullWidth={true}
       onClose={props.handleCloseModal}
       aria-labelledby="customized-dialog-title"
       open={props.openModal}
@@ -76,39 +82,64 @@ export default function ViewDumpsterModal(props) {
       <BootstrapDialogTitle
         id="customized-dialog-title"
         onClose={props.handleCloseModal}
-        fullWidth
+
       >
         Dumpster Details
       </BootstrapDialogTitle>
       <DialogContent dividers>
+      <Box sx={{ width: "100%" }} paddingTop={2} paddingBottom={2}>
+      <Typography variant="body2" color="text.secondary">
+           <b style={{fontSize: 20}}>{props.data[1]} </b> 
+          </Typography>
+          </Box>
       <div style={{ height: '40vh', width: '100%' }}>
-                <GoogleMapReact
-                    defaultCenter={defaultProps.center}
-                    defaultZoom={defaultProps.zoom}
-                    yesIWantToUseGoogleMapApiInternals
-                    onGoogleApiLoaded={({ map, maps }) => handleOnLoad(map, maps)}
-                >
-                    <AnyReactComponent
-                        lat={10.99835602}
-                        lng={77.01502627}
-                        text="My Marker"
-                    />
-                </GoogleMapReact>
-            </div>
-        <Box sx={{ width: "100%" }} paddingTop={2}>
+      <Map
+            style="mapbox://styles/mapbox/streets-v9"
+            containerStyle={{
+              height: "36vh",
+              width: "100%",
+            }}
+            center={
+              props.data[3] != 0 && props.data[4] != 0
+                ? [props.data[4], props.data[3]]
+                : [123.94964154058066, 10.482913243053028]
+            }
+            zoom={
+              props.data[3]  != 0 && props.data[4] != 0
+                ? [15]
+                : [11]
+            }
+          >
+            {props.data[3] != 0 && props.data[4] != 0 ? (
+              <Marker
+                coordinates={
+                  props.data[3] != 0 && props.data[4] != 0
+                    ? [props.data[4], props.data[3]]
+                    : [123.94964154058066, 10.482913243053028]
+                }
+                anchor="bottom"
+              >
+                <img style={mystyle} src="/dumpster_marker_icon.png" />
+              </Marker>
+            ) : (
+              <></>
+            )}
+          </Map>
+          </div>
+        {/* <Box sx={{ width: "100%" }} paddingTop={2}>
           <Typography variant="body2" color="text.secondary">
-           <b style={{fontSize: 22}}>Address: </b> {props.data[0]}
+           <b style={{fontSize: 22}}>Address: </b> {props.data[1]}
           </Typography>
           <Typography variant="body2" color="text.secondary" paddingTop={1}>
-          <b style={{fontSize: 22}}>Postal Code: </b>{props.data[1]}
+          <b style={{fontSize: 22}}>Postal Code: </b>{props.data[2]}
           </Typography>
           <Typography variant="body2" color="text.secondary" paddingTop={1}>
-          <b style={{fontSize: 22}}>Longitude: </b> {props.data[2]}
+          <b style={{fontSize: 22}}>Longitude: </b> {props.data[3]}
           </Typography>
           <Typography variant="body2" color="text.secondary" paddingTop={1}>
-          <b style={{fontSize: 22}}>Latitude: </b> {props.data[3]}
+          <b style={{fontSize: 22}}>Latitude: </b> {props.data[4]}
           </Typography>
-        </Box>
+        </Box> */}
       </DialogContent>
       <DialogActions>
         <Button autoFocus onClick={props.handleCloseModal}>
@@ -118,3 +149,8 @@ export default function ViewDumpsterModal(props) {
     </Dialog>
   );
 }
+const mystyle = {
+  height: "25px",
+  width: "25px",
+};
+export default ViewDumpsterModal;

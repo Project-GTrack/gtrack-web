@@ -1,23 +1,12 @@
-import * as React from 'react';
-import Grid from "@mui/material/Grid";
+import React, { useState, useEffect } from 'react'
 import { styled } from '@mui/material/styles';
 import Box from "@mui/material/Box";
-import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import InputLabel from '@mui/material/InputLabel';
-import Select from '@mui/material/Select';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
 import PropTypes from 'prop-types';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from "@mui/material/IconButton";
-import MenuItem from "@mui/material/MenuItem";
-import { Input } from '@mui/material';
-import TextareaAutosize from '@mui/base/TextareaAutosize';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -25,7 +14,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import Drivers from "../data/DriversData";
+import moment from 'moment';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -38,7 +27,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   
   const BootstrapDialogTitle = (props) => {
     const { children, onClose, ...other } = props;
-  
+    
     return (
       <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
         {children}
@@ -89,16 +78,16 @@ export default function DriversModal(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-            {Drivers.map((driver) => (
+            {props.data.map((driver) => (
             <TableRow
-              key={driver.id}
+              key={driver.user_id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
-              <TableCell align="justify">{driver.name}</TableCell>
+              <TableCell align="justify">{driver.fname+" "+driver.lname}</TableCell>
               <TableCell align="justify">{driver.email}</TableCell>
-              <TableCell align="justify">{driver.contact}</TableCell>
-              <TableCell align="justify">{driver.address}</TableCell>
-              <TableCell align="justify">{driver.date}</TableCell>
+              <TableCell align="justify">{driver.contact_no}</TableCell>
+              <TableCell align="justify">{driver.street+" "+driver.purok+" "+driver.barangay+" "+driver.town}</TableCell>
+              <TableCell align="justify">{moment(driver.createdAt).format("LL")}</TableCell>
             </TableRow>
             ))}
         </TableBody>

@@ -33,7 +33,27 @@ module.exports = {
       deletedAt:{
         type:Sequelize.DATE,
       },
-    })
+    }).then(() => queryInterface.addConstraint('truck_assignments',{
+      fields:['driver_id'],
+      type: 'FOREIGN KEY',
+      name: 'FK_truck_assignments_1', // useful if using queryInterface.removeConstraint
+      references: {
+        table: 'users',
+        field: 'user_id',
+      },
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
+    })).then(() => queryInterface.addConstraint('truck_assignments',{
+      fields:['truck_id'],
+      type: 'FOREIGN KEY',
+      name: 'FK_truck_assignments_2', // useful if using queryInterface.removeConstraint
+      references: {
+        table: 'trucks',
+        field: 'truck_id',
+      },
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
+    }))
   },
 
   down: async (queryInterface, Sequelize) => {

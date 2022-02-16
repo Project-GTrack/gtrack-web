@@ -41,7 +41,17 @@ module.exports = {
       deletedAt:{
         type:Sequelize.DATE,
       },
-    })
+    }).then(() => queryInterface.addConstraint('waste_collections',{
+      fields:['driver_id'],
+      type: 'FOREIGN KEY',
+      name: 'FK_waste_collections_1', // useful if using queryInterface.removeConstraint
+      references: {
+        table: 'users',
+        field: 'user_id',
+      },
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
+    }))
   },
 
   down: async (queryInterface, Sequelize) => {

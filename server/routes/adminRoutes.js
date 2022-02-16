@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const userController = require("../controllers/userController");
 
 
-router.post("/register",userController.registerUser);
+router.post("/register",userController.registerEmployee);
 router.post("/login",userController.login);
 router.post("/logout",userController.logout);
 

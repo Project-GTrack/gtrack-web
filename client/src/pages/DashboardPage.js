@@ -28,7 +28,7 @@ const DashboardPage = () => {
  
   useEffect(() => {
     if(Cookies.get('user_id')){
-      Axios.post("http://localhost:8000/admin/dashboard",{accessToken: Cookies.get('user_id')})
+      Axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/dashboard`,{accessToken: Cookies.get('user_id')})
       .then((res) => {
           if(res){
             setData(res.data);

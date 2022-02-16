@@ -10,6 +10,7 @@ router.post("/logout",userController.logout);
 
 
 //employee module routes
-router.post('/deleteRecord',userController.deleteUser);
+router.post('/deleteUser/:id',userController.deleteUser);
+router.post('/updateUser/:id',userController.updateUser);
 
 module.exports = router;

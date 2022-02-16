@@ -60,14 +60,14 @@ exports.logout = async(req, res)=>{
 
 //Need to test this first
 exports.deleteUser = async(req,res) => {
-    user.model.destroy({
+    let data = user.model.destroy({
         where:{
-            user_id: req.body.id //Id of the user I wanna delete will be passed (this id should be stored in the delete button) 
-                                // or is this req.params.id
+            user_id: req.params.id //Id of the user I wanna delete will be passed (this id should be stored in the delete button) 
         }
     }).then(function(rowDeleted){
         if(rowDeleted===1){
-            console.log('Record Deleted Successfully')
+            res.send({value:data}); 
+            console.log('Record Deleted Successfully');
         }
     }, function(err){
         console.log(err);
@@ -78,16 +78,21 @@ exports.deleteUser = async(req,res) => {
 //Need to test this first
 exports.updateUser = async(req,res) => {
     //add the needed data to do the updates
+    const updateObject = req.body
+    //Medj big bug ni siya kay if mag send ka part sa object og new password ma change siya so if naa password apil sa req 
+    //matic error
+    if (req.body.password) {
+        return res.status(500).send('something went wrong');
+    }
 
-    const user = await user.model.findOne({
-        attributes: ['email', 'Firstname'], //figure this out
+    let data = await user.model.update(updateObject, {
         where:{
-            user_id:req.body.id,
-            email:req.body.email
+            user_id: req.params.id
         }
     })
-    if(user !== null){
-        
-
+    
+    if (data) {
+        res.send({value:data}); 
+        console.log('record has been updated');
     }
 }

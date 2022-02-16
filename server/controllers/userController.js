@@ -27,6 +27,7 @@ exports.registerEmployee = async(req, res) => {
         return res.status(207).send("Account Exists");
     }
 }
+
 exports.login = async(req, res) => {
     console.log(req.body.email);
     let data = await user.model.findOne({
@@ -51,4 +52,47 @@ exports.login = async(req, res) => {
 }
 exports.logout = async(req, res)=>{
     res.status(200).json("You logged out Successfully");
+}
+
+
+
+// Additional user functions (For Employees)
+
+//Need to test this first
+exports.deleteUser = async(req,res) => {
+    let data = user.model.destroy({
+        where:{
+            user_id: req.params.id //Id of the user I wanna delete will be passed (this id should be stored in the delete button) 
+        }
+    }).then(function(rowDeleted){
+        if(rowDeleted===1){
+            res.send({value:data}); 
+            console.log('Record Deleted Successfully');
+        }
+    }, function(err){
+        console.log(err);
+    })
+}
+
+
+//Need to test this first
+exports.updateUser = async(req,res) => {
+    //add the needed data to do the updates
+    const updateObject = req.body
+    //Medj big bug ni siya kay if mag send ka part sa object og new password ma change siya so if naa password apil sa req 
+    //matic error
+    if (req.body.password) {
+        return res.status(500).send('something went wrong');
+    }
+
+    let data = await user.model.update(updateObject, {
+        where:{
+            user_id: req.params.id
+        }
+    })
+    
+    if (data) {
+        res.send({value:data}); 
+        console.log('record has been updated');
+    }
 }

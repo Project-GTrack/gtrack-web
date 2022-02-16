@@ -8,4 +8,9 @@ router.post("/register",userController.registerEmployee);
 router.post("/login",userController.login);
 router.post("/logout",userController.logout);
 
+
+//employee module routes
+router.post('/deleteUser/:id',userController.deleteUser);
+router.post('/updateUser/:id',userController.updateUser);
+
 module.exports = router;

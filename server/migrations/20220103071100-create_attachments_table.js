@@ -33,7 +33,17 @@ module.exports = {
       deletedAt:{
         type:Sequelize.DATE,
       },
-    })
+    }).then(() => queryInterface.addConstraint('attachments',{
+      fields:['attachment_line_id'],
+      type: 'FOREIGN KEY',
+      name: 'FK_attachments_2', // useful if using queryInterface.removeConstraint
+      references: {
+        table: 'attachment_lines',
+        field: 'attachment_line_id',
+      },
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
+    }))
   },
 
   down: async (queryInterface, Sequelize) => {

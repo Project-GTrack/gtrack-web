@@ -19,7 +19,7 @@ module.exports = {
             type:Sequelize.BIGINT,
             allowNull:false
         },
-        attachment_id:{
+        attachment_line_id:{
             type:Sequelize.BIGINT,
             allowNull:false
         },
@@ -74,7 +74,27 @@ module.exports = {
           type:Sequelize.DATE,
         },
 
-      })
+      }).then(() => queryInterface.addConstraint('events',{
+        fields:['admin_id'],
+        type: 'FOREIGN KEY',
+        name: 'FK_events_1', // useful if using queryInterface.removeConstraint
+        references: {
+          table: 'users',
+          field: 'user_id',
+        },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+      })).then(() => queryInterface.addConstraint('events',{
+        fields:['attachment_line_id'],
+        type: 'FOREIGN KEY',
+        name: 'FK_events_2', // useful if using queryInterface.removeConstraint
+        references: {
+          table: 'attachment_lines',
+          field: 'attachment_line_id',
+        },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+      }))
 
   },
 

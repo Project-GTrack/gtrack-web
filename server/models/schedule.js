@@ -22,7 +22,7 @@ const schedule = instance.sequelize.define("schedules",{
         allowNull: false
     },
     schedule:{
-        type:DataTypes.DATE,
+        type:DataTypes.TEXT,
         allowNull: false
     },
     garbage_type:{

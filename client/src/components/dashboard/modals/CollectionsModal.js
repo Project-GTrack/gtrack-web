@@ -55,6 +55,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   };
   
 export default function CollectionsModal(props) {
+  console.log(props);
   return (
     <BootstrapDialog
     onClose={props.handleCloseModal}
@@ -86,7 +87,7 @@ export default function CollectionsModal(props) {
               <TableCell align="justify">{moment(collection.collection_date).format("LLL")}</TableCell>
               <TableCell align="justify">{collection.collection_route}</TableCell>
               <TableCell align="justify">{collection.collection_weight_volume}</TableCell>
-              <TableCell align="justify">{collection.fname+" "+collection.lname}</TableCell>
+              <TableCell align="justify">{collection.collectionDriver.fname+" "+collection.collectionDriver.lname}</TableCell>
               <TableCell align="justify">{moment(collection.createdAt).format("LL")}</TableCell>
             </TableRow>
         ))}

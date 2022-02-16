@@ -1,9 +1,10 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
 import PageLayout from './PageLayout';
+import axios from 'axios';
 import DumpstersComponent from '../components/dumpsters/DumpstersComponent';
 
 const DumpstersPage = () => {

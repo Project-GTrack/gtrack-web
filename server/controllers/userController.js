@@ -17,7 +17,7 @@ exports.registerUser = async(req, res) => {
             email:req.body.email
         }
     })
-    if(data.length == 0){
+    if(data.length === 0){
        req.body.password = "p@ssw0rd";
        hash = bcrypt.hashSync(req.body.password,saltRounds);
        req.body.pasword = hash;
@@ -27,6 +27,7 @@ exports.registerUser = async(req, res) => {
         return res.status(207).send("Account Exists");
     }
 }
+
 exports.login = async(req, res) => {
     console.log(req.body.email);
     let data = await user.model.findOne({

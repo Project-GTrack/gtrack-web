@@ -57,7 +57,6 @@ exports.login=async (req,res)=>{
           
         }
     }
-    console.log("YEAHHBOI", account);
     if(account && !req.body.google_auth){
         if(!account.google_auth){
             var decrypted = C.AES.decrypt(account.password,process.env.SECRET_KEY);

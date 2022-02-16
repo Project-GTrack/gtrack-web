@@ -48,7 +48,7 @@ const ReportNotifications = ({open,anchorEl,handleClose,type,reports}) => {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
       {(type==='concern')?(
-        data.length!==0?(
+        data != null && data.length!==0?(
           data.map((item,i)=>{
             return (
               <MenuItem key={i}>
@@ -68,7 +68,7 @@ const ReportNotifications = ({open,anchorEl,handleClose,type,reports}) => {
           </MenuItem>
         )
       ):(
-        data.length!==0?(
+        data != null && data.length!==0?(
           data.map((item,i)=>{
             return (
               <MenuItem key={i}>

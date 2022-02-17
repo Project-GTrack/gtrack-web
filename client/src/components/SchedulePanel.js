@@ -61,7 +61,7 @@ const SchedulePanel = () => {
         );
     }
     useEffect(() => {
-        axios.get(`${process.env.REACT_APP_BACKEND_URL}/web/schedule/display`)
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}/admin/schedule/display`)
         .then(res => {
             if(res.data.success){
                 // setSchedule(res.data.data.schedule);

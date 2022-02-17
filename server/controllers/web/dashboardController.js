@@ -1,13 +1,13 @@
 const { Sequelize } = require("sequelize");
 require('dotenv').config("../../.env");
-const user = require("../models/user");
-const truck = require("../models/truck");
-const dumpster = require("../models/dumpster");
-const collection = require("../models/waste_collection");
+const user = require("../../models/user");
+const truck = require("../../models/truck");
+const dumpster = require("../../models/dumpster");
+const collection = require("../../models/waste_collection");
 const jwt=require("jsonwebtoken");
 const bcrypt=require("bcrypt");
 const {QueryTypes, Op} = require('sequelize');
-const { sequelize } = require('../connection');
+const { sequelize } = require('../../connection');
 const moment = require('moment')
 user.model.hasMany(collection.model,{
     foreignKey:'driver_id',as:'userCollection'
@@ -110,27 +110,28 @@ exports.viewDashboard= async(req, res)=>{
             //      }
             // })
 
-                var day = moment()
+                let day = moment()
                         .startOf('month')
                         .day('Sunday');
                 if (day.date() > 7) day.add(7,'d');
                 var month = day.month();
-                var chartDataCount=[];
-                let startDate = moment().startOf('month');
+                let chartDataCount=[];
+                var startDate = moment(moment().format("YYYY-MM-01"));
+                var total_price=null;
                 while(month === day.month()){
-                    const total_price = await collection.model.sum('collection_weight_volume',{
+                    total_price = await collection.model.sum('collection_weight_volume',{
                         where: {
                             collection_date: {
                               [Op.between]: [startDate, day]
                             }
                         }
                     })
-                    chartDataCount.push({collection_weight_volume:total_price,date:day})
+                    if(total_price){
+                        chartDataCount.push({collection_weight_volume:total_price,collection_date:day.clone()})
+                    }
+                    startDate=day.clone();
                     day.add(7,'d');
-                    startDate=day;
                 }
-                console.log(chartDataCount);
-
             res.send({data:admin, drivers:driversCount, trucks:trucksCount, dumpsters:dumpstersCount,
                         collections:collectionsCount,chartData:chartDataCount});
             

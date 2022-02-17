@@ -2,16 +2,18 @@ import * as React from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
-import PropTypes from "prop-types";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import TextField from '@mui/material/TextField';
-import Typography from "@mui/material/Typography";
+import { useFormik } from 'formik';
+import axios from "axios";
+import { useState } from "react";
+import Cookies from "js-cookie";
+import * as yup from 'yup'
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -46,15 +48,33 @@ const BootstrapDialogTitle = (props) => {
   );
 };
 
-BootstrapDialogTitle.propTypes = {
-  children: PropTypes.node,
-  onClose: PropTypes.func.isRequired,
-};
-
 export default function ReactivateModal(props) {
+  const passwordValidationSchema = yup.object().shape({
+    password: yup
+      .string()
+      .required('Password is required'),
+  })
+  const [error,setError]=useState(null);
+  const handleFormSubmit = async() =>{
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/activate`,{email:props.data[2],password:values.password,accessToken:Cookies.get("user_id")})
+    .then(res=>{
+      if(res.data.success){
+        props.setAccounts(res.data.data);
+        props.setDeleteModal(false)
+      }else{
+        setError(res.data.message);
+      }
+    })
+  }
+  const { handleChange, handleSubmit, handleBlur, values, errors,isValid,touched } = useFormik({
+    initialValues:{ password:''},
+    enableReinitialize:true,
+    validationSchema:passwordValidationSchema,
+    onSubmit: handleFormSubmit
+  });
   return (
     <BootstrapDialog
-      onClose={props.handleCloseDeleteModal}
+      onClose={()=>props.setDeleteModal(false)}
       aria-labelledby="customized-dialog-title"
       open={props.openDeleteModal}
     >
@@ -67,15 +87,21 @@ export default function ReactivateModal(props) {
         <Box sx={{ width: "100%" }}>
         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
     <Grid item xs={6} marginTop={2}>
-    Confirm using your password
+      Confirm using your password
     </Grid>
     <Grid item xs={6} marginTop={-2}>
-    <TextField
+      {(errors.password && touched.password) &&
+        <p className="text-danger small mt-2">{errors.password}</p>
+      }
+      {error && <p className="text-danger small mt-2">{error}</p>}
+      <TextField
+        onChange={handleChange('password')}
+        value={values.password}
+        onBlur={handleBlur('password')}
         autoFocus
         margin="dense"
-        id="password"
         label="Enter password here"
-        type="text"
+        type="password"
         fullWidth
         variant="standard"
       />
@@ -84,8 +110,8 @@ export default function ReactivateModal(props) {
         </Box>
       </DialogContent>
       <DialogActions>
-      <button className='btn' onClick={props.handleCloseDeleteModal}>Close</button>
-        <button className='btn btn-success' onClick={props.handleCloseDeleteModal}>Activate</button>
+        <button className='btn' onClick={()=>props.setDeleteModal(false)}>Close</button>
+        <button className='btn btn-success' type="submit" disabled={!isValid} onClick={handleSubmit}>Activate</button>
       </DialogActions>
     </BootstrapDialog>
   );

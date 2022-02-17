@@ -76,8 +76,12 @@ const user = instance.sequelize.define("users",{
     postal_code:{
         type:DataTypes.STRING,
         allowNull: true
-    }
-
+    },
+    status:{
+        type:DataTypes.BOOLEAN,
+        defaultValue: true,
+        allowNull: false
+    },
 },{
     createdAt: true,
     updatedAt: true,

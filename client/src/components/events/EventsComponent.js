@@ -34,7 +34,7 @@ const EventsComponent = () => {
     return (
         <div>
             <div className='mb-3'>
-                <button className='btn btn-success' onClick={handleOpenModal}><i class="fa fa-plus" aria-hidden="true"></i> Add New Event</button>            </div>
+                <button className='btn btn-success' onClick={handleOpenModal}><i className="fa fa-plus" aria-hidden="true"></i> Add New Event</button>            </div>
                 <AddNewEventModal
             openModal={openModal}
             contactPerson = {contactPerson}

@@ -62,7 +62,7 @@ const SignInPage = () => {
       event.preventDefault();
       setErrors(AdminLoginValidation(user));
       if(Object.keys(AdminLoginValidation(user)).length === 0){
-        Axios.post('http://localhost:8000/admin/login',{
+        Axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/login`,{
           email: user.email,
           password: user.password
         }).then((res)=>{

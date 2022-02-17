@@ -1,13 +1,13 @@
 const { Sequelize } = require("sequelize");
 require('dotenv').config("../../.env");
-const user = require("../models/user");
-const truck = require("../models/truck");
-const dumpster = require("../models/dumpster");
-const collection = require("../models/waste_collection");
+const user = require("../../models/user");
+const truck = require("../../models/truck");
+const dumpster = require("../../models/dumpster");
+const collection = require("../../models/waste_collection");
 const jwt=require("jsonwebtoken");
 const bcrypt=require("bcrypt");
 const {QueryTypes, Op} = require('sequelize');
-const { sequelize } = require('../connection');
+const { sequelize } = require('../../connection');
 const moment = require('moment')
 user.model.hasMany(collection.model,{
     foreignKey:'driver_id',as:'userCollection'

@@ -20,7 +20,7 @@ const TruckAssignmentPanel = () => {
     return (
         <div>
             <div className='mb-3'>
-                <button className='btn btn-success'><i class="fa fa-plus" aria-hidden="true"></i> Add New Truck Assignment</button>            </div>
+                <button className='btn btn-success'><i className="fa fa-plus" aria-hidden="true"></i> Add New Truck Assignment</button>            </div>
             <MUIDataTable
                 title={"Truck Assignments List"}
                 data={data}

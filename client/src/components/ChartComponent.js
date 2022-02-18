@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useTheme } from '@mui/material/styles';
-import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import Title from './TitleComponent';
 import moment from 'moment';
 
@@ -14,12 +14,12 @@ function createData(date, volume) {
   return { date, volume };
 }
 
-const data = [
-  createData(moment(chartData.data[0].collection_date).format("LL"), chartData.data[0].collection_weight_volume),
-  createData(moment(chartData.data[1].collection_date).format("LL"), chartData.data[1].collection_weight_volume),
-  createData(moment(chartData.data[2].collection_date).format("LL"), chartData.data[2].collection_weight_volume),
-  createData(moment(chartData.data[3].collection_date).format("LL"), chartData.data[3].collection_weight_volume),
-];
+const data = [];
+for(let i = 0; i < chartData.data.length; i++ ){
+ 
+  data.push(createData(moment(chartData.data[i].collection_date).format("LL"), chartData.data[i].collection_weight_volume));
+}
+
  
   return (
     <React.Fragment>
@@ -51,6 +51,7 @@ const data = [
             stroke={theme.palette.primary.main}
             dot={false}
           />
+          <Tooltip />
         </LineChart>
       </ResponsiveContainer>
     </React.Fragment>

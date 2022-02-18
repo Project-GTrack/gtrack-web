@@ -6,7 +6,7 @@ const GarbageTrucksToolbar = ({selectedRows,displayData}) => {
       }
     return (
           <div>
-              <button onClick={handleClick} className="btn btn-warning "><i class="fa fa-eye-slash" aria-hidden="true"></i></button>
+              <button onClick={handleClick} className="btn btn-warning "><i className="fa fa-eye-slash" aria-hidden="true"></i></button>
               <button onClick={handleClick} className="btn btn-danger mx-2"><i className="fa fa-trash" aria-hidden="true"></i></button>
           </div>
     )

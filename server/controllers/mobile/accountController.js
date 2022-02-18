@@ -4,6 +4,7 @@ const user=require("../../models/user");
 const schedule=require("../../models/schedule");
 var C = require("crypto-js");
 var moment = require('moment');
+const { Op} = require('sequelize');
 const days = [
     'Sunday',
     'Monday',
@@ -30,7 +31,7 @@ exports.register=async (req,res)=>{
 }
 
 exports.login=async (req,res)=>{
-    let account = await user.model.findOne({where:{email:req.body.email}});
+    let account = await user.model.findOne({where:{email:req.body.email,user_type:{ [Op.not]: 'Admin'},status:true}});
     let sched = await schedule.model.findAll({
         where:{
             driver_id:account.user_id,
@@ -57,7 +58,6 @@ exports.login=async (req,res)=>{
           
         }
     }
-    console.log("YEAHHBOI", account);
     if(account && !req.body.google_auth){
         if(!account.google_auth){
             var decrypted = C.AES.decrypt(account.password,process.env.SECRET_KEY);

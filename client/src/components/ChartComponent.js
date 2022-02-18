@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useTheme } from '@mui/material/styles';
-import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import Title from './TitleComponent';
 import moment from 'moment';
 
@@ -51,6 +51,7 @@ for(let i = 0; i < chartData.data.length; i++ ){
             stroke={theme.palette.primary.main}
             dot={false}
           />
+          <Tooltip />
         </LineChart>
       </ResponsiveContainer>
     </React.Fragment>

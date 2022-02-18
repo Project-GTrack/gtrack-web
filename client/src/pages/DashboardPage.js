@@ -5,9 +5,7 @@ import Axios from 'axios';
 import Cookies from 'js-cookie';
 
 import ArticleIcon from "@mui/icons-material/Article";
-import { Paper,Grid,Button, Card,CardHeader,CardContent,Typography,
-        Table, TableHead, TableRow, TableCell, TableBody, Dialog,
-        DialogTitle,Box,DialogContent, TableContainer} from '@mui/material';
+import { Paper,Grid,Button} from '@mui/material';
         
 import DashboardCard from '../components/dashboard/DashboardCard'
 import Chart from '../components/ChartComponent';
@@ -15,11 +13,6 @@ import PersonIcon from "@mui/icons-material/Person";
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import DeleteIcon from "@mui/icons-material/Delete";
 import AutoDeleteIcon from '@mui/icons-material/AutoDelete';
-import { set } from 'react-hook-form';
-import { styled } from '@mui/material/styles';
-import PropTypes from 'prop-types';
-import CloseIcon from '@mui/icons-material/Close';
-import IconButton from "@mui/material/IconButton";
 import { useNavigate } from 'react-router-dom';
 
 const DashboardPage = () => {
@@ -37,6 +30,7 @@ const DashboardPage = () => {
     }else{
       navigate("/login");
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
   const {drivers,trucks,dumpsters,chartData,collections} = data;
 

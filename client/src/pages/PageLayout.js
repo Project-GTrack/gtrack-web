@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import * as React from "react";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -226,18 +227,14 @@ const PageLayout = ({headerTitle,children}) => {
                 anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
               >
                 <MenuItem>
-                  <a href="/settings" className="text-decoration-none text-dark">
-                  <ListItemIcon>
-                    <Settings fontSize="small" />
-                  </ListItemIcon>
-                  Settings
+                  <a onClick={()=>navigate("/settings")} className="btn ext-decoration-none text-dark">
+                  <i class="fa fa-cog" aria-hidden="true"></i>&nbsp;
+                    Settings
                   </a>
                 </MenuItem>
                 <MenuItem>
                   <a onClick={handleLogout} className="btn text-decoration-none text-dark">
-                  <ListItemIcon>
-                    <Logout fontSize="small" />
-                  </ListItemIcon>
+                  <i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;
                   Logout 
                   </a>
                 </MenuItem>

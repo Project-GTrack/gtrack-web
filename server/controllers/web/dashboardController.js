@@ -8,7 +8,7 @@ const jwt=require("jsonwebtoken");
 const bcrypt=require("bcrypt");
 const {QueryTypes, Op} = require('sequelize');
 const { sequelize } = require('../../connection');
-
+const moment = require('moment')
 user.model.hasMany(collection.model,{
     foreignKey:'driver_id',as:'userCollection'
 });
@@ -110,7 +110,28 @@ exports.viewDashboard= async(req, res)=>{
                  }
             })
 
-
+                let day = moment()
+                        .startOf('month')
+                        .day('Sunday');
+                if (day.date() > 7) day.add(7,'d');
+                var month = day.month();
+                let chartDataCount=[];
+                var startDate = moment(moment().format("YYYY-MM-01"));
+                var total_price=null;
+                while(month === day.month()){
+                    total_price = await collection.model.sum('collection_weight_volume',{
+                        where: {
+                            collection_date: {
+                              [Op.between]: [startDate, day]
+                            }
+                        }
+                    })
+                    if(total_price){
+                        chartDataCount.push({collection_weight_volume:total_price,collection_date:day.clone()})
+                    }
+                    startDate=day.clone();
+                    day.add(7,'d');
+                }
             res.send({data:admin, drivers:driversCount, trucks:trucksCount, dumpsters:dumpstersCount,
                         collections:collectionsCount,chartData:chartDataCount});
             

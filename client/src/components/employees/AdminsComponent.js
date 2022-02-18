@@ -1,12 +1,21 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import MUIDataTable from "mui-datatables";
 import EmployeeCustomToolbar from './EmployeeCustomToolbar';
-const AdminsComponent = () => {
-    const columns = ["Last Name", "First Name", "Email", "Contact Number","Address","Age","Gender","Date Added","Status"];
+import moment from 'moment';
 
-    const data = [
-    ["Snow", "Jon", "snowjn@gmail.com", "09123456789","America","52","Male","01/02/22","Active","/images/gtrack-logo-1.png","Admin"],
-    ];
+const AdminsComponent = ({admins,setAccounts}) => {
+    const [adminList, setAdminList] = useState([]);
+    const [data, setData] = useState([]);
+    useEffect(() => {
+        setAdminList(admins);
+        var temp=[];
+        admins && admins.map((item)=>{
+            temp.push([item.fname && item.fname,item.lname && item.lname,item.email && item.email,item.contact_no && item.contact_no,`${item.purok?item.purok:""} ${item.street?item.street:""} ${item.barangay?item.barangay:""}`,item.birthday && moment().diff(item.birthday, 'years'),item.gender && item.gender,item.createdAt && moment(item.createdAt).format("MMMM DD, YYYY"),item.status && item.status===true?'Active':'Inactive',item.image]);
+        })
+        setData(temp);
+    }, [admins])
+    
+    const columns = ["Last Name", "First Name", "Email", "Contact Number","Address","Age","Gender","Date Added","Status"];
 
     const options = {
     selectableRowsHeader: false,
@@ -14,7 +23,7 @@ const AdminsComponent = () => {
     filter: true,
     filterType: 'dropdown',
     customToolbarSelect:(selectedRows,displayData)=>(
-        <EmployeeCustomToolbar avatar={data[displayData[selectedRows.data[0].dataIndex].dataIndex][9]} selectedRows={selectedRows} displayData={displayData}/>   
+        <EmployeeCustomToolbar setAccounts={setAccounts} data={data[selectedRows.data[0].dataIndex]} selectedRows={selectedRows} displayData={displayData}/>   
     )
     };
     return (

@@ -86,7 +86,7 @@ export default function DriversModal(props) {
               <TableCell align="justify">{driver.fname+" "+driver.lname}</TableCell>
               <TableCell align="justify">{driver.email}</TableCell>
               <TableCell align="justify">{driver.contact_no}</TableCell>
-              <TableCell align="justify">{driver.street+" "+driver.purok+" "+driver.barangay+" "+driver.town}</TableCell>
+              <TableCell align="justify">{driver.street && driver.street+" "+driver.purok && driver.purok+" "+driver.barangay && driver.barangay+" "+driver.town && driver.town}</TableCell>
               <TableCell align="justify">{moment(driver.createdAt).format("LL")}</TableCell>
             </TableRow>
             ))}

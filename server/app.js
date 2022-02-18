@@ -26,9 +26,10 @@ const dumpsterRoutes=require('./routes/mobile/dumpsterRoutes');
 
 //INCLUDE MODULES HERE (WEB)
 const scheduleWebRoutes=require('./routes/web/scheduleRoutes');
-const adminDashboarRoutes  = require("./routes/adminDashboardRoutes");
-const adminRoutes = require("./routes/adminRoutes");
+const adminDashboardRoutes  = require("./routes/web/adminDashboardRoutes");
+const adminRoutes = require("./routes/web/adminRoutes");
 const adminDumpsterRoutes = require("./routes/web/adminDumpsterRoutes");
+const adminAnnouncementRoutes = require('./routes/web/adminAnnouncementRoutes');
 
 //MOBILE ROUTES HERE
 app.use("/mobile",accountRoutes);
@@ -44,5 +45,6 @@ app.use("/mobile/dumpster",dumpsterRoutes);
 //WEB ROUTES HERE
 app.use("/web/schedule",scheduleWebRoutes);
 app.use("/admin", adminRoutes);
-app.use("/admin/dashboard", adminDashboarRoutes);
+app.use("/admin/dashboard", adminDashboardRoutes);
 app.use("/admin/dumpster", adminDumpsterRoutes);
+app.use("/admin/announcement",adminAnnouncementRoutes);

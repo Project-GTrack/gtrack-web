@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
-const userController = require("../controllers/userController");
+const userController = require("../../controllers/web/userController");
 
 
 router.post("/register",userController.registerEmployee);

@@ -26,7 +26,7 @@ const dumpsterRoutes=require('./routes/mobile/dumpsterRoutes');
 
 //INCLUDE MODULES HERE (WEB)
 const scheduleWebRoutes=require('./routes/web/scheduleRoutes');
-const adminDashboarRoutes  = require("./routes/web/adminDashboardRoutes");
+const adminDashboardRoutes  = require("./routes/web/adminDashboardRoutes");
 const adminRoutes = require("./routes/web/adminRoutes");
 const adminDumpsterRoutes = require("./routes/web/adminDumpsterRoutes");
 const adminAnnouncementRoutes = require('./routes/web/adminAnnouncementRoutes');

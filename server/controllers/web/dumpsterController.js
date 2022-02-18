@@ -2,7 +2,6 @@ const { Sequelize } = require("sequelize");
 require('dotenv').config("../../.env");
 const dumpster = require("../../models/dumpster");
 const user = require("../../models/user");
-const bcrypt=require("bcrypt");
 const jwt=require("jsonwebtoken");
 var C = require("crypto-js");
 const { sequelize } = require('../../connection');

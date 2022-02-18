@@ -228,13 +228,13 @@ const PageLayout = ({headerTitle,children}) => {
               >
                 <MenuItem>
                   <a onClick={()=>navigate("/settings")} className="btn ext-decoration-none text-dark">
-                  <i class="fa fa-cog" aria-hidden="true"></i>&nbsp;
+                  <i className="fa fa-cog" aria-hidden="true"></i>&nbsp;
                     Settings
                   </a>
                 </MenuItem>
                 <MenuItem>
                   <a onClick={handleLogout} className="btn text-decoration-none text-dark">
-                  <i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;
+                  <i className="fa fa-sign-out" aria-hidden="true"></i>&nbsp;
                   Logout 
                   </a>
                 </MenuItem>

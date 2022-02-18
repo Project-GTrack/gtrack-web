@@ -5,7 +5,6 @@ const truck = require("../../models/truck");
 const dumpster = require("../../models/dumpster");
 const collection = require("../../models/waste_collection");
 const jwt=require("jsonwebtoken");
-const bcrypt=require("bcrypt");
 const {QueryTypes, Op} = require('sequelize');
 const { sequelize } = require('../../connection');
 const moment = require('moment')

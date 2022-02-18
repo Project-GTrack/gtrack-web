@@ -92,23 +92,23 @@ exports.viewDashboard= async(req, res)=>{
                     ]    
                }
             });
-
+         
             // let chartDataCount = await sequelize.query("SELECT collection_date, collection_weight_volume"+
             // " FROM waste_collections"+
             // " WHERE DAYNAME(collection_date) IN ('Sunday')")
 
-            // let chartDataCount = await collection.model.findAll({
-            //     attributes:{
-            //         exclude:['driver_id','weight_id','collection_route','createdAt','updatedAt','deletedAt']
-            //     },
-            //     where:{
-            //         [Op.and]:[
-            //          sequelize.literal(`DAYNAME(collection_date) IN ('Sunday')`),
-            //          sequelize.literal('collection_date >= LAST_DAY(NOW()) + INTERVAL 1 DAY - INTERVAL 1 MONTH'),
-            //          sequelize.literal('collection_date < LAST_DAY(NOW())')
-            //         ]
-            //      }
-            // })
+            let chartDataCount = await collection.model.findAll({
+                attributes:{
+                    exclude:['driver_id','weight_id','collection_route','createdAt','updatedAt','deletedAt']
+                },
+                where:{
+                    [Op.and]:[
+                     sequelize.literal(`DAYNAME(collection_date) IN ('Sunday')`),
+                     sequelize.literal('collection_date >= LAST_DAY(NOW()) + INTERVAL 1 DAY - INTERVAL 1 MONTH'),
+                     sequelize.literal('collection_date < LAST_DAY(NOW())')
+                    ]
+                 }
+            })
 
                 let day = moment()
                         .startOf('month')

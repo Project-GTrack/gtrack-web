@@ -6,8 +6,10 @@ import moment from 'moment';
 import axios from 'axios';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import ScheduleDialogBox from './ScheduleDialogBox';
+import AddScheduleModal from './schedules/AddScheduleModal';
 const SchedulePanel = () => {
     const [calendar,setCalendar]=useState(false);
+    const [openAddModal,setOpenAddModal]=useState(false);
     const [open,setOpen]=useState({
         isOpen:false,
         data:null
@@ -79,6 +81,9 @@ const SchedulePanel = () => {
                 setEvent([...events]);
             }
         })
+        return ()=>{
+            setEvent([]);
+        }
     }, [])
     const handleSelect=(event)=>{
         setOpen({isOpen:true,data:JSON.parse(event.resource)});
@@ -88,13 +93,18 @@ const SchedulePanel = () => {
             <div className='mb-3'>
             {(!calendar)?(
                 <>
-                    <button className='btn btn-success'><i className="fa fa-plus" aria-hidden="true"></i> Add New Schedule</button>
+                    <button className='btn btn-success' onClick={()=>setOpenAddModal(true)}><i className="fa fa-plus" aria-hidden="true"></i> Add New Schedule</button>
                     <button onClick={()=>setCalendar(true)} className='btn btn-secondary mx-2'><i className="fa fa-calendar" aria-hidden="true"></i> View Calendar</button>
                 </>
             ):(
                 <button onClick={()=>setCalendar(false)} className='btn btn-secondary'><i className="fa fa-arrow-left" aria-hidden="true"></i> Back</button>
             )}
             </div>
+            <AddScheduleModal 
+                openAddModal={openAddModal}
+                setOpenAddModal={setOpenAddModal}
+                // setAccounts={setAccounts}
+            />
             {(!calendar)?(
                 <MUIDataTable
                     title={"Schedule List"}

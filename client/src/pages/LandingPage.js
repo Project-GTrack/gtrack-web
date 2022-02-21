@@ -6,10 +6,21 @@ import Toolbar from '@mui/material/Toolbar';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Link from '@mui/material/Link';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import Cookies from 'js-cookie';
 
 const theme = createTheme();
 const LandingPage = () => {
     const navigate = useNavigate();
+    const [user,setUser]=useState(null);
+    useEffect(() => {
+      if(Cookies.get('user_id')){
+        setUser(Cookies.get('user_id'));
+        navigate("/dashboard")
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[])
     return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

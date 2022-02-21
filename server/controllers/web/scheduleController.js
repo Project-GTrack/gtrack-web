@@ -59,3 +59,28 @@ exports.display=async (req,res)=>{
     }
     
 }
+
+exports.getDriversAssignments=async (req,res)=>{
+    var drivers=await user.model.findAll({
+        where:{
+            user_type:"Driver",
+            status:true
+        }
+    })
+    var assignments=await truck_assignment.model.findAll({
+        include:[
+            {model:truck.model, as:"truckAssignmentTruck"},
+            {model:user.model, as:"truckAssignmentDriver"},
+        ]
+    })
+    res.send({success:true,message:"Details retrieved successfully.",data:{drivers:drivers,assignments:assignments}});
+}
+
+exports.addSchedule=async (req,res)=>{
+    let sched=await schedule.model.create(req.body);
+    if(sched){
+        res.send({success:true,message:"New schedule is added",data:sched});
+    }else{
+        res.send({success:false,message:"Cannot add new schedule",data:null});
+    }
+}

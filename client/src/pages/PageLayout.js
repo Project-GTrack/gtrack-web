@@ -32,6 +32,7 @@ import { useEffect } from "react";
 import Firebase from "../components/helpers/Firebase";
 import Cookies from 'js-cookie';
 import { useNavigate } from "react-router-dom";
+import { decodeToken } from "react-jwt";
 
 const database=Firebase.database();
 function Copyright(props) {
@@ -101,6 +102,7 @@ const mdTheme = createTheme();
 const PageLayout = ({headerTitle,children}) => {
   const [concerns, setConcerns] = useState(null);
   const [alerts, setAlerts] = useState(null);
+  const [user, setUser] = useState(null);
   const getFirebaseConcerns = () => {
     database.ref(`Concerns/`).on('value', function (snapshot) {
         if(snapshot.val()){
@@ -123,7 +125,15 @@ const PageLayout = ({headerTitle,children}) => {
         }
     });
   }
+  const getCookiesJWT=()=>{
+    const cookie=Cookies.get("user_id");
+    if(cookie){
+      const decodedToken = decodeToken(cookie);
+      setUser(JSON.parse(decodedToken.user_id));
+    }
+  }
   useEffect(() => {
+    getCookiesJWT();
     getFirebaseConcerns();
     getFirebaseReports();
   }, [])
@@ -213,7 +223,7 @@ const PageLayout = ({headerTitle,children}) => {
                 aria-haspopup="true"
                 aria-expanded={openDropDown ? "true" : undefined}
               >
-                <Avatar sx={{ width: 32, height: 32 }}></Avatar>
+                <Avatar sx={{ width: 32, height: 32 }} src={user&&user.image}></Avatar>
               </IconButton>
             </Tooltip>
               <Menu

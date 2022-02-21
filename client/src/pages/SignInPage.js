@@ -31,7 +31,7 @@ function Copyright(props) {
 
 const theme = createTheme();
 const SignInPage = () => {
-  
+    
     const { register,watch, handleSubmit } = useForm();
     const [user, setUser] = useState({
       email:"",
@@ -56,9 +56,13 @@ const SignInPage = () => {
       severity:null,
     });
     const navigate = useNavigate();
-
+    React.useEffect(() => {
+      if(Cookies.get('user_id')){
+        navigate("/dashboard");
+      }
+    }, [navigate])
     const handleFormSubmit = (event) => {
-      var mins = new Date(new Date().getTime() + 15 * 60 * 1000);
+      // var mins = new Date(new Date().getTime() + 15 * 60 * 1000);
       event.preventDefault();
       setErrors(AdminLoginValidation(user));
       if(Object.keys(AdminLoginValidation(user)).length === 0){
@@ -68,7 +72,7 @@ const SignInPage = () => {
         }).then((res)=>{
           if(res.data.success){
             setLoading(true);
-            Cookies.set('user_id', res.data.accessToken, {expires: mins});
+            Cookies.set('user_id', res.data.accessToken, {expires: 1});
             navigate("/dashboard");
     
           }else{

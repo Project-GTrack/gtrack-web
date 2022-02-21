@@ -6,9 +6,22 @@ import PropTypes from 'prop-types';
 import PageLayout from './PageLayout'
 import GarbageTrucksPanel from '../components/GarbageTrucksPanel';
 import UnderMaintenancePanel from '../components/UnderMaintenancePanel';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import Cookies from 'js-cookie';
 
 const TrucksPage = () => {
     const [value, setValue] = useState(0);
+    const [user,setUser]=useState(null);
+    const navigate = useNavigate();
+    useEffect(() => {
+      if(Cookies.get('user_id')){
+        setUser(Cookies.get('user_id'));
+      }else{
+        navigate("/login");
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[])
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };

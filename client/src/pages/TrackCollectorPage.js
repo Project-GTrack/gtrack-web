@@ -6,6 +6,8 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import DumpsterPopup from '../components/DumpsterPopup';
 import CollectorPopup from '../components/CollectorPopup';
 import CollectionAlertDialog from '../components/CollectionAlertDialog';
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const Map = ReactMapboxGl({
     accessToken:
@@ -45,6 +47,16 @@ const TrackCollectorPage = () => {
             }
         });
      }
+    const [user,setUser]=useState(null);
+    const navigate = useNavigate();
+    useEffect(() => {
+      if(Cookies.get('user_id')){
+        setUser(Cookies.get('user_id'));
+      }else{
+        navigate("/login");
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[])
     useEffect(() => {
         getFirebaseDrivers();
         getFirebaseDumpsters();

@@ -26,7 +26,7 @@ const schedule = instance.sequelize.define("schedules",{
         allowNull: false
     },
     garbage_type:{
-        type:DataTypes.ENUM('biodegradable','non-biodegradable','recyclable'),
+        type:DataTypes.ENUM('Biodegradable','Non-biodegradable','Recyclable'),
         allowNull: false
     },
     landmark:{

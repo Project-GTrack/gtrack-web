@@ -6,8 +6,20 @@ import PropTypes from 'prop-types';
 import PageLayout from './PageLayout';
 import axios from 'axios';
 import DumpstersComponent from '../components/dumpsters/DumpstersComponent';
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const DumpstersPage = () => {
+    const [user,setUser]=useState(null);
+    const navigate = useNavigate();
+    useEffect(() => {
+      if(Cookies.get('user_id')){
+        setUser(Cookies.get('user_id'));
+      }else{
+        navigate("/login");
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[])
     const [value, setValue] = useState(0);
     const handleChange = (event, newValue) => {
         setValue(newValue);

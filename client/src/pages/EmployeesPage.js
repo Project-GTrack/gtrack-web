@@ -8,7 +8,10 @@ import DriversComponent from '../components/employees/DriversComponent'
 import AdminsComponent from '../components/employees/AdminsComponent'
 import InactiveAccountsComponent from '../components/employees/InactiveAccountsComponent'
 import axios from 'axios';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 const EmployeesPage = () => {
+  
   const [value, setValue] = useState(0);
   const [accounts, setAccounts] = useState([
     {
@@ -17,13 +20,18 @@ const EmployeesPage = () => {
       inactives:[]
     }
   ]);
+  const navigate = useNavigate();
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_BACKEND_URL}/admin/get/users`)
-    .then(res=>{
-      if(res.data.success){
-        setAccounts(res.data.data);
-      }
-    })
+    if(Cookies.get('user_id')){
+      axios.get(`${process.env.REACT_APP_BACKEND_URL}/admin/get/users`)
+      .then(res=>{
+        if(res.data.success){
+          setAccounts(res.data.data);
+        }
+      })
+    }else{
+      navigate("/login");
+    }
     return ()=>{
       setAccounts([
         {

@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
@@ -6,8 +6,20 @@ import PropTypes from 'prop-types';
 import PageLayout from './PageLayout';
 import SchedulePanel from '../components/SchedulePanel';
 import TruckAssignmentPanel from '../components/TruckAssignmentPanel';
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 const SchedulesPage = () => {
     const [value, setValue] = useState(0);
+    const [user,setUser]=useState(null);
+    const navigate = useNavigate();
+    useEffect(() => {
+      if(Cookies.get('user_id')){
+        setUser(Cookies.get('user_id'));
+      }else{
+        navigate("/login");
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[])
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };

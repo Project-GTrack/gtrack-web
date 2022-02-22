@@ -67,8 +67,6 @@ const EditDumpsterModal = (props) => {
     street: yup.string().required("Street is required"),
     purok: yup.string().required("Purok is required"),
     barangay: yup.string().required("Barangay is required"),
-    town: yup.string().required("Town is required"),
-    postal_code: yup.string().required("Postal Code is required"),
   });
   React.useEffect(() => {
     setCoordinate({
@@ -82,27 +80,17 @@ const EditDumpsterModal = (props) => {
     values.postal_code = props.data[2];
   }, [props.data[0], props.openModal]);
   const handleFormSubmit = (values, { resetForm }) => {
-    if (
-      values.street === props.data[1].split(", ")[0] &&
-      values.purok === props.data[1].split(", ")[1] &&
-      values.barangay === props.data[1].split(", ")[2] &&
-      values.town === props.data[1].split(", ")[3] &&
-      values.postal_code === props.data[2] &&
-      coordinate.latitude === props.data[3] &&
-      coordinate.longitude === props.data[4]
-    ) {
+    if (values.street === props.data[1].split(", ")[0] && values.purok === props.data[1].split(", ")[1] && values.barangay === props.data[1].split(", ")[2] && values.town === props.data[1].split(", ")[3] && values.postal_code === props.data[2] && coordinate.latitude === props.data[3] && coordinate.longitude === props.data[4]) {
       props.setOpenModal(false);
     } else {
       if (coordinate.latitude != 0 && coordinate.longitude != 0) {
         axios
           .put(
-            `http://localhost:8000/admin/dumpster/edit-dumpster/${props.data[0]}`,
+            `${process.env.REACT_APP_BACKEND_URL}/admin/dumpster/edit-dumpster/${props.data[0]}`,
             {
               street: values.street,
               purok: values.purok,
               barangay: values.barangay,
-              town: values.town,
-              postal_code: values.postal_code,
               latitude: coordinate.latitude,
               longitude: coordinate.longitude,
               accessToken: Cookies.get("user_id"),
@@ -127,8 +115,6 @@ const EditDumpsterModal = (props) => {
         street: props.data[1].split(", ")[0],
         purok: props.data[1].split(", ")[1],
         barangay: props.data[1].split(", ")[2],
-        town: props.data[1].split(", ")[3],
-        postal_code: props.data[2],
       },
       enableReinitialize: true,
       validationSchema: dumpsterErrorHandling,
@@ -235,36 +221,6 @@ const EditDumpsterModal = (props) => {
           />
           {errors.barangay && touched.barangay && (
             <p className="text-danger small ">{errors.barangay}</p>
-          )}
-          <TextField
-            autoFocus
-            margin="dense"
-            id="town"
-            label="Town"
-            type="text"
-            fullWidth
-            value={values.town}
-            onChange={handleChange("town")}
-            onBlur={handleBlur("town")}
-            variant="standard"
-          />
-          {errors.town && touched.town && (
-            <p className="text-danger small ">{errors.town}</p>
-          )}
-          <TextField
-            autoFocus
-            margin="dense"
-            id="postal"
-            label="Postal Code"
-            type="text"
-            fullWidth
-            value={values.postal_code}
-            onChange={handleChange("postal_code")}
-            onBlur={handleBlur("postal_code")}
-            variant="standard"
-          />
-          {errors.postal_code && touched.postal_code && (
-            <p className="text-danger small ">{errors.postal_code}</p>
           )}
         </Box>
       </DialogContent>

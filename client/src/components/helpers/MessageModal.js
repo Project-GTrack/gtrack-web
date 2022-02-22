@@ -62,10 +62,6 @@ BootstrapDialogTitle.propTypes = {
 };
 
 const MessageModal = (props) => {
-    const navigate = useNavigate();
-    const navigateTo = () => {
-        navigate("/dumpsters");
-    }
   return (
     <BootstrapDialog
       onClose={props.handleCloseModal}

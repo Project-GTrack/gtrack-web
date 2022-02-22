@@ -13,7 +13,7 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import IconButton from "@mui/material/IconButton";
 import axios from "axios";
-import ReactMapboxGl, { Layer, Feature, Marker } from "react-mapbox-gl";
+import ReactMapboxGl, { Marker } from "react-mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -82,12 +82,15 @@ const AddNewDumpsterModal = (props) => {
           accessToken: Cookies.get("user_id"),
         })
         .then((res) => {
+          resetForm();
+          props.setOpenModal(false);
+          setCoordinate({ latitude: 0, longitude: 0 });
+          setError(null);
           if (res.data.success) {
-            resetForm();
-            props.setOpenModal(false);
-            props.setMesAlert(true);
-            props.setMessage(res.data);
-            setCoordinate({ latitude: 0, longitude: 0 });
+            props.setDumpsters(res.data.data);
+            props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
+          }else{
+            props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"info"})
           }
         });
     } else {

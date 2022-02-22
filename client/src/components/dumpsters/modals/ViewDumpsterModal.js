@@ -8,11 +8,9 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import PropTypes from "prop-types";
 import CloseIcon from "@mui/icons-material/Close";
-import GoogleMapReact from 'google-map-react';
-import axios from "axios";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import ReactMapboxGl, { Layer, Feature, Marker } from "react-mapbox-gl";
+import ReactMapboxGl, { Marker } from "react-mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -126,20 +124,6 @@ const ViewDumpsterModal = (props) => {
             )}
           </Map>
           </div>
-        {/* <Box sx={{ width: "100%" }} paddingTop={2}>
-          <Typography variant="body2" color="text.secondary">
-           <b style={{fontSize: 22}}>Address: </b> {props.data[1]}
-          </Typography>
-          <Typography variant="body2" color="text.secondary" paddingTop={1}>
-          <b style={{fontSize: 22}}>Postal Code: </b>{props.data[2]}
-          </Typography>
-          <Typography variant="body2" color="text.secondary" paddingTop={1}>
-          <b style={{fontSize: 22}}>Longitude: </b> {props.data[3]}
-          </Typography>
-          <Typography variant="body2" color="text.secondary" paddingTop={1}>
-          <b style={{fontSize: 22}}>Latitude: </b> {props.data[4]}
-          </Typography>
-        </Box> */}
       </DialogContent>
       <DialogActions>
         <Button autoFocus onClick={props.handleCloseModal}>

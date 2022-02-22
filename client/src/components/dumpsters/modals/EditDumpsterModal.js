@@ -13,7 +13,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import ReactMapboxGl, { Layer, Feature, Marker } from "react-mapbox-gl";
+import ReactMapboxGl, { Marker } from "react-mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -97,12 +97,14 @@ const EditDumpsterModal = (props) => {
             }
           )
           .then((res) => {
-            if (res.data.success) {
               resetForm();
               props.setOpenModal(false);
-              props.setMesAlert(true);
-              props.setMessage(res.data);
-            }
+              if(res.data.success){
+                props.setDumpsters(res.data.data);
+                props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
+              }else{
+                props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"info"})
+              }
           });
       } else {
         setError("Please select a designated location for the dumpster");

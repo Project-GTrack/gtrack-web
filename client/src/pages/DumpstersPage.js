@@ -1,6 +1,4 @@
 import React,{useEffect, useState} from 'react';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
 import PageLayout from './PageLayout';
@@ -8,9 +6,16 @@ import axios from 'axios';
 import DumpstersComponent from '../components/dumpsters/DumpstersComponent';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import StatusToast from '../components/helpers/StatusToast';
 
 const DumpstersPage = () => {
     const [user,setUser]=useState(null);
+    const [dumpsters,setDumpsters]=useState([]);
+    const [statusToast, setStatusToast] = useState({
+      isOpen:false,
+      message:"",
+      colorScheme:"success"
+    });
     const navigate = useNavigate();
     useEffect(() => {
       if(Cookies.get('user_id')){
@@ -20,16 +25,14 @@ const DumpstersPage = () => {
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
-    const [value, setValue] = useState(0);
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
-    function a11yProps(index) {
-        return {
-            id: `simple-tab-${index}`,
-            'aria-controls': `simple-tabpanel-${index}`,
-        };
-    }
+    useEffect(() => {
+      axios.get(`${process.env.REACT_APP_BACKEND_URL}/admin/dumpster/get-dumpsters`)
+      .then((res) => {
+        if (res.data.success) {
+          setDumpsters(res.data.data);
+        }
+      });
+    },[])
     function TabPanel(props) {
         const { children, value, index, ...other } = props;
       
@@ -57,7 +60,8 @@ const DumpstersPage = () => {
       };
     return (
         <PageLayout headerTitle={"Dumpsters"}>
-           <DumpstersComponent/>
+           <DumpstersComponent dumpsters={dumpsters} setDumpsters={setDumpsters} statusToast={statusToast} setStatusToast={setStatusToast}/>
+           <StatusToast statusToast={statusToast} setStatusToast={setStatusToast}/>
         </PageLayout>
     )
 }

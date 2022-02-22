@@ -18,8 +18,8 @@ import IconButton from "@mui/material/IconButton";
 import MenuItem from "@mui/material/MenuItem";
 import { Input } from '@mui/material';
 import TextareaAutosize from '@mui/base/TextareaAutosize';
-
-
+import * as yup from 'yup'
+import Firebase from '../../helpers/Firebase';
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
       padding: theme.spacing(2),
@@ -57,8 +57,22 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     children: PropTypes.node,
     onClose: PropTypes.func.isRequired,
   };
-  
+
+const database = Firebase.database();
+
 export default function AddNewAnnouncementModal(props) {
+  const announcementValidationSchema = yup.object().shape({
+    title: yup
+      .string()
+      .required('Title is required'),
+    content: yup
+      .string()
+      .required('Content is required'),
+    images: yup
+      .array()
+      .min(1,'Attach at least 1 image').required('Attach at least 1 image')
+    
+  })
   return (
     <BootstrapDialog
     onClose={props.handleCloseModal}

@@ -32,8 +32,28 @@ exports.viewAnnouncements = async(req, res) => {
     }
    
 }
-// exports.createAnnouncement = async(req, res) =>{
-//     let post = await announcement.model.create({
-
-//     })
-// }
+exports.createAnnouncement = async(req, res) =>{
+    if(req.body.accessToken!= undefined){
+        jwt.verify(req.body.accessToken,process.env.ACCESS_TOKEN_SECRET, async(err, decoded)=>{
+            let attline = await attachment_line.model.create();
+            if(attline){
+                let attachment = await attachment.model.create({
+                    attachment_line_id:attLine.attachment_line_id,
+                    filename: req.body.filename 
+                });
+                let post = await announcement.model.create({
+                    title:req.body.title,
+                    content:req.body.content,
+                    attachment_line_id:attLine.attachment_line_id
+                })
+                if(post){
+                    res.send({success:true,message:"Announcement created successfully!",data:post});
+                }else{
+                        res.send({success:false,message:"Failed to create announcement.",data:null});
+                }
+            }else{
+                    res.send({success:false,message:"Attachment not created.",data:null});
+            }
+        })
+    }
+}

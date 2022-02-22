@@ -1,16 +1,30 @@
-import React from 'react'
+import React, { useState ,useEffect } from 'react'
 import MUIDataTable from "mui-datatables";
 import AnnouncementCustomToolbar from './AnnouncementCustomToolbar';
 import AddNewAnnouncementModal from './modals/AddNewAnnouncementModal';
-const AnnouncementsComponent = () => {
+const AnnouncementsComponent = ({announcements}) => {
+    const[announcementList, setAnnouncementList] = useState([]);
+    const[data,  setData] = useState([]);
+
+    useEffect(()=>{
+        setAnnouncementList(announcements);
+        var temp = [];
+        announcements && announcements.map((announcement)=>{
+            temp.push([announcement.title, announcement.content,announcement.createdAt]);
+            setData(temp);
+        })
+    },[announcements]);
+
+
+
   const [openModal, setOpenModal] = React.useState(false);
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
     const columns = ["Title", "Content", "Date Added"];
 
-    const data = [
-    ["Compostela Municipal Coastal Cleanup 2020", "The coastal cleanup is scheduled quarterly every year in the hopes to increase awareness in the preservation of the major waterways in the city as well as remove as much garbage as possible from these waterways.", "10/12/2020"],
-    ];
+    // const data = [
+    // ["Compostela Municipal Coastal Cleanup 2020", "The coastal cleanup is scheduled quarterly every year in the hopes to increase awareness in the preservation of the major waterways in the city as well as remove as much garbage as possible from these waterways.", "10/12/2020"],
+    // ];
 
     const options = {
     selectableRowsHeader: false,

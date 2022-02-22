@@ -4,7 +4,7 @@ import DumpsterCustomToolbar from './DumpsterCustomToolbar';
 import AddNewDumpsterModal from './modals/AddNewDumpsterModal';
 import Cookies from 'js-cookie';
 import axios from 'axios';
-import MessageModal from "./modals/MessageModal";
+import MessageModal from "../helpers/MessageModal";
 const DumpstersComponent = (props) => {
   const [openModal, setOpenModal] = React.useState(false);
   const [openDeleteModal, setDeleteModal] = React.useState(false);
@@ -23,7 +23,7 @@ const DumpstersComponent = (props) => {
   const [data,setData]=useState([]);
 
   useEffect(() => {
-        axios.get('http://localhost:8000/admin/dumpster/get-dumpsters')
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}/admin/dumpster/get-dumpsters`)
       .then((res) => {
           if(res.data.success){
             let tempD=[];

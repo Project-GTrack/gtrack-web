@@ -67,18 +67,16 @@ const AddNewDumpsterModal = (props) => {
     street: yup.string().required("Street is required"),
     purok: yup.string().required("Purok is required"),
     barangay: yup.string().required("Barangay is required"),
-    town: yup.string().required("Town is required"),
-    postal_code: yup.string().required("Postal Code is required"),
   });
   const handleFormSubmit = async (values, { resetForm }) => {
     if (coordinate.latitude != 0 && coordinate.longitude != 0) {
       axios
-        .post("http://localhost:8000/admin/dumpster/add-dumpster", {
+        .post(`${process.env.REACT_APP_BACKEND_URL}/admin/dumpster/add-dumpster`, {
           street: values.street,
           purok: values.purok,
           barangay: values.barangay,
-          town: values.town,
-          postal_code: values.postal_code,
+          town: "Compostela",
+          postal_code: "6003",
           latitude: coordinate.latitude,
           longitude: coordinate.longitude,
           accessToken: Cookies.get("user_id"),
@@ -102,8 +100,6 @@ const AddNewDumpsterModal = (props) => {
         street: "",
         purok: "",
         barangay: "",
-        town: "",
-        postal_code: "",
       },
       enableReinitialize: true,
       validationSchema: dumpsterErrorHandling,
@@ -168,34 +164,6 @@ const AddNewDumpsterModal = (props) => {
           />
           {errors.barangay && touched.barangay && (
             <p className="text-danger small ">{errors.barangay}</p>
-          )}
-          <TextField
-            margin="dense"
-            id="town"
-            label="Town"
-            type="text"
-            fullWidth
-            value={values.town}
-            onChange={handleChange("town")}
-            onBlur={handleBlur("town")}
-            variant="standard"
-          />
-          {errors.town && touched.town && (
-            <p className="text-danger small ">{errors.town}</p>
-          )}
-          <TextField
-            margin="dense"
-            id="postal"
-            label="Postal Code"
-            type="text"
-            fullWidth
-            value={values.postal_code}
-            onChange={handleChange("postal_code")}
-            onBlur={handleBlur("postal_code")}
-            variant="standard"
-          />
-          {errors.postal_code && touched.postal_code && (
-            <p className="text-danger small ">{errors.postal_code}</p>
           )}
           <div style={{ marginTop: "20px", marginBottom: "-18px" }}>
             <p>

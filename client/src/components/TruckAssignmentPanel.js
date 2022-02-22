@@ -1,69 +1,56 @@
 import React, { useEffect, useState } from "react";
 import MUIDataTable from "mui-datatables";
-import CustomSelectToolbar from "./CustomSelectToolbar";
-import axios from "axios";
-import { Grid } from "@material-ui/core";
 import moment from "moment";
 import AddNewAssignment from "./assignments/modals/AddNewAssignment";
-import MessageModal from "./helpers/MessageModal";
 import TruckAssignmentCustomToolbar from "./assignments/TruckAssignmentCustomToolbar";
 
-const TruckAssignmentPanel = () => {
-  const [data, setData] = useState([]);
+const TruckAssignmentPanel = ({assignments,setAssignments,statusToast,setStatusToast}) => {
+  const [data,setData]=useState([]);
   const [openModal, setOpenModal] = useState(false);
-  const [message,setMessage]=useState({
-    success:false,
-    content:"",
-  });
-  const [mesAlert,setMesAlert]=useState(false);
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
-  const handleOpenMesModal = () => setMesAlert(true);
-  const handleCloseMesModal = () => setMesAlert(false);
-  useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_BACKEND_URL}/admin/assignment/get-assignments`)
-      .then((res) => {
-        if (res.data.success) {
-          let data = [];
-          let weekly = [];
-          let specific = [];
-          for (var x = 0; x < res.data.data.length; x++) {
-            if (res.data.data[x].assignmentSchedule.length > 0) {
-              for (var i = 0;i < res.data.data[x].assignmentSchedule.length;i++) {
-                for (var y = 0;y <JSON.parse(res.data.data[x].assignmentSchedule[i].schedule).when.length;y++) {
-                  var street = res.data.data[x].assignmentSchedule[i].street.toString().charAt(0).toUpperCase() +res.data.data[x].assignmentSchedule[i].street.slice(1);
-                  var purok = res.data.data[x].assignmentSchedule[i].purok.toString().charAt(0).toUpperCase() +res.data.data[x].assignmentSchedule[i].purok.slice(1);
-                  var barangay = res.data.data[x].assignmentSchedule[i].barangay.toString().charAt(0).toUpperCase() +res.data.data[x].assignmentSchedule[i].barangay.slice(1);
-                  if (JSON.parse(res.data.data[x].assignmentSchedule[i].schedule).type === "weekly") {
-                    var temp =JSON.parse(res.data.data[x].assignmentSchedule[i].schedule).when[y].schedule +" - " + street +", " + purok +", " + barangay;
-                    weekly.push(temp);
-                  } else {
-                    var temp =moment(new Date(JSON.parse(res.data.data[x].assignmentSchedule[i].schedule).when[y].schedule)).format("MM/DD/YY") +" - " + street + ", " + purok + ", " + barangay;
-                    specific.push(temp);
-                  }
+  useEffect(()  => {
+        let data = [];
+        let weekly = [];
+        let specific = [];
+        let temp;
+        for (var x = 0; x < assignments.length; x++) {
+          if (assignments[x].assignmentSchedule.length > 0) {
+            for (var i = 0;i < assignments[x].assignmentSchedule.length;i++) {
+              for (var y = 0;y <JSON.parse(assignments[x].assignmentSchedule[i].schedule).when.length;y++) {
+                var street = assignments[x].assignmentSchedule[i].street.toString().charAt(0).toUpperCase() +assignments[x].assignmentSchedule[i].street.slice(1);
+                var purok = assignments[x].assignmentSchedule[i].purok.toString().charAt(0).toUpperCase() +assignments[x].assignmentSchedule[i].purok.slice(1);
+                var barangay = assignments[x].assignmentSchedule[i].barangay.toString().charAt(0).toUpperCase() +assignments[x].assignmentSchedule[i].barangay.slice(1);
+                if (JSON.parse(assignments[x].assignmentSchedule[i].schedule).type === "weekly") {
+                  temp =JSON.parse(assignments[x].assignmentSchedule[i].schedule).when[y].schedule +" - " + street +", " + purok +", " + barangay;
+                  weekly.push(temp);
+                } else {
+                  temp =moment(new Date(JSON.parse(assignments[x].assignmentSchedule[i].schedule).when[y].schedule)).format("MM/DD/YY") +" - " + street + ", " + purok + ", " + barangay;
+                  specific.push(temp);
                 }
               }
             }
-            var temp = [
-              res.data.data[x].assignment_id,
-              res.data.data[x].truckAssignmentDriver.user_id,
-              res.data.data[x].truckAssignmentTruck.truck_id,
-              weekly,
-              specific,
-              res.data.data[x].truckAssignmentTruck.plate_no,
-              res.data.data[x].truckAssignmentDriver.fname + " " +res.data.data[x].truckAssignmentDriver.lname,
-              moment(res.data.data[x].createdAt).format("MM/DD/YY"),
-              res.data.data[x].deletedAt === null ? "Active" : "Inactive",
-            ];
-            data.push(temp);
-            weekly = [];
-            specific = [];
           }
-          setData(data);
+          temp = [
+            assignments[x].assignment_id,
+            assignments[x].truckAssignmentDriver.user_id,
+            assignments[x].truckAssignmentTruck.truck_id,
+            weekly,
+            specific,
+            assignments[x].truckAssignmentTruck.plate_no,
+            assignments[x].truckAssignmentDriver.fname + " " +assignments[x].truckAssignmentDriver.lname,
+            moment(assignments[x].createdAt).format("MM/DD/YY"),
+            assignments[x].deletedAt === null ? "Active" : "Inactive",
+          ];
+          data.push(temp);
+          weekly = [];
+          specific = [];
         }
-      });
-  }, [mesAlert]);
+        setData(data);
+      return ()=>{
+          setData([]);
+      }
+  },[])
   // const columns = ["Schedule", "Plate Number", "Driver", "Route","Date Created","Status"];
   const columns = [
     {
@@ -214,7 +201,9 @@ const TruckAssignmentPanel = () => {
     filterType: "dropdown",
     customToolbarSelect: (selectedRows, displayData) => (
       <TruckAssignmentCustomToolbar
-        setMessage={setMessage} setMesAlert={setMesAlert}
+        setAssignments={setAssignments}
+        statusToast={statusToast}
+        setStatusToast={setStatusToast}
         selectedRows={selectedRows}
         displayData={displayData}
       />
@@ -229,18 +218,12 @@ const TruckAssignmentPanel = () => {
         </button>
         <AddNewAssignment
             openModal={openModal}
-            setMessage={setMessage}
-            setMesAlert={setMesAlert}
             setOpenModal={setOpenModal}
+            setAssignments={setAssignments}
             handleCloseModal={handleCloseModal}
             handleOpenModal={handleOpenModal}
-          />
-          <MessageModal
-            openModal={mesAlert}
-            message={message}
-            setOpenModal={setMesAlert}
-            handleCloseModal={handleCloseMesModal}
-            handleOpenModal={handleOpenMesModal}
+            statusToast={statusToast}
+            setStatusToast={setStatusToast} 
           />
       </div>
       <MUIDataTable

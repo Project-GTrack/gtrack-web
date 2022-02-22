@@ -67,8 +67,13 @@ const DeleteAssignment = (props) => {
       .then((res) => {
         resetForm();
         props.setDeleteModal(false);
-        props.setMesAlert(true);
-        props.setMessage(res.data);
+        if(res.data.success){
+          props.setAssignments(res.data.data);
+          props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
+        }else{
+          props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"error"})
+        }
+        
       });
   };
   const { handleChange, handleSubmit, handleBlur, values, errors, touched } =

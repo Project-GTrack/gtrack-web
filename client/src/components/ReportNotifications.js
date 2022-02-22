@@ -53,7 +53,7 @@ const ReportNotifications = ({open,anchorEl,handleClose,type,reports}) => {
             return (
               <MenuItem key={i}>
                   <Stack direction="row" spacing={1}>
-                    <Avatar />
+                    <Avatar src={item.sender_image}/>
                     <Stack direction="column">
                       <span style={{fontSize: '12px'}}>{item.sender}  | {item.classification}</span>
                       <span style={{fontSize: '14px'}}>{item.subject}</span>
@@ -73,7 +73,7 @@ const ReportNotifications = ({open,anchorEl,handleClose,type,reports}) => {
             return (
               <MenuItem key={i}>
                   <Stack direction="row" spacing={1}>
-                    <Avatar />
+                    <Avatar src={item.sender_image}/>
                     <Stack direction="column">
                       <span style={{fontSize: '12px'}}>{item.sender}  | {item.degree}</span>
                       <span style={{fontSize: '14px'}}>{item.subject}</span>

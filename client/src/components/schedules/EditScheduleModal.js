@@ -62,12 +62,8 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     onClose: PropTypes.func.isRequired,
   };
   
-const AddScheduleModal = (props) => {
-    const [schedule,setSchedule]=useState([{
-        schedule:"",
-        time_start:new Date(moment()),
-        time_end:new Date(moment())
-    }]);
+const EditScheduleModal = (props) => {
+    const [schedule,setSchedule]=useState([]);
     const [driversAssignments,setDriversAssignments]=useState({
         drivers:[],
         assignments:[]
@@ -101,11 +97,10 @@ const AddScheduleModal = (props) => {
         .string()
         .required('Barangay is required'),
     })
-    const [user,setUser]=useState(null);
+    const [,setUser]=useState(null);
     const [error,setError]=useState(null);
     const handleFormSubmit = async(values,{resetForm}) =>{
-        axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/schedule/add`,{
-            admin_id:user.user_id,
+        axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/schedule/update/${props.data.schedule_id}`,{
             driver_id:values.driver_id,
             assignment_id:values.assignment_id,
             schedule:JSON.stringify({type:values.type,when:values.schedule}),
@@ -120,7 +115,7 @@ const AddScheduleModal = (props) => {
         .then(res=>{
             if(res.data.success){
                 props.setSchedules(res.data.data);
-                props.setOpenAddModal(false);
+                props.setOpenEditModal(false);
                 resetForm();
                 props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
             }else{
@@ -135,6 +130,20 @@ const AddScheduleModal = (props) => {
             setUser(JSON.parse(decodedToken.user_id));
         }
     }
+    const initializeSchedule=()=>{
+        let temp=[];
+        // eslint-disable-next-line array-callback-return
+        JSON.parse(props.data.schedule).when.map((item)=>{
+            temp.push({schedule:item.schedule,time_start:item.time_start,time_end:item.time_end});
+        })
+        setSchedule([...temp]);
+        setFieldValue('schedule',[...temp]);
+    }
+    useEffect(() => {
+      initializeSchedule();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.data])
+    
     useEffect(() => {
         getCookiesJWT();
         axios.get(`${process.env.REACT_APP_BACKEND_URL}/admin/schedule/get_drivers_assignments`)
@@ -150,19 +159,21 @@ const AddScheduleModal = (props) => {
                 drivers:[],
                 assignments:[]
             });
+            setSchedule([]);
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     const { handleChange, handleSubmit, handleBlur, values, errors,isValid,touched, setFieldValue } = useFormik({
         initialValues:{ 
-            type: "weekly",
+            type: JSON.parse(props.data.schedule).type,
             schedule:[], 
-            garbage_type:"",
-            landmark:"", 
-            purok:"",
-            street:"",
-            barangay:"",
-            driver_id:'',
-            assignment_id:''
+            garbage_type:props.data.garbage_type,
+            landmark:props.data.landmark, 
+            purok:props.data.purok,
+            street:props.data.street,
+            barangay:props.data.barangay,
+            driver_id:props.data.driver_id,
+            assignment_id:props.data.assignment_id
         },
         enableReinitialize:true,
         validationSchema:addScheduleValidationSchema,
@@ -220,12 +231,12 @@ const AddScheduleModal = (props) => {
     }
   return (
     <BootstrapDialog
-        onClose={()=>props.setOpenAddModal(false)}
+        onClose={()=>props.setOpenEditModal(false)}
         aria-labelledby="customized-dialog-title"
-        open={props.openAddModal}
+        open={props.openEditModal}
     >
-    <BootstrapDialogTitle id="customized-dialog-title" onClose={()=>props.setOpenAddModal(false)}>
-      Add New Schedule
+    <BootstrapDialogTitle id="customized-dialog-title" onClose={()=>props.setOpenEditModal(false)}>
+      Update Schedule
     </BootstrapDialogTitle>
     <DialogContent dividers>
     <Box sx={{ width: '100%' }}>
@@ -438,11 +449,11 @@ const AddScheduleModal = (props) => {
     </DialogContent>
     <DialogActions>
       <Button type="submit"  className='text-dark' disabled={!isValid} onClick={handleSubmit}>
-        Add Schedule
+        Update Schedule
       </Button>
     </DialogActions>
   </BootstrapDialog>
   );
 }
 
-export default AddScheduleModal;
+export default EditScheduleModal;

@@ -32,7 +32,7 @@ module.exports = {
           allowNull:false
       },
       garbage_type:{
-          type:Sequelize.ENUM('Biodegradable','Non-biodegradable','Recyclable'),
+          type:Sequelize.ENUM('Biodegradable','Non-biodegradable','Residual'),
           allowNull:false
       },
       landmark:{

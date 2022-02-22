@@ -1,7 +1,6 @@
 import * as React from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
@@ -80,10 +79,15 @@ const AddNewAssignment = (props) => {
           accessToken: Cookies.get("user_id"),
         })
         .then((res) => {
-            resetForm();
-            props.setOpenModal(false);
-            props.setMesAlert(true);
-            props.setMessage(res.data);
+          resetForm();
+          props.setOpenModal(false);
+          if(res.data.success){
+            props.setAssignments(res.data.data);
+            props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
+          }else{
+            props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"info"})
+          }
+            
         });
   };
   const { handleChange, handleSubmit, handleBlur, values, errors, touched } =

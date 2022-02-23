@@ -85,6 +85,32 @@ exports.deleteTruck = async(req, res) => {
 
 exports.updateTruck = async(req, res) => {
     
+    let truck = await truck.model.update(
+        {
+            plate_no: req.body.plate_no,
+            model: req.body.model
+        },{
+            where:{
+                truck_id: req.params.id
+            }
+        }
+
+       
+    )
+
+    let data = await task.model.update(
+        {taskName : req.body.taskName,
+         description: req.body.description,
+         dueDate : req.body.dueDate
+        },
+
+        {
+            where: {
+                id: req.params.id
+            }
+        }
+    )
+    
 }
 
 exports.maintenaceTruck = async(req,res) => {

@@ -18,23 +18,19 @@ const SchedulesPage = () => {
     });
     const [value, setValue] = useState(0);
     const [schedules,setSchedules]=useState([]);
-    const [user,setUser]=useState(null);
     const navigate = useNavigate();
     useEffect(() => {
       if(Cookies.get('user_id')){
-        setUser(Cookies.get('user_id'));
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}/admin/schedule/get_schedules`)
+        .then(res=>{
+          if(res.data.success){
+            setSchedules(res.data.data);
+          }
+        })
       }else{
         navigate("/login");
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[])
-    useEffect(() => {
-      axios.get(`${process.env.REACT_APP_BACKEND_URL}/admin/schedule/get_schedules`)
-      .then(res=>{
-        if(res.data.success){
-          setSchedules(res.data.data);
-        }
-      })
     },[])
     const handleChange = (event, newValue) => {
         setValue(newValue);

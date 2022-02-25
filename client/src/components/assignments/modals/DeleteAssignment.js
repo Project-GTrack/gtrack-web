@@ -53,33 +53,34 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-const DeleteDumpsterModal = (props) => {
-  const dumpsterErrorHandling = yup.object().shape({
+const DeleteAssignment = (props) => {
+  const assignmentErrorHandling = yup.object().shape({
     password: yup.string().required("Password is required"),
   });
   const handleFormSubmit = (values, { resetForm }) => {
     props.setPrevData(props.data);
     axios
       .post(
-        `${process.env.REACT_APP_BACKEND_URL}/admin/dumpster/delete-dumpster/${props.data[0]}`,
+        `${process.env.REACT_APP_BACKEND_URL}/admin/assignment/delete-assignment/${props.data[0]}`,
         { password: values.password, accessToken: Cookies.get("user_id") }
       )
       .then((res) => {
         resetForm();
         props.setDeleteModal(false);
         if(res.data.success){
-          props.setDumpsters(res.data.data);
+          props.setAssignments(res.data.data);
           props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
         }else{
           props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"error"})
         }
+        
       });
   };
   const { handleChange, handleSubmit, handleBlur, values, errors, touched } =
     useFormik({
       initialValues: { password: "" },
       enableReinitialize: true,
-      validationSchema: dumpsterErrorHandling,
+      validationSchema: assignmentErrorHandling,
       onSubmit: handleFormSubmit,
     });
   return (
@@ -92,7 +93,7 @@ const DeleteDumpsterModal = (props) => {
         id="customized-dialog-title"
         onClose={props.handleCloseDeleteModal}
       >
-        Delete this Dumpster Record?
+        Delete this Truck Assignment?
       </BootstrapDialogTitle>
       <DialogContent dividers>
         <Box sx={{ width: "100%" }}>
@@ -136,4 +137,4 @@ const DeleteDumpsterModal = (props) => {
   );
 };
 
-export default DeleteDumpsterModal;
+export default DeleteAssignment;

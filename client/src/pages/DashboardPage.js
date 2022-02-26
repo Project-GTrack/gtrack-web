@@ -50,7 +50,7 @@ const DashboardPage = () => {
     <PageLayout headerTitle={"Dashboard"}>
       <div>
         <ReactToPrint 
-          trigger={() => <Button variant="contained" style={{float: 'right'}} startIcon={<ArticleIcon/>} color="success">Generate Report</Button>}
+          trigger={() => <Button variant="contained" style={{float: 'right'}} startIcon={<ArticleIcon/>} color="success" disabled={data.length > 0? true:false}>Generate Report</Button>}
           content={() => componentRef.current}
           documentTitle="GTrack"
         />

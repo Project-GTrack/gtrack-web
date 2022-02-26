@@ -26,7 +26,7 @@ const PdfComponent = forwardRef(({dashcards,chartData},ref) => {
             <h5><strong>Waste Collection Summary Report</strong></h5>
         </center>
        
-         <div className="row" container spacing={3}>
+         <div className="row" container spacing={3} style={{marginTop: "5vh"}}>
          <p><strong>Assets and Collections</strong></p>
         <p style={{textIndent: "50px"}}>The figure below shows the total number of assets in use and the total number of collections generated within the month of {moment().format("MMMM")}</p>
              <center>
@@ -55,7 +55,7 @@ const PdfComponent = forwardRef(({dashcards,chartData},ref) => {
             <DashboardCard id={dashcard.id} data={data} title={dashcard.title} count={dashcard.count} icon={dashcard.icon}/>
           </div>
           ))}       */}
-          <div item xs={12} style={{marginTop: "30vh", marginBottom: "4vh"}}>
+          <div item xs={12} style={{marginTop: "25vh", marginBottom: "4vh"}}>
           <p><strong>Total Garbage Weight Collected Per Week</strong></p>
           <p style={{textIndent: "50px"}}>The figure below shows the total garbage weight collected weekly within the month of {moment().format("MMMM")}</p>
           <center>

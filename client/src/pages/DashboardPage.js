@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import PageLayout from "./PageLayout";
 
 import Axios from 'axios';
@@ -13,13 +13,18 @@ import PersonIcon from "@mui/icons-material/Person";
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import DeleteIcon from "@mui/icons-material/Delete";
 import AutoDeleteIcon from '@mui/icons-material/AutoDelete';
+import DashboardComponent from '../components/dashboard/DashboardComponent';
 import { useNavigate } from 'react-router-dom';
+import PdfComponent from '../components/helpers/PdfComponent';
+import ReactToPrint from 'react-to-print';
 
 const DashboardPage = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
+  const componentRef = useRef();
  
   useEffect(() => {
+    console.log(componentRef);
     if(Cookies.get('user_id')){
       Axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/dashboard`,{accessToken: Cookies.get('user_id')})
       .then((res) => {
@@ -43,30 +48,18 @@ const DashboardPage = () => {
   
   return (
     <PageLayout headerTitle={"Dashboard"}>
-       <div>
-        <Button variant="contained" style={{float: 'right'}} startIcon={<ArticleIcon/>} color="success">Generate Report</Button>
-        <Grid container spacing={3}>
-          {dashcards.map(dashcard => (
-          <Grid item key={dashcard.id} xs={12} md={6} lg={3}>
-            <DashboardCard id={dashcard.id} data={data} title={dashcard.title} count={dashcard.count} icon={dashcard.icon}/>
-          </Grid>
-          ))}      
-            {/* Chart */}
-            <Grid item xs={12} sx={{mt:4, mb:4}}>
-                <Paper
-                    sx={{
-                    p: 2,
-                    display: "flex",
-                    flexDirection: "column",
-                    height: 280,
-                    maxWidth: 'lg'
-                    }}
-                >
-                    {chartData && <Chart data={chartData} />}
-                </Paper>
-            </Grid>
-        </Grid>
-        </div>  
+      <div>
+        <ReactToPrint 
+          trigger={() => <Button variant="contained" style={{float: 'right'}} startIcon={<ArticleIcon/>} color="success">Generate Report</Button>}
+          content={() => componentRef.current}
+          documentTitle="GTrack"
+        />
+        <DashboardComponent dashcards={dashcards} data={data} chartData={chartData}/>
+        <div style={{display: "none"}}>
+          {chartData ? <PdfComponent dashcards={dashcards} chartData={chartData} ref={componentRef}/>:<></>}
+          
+        </div>
+      </div>
     </PageLayout>
   );
 };

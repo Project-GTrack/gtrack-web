@@ -16,30 +16,32 @@ const PdfComponent = forwardRef(({dashcards,chartData},ref) => {
         console.log("yeahh",dashcards,chartData)
     },[])
   return (
-    <div ref={ref} style={{margin: "5vh"}}>
-        <center style={{marginTop: "5vh"}}>
-            <img src="/images/compostela.jpg" style={{paddingBottom: "2vh", width: "24vh", height: "25vh"}}/>
-            <h4><strong>Solid Waste Management Department of Compostela</strong></h4>
-            <h5>Municipality of Compostela</h5>
-            <h5>Compostela, Cebu, Philippines 6003</h5>
+    <div ref={ref} style={{margin: "2vh"}}>
+        <center>
+            <img src="/images/compostela.jpg" style={{paddingBottom: "2vh", width: "11vh", height: "13vh"}}/>
+            <h5><strong>Solid Waste Management Department of Compostela</strong></h5>
+            <h6>Municipality of Compostela</h6>
+            <h6>Compostela, Cebu, Philippines 6003</h6>
             <br/><br/><br/>
-            <h3><strong>Waste Collection Summary Report</strong></h3>
-            <p></p>
+            <h5><strong>Waste Collection Summary Report</strong></h5>
         </center>
+       
          <div className="row" container spacing={3}>
+         <p><strong>Assets and Collections</strong></p>
+        <p style={{textIndent: "50px"}}>The figure below shows the total number of assets in use and the total number of collections generated within the month of {moment().format("MMMM")}</p>
              <center>
              <table style={{border: "1px solid black" }}>
                  <thead>
                      <tr>
-                         <th style={{padding: "2vh", border: "1px solid black"}}><strong>Assets & Collections</strong></th>
-                         <th style={{padding: "2vh", border: "1px solid black"}}><strong># of Assets/Collections</strong></th>
+                         <th style={{padding: "2vh", border: "1px solid black"}}><p><strong>Assets & Collections</strong></p></th>
+                         <th style={{padding: "2vh", border: "1px solid black"}}><p><strong># of Assets/Collections</strong></p></th>
                      </tr>
                  </thead>
                  <tbody>
                  {dashcards.map(data => (
                             <tr key={data.id}>
-                                <td style={{padding: "2vh", borderRight: "1px solid black"}}>{data.title}</td>
-                                <td style={{padding: "2vh", borderLeft: "1px solid black"}}>{data.count}</td>
+                                <td style={{padding: "1vh", borderRight: "1px solid black"}}><p>{data.title}</p></td>
+                                <td style={{padding: "1vh", borderLeft: "1px solid black"}}><p>{data.count}</p></td>
                             </tr>
                             
                         ))}
@@ -53,20 +55,22 @@ const PdfComponent = forwardRef(({dashcards,chartData},ref) => {
             <DashboardCard id={dashcard.id} data={data} title={dashcard.title} count={dashcard.count} icon={dashcard.icon}/>
           </div>
           ))}       */}
-          <div item xs={12} style={{marginTop: "4vh", marginBottom: "4vh"}}>
+          <div item xs={12} style={{marginTop: "30vh", marginBottom: "4vh"}}>
+          <p><strong>Total Garbage Weight Collected Per Week</strong></p>
+          <p style={{textIndent: "50px"}}>The figure below shows the total garbage weight collected weekly within the month of {moment().format("MMMM")}</p>
           <center>
              <table style={{border: "1px solid black" }}>
                  <thead>
                      <tr>
-                         <th style={{padding: "2vh", border: "1px solid black"}}><strong>Date</strong></th>
-                         <th style={{padding: "2vh", border: "1px solid black"}}><strong>Garbage Weight Collected</strong></th>
+                         <th style={{padding: "2vh", border: "1px solid black"}}><p><strong>Date</strong></p></th>
+                         <th style={{padding: "2vh", border: "1px solid black"}}><p><strong>Garbage Weight Collected (in Tons)</strong></p></th>
                      </tr>
                  </thead>
                  <tbody>
                  {chartData.map((data,i) => (
                             <tr key={i}>
-                                <td style={{padding: "2vh", borderRight: "1px solid black"}}>{moment(data.collection_date).format("MMMM DD, YYYY")}</td>
-                                <td style={{padding: "2vh", borderLeft: "1px solid black"}}>{data.collection_weight_volume}</td>
+                                <td style={{padding: "1vh", borderRight: "1px solid black"}}><p>{moment(data.collection_date).format("MMMM DD, YYYY")}</p></td>
+                                <td style={{padding: "1vh", borderLeft: "1px solid black"}}><p>{data.collection_weight_volume}</p></td>
                             </tr>
                             
                         ))}

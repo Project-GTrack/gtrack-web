@@ -57,7 +57,6 @@ const DashboardPage = () => {
         <DashboardComponent dashcards={dashcards} data={data} chartData={chartData}/>
         <div style={{display: "none"}}>
           {chartData ? <PdfComponent dashcards={dashcards} chartData={chartData} ref={componentRef}/>:<></>}
-          
         </div>
       </div>
     </PageLayout>

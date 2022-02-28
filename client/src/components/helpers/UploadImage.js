@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState } from 'react';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import Button from '@mui/material/Button';
@@ -9,11 +9,10 @@ import LinearProgress from '@mui/material/LinearProgress';
 import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
 import Typography from '@mui/material/Typography';
-import ClearIcon from '@mui/icons-material/Clear';
 import Grid from '@mui/material/Grid';
 const storage = Firebase.storage();
-const UploadImage = ({images,setImages,urls,setUrls,progress,setProgress}) => {
-  const [oldImage,setOldImage] = useState([]);
+const UploadImage = ({urls,setUrls,progress,setProgress}) => {
+  const [error, setError] = useState(null);
     function LinearProgressWithLabel(props) {
         return (
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -36,96 +35,103 @@ const UploadImage = ({images,setImages,urls,setUrls,progress,setProgress}) => {
         value: PropTypes.number.isRequired,
       };
     const handleChange = (event) =>{
-        for(let i = 0 ; i < event.target.files.length; i++){
-            const newImage = event.target.files[i];
-            console.log(newImage);
-            newImage["id"] = uuidGenerator();
-            setOldImage((prevState) => [...prevState, newImage]);
-            setImages((prevState) => [...prevState, newImage]);
+        if(urls.length>=0&&urls.length+event.target.files.length<=4){
+          handleUpload(event.target.files);
+        }else if(urls.length+event.target.files.length>4){
+          setError("Maximum number of image upload is 4.");
+        }else{
+          setUrls([]);
         }
     }
     const handleRemove = (index) => {
-      let imageList = [...oldImage];
+      let imageList = [...urls];
       imageList.splice(index,1);
-      setOldImage([...imageList]);
+      setUrls([...imageList]);
     }
  
-    const handleUpload = () => {
-        const promises = [];
-        images.map((image)=>{
-            let filename = uuidGenerator();
-            const uploadTask = storage.ref(`/gtrack-web/announcement/${filename}`).put(image);
-            promises.push(uploadTask);
-            uploadTask.on(
-            "state_changed",
-            (snapshot) => {
-                const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-                setProgress(progress);
-            },
-            (err) => {
-                console.log(err);
-            },
-            async () => {
-                await storage
-                .ref("/gtrack-web/announcement/")
-                .child(filename)
-                .getDownloadURL()
-                .then((urls)=>{
-                console.log(urls);
-                setUrls((prevState)=> [...prevState, urls]);
-                })
-            }
-        
-            )
-    })
-    Promise.all(promises)
-    .then(() => alert("All images uploaded"))
-    .catch((err) => console.log(err));
+    const handleUpload = (files) => {
+      for(let i = 0 ; i < files.length; i++){
+      const promises = [];
+      let image = files[i];
+      // images.forEach(function(image){
+        let filename = uuidGenerator();
+        const uploadTask = storage.ref(`/gtrack-web/announcement/${filename}`).put(image);
+        promises.push(uploadTask);
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+              const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+              setProgress(progress);
+          },
+          (err) => {
+              console.log(err);
+          },
+          async () => {
+            await storage
+            .ref("/gtrack-web/announcement/")
+            .child(filename)
+            .getDownloadURL()
+            .then((urls)=>{
+            setUrls((prevState)=> [...prevState, urls]);
+            })
+          }
+        )
+      
     }
+    // Promise.all(promises)
+    // .then(() => alert("All images uploaded"))
+    // .catch((err) => console.log(err));
+  }
 
     return (
-        <div>
+        <div className='w-100'>
             <Box sx={{ width: '100%' }}>
                 <LinearProgressWithLabel value={progress} />
             </Box>
-            <br></br>
             <Grid container spacing={2}>
-              <Grid item xs={6} md={4}>
-              <Button
-                variant="contained"
-                component="label"
-              >
-              Choose Image
-                <Input
-                type="file"
-                hidden
-                inputProps={{ multiple: true }}
-                onChange ={handleChange}
-                />
-              </Button>
-              </Grid>
-              <Grid item xs={6} md={8}>
-                <Box component="div">
-                    {oldImage ? oldImage.map((image, i) => (
-                  <Typography  sx={{ display: 'inline' }} key={i} variant="subtitle1" gutterBottom component="div">
-                    {image.name}<ClearIcon fontSize='small' onClick={()=>handleRemove(i)}/>
-                  </Typography>
-                
-                )):null}
-                </Box>
+              <Grid item xs={12} md={12}>
+                <Button
+                  variant="contained"
+                  component="label"
+                  sx={{width:"100%"}}
+                >
+                  Choose Image
+                  <Input
+                    type="file"
+                    hidden
+                    inputProps={{ multiple: true,accept:'image/jpeg,image/jpg,image/png',max:4 }}
+                    onChange ={handleChange}
+                  />
+                </Button>
+                {error && <p className='small text-danger mt-2 text-center'>{error}</p>}
               </Grid>
             </Grid>
             <br></br>
-            <Button variant="contained" onClick={handleUpload} color = 'success'>Upload</Button>
-            <ImageList sx={{ width: 500, height: 450 }} cols={3} rowHeight={164}>
+            {/* <Button variant="contained" onClick={handleUpload} color = 'success'>Upload</Button> */}
+            <ImageList cols={4} >
             {urls.map((url, i) => (
               <ImageListItem key={i}>
                 <img
                   src={url}
-                  alt="firebase iamge"
+                  alt={"announcement image "+url}
                   loading="lazy"
+                  className='rounded'
                 />
-          </ImageListItem>
+                <button 
+                  className='btn btn-danger text-center rounded-circle position-absolute btn-sm'
+                  onClick={()=>handleRemove(i)} 
+                  style={{
+                    right:0, 
+                    marginRight:5, 
+                    top:0, 
+                    marginTop:5, 
+                    width:25,
+                    height:25,
+                    fontSize:10,
+                  }}>
+                  <i className="fa fa-times" aria-hidden="true"></i>
+                </button>
+              </ImageListItem>
             ))}
           </ImageList>
           </div>

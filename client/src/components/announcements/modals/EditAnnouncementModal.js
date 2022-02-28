@@ -1,4 +1,5 @@
 import React, {useState,useEffect} from 'react';
+import Grid from "@mui/material/Grid";
 import { styled } from '@mui/material/styles';
 import Box from "@mui/material/Box";
 import Button from '@mui/material/Button';
@@ -87,6 +88,14 @@ export default function EditAnnouncementModal(props) {
       .test("FILE_FORMAT", "Uploaded file has unsupported format.", 
           value => !value || (value && SUPPORTED_FORMATS.includes(value.type)))
   })
+  useEffect(() => {
+    let temp=[];
+    props.data[5].map((image)=>{
+      temp.push(image.filename);
+    })
+    setUrls([...temp]);
+  }, [props])
+  
   const [error,setError] = useState([]);
   const handleFormSubmit = async(values, {resetForm}) => {
     if(Cookies.get('user_id')){
@@ -96,11 +105,11 @@ export default function EditAnnouncementModal(props) {
         urls:urls
       }).then(res=>{
         if(res.data.success){
-          console.log(res.data.data)
-          // props.setAnnouncements(res.data.data);
+          props.setAnnouncements(res.data.data);
           props.setOpenModal(false);
+          props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
         }else{
-          setError(res.data.message);
+          props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"error"})
       
         }
       })
@@ -129,36 +138,39 @@ export default function EditAnnouncementModal(props) {
     </BootstrapDialogTitle>
     <DialogContent dividers>
     {error && <p className="text-danger small text-center">{error}</p>}
-    <Box sx={{ width: '100%' }}>
-      <TextField
-        value={values.title}
-        onChange={handleChange('title')}
-        onBlur={handleBlur('title')}
-        margin="dense"
-        id="title"
-        label=  "Title"
-        type="text"
-        fullWidth
-        variant="standard"
-      />
-       {(errors.title && touched.title) &&
-        <p className="text-danger small ">{errors.title}</p>
-      } 
-      <TextareaAutosize
-        value={values.content}
-        onChange={handleChange('content')}
-        onBlur={handleBlur('content')}
-        maxRows={10}
-        aria-label="maximum height"
-        placeholder= "Content"
-        style={{ width: '100%', height: 200 }}
-      />
-      {(errors.content && touched.content) &&
-        <p className="text-danger small ">{errors.content}</p>
-      } 
-      <UploadImage images={images} setImages={setImages} urls={urls} setUrls={setUrls} progress={progress} setProgress={setProgress}/>
-
-    </Box>
+      <Box sx={{ width: '100%' }}>
+        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+            <Grid item xs={12}>
+            <TextField
+              value={values.title}
+              onChange={handleChange('title')}
+              onBlur={handleBlur('title')}
+              id="title"
+              label=  "Title"
+              type="text"
+              fullWidth
+            />
+            {(errors.title && touched.title) &&
+              <p className="text-danger small ">{errors.title}</p>
+            } 
+            </Grid>
+            <Grid item xs={12}>
+              <TextareaAutosize
+                value={values.content}
+                onChange={handleChange('content')}
+                onBlur={handleBlur('content')}
+                maxRows={10}
+                aria-label="maximum height"
+                placeholder= "Content"
+                style={{ width: '100%', height: 200 }}
+              />
+              {(errors.content && touched.content) &&
+                <p className="text-danger small ">{errors.content}</p>
+              } 
+            </Grid>
+            </Grid>
+            <UploadImage images={images} setImages={setImages} urls={urls} setUrls={setUrls} progress={progress} setProgress={setProgress}/>    
+      </Box>
     </DialogContent>
     <DialogActions>
       <Button  type="submit"  className='text-dark' disabled={!isValid} onClick={handleSubmit}>

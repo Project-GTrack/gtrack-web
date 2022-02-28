@@ -6,10 +6,15 @@ import AnnouncementsComponent from '../components/announcements/AnnouncementsCom
 import Axios from 'axios';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
+import StatusToast from '../components/helpers/StatusToast';
 const AnnouncementsPage = () =>{
   const navigate = useNavigate();
   const [data, setData] = useState([]);
-
+  const [statusToast, setStatusToast] = useState({
+    isOpen : false,
+    message : "",
+    colorScheme:"success"
+  })
 
   useEffect(() => {
     if(Cookies.get('user_id')){
@@ -17,20 +22,13 @@ const AnnouncementsPage = () =>{
       .then((res) => {
           if(res){
             setData(res.data.posts);
-            
           }
       }) 
     }else{
       navigate("/login");
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
- 
-  function a11yProps(index) {
-    return {
-        id: `simple-tab-${index}`,
-        'aria-controls': `simple-tabpanel-${index}`,
-    };
-}
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
     return (
@@ -58,7 +56,8 @@ function TabPanel(props) {
 
     return (
         <PageLayout headerTitle={"Announcements"}>
-            <AnnouncementsComponent announcements = {data} setAnnouncements = {setData}/>
+            <AnnouncementsComponent announcements = {data} setAnnouncements = {setData}  statusToast={statusToast} setStatusToast={setStatusToast}/>
+            <StatusToast statusToast={statusToast} setStatusToast={setStatusToast}/>
         </PageLayout>
     )
 }

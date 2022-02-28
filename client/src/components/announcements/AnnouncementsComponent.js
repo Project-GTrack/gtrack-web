@@ -3,20 +3,26 @@ import MUIDataTable from "mui-datatables";
 import AnnouncementCustomToolbar from './AnnouncementCustomToolbar';
 import AddNewAnnouncementModal from './modals/AddNewAnnouncementModal';
 import moment from 'moment';
-const AnnouncementsComponent = ({announcements, setAnnouncements}) => {
+const AnnouncementsComponent = ({announcements, setAnnouncements,statusToast, setStatusToast}) => {
 
     const[data,  setData] = useState([]);
     useEffect(()=>{
        
         var temp = [];
+        // eslint-disable-next-line array-callback-return
         announcements && announcements.map((announcement)=>{
-            temp.push([announcement.announcement_id,announcement.title, announcement.content,moment(announcement.createdAt).format("LL")
-            , announcement.announcementLine.lineAttachment && announcement.announcementLine.lineAttachment]);
-            console.log(temp);
+            temp.push([
+                announcement.announcement_id,
+                announcement.title, 
+                announcement.content,
+                announcement.announcementAdmin.fname+" "+announcement.announcementAdmin.lname,
+                moment(announcement.createdAt).format("MMMM DD, YYYY"),
+                announcement.announcementLine.lineAttachment
+            ]);
         })
-        setData(temp);
+        setData(temp);  
 
-    },[announcements]);
+    },[announcements, statusToast.isOpen]);
 
 
 
@@ -51,6 +57,14 @@ const AnnouncementsComponent = ({announcements, setAnnouncements}) => {
         }
     },
     {
+        name:"Added by",
+        label:"Added by",
+        options: {
+            filter:true,
+            sort:true,
+        }
+    },
+    {
         name:"Date Added",
         label:"Date Added",
         options: {
@@ -77,18 +91,23 @@ const AnnouncementsComponent = ({announcements, setAnnouncements}) => {
     filter: true,
     filterType: 'dropdown',
     customToolbarSelect:(selectedRows,displayData)=>(
-        <AnnouncementCustomToolbar selectedRows={selectedRows} setAnnouncements={setAnnouncements} displayData={displayData}/>
+        <AnnouncementCustomToolbar statusToast={statusToast} setStatusToast={setStatusToast}  selectedRows={selectedRows} setAnnouncements={setAnnouncements} displayData={displayData}/>
     )
     };
     return (
         <div>
             <div className='mb-3'>
-                <button className='btn btn-success' onClick={handleOpenModal}><i className="fa fa-plus" aria-hidden="true"></i> Add New Announcement</button>            </div>
-                <AddNewAnnouncementModal
-            openModal={openModal}
-            handleCloseModal={handleCloseModal}
-            handleOpenModal={handleOpenModal}
-          />
+                <button className='btn btn-success' onClick={handleOpenModal}><i className="fa fa-plus" aria-hidden="true"></i> Add New Announcement</button>
+            </div>
+            <AddNewAnnouncementModal
+                openModal={openModal}
+                setAnnouncements={setAnnouncements}
+                statusToast={statusToast}
+                setStatusToast={setStatusToast}
+                setOpenModal={setOpenModal} 
+                handleCloseModal={handleCloseModal}
+                handleOpenModal={handleOpenModal}
+            />
             <MUIDataTable
                 title={"Announcement List"}
                 data={data}

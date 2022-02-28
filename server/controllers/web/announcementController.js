@@ -5,7 +5,7 @@ const attachment_line=require("../../models/attachment_line");
 const attachment=require("../../models/attachment");
 const admin=require("../../models/user");
 const jwt=require("jsonwebtoken");
-
+var C = require("crypto-js");
 exports.viewAnnouncements = async(req, res) => {
     let announcements=await announcement.model.findAll({
         where:{
@@ -44,9 +44,18 @@ exports.createAnnouncement = async(req, res) =>{
                     content:req.body.content,
                     attachment_line_id:attline.attachment_line_id
                 })
-                console.log(post);
+                announce = await announcement.model.findAll({
+                    include:[
+                        {model: admin.model, as:"announcementAdmin"},
+                        {model: attachment_line.model, as: 'announcementLine',
+                            include:[{
+                                model: attachment.model, as:'lineAttachment'
+                            }]
+                        }
+                    ],
+                });
                 if(post){
-                    res.send({success:true,message:"Announcement created successfully!",data:post});
+                    res.send({success:true,message:"Announcement created successfully!",data:announce});
                 }else{
                     res.send({success:false,message:"Failed to create announcement.",data:null});
                 }
@@ -62,7 +71,7 @@ exports.editAnnouncement = async(req, res) => {
             announcement_id: req.params.id
         }
     })
-    if(req.body.urls.length > 0){
+    // if(req.body.urls.length > 0){
         await attachment.model.destroy({
             where:{
                 attachment_line_id : announce.attachment_line_id
@@ -74,7 +83,7 @@ exports.editAnnouncement = async(req, res) => {
                 filename: req.body.urls[i] 
             });
         }
-    }
+    // }
     let post = await announcement.model.update({
         title:req.body.title,
         content:req.body.content,
@@ -84,12 +93,14 @@ exports.editAnnouncement = async(req, res) => {
         }
     })
     announce = await announcement.model.findAll({
-        include:{
-            model: attachment_line.model, as: 'announcementLine',
-            include:{
-                model: attachment.model, as:'lineAttachment'
+        include:[
+            {model: admin.model, as:"announcementAdmin"},
+            {model: attachment_line.model, as: 'announcementLine',
+                include:[{
+                    model: attachment.model, as:'lineAttachment'
+                }]
             }
-        },
+        ],
     });
     if(post){
         res.send({success:true,message:"Announcement updated successfully!",data:announce});
@@ -98,4 +109,59 @@ exports.editAnnouncement = async(req, res) => {
     }
  
    
+}
+exports.deleteAnnouncement = async(req, res) => {
+    if(req.body.accessToken!= undefined){
+        jwt.verify(req.body.accessToken,process.env.ACCESS_TOKEN_SECRET, async(err, decoded)=>{
+            var bytes  = C.AES.decrypt(JSON.parse(decoded.user_id).password, process.env.SECRET_KEY);
+            var originalText = bytes.toString(C.enc.Utf8);
+            if(originalText === req.body.password){
+                let announce = await announcement.model.findOne({
+                    where:{
+                        announcement_id: req.params.id
+                    }
+                })
+
+                await attachment.model.destroy({
+                    where:{
+                        attachment_line_id : announce.attachment_line_id
+                    }
+                });
+                await attachment_line.model.destroy({
+                    where:{
+                        attachment_line_id : announce.attachment_line_id
+                    }
+                })
+
+                announce = await announcement.model.destroy({
+                    where:{
+                        announcement_id:req.params.id
+                    }
+                })
+                console.log(announce);
+                if(announce != 0){
+                    posts = await announcement.model.findAll({
+                        include:[
+                            {
+                                model: admin.model, as:"announcementAdmin"
+                            },
+                            {
+                                model: attachment_line.model, as: 'announcementLine',
+                                include:[{
+                                    model: attachment.model, as:'lineAttachment'
+                                }]
+                            }
+                        ],
+                    });
+                    res.send({success:true,message:"Announcement has been deleted",data:posts});
+                }else{
+                    res.send({success:false,message:"Cannot Delete Announcement",data:null});
+                }
+                
+            }else{
+                res.send({success:false,message:"Password did not match"});
+            }
+        })
+        
+    }
 }

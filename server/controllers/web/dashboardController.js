@@ -32,11 +32,8 @@ exports.viewDashboard= async(req, res)=>{
                     exclude:['image','birthday','gender','postal_code','email_verified_at','password','remember_token','google_auth','updatedAt','deletedAt']
                 },
                 where:{
-                   [Op.and]:[
-                    sequelize.literal('createdAt >= LAST_DAY(NOW()) + INTERVAL 1 DAY - INTERVAL 1 MONTH'),
-                    sequelize.literal('createdAt < LAST_DAY(NOW())'),
-                    {user_type: 'Driver'}
-                   ]
+                    user_type: 'Driver',
+                    status: 1
                 }
             });
 
@@ -47,11 +44,7 @@ exports.viewDashboard= async(req, res)=>{
                     exclude:['user_id','updatedAt','active','deletedAt']
                 },
                 where:{
-                    [Op.and]:[
-                     sequelize.literal('createdAt >= LAST_DAY(NOW()) + INTERVAL 1 DAY - INTERVAL 1 MONTH'),
-                     sequelize.literal('createdAt < LAST_DAY(NOW())'),
-                     {active: 1}
-                    ]
+                   active: 1
                  }
 
             })
@@ -63,11 +56,8 @@ exports.viewDashboard= async(req, res)=>{
                     exclude:['admin_id','town','postal_code','latitude','longitude','complete','updatedAt','deletedAt']
                 },
                 where:{
-                    [Op.and]:[
-                     sequelize.literal('createdAt >= LAST_DAY(NOW()) + INTERVAL 1 DAY - INTERVAL 1 MONTH'),
-                     sequelize.literal('createdAt < LAST_DAY(NOW())')
-                    ]
-                 }
+                    deletedAt:null
+                },
             })
 
 
@@ -87,7 +77,7 @@ exports.viewDashboard= async(req, res)=>{
                where:{
                     [Op.and]:[
                         sequelize.literal('collection_date >= LAST_DAY(NOW()) + INTERVAL 1 DAY - INTERVAL 1 MONTH'),
-                        sequelize.literal('collection_date < LAST_DAY(NOW())')
+                        sequelize.literal('collection_date <= LAST_DAY(NOW())')
                     ]    
                }
             });
@@ -121,7 +111,7 @@ exports.viewDashboard= async(req, res)=>{
                     total_price = await collection.model.sum('collection_weight_volume',{
                         where: {
                             collection_date: {
-                              [Op.between]: [startDate, day]
+                              [Op.between]: [new Date(startDate), new Date(day)]
                             }
                         }
                     })

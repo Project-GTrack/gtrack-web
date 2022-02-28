@@ -67,28 +67,36 @@ export default function ViewAnnouncementModal(props) {
       </BootstrapDialogTitle>
       <DialogContent dividers>
         <Box sx={{ width: "100%" }}>
-          <Carousel>
-          {props.data[5] && props.data[5].map((image,i)=>{
-            return (
-              <img 
-              key = {i}
-              src={image.filename}
-              style={{width:"100%",height: 200}}
-              alt={image.filename}
-              />
-    
-            )
-          })}
+          <Carousel sx={{height: 200,width:'100%',alignContent:'center',alignItems:'center',justifyContent:'center',margin:'auto'}}>
+          {props.data[5].length!==0?(props.data[5].map((image,i)=>{
+              return (
+                <div key = {i} className="text-center mx-auto ml-auto mr-auto">
+                  <img 
+                    src={image.filename}
+                    style={{height: 200, margin:"auto",alignSelf:"center",alignContent:"center",justifyContent:"center"}}
+                    alt={image.filename}
+                  />
+                </div>
+              )
+            })
+          ):(
+            <div className="text-white mx-auto bg-secondary" style={{width:"100%",height:200,justifyContent:"center",display:"flex"}}>
+              <p className="text-center mt-auto mb-auto">No photos uploaded</p>
+            </div>
+          )}
           </Carousel>
        
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" mt={2} color="text.secondary">
             <b>Title:</b> {props.data[1]}
           </Typography>
           <Typography align='justify' variant="body2" color="text.secondary">
             <b>Content:</b> {props.data[2]}
           </Typography>
+          <Typography align='justify' variant="body2" color="text.secondary">
+            <b>Added by:</b> {props.data[3]}
+          </Typography>
           <Typography variant="body2" color="text.secondary">
-            <b>Date Added:</b> {props.data[3]}
+            <b>Date Added:</b> {props.data[4]}
           </Typography>
         </Box>
       </DialogContent>

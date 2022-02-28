@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import Button from '@mui/material/Button';
@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 const storage = Firebase.storage();
 const UploadImage = ({urls,setUrls,progress,setProgress}) => {
+  const [error, setError] = useState(null);
     function LinearProgressWithLabel(props) {
         return (
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -34,13 +35,12 @@ const UploadImage = ({urls,setUrls,progress,setProgress}) => {
         value: PropTypes.number.isRequired,
       };
     const handleChange = (event) =>{
-        if(event.target.files.length>0){
-          // for(let i = 0 ; i < event.target.files.length; i++){
-          //   const newImage = event.target.files[i];
-          //   setImages((prevState) => [...prevState, newImage]);
-          // }
+        if(urls.length>=0&&urls.length+event.target.files.length<=4){
           handleUpload(event.target.files);
-          // event.target.files=[];
+        }else if(urls.length+event.target.files.length>4){
+          setError("Maximum number of image upload is 4.");
+        }else{
+          setUrls([]);
         }
     }
     const handleRemove = (index) => {
@@ -90,19 +90,20 @@ const UploadImage = ({urls,setUrls,progress,setProgress}) => {
             </Box>
             <Grid container spacing={2}>
               <Grid item xs={12} md={12}>
-              <Button
-                variant="contained"
-                component="label"
-                sx={{width:"100%"}}
-              >
-                Choose Image
-                <Input
-                  type="file"
-                  hidden
-                  inputProps={{ multiple: true }}
-                  onChange ={handleChange}
-                />
-              </Button>
+                <Button
+                  variant="contained"
+                  component="label"
+                  sx={{width:"100%"}}
+                >
+                  Choose Image
+                  <Input
+                    type="file"
+                    hidden
+                    inputProps={{ multiple: true,accept:'image/jpeg,image/jpg,image/png',max:4 }}
+                    onChange ={handleChange}
+                  />
+                </Button>
+                {error && <p className='small text-danger mt-2 text-center'>{error}</p>}
               </Grid>
             </Grid>
             <br></br>

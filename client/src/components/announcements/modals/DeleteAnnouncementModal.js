@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, {useEffect, useState} from 'react';
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -11,7 +11,12 @@ import PropTypes from "prop-types";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import TextField from '@mui/material/TextField';
-import Typography from "@mui/material/Typography";
+import * as yup from 'yup';
+import Axios from 'axios';
+import { useFormik } from 'formik';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
+
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -52,6 +57,35 @@ BootstrapDialogTitle.propTypes = {
 };
 
 export default function DeleteAnnouncementModal(props) {
+  const navigate = useNavigate();
+  const announcementValidationSchema = yup.object().shape({
+    password: yup.string().required("Password is required"),
+  });
+  const handleFormSubmit = async(values, {resetForm}) => {
+    if(Cookies.get('user_id')){
+      Axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/announcement/delete/${props.data[0]}`,{
+        password: values.password,
+        accessToken: Cookies.get('user_id')
+      }).then(res=>{
+        if(res.data.success){
+          props.setDeleteModal(false);
+          props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
+          props.setAnnouncements(res.data.data);
+        }else{
+          props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"error"})
+        }
+      })
+    }else{
+      navigate("/login");
+    }
+  }
+  const { handleChange, handleSubmit, handleBlur, values, errors, touched } =
+    useFormik({
+      initialValues: { password: "" },
+      enableReinitialize: true,
+      validationSchema: announcementValidationSchema,
+      onSubmit: handleFormSubmit,
+  });
   return (
     <BootstrapDialog
       onClose={props.handleCloseDeleteModal}
@@ -60,6 +94,7 @@ export default function DeleteAnnouncementModal(props) {
     >
       <BootstrapDialogTitle
         id="customized-dialog-title"
+        onClose={props.handleCloseDeleteModal}
       >
         Are you sure you want to delete this Announcement Record?
       </BootstrapDialogTitle>
@@ -75,17 +110,23 @@ export default function DeleteAnnouncementModal(props) {
         margin="dense"
         id="password"
         label="Enter password here"
-        type="text"
+        type="password"
         fullWidth
+        value={values.password}
+        onChange={handleChange("password")}
+        onBlur={handleBlur("password")}
         variant="standard"
       />
+       {errors.password && touched.password && (
+          <p className="text-danger small ">{errors.password}</p>
+        )}
     </Grid>
   </Grid>
         </Box>
       </DialogContent>
       <DialogActions>
       <button className='btn' onClick={props.handleCloseDeleteModal}>Close</button>
-        <button className='btn btn-danger' onClick={props.handleCloseDeleteModal}>Delete</button>
+        <button className='btn btn-danger' type="submit" onClick={handleSubmit}>Delete</button>
       </DialogActions>
     </BootstrapDialog>
   );

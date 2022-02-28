@@ -13,13 +13,11 @@ import CloseIcon from '@mui/icons-material/Close';
 import IconButton from "@mui/material/IconButton";
 import TextareaAutosize from '@mui/base/TextareaAutosize';
 import * as yup from 'yup'
-import Firebase from '../../helpers/Firebase';
 import UploadImage from '../../helpers/UploadImage';
 import Axios from 'axios';
 import { useFormik } from 'formik';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
-const storage = Firebase.storage();
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -75,6 +73,7 @@ export default function EditAnnouncementModal(props) {
   })
   useEffect(() => {
     let temp=[];
+    // eslint-disable-next-line array-callback-return
     props.data[5].map((image)=>{
       temp.push(image.filename);
     })

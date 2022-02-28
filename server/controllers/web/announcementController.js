@@ -5,7 +5,10 @@ const attachment_line=require("../../models/attachment_line");
 const attachment=require("../../models/attachment");
 const admin=require("../../models/user");
 const jwt=require("jsonwebtoken");
+const Firebase = require('../../helpers/Firebase');
+const { Expo } = require('expo-server-sdk');
 
+const database=Firebase.database();
 exports.viewAnnouncements = async(req, res) => {
     let announcements=await announcement.model.findAll({
         where:{
@@ -20,10 +23,46 @@ exports.viewAnnouncements = async(req, res) => {
             }]
         }]
     });
-    console.log(announcements);
     res.send({ posts:announcements});
-
-   
+}
+const handleFirebase=async ()=>{
+    var temp=[];
+    var snap;
+    const tokenRef=database.ref(`PushTokens/`);
+    const snapshot=await tokenRef.once('value');
+    if(snapshot.val()){
+        snap=snapshot.val();
+        temp=Object.keys(snap).map((key) => snap[key]);
+    }
+    return temp;
+}
+const handlePushNotifications=(expoTokens)=>{
+    let messages = [];
+    for (let pushToken of expoTokens) {
+      if (!Expo.isExpoPushToken(pushToken)) {
+        console.error(`Push token ${pushToken} is not a valid Expo push token`);
+        continue;
+      }
+      messages.push({
+        to: pushToken,
+        sound: 'default',
+        body: req.body.title,
+        data: {},
+      })
+    }
+    let chunks = expo.chunkPushNotifications(messages);
+    let tickets = [];
+    (async () => {
+      for (let chunk of chunks) {
+        try {
+          let ticketChunk = await expo.sendPushNotificationsAsync(chunk);
+          console.log(ticketChunk);
+          tickets.push(...ticketChunk);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    })();
 }
 exports.createAnnouncement = async(req, res) =>{
     if(req.body.accessToken!= undefined){
@@ -44,6 +83,14 @@ exports.createAnnouncement = async(req, res) =>{
                     content:req.body.content,
                     attachment_line_id:attline.attachment_line_id
                 })
+                if(req.body.isNotified){
+                   let expoTokens=handleFirebase();
+                    if(expoTokens.length>0){
+                        handlePushNotifications(expoTokens);
+                    }else{
+                        console.log("No Pushtokens");
+                    }
+                }
                 if(post){
                     res.send({success:true,message:"Announcement created successfully!",data:post});
                 }else{

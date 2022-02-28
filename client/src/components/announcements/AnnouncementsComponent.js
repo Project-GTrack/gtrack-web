@@ -90,7 +90,7 @@ const AnnouncementsComponent = ({announcements, setAnnouncements}) => {
     filter: true,
     filterType: 'dropdown',
     customToolbarSelect:(selectedRows,displayData)=>(
-        <AnnouncementCustomToolbar selectedRows={selectedRows} displayData={displayData}/>
+        <AnnouncementCustomToolbar selectedRows={selectedRows} setAnnouncements={setAnnouncements} displayData={displayData}/>
     )
     };
     return (

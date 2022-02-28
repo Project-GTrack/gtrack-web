@@ -13,7 +13,7 @@ const AnnouncementsPage = () =>{
 
   useEffect(() => {
     if(Cookies.get('user_id')){
-      Axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/announcement/view`,{accessToken: Cookies.get('user_id')})
+      Axios.get(`${process.env.REACT_APP_BACKEND_URL}/admin/announcement/view`)
       .then((res) => {
           if(res){
             setData(res.data.posts);
@@ -25,8 +25,6 @@ const AnnouncementsPage = () =>{
     }
   },[])
  
-
-  console.log(data);
   function a11yProps(index) {
     return {
         id: `simple-tab-${index}`,
@@ -60,7 +58,7 @@ function TabPanel(props) {
 
     return (
         <PageLayout headerTitle={"Announcements"}>
-            <AnnouncementsComponent announcements = {data}/>
+            <AnnouncementsComponent announcements = {data} setAnnouncements = {setData}/>
         </PageLayout>
     )
 }

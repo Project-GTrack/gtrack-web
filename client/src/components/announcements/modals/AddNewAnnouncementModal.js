@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useEffect, useState} from 'react';
 import Grid from "@mui/material/Grid";
 import { styled } from '@mui/material/styles';
 import Box from "@mui/material/Box";
@@ -6,6 +6,8 @@ import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -20,6 +22,12 @@ import { Input } from '@mui/material';
 import TextareaAutosize from '@mui/base/TextareaAutosize';
 import * as yup from 'yup'
 import Firebase from '../../helpers/Firebase';
+import UploadImage from '../../helpers/UploadImage';
+import Axios from 'axios';
+import { useFormik } from 'formik';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
+const storage = Firebase.storage();
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
       padding: theme.spacing(2),
@@ -58,9 +66,15 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     onClose: PropTypes.func.isRequired,
   };
 
-const database = Firebase.database();
+
+
 
 export default function AddNewAnnouncementModal(props) {
+  const [images, setImages] = useState([]);
+  const [urls, setUrls] = useState([]);
+  const [progress, setProgress] = useState(0);
+  const [alert, setAlert] = useState([]);
+  const navigate = useNavigate();
   const announcementValidationSchema = yup.object().shape({
     title: yup
       .string()
@@ -68,11 +82,35 @@ export default function AddNewAnnouncementModal(props) {
     content: yup
       .string()
       .required('Content is required'),
-    images: yup
-      .array()
-      .min(1,'Attach at least 1 image').required('Attach at least 1 image')
-    
+
   })
+  const [error,setError] = useState([]);
+  const handleFormSubmit = async(values, {resetForm}) => {
+    if(Cookies.get('user_id')){
+      Axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/announcement/create`,{
+        title:values.title,
+        content: values.content,
+        urls:urls,
+        accessToken: Cookies.get('user_id')
+      }).then(res=>{
+        if(res.data.success){
+          resetForm();
+          setAlert({visible:true,message:res.data.message,colorScheme:"success",header:"Success"});
+        }else{
+          setError(res.data.message);
+      
+        }
+      })
+    }else{
+      navigate("/login");
+    }
+  }
+  const { handleChange, handleSubmit, handleBlur, values, errors,isValid,touched } = useFormik({
+    initialValues:{ title:'',content:''},
+    enableReinitialize:true,
+    validationSchema:announcementValidationSchema,
+    onSubmit: handleFormSubmit
+  });
   return (
     <BootstrapDialog
     onClose={props.handleCloseModal}
@@ -83,9 +121,12 @@ export default function AddNewAnnouncementModal(props) {
       Add New Announcement
     </BootstrapDialogTitle>
     <DialogContent dividers>
+    {error && <p className="text-danger small text-center">{error}</p>}
     <Box sx={{ width: '100%' }}>
       <TextField
-        autoFocus
+        value={values.title}
+        onChange={handleChange('title')}
+        onBlur={handleBlur('title')}
         margin="dense"
         id="title"
         label="Title"
@@ -93,27 +134,30 @@ export default function AddNewAnnouncementModal(props) {
         fullWidth
         variant="standard"
       />
+      {(errors.title && touched.title) &&
+        <p className="text-danger small ">{errors.title}</p>
+      } 
       <TextareaAutosize
+      value={values.content}
+      onChange={handleChange('content')}
+      onBlur={handleBlur('content')}
       maxRows={10}
       aria-label="maximum height"
       placeholder="Content"
       style={{ width: '100%', height: 200 }}
       />
-      <Button
-        variant="contained"
-        component="label"
-        color = 'success'
-      >
-      Attach Image
-      <Input
-      type="file"
-      hidden
-      />
-</Button>
+      {(errors.content && touched.content) &&
+        <p className="text-danger small ">{errors.content}</p>
+      } 
+      <UploadImage images={images} setImages={setImages} urls={urls} setUrls={setUrls} progress={progress} setProgress={setProgress}/>
+     
+             
+  
+
 </Box>
     </DialogContent>
     <DialogActions>
-      <Button autoFocus onClick={props.handleCloseModal}>
+      <Button type="submit"  className='text-dark' disabled={!isValid} onClick={handleSubmit}>
         Save
       </Button>
     </DialogActions>

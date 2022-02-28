@@ -37,6 +37,7 @@
     "react-hook-form": "^7.25.3",
     "react-jwt": "^1.1.4",
     "react-mapbox-gl": "^5.1.1",
+    "react-material-ui-carousel": "^3.2.0",
     "react-router-dom": "^6.2.1",
     "react-scripts": "5.0.0",
     "react-to-print": "^2.14.4",

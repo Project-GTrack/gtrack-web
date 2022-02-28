@@ -2,12 +2,6 @@ import React, {useEffect, useState} from 'react';
 import Grid from "@mui/material/Grid";
 import { styled } from '@mui/material/styles';
 import Box from "@mui/material/Box";
-import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import InputLabel from '@mui/material/InputLabel';
-import Select from '@mui/material/Select';
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -17,17 +11,13 @@ import DialogActions from '@mui/material/DialogActions';
 import PropTypes from 'prop-types';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from "@mui/material/IconButton";
-import MenuItem from "@mui/material/MenuItem";
-import { Input } from '@mui/material';
 import TextareaAutosize from '@mui/base/TextareaAutosize';
 import * as yup from 'yup'
-import Firebase from '../../helpers/Firebase';
 import UploadImage from '../../helpers/UploadImage';
 import Axios from 'axios';
 import { useFormik } from 'formik';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
-const storage = Firebase.storage();
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
       padding: theme.spacing(2),
@@ -113,54 +103,53 @@ export default function AddNewAnnouncementModal(props) {
   });
   return (
     <BootstrapDialog
-    onClose={props.handleCloseModal}
-    aria-labelledby="customized-dialog-title"
-    open={props.openModal}
-  >
-    <BootstrapDialogTitle id="customized-dialog-title" onClose={props.handleCloseModal}>
-      Add New Announcement
-    </BootstrapDialogTitle>
+      onClose={props.handleCloseModal}
+      aria-labelledby="customized-dialog-title"
+      open={props.openModal}
+    >
+      <BootstrapDialogTitle id="customized-dialog-title" onClose={props.handleCloseModal}>
+        Add New Announcement
+      </BootstrapDialogTitle>
     <DialogContent dividers>
     {error && <p className="text-danger small text-center">{error}</p>}
-    <Box sx={{ width: '100%' }}>
-      <TextField
-        value={values.title}
-        onChange={handleChange('title')}
-        onBlur={handleBlur('title')}
-        margin="dense"
-        id="title"
-        label="Title"
-        type="text"
-        fullWidth
-        variant="standard"
-      />
-      {(errors.title && touched.title) &&
-        <p className="text-danger small ">{errors.title}</p>
-      } 
-      <TextareaAutosize
-      value={values.content}
-      onChange={handleChange('content')}
-      onBlur={handleBlur('content')}
-      maxRows={10}
-      aria-label="maximum height"
-      placeholder="Content"
-      style={{ width: '100%', height: 200 }}
-      />
-      {(errors.content && touched.content) &&
-        <p className="text-danger small ">{errors.content}</p>
-      } 
-      <UploadImage images={images} setImages={setImages} urls={urls} setUrls={setUrls} progress={progress} setProgress={setProgress}/>
-     
-             
-  
-
-</Box>
+      <Box sx={{ width: '100%' }}>
+      <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+          <Grid item xs={12}>
+            <TextField
+              value={values.title}
+              onChange={handleChange('title')}
+              onBlur={handleBlur('title')}
+              id="title"
+              label="Title"
+              type="text"
+              fullWidth
+            />
+            {(errors.title && touched.title) &&
+              <p className="text-danger small ">{errors.title}</p>
+            }
+          </Grid>
+          <Grid item xs={12}>
+            <TextareaAutosize
+              value={values.content}
+              onChange={handleChange('content')}
+              onBlur={handleBlur('content')}
+              maxRows={10}
+              placeholder="Content"
+              style={{ width: '100%', height: 200 }}
+            />
+            {(errors.content && touched.content) &&
+              <p className="text-danger small ">{errors.content}</p>
+            } 
+        </Grid>
+        </Grid>  
+        <UploadImage images={images} setImages={setImages} urls={urls} setUrls={setUrls} progress={progress} setProgress={setProgress}/>
+      </Box>
     </DialogContent>
-    <DialogActions>
-      <Button type="submit"  className='text-dark' disabled={!isValid} onClick={handleSubmit}>
-        Save
-      </Button>
-    </DialogActions>
+      <DialogActions>
+        <Button type="submit"  className='text-dark' disabled={!isValid} onClick={handleSubmit}>
+          Save
+        </Button>
+      </DialogActions>
   </BootstrapDialog>
   );
 }

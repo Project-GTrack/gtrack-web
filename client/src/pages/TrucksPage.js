@@ -9,14 +9,25 @@ import UnderMaintenancePanel from '../components/UnderMaintenancePanel';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import Cookies from 'js-cookie';
+import axios from 'axios';
+import StatusToast from '../components/helpers/StatusToast';
 
 const TrucksPage = () => {
     const [value, setValue] = useState(0);
-    const [user,setUser]=useState(null);
+    const [statusToast,setStatusToast]=useState(false);
+    const [trucks,setTrucks]=useState({
+      trucks:[],
+      inactives:[]
+    });
     const navigate = useNavigate();
     useEffect(() => {
       if(Cookies.get('user_id')){
-        setUser(Cookies.get('user_id'));
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}/admin/truck/get`)
+        .then(res=>{
+          if(res.data.success){
+            setTrucks(res.data.data);
+          }
+        })
       }else{
         navigate("/login");
       }
@@ -65,11 +76,12 @@ const TrucksPage = () => {
             </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
-                <GarbageTrucksPanel/>
+                <GarbageTrucksPanel trucks={trucks.trucks} setTrucks={setTrucks} statusToast={statusToast} setStatusToast={setStatusToast}/>
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <UnderMaintenancePanel/>
+                <UnderMaintenancePanel inactives={trucks.inactives} setTrucks={setTrucks}/>
             </TabPanel>
+            <StatusToast statusToast={statusToast} setStatusToast={setStatusToast}/>
         </PageLayout>
     )
 }

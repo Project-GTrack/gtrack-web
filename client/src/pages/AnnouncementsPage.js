@@ -23,14 +23,8 @@ const AnnouncementsPage = () =>{
     }else{
       navigate("/login");
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
- 
-  function a11yProps(index) {
-    return {
-        id: `simple-tab-${index}`,
-        'aria-controls': `simple-tabpanel-${index}`,
-    };
-}
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
     return (

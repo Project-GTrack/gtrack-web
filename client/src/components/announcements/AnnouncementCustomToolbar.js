@@ -12,7 +12,7 @@ const AnnouncementCustomToolbar = ({selectedRows,displayData}) => {
     const handleOpenModal = () => {
         console.log(displayData[selectedRows.data[0].dataIndex].data)
         setOpenModal(true);
-      }
+    }
 
     const handleOpenEditModal = () => {
         console.log(displayData[selectedRows.data[0].dataIndex].data)

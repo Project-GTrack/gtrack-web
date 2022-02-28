@@ -1,4 +1,4 @@
-import React,{useEffect, useState} from "react";
+import React from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -10,7 +10,6 @@ import PropTypes from "prop-types";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import { Avatar } from "@mui/material";
 import Carousel from 'react-material-ui-carousel'
 import moment from 'moment';
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -54,8 +53,6 @@ BootstrapDialogTitle.propTypes = {
 
 export default function ViewAnnouncementModal(props) {
 
-
-  console.log(props);
   return (
     <BootstrapDialog
       fullWidth={true}
@@ -71,7 +68,7 @@ export default function ViewAnnouncementModal(props) {
       <DialogContent dividers>
         <Box sx={{ width: "100%" }}>
           <Carousel>
-          {props.data[4] && props.data[4].map((image,i)=>{
+          {props.data[5] && props.data[5].map((image,i)=>{
             return (
               <img 
               key = {i}
@@ -91,7 +88,7 @@ export default function ViewAnnouncementModal(props) {
             <b>Content:</b> {props.data[2]}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            <b>Date Added:</b> {moment(props.data[3]).format("LL")}
+            <b>Date Added:</b> {props.data[3]}
           </Typography>
         </Box>
       </DialogContent>

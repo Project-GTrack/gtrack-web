@@ -9,10 +9,16 @@ const AnnouncementsComponent = ({announcements, setAnnouncements}) => {
     useEffect(()=>{
        
         var temp = [];
+        // eslint-disable-next-line array-callback-return
         announcements && announcements.map((announcement)=>{
-            temp.push([announcement.announcement_id,announcement.title, announcement.content,moment(announcement.createdAt).format("LL")
-            , announcement.announcementLine.lineAttachment&&announcement.announcementLine.lineAttachment]);
-            console.log(temp);
+            temp.push([
+                announcement.announcement_id,
+                announcement.title, 
+                announcement.content,
+                announcement.announcementAdmin.fname+" "+announcement.announcementAdmin.lname,
+                moment(announcement.createdAt).format("MMMM DD, YYYY"),
+                announcement.announcementLine.lineAttachment
+            ]);
         })
         setData(temp);
     },[announcements]);
@@ -44,6 +50,14 @@ const AnnouncementsComponent = ({announcements, setAnnouncements}) => {
     {
         name:"Content",
         label:"Content",
+        options: {
+            filter:true,
+            sort:true,
+        }
+    },
+    {
+        name:"Added by",
+        label:"Added by",
         options: {
             filter:true,
             sort:true,
@@ -82,12 +96,13 @@ const AnnouncementsComponent = ({announcements, setAnnouncements}) => {
     return (
         <div>
             <div className='mb-3'>
-                <button className='btn btn-success' onClick={handleOpenModal}><i className="fa fa-plus" aria-hidden="true"></i> Add New Announcement</button>            </div>
-                <AddNewAnnouncementModal
-            openModal={openModal}
-            handleCloseModal={handleCloseModal}
-            handleOpenModal={handleOpenModal}
-          />
+                <button className='btn btn-success' onClick={handleOpenModal}><i className="fa fa-plus" aria-hidden="true"></i> Add New Announcement</button>
+            </div>
+            <AddNewAnnouncementModal
+                openModal={openModal}
+                handleCloseModal={handleCloseModal}
+                handleOpenModal={handleOpenModal}
+            />
             <MUIDataTable
                 title={"Announcement List"}
                 data={data}

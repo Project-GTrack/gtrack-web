@@ -22,6 +22,7 @@ exports.registerEmployee = async(req, res) => {
        req.body.password = "p@ssw0rd";
        var hash = C.AES.encrypt(req.body.password,process.env.SECRET_KEY).toString();
     //    hash = bcrypt.hashSync(req.body.password,saltRounds);
+    console.log( hash);
        req.body.password = hash;
        await user.model.create(req.body);
        return res.status(200).send("Sign-up success");
@@ -39,8 +40,10 @@ exports.login = async(req, res) => {
     })
     // console.log(data);
     if(data !== null ){
+        
         var bytes  = C.AES.decrypt(data.password, process.env.SECRET_KEY);
         var originalText = bytes.toString(C.enc.Utf8);
+        console.log(data.password,bytes);
         if(originalText === req.body.password && data.password != ""){
             const accessToken = generateAccessToken(data);
             // res.cookie("user_id",accessToken,{maxAge:100000000,httpOnly:true,path:"/"});

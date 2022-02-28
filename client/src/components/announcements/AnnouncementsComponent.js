@@ -1,16 +1,74 @@
-import React from 'react'
+import React, { useState ,useEffect } from 'react'
 import MUIDataTable from "mui-datatables";
 import AnnouncementCustomToolbar from './AnnouncementCustomToolbar';
 import AddNewAnnouncementModal from './modals/AddNewAnnouncementModal';
-const AnnouncementsComponent = () => {
+import moment from 'moment';
+const AnnouncementsComponent = ({announcements, setAnnouncements}) => {
+
+    const[data,  setData] = useState([]);
+    useEffect(()=>{
+       
+        var temp = [];
+        announcements && announcements.map((announcement)=>{
+            temp.push([announcement.announcement_id,announcement.title, announcement.content,moment(announcement.createdAt).format("LL")
+            ,announcement.announcementLine.lineAttachment]);
+            console.log(temp);
+        })
+        setData(temp);
+    },[announcements]);
+
+
+
   const [openModal, setOpenModal] = React.useState(false);
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
-    const columns = ["Title", "Content", "Date Added"];
+  const columns = [
+    {
+        name:"ID",
+        label:"ID",
+        options: {
+            filter:false,
+            sort:false,
+            display:false,
+            viewColumns:false,
+        }
+    },
+    {
+        name:"Title",
+        label:"Title",
+        options: {
+            filter:true,
+            sort:true,
+        }
+    },
+    {
+        name:"Content",
+        label:"Content",
+        options: {
+            filter:true,
+            sort:true,
+        }
+    },
+    {
+        name:"Date Added",
+        label:"Date Added",
+        options: {
+            filter:true,
+            sort:true,
+        }
+    },
+    {
+        name:"Image",
+        label:"Image",
+        options: {
+            filter:false,
+            sort:false,
+            display:false,
+            viewColumns:false,
+        }
+    },
 
-    const data = [
-    ["Compostela Municipal Coastal Cleanup 2020", "The coastal cleanup is scheduled quarterly every year in the hopes to increase awareness in the preservation of the major waterways in the city as well as remove as much garbage as possible from these waterways.", "10/12/2020"],
-    ];
+  ];
 
     const options = {
     selectableRowsHeader: false,

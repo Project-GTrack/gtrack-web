@@ -81,7 +81,8 @@ export default function EditAnnouncementModal(props) {
         urls:urls
       }).then(res=>{
         if(res.data.success){
-          console.log("GOOD")
+          console.log(res.data.data)
+          props.setAnnouncements(res.data.data);
           resetForm();
           // setAlert({visible:true,message:res.data.message,colorScheme:"success",header:"Success"});
         }else{

@@ -57,38 +57,42 @@ exports.createAnnouncement = async(req, res) =>{
     }
 }
 exports.editAnnouncement = async(req, res) => {
-    res.send('Got a PUT request at /user')
-    
     let announce = await announcement.model.findOne({
-        include:{
-            model: attachment_line.model,as: 'announcementLine'
-        },
         where:{
             announcement_id: req.params.id
         }
     })
     if(req.body.urls.length > 0){
+        await attachment.model.destroy({
+            where:{
+                attachment_line_id : announce.attachment_line_id
+            }
+        });
         for(let i = 0 ; i < req.body.urls.length; i++){
-            await attachment.model.update({
+            await attachment.model.create({
+                attachment_line_id:announce.attachment_line_id,
                 filename: req.body.urls[i] 
-            },{
-                where:{
-                    attachment_line_id:announce.attachment_line_id,
-                }
             });
         }
     }
     let post = await announcement.model.update({
         title:req.body.title,
         content:req.body.content,
-        attachment_line_id:announce.attachment_line_id
     },{
         where:{
             announcement_id: req.params.id
         }
     })
+    announce = await announcement.model.findAll({
+        include:{
+            model: attachment_line.model, as: 'announcementLine',
+            include:{
+                model: attachment.model, as:'lineAttachment'
+            }
+        },
+    });
     if(post){
-        res.send({success:true,message:"Announcement updated successfully!",data:post});
+        res.send({success:true,message:"Announcement updated successfully!",data:announce});
     }else{
         res.send({success:false,message:"Failed to create announcement.",data:null});
     }

@@ -11,7 +11,7 @@ const AnnouncementsComponent = ({announcements, setAnnouncements}) => {
         var temp = [];
         announcements && announcements.map((announcement)=>{
             temp.push([announcement.announcement_id,announcement.title, announcement.content,moment(announcement.createdAt).format("LL")
-            ,announcement.announcementLine.lineAttachment]);
+            , announcement.announcementLine.lineAttachment&&announcement.announcementLine.lineAttachment]);
             console.log(temp);
         })
         setData(temp);
@@ -76,7 +76,7 @@ const AnnouncementsComponent = ({announcements, setAnnouncements}) => {
     filter: true,
     filterType: 'dropdown',
     customToolbarSelect:(selectedRows,displayData)=>(
-        <AnnouncementCustomToolbar selectedRows={selectedRows} displayData={displayData}/>
+        <AnnouncementCustomToolbar selectedRows={selectedRows} setAnnouncements={setAnnouncements} displayData={displayData}/>
     )
     };
     return (

@@ -92,8 +92,11 @@ export default function AddNewAnnouncementModal(props) {
         accessToken: Cookies.get('user_id')
       }).then(res=>{
         if(res.data.success){
+          props.setAnnouncements(res.data.data);
+          console.log(res.data.data)
+          props.setOpenModal(false);
           resetForm();
-          setAlert({visible:true,message:res.data.message,colorScheme:"success",header:"Success"});
+          props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
         }else{
           setError(res.data.message);
         }

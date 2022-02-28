@@ -18,7 +18,7 @@ const waste_collection = instance.sequelize.define("waste_collections",{
         allowNull:false
     },
     collection_date:{
-        type:DataTypes.TEXT,
+        type:DataTypes.DATE,
         allowNull:false
     },
     collection_route:{

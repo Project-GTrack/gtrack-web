@@ -62,6 +62,14 @@ export default function EditAnnouncementModal(props) {
   const [urls, setUrls] = useState([]);
   const [progress, setProgress] = useState(0);
   const navigate = useNavigate();
+
+  const FILE_SIZE = 160 * 1024;
+  const SUPPORTED_FORMATS = [
+      "image/jpg",
+      "image/jpeg",
+      "image/gif",
+      "image/png"
+  ];
   const announcementValidationSchema = yup.object().shape({
     title: yup
       .string()
@@ -69,7 +77,14 @@ export default function EditAnnouncementModal(props) {
     content: yup
       .string()
       .required('Content is required'),
-
+    image: yup
+      .mixed()
+      .nullable()
+      .notRequired()
+      .test("FILE_SIZE", "Uploaded file is too big.", 
+          value => !value || (value && value.size <= FILE_SIZE))
+      .test("FILE_FORMAT", "Uploaded file has unsupported format.", 
+          value => !value || (value && SUPPORTED_FORMATS.includes(value.type)))
   })
   useEffect(() => {
     let temp=[];
@@ -83,17 +98,17 @@ export default function EditAnnouncementModal(props) {
   const [error,setError] = useState([]);
   const handleFormSubmit = async(values, {resetForm}) => {
     if(Cookies.get('user_id')){
-      Axios.put(`${process.env.REACT_APP_BACKEND_URL}/admin/announcement/edit/${props.data[0]}`,{
+      await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/admin/announcement/edit/${props.data[0]}`,{
         title:values.title,
         content: values.content,
         urls:urls
       }).then(res=>{
         if(res.data.success){
           props.setAnnouncements(res.data.data);
-          // resetForm();
-          // setAlert({visible:true,message:res.data.message,colorScheme:"success",header:"Success"});
+          props.setOpenModal(false);
+          props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
         }else{
-          setError(res.data.message);
+          props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"error"})
       
         }
       })

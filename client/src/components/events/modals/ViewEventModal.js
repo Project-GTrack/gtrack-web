@@ -10,7 +10,7 @@ import PropTypes from "prop-types";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import { Avatar } from "@mui/material";
+import Carousel from 'react-material-ui-carousel'
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -65,40 +65,42 @@ export default function ViewEventModal(props) {
       </BootstrapDialogTitle>
       <DialogContent dividers>
         <Box sx={{ width: "100%" }}>
-         <img
-            alt="GTrack Logo"
-            className="mb-4"
-            borderWidth=""
-            style={{
-              borderRadius: "50%",
-              width: 200,
-              height: 200,
-              margin:'auto',
-              border: '2px solid black',
-              display: "block"
-            }}
-           
-            src={props.avatar}
-          ></img>
+        <Carousel sx={{height: 200,width:'100%',alignContent:'center',alignItems:'center',justifyContent:'center',margin:'auto'}}>
+          {props.data[10].length!==0?(props.data[10].map((image,i)=>{
+              return (
+                <div key = {i} className="text-center mx-auto ml-auto mr-auto">
+                  <img 
+                    src={image.filename}
+                    style={{height: 200, margin:"auto",alignSelf:"center",alignContent:"center",justifyContent:"center"}}
+                    alt={image.filename}
+                  />
+                </div>
+              )
+            })
+          ):(
+            <div className="text-white mx-auto bg-secondary" style={{width:"100%",height:200,justifyContent:"center",display:"flex"}}>
+              <p className="text-center mt-auto mb-auto">No photos uploaded</p>
+            </div>
+          )}
+          </Carousel>
        
           <Typography variant="body2" color="text.secondary">
-            <b>Event Name:</b> {props.data[0]}
+            <b>Event Name:</b> {props.data[1]}
           </Typography>
           <Typography align='justify' variant="body2" color="text.secondary">
-            <b>Content:</b> {props.data[1]}
+            <b>Description:</b> {props.data[2]}
           </Typography>
           <Typography variant="h6" color="text.secondary">
             <b>Event Details:</b>
             <Typography variant="body2" color="text.secondary">
-            <b>Date Started:</b> {props.data[2]} <b>Date Ended:</b> {props.data[2]}
-             <br></br>
-             <b>Participants:</b>{props.data[1]} <b>Venue:</b> {props.data[3]}
+            <b>Event Date:</b> {props.data[6]}  <br></br>
+            <b>Participants:</b>{props.data[3]} <b>Venue:</b> {props.data[7]}
           </Typography>
           </Typography>
           <Typography variant="h6" color="text.secondary">
             <b>Contact Details:</b>
             <Typography variant="body2" color="text.secondary">
-            <b>Contact Person:</b> {props.data[10]} <b>Contact Number:</b> {props.data[2]}
+            <b>Contact Person:</b> {props.data[4]} <b>Contact Number:</b> {props.data[5]}
           </Typography>
           </Typography>
         </Box>

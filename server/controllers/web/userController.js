@@ -38,7 +38,7 @@ exports.login = async(req, res) => {
             status:true
         }
     })
-    // console.log(data);
+    console.log(data);
     if(data !== null ){
         
         var bytes  = C.AES.decrypt(data.password, process.env.SECRET_KEY);

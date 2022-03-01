@@ -47,6 +47,10 @@ module.exports = {
           type:Sequelize.DATE,
           allowNull: false
         },
+        registration_form_url:{
+          type:Sequelize.STRING,
+          allowNull:false
+        },
         street:{
             type:Sequelize.STRING,
             allowNull:false

@@ -29,6 +29,7 @@ const DashboardPage = () => {
       Axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/dashboard`,{accessToken: Cookies.get('user_id')})
       .then((res) => {
           if(res){
+            console.log(res.data)
             setData(res.data);
           }
       }) 

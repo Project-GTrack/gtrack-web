@@ -6,6 +6,11 @@ const attachment=require("../../models/attachment");
 const admin=require("../../models/user");
 const jwt=require("jsonwebtoken");
 var C = require("crypto-js");
+const Firebase = require('../../helpers/Firebase');
+const { Expo } = require('expo-server-sdk');
+
+const database=Firebase.database();
+let expo = new Expo();
 exports.viewAnnouncements = async(req, res) => {
     let announcements=await announcement.model.findAll({
         where:{
@@ -20,10 +25,52 @@ exports.viewAnnouncements = async(req, res) => {
             }]
         }]
     });
-    console.log(announcements);
     res.send({ posts:announcements});
-
-   
+}
+const handleFirebase=async (title)=>{
+    var temp=[];
+    var snap;
+    const tokenRef=database.ref(`PushTokens/`);
+    const snapshot=await tokenRef.once('value');
+    if(snapshot.val()){
+        snap=snapshot.val();
+        temp=Object.keys(snap).map((key) => snap[key]);
+    }
+    if(temp.length>0){
+        handlePushNotifications(temp,title);
+    }else{
+        console.log("No Pushtokens");
+    }
+}
+const handlePushNotifications=(expoTokens,title)=>{
+    let messages = [];
+    console.log(expoTokens);
+    for (let pushToken of expoTokens) {
+      if (!Expo.isExpoPushToken(pushToken.push_token)) {
+        console.error(`Push token ${pushToken.push_token} is not a valid Expo push token`);
+        continue;
+      }
+      messages.push({
+        to: pushToken.push_token,
+        sound: 'default',
+        title: "GTRACK Notice",
+        body:title,
+        data: {},
+      })
+    }
+    let chunks = expo.chunkPushNotifications(messages);
+    let tickets = [];
+    (async () => {
+      for (let chunk of chunks) {
+        try {
+          let ticketChunk = await expo.sendPushNotificationsAsync(chunk);
+          console.log(ticketChunk);
+          tickets.push(...ticketChunk);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    })();
 }
 exports.createAnnouncement = async(req, res) =>{
     if(req.body.accessToken!= undefined){
@@ -44,6 +91,9 @@ exports.createAnnouncement = async(req, res) =>{
                     content:req.body.content,
                     attachment_line_id:attline.attachment_line_id
                 })
+                if(req.body.isNotified){
+                   handleFirebase(req.body.title);
+                }
                 announce = await announcement.model.findAll({
                     include:[
                         {model: admin.model, as:"announcementAdmin"},

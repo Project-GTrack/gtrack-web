@@ -111,7 +111,7 @@ exports.viewDashboard= async(req, res)=>{
                     total_price = await collection.model.sum('collection_weight_volume',{
                         where: {
                             collection_date: {
-                              [Op.between]: [new Date(startDate), new Date(day)]
+                              [Op.between]: [new Date(startDate),new Date(day)]
                             }
                         }
                     })

@@ -17,4 +17,4 @@ if (!firebase.apps.length) {
  }
 
 const Firebase=firebase;
-export default Firebase;
+module.exports=Firebase;

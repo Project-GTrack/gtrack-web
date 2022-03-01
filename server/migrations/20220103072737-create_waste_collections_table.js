@@ -24,7 +24,7 @@ module.exports = {
           allowNull:false
       },
       collection_date:{
-          type:Sequelize.TEXT,
+          type:Sequelize.DATE,
           allowNull:false
       },
       collection_route:{

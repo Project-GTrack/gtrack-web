@@ -30,7 +30,7 @@ const event = instance.sequelize.define("events",{
         allowNull: false
     },
     status:{
-        type:DataTypes.TINYINT,
+        type: DataTypes.ENUM('Ongoing','Canceled','Ended'),
         allowNull: false
     },
     startDate:{

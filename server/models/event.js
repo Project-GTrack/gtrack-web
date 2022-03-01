@@ -25,7 +25,7 @@ const event = instance.sequelize.define("events",{
         type:DataTypes.TEXT,
         allowNull: false
     },
-    participants:{
+    target_participants:{
         type:DataTypes.STRING,
         allowNull: false
     },
@@ -33,7 +33,11 @@ const event = instance.sequelize.define("events",{
         type:DataTypes.TINYINT,
         allowNull: false
     },
-    date:{
+    startDate:{
+        type:DataTypes.DATE,
+        allowNull: false
+    },
+    endDate:{
         type:DataTypes.DATE,
         allowNull: false
     },

@@ -41,6 +41,10 @@ const event = instance.sequelize.define("events",{
         type:DataTypes.DATE,
         allowNull: false
     },
+    registration_form_url:{
+        type:DataTypes.STRING,
+        allowNull:false
+    },
     street:{
         type:DataTypes.STRING,
         allowNull: false

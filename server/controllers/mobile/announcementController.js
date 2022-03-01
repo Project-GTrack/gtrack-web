@@ -8,6 +8,7 @@ const attachment=require("../../models/attachment");
 
 exports.getAnnouncements=async (req,res)=>{
     let posts=await announcement.model.findAll({
+        order: [['createdAt','DESC']],
         where:{
             deletedAt:null
         },

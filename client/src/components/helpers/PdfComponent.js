@@ -1,24 +1,15 @@
-import React, { useState, useEffect, forwardRef } from 'react'
-import Paper from '@mui/material/Paper';
-import DashboardCard from '../dashboard/DashboardCard'
-import Chart from '../ChartComponent';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
+import React, {  forwardRef } from 'react'
 import moment from 'moment';
 
 
 const PdfComponent = forwardRef(({dashcards,chartData},ref) => {
-    useEffect(() => {
-        console.log("yeahh",dashcards,chartData)
-    },[])
+    // useEffect(() => {
+    //     console.log("yeahh",dashcards,chartData)
+    // },[])
   return (
     <div ref={ref} style={{margin: "2vh"}}>
         <center>
-            <img src="/images/compostela.jpg" style={{paddingBottom: "2vh", width: "11vh", height: "13vh"}}/>
+            <img src="/images/compostela.jpg" alt='Compostela Logo' style={{paddingBottom: "2vh", width: "11vh", height: "13vh"}}/>
             <h5><strong>Solid Waste Management Department of Compostela</strong></h5>
             <h6>Municipality of Compostela</h6>
             <h6>Compostela, Cebu, Philippines 6003</h6>
@@ -26,7 +17,7 @@ const PdfComponent = forwardRef(({dashcards,chartData},ref) => {
             <h5><strong>Waste Collection Summary Report</strong></h5>
         </center>
        
-         <div className="row" container spacing={3} style={{marginTop: "5vh"}}>
+         <div className="row" spacing={3} style={{marginTop: "5vh"}}>
          <p><strong>Assets and Collections</strong></p>
         <p style={{textIndent: "50px"}}>The figure below shows the total number of assets in use and the total number of collections generated within the month of {moment().format("MMMM")}</p>
              <center>
@@ -55,7 +46,7 @@ const PdfComponent = forwardRef(({dashcards,chartData},ref) => {
             <DashboardCard id={dashcard.id} data={data} title={dashcard.title} count={dashcard.count} icon={dashcard.icon}/>
           </div>
           ))}       */}
-          <div item xs={12} style={{marginTop: "25vh", marginBottom: "4vh"}}>
+          <div xs={12} style={{marginTop: "25vh", marginBottom: "4vh"}}>
           <p><strong>Total Garbage Weight Collected Per Week</strong></p>
           <p style={{textIndent: "50px"}}>The figure below shows the total garbage weight collected weekly within the month of {moment().format("MMMM")}</p>
           <center>

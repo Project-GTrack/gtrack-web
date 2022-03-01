@@ -31,6 +31,7 @@ const adminRoutes = require("./routes/web/adminRoutes");
 const adminDumpsterRoutes = require("./routes/web/adminDumpsterRoutes");
 const adminAnnouncementRoutes = require('./routes/web/adminAnnouncementRoutes');
 const assignmentRoutes = require('./routes/web/assignmentRoutes');
+const adminEventRoutes = require('./routes/web/adminEventRoutes');
 
 //MOBILE ROUTES HERE
 app.use("/mobile",accountRoutes);
@@ -50,3 +51,4 @@ app.use("/admin/dashboard", adminDashboardRoutes);
 app.use("/admin/dumpster", adminDumpsterRoutes);
 app.use("/admin/announcement",adminAnnouncementRoutes);
 app.use("/admin/assignment", assignmentRoutes);
+app.use("/admin/event",adminEventRoutes)

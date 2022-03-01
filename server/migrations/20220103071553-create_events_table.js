@@ -31,7 +31,7 @@ module.exports = {
             type:Sequelize.TEXT,
             allowNull:false
         },
-        participants:{
+        target_participants:{
             type:Sequelize.STRING,
             allowNull:false
         },
@@ -39,9 +39,13 @@ module.exports = {
             type:Sequelize.TINYINT,
             allowNull: false
         },
-        date:{
+        startDate:{
             type:Sequelize.DATE,
             allowNull: false
+        },
+        endDate:{
+          type:Sequelize.DATE,
+          allowNull: false
         },
         street:{
             type:Sequelize.STRING,

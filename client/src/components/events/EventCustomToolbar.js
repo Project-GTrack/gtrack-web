@@ -3,19 +3,16 @@ import React from "react";
 import ViewEventModal from "./modals/ViewEventModal";
 import EditEventModal from "./modals/EditEventModal";
 import DeleteEventModal from "./modals/DeleteEventModal";
-const EventCustomToolbar = ({selectedRows,displayData}) => {
+const EventCustomToolbar = ({setEvents,statusToast,setStatusToast,selectedRows,displayData}) => {
     const [openModal, setOpenModal] = React.useState(false);
     const [openDeleteModal, setDeleteModal] = React.useState(false);
     const[openEditModal, setEditModal] = React.useState(false);
 
-    const [data,setData]=React.useState({});
     const handleOpenModal = () => {
-        console.log(displayData[selectedRows.data[0].dataIndex].data)
         setOpenModal(true);
       }
 
     const handleOpenEditModal = () => {
-        console.log(displayData[selectedRows.data[0].dataIndex].data)
         setEditModal(true);
     }  
     const handleCloseModal = () => setOpenModal(false);
@@ -30,8 +27,8 @@ const EventCustomToolbar = ({selectedRows,displayData}) => {
               <button onClick={handleOpenEditModal} className="btn btn-warning mx-1 "><i className="fa fa-pencil-square-o" aria-hidden="true"></i></button>
               <button onClick={handleDeleteModal} className="btn btn-danger mx-1"><i className="fa fa-trash" aria-hidden="true"></i></button>
               <ViewEventModal data={displayData[selectedRows.data[0].dataIndex].data} openModal={openModal} setOpenModal={setOpenModal} handleCloseModal={handleCloseModal}/>
-              <EditEventModal data={displayData[selectedRows.data[0].dataIndex].data} openModal={openEditModal} setOpenModal={setEditModal} handleCloseModal={handleCloseEditModal}/>
-              <DeleteEventModal data={displayData[selectedRows.data[0].dataIndex].data} openDeleteModal={openDeleteModal} setDeleteModal={setDeleteModal} handleCloseDeleteModal={handleCloseDeleteModal}/>
+              <EditEventModal data={displayData[selectedRows.data[0].dataIndex].data} setEvents={setEvents} statusToast={statusToast} setStatusToast={setStatusToast} openModal={openEditModal} setOpenModal={setEditModal} handleCloseModal={handleCloseEditModal}/>
+              <DeleteEventModal data={displayData[selectedRows.data[0].dataIndex].data} statusToast={statusToast} setStatusToast={setStatusToast} setEvents={setEvents} openDeleteModal={openDeleteModal} setDeleteModal={setDeleteModal} handleCloseDeleteModal={handleCloseDeleteModal}/>
           </div>
     )
 }

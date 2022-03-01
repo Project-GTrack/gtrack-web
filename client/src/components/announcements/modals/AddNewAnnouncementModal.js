@@ -66,8 +66,14 @@ export default function AddNewAnnouncementModal(props) {
   const [images, setImages] = useState([]);
   const [urls, setUrls] = useState([]);
   const [progress, setProgress] = useState(0);
-  const [alert, setAlert] = useState([]);
   const navigate = useNavigate();
+  const FILE_SIZE = 160 * 1024;
+  const SUPPORTED_FORMATS = [
+      "image/jpg",
+      "image/jpeg",
+      "image/gif",
+      "image/png"
+  ];
   const announcementValidationSchema = yup.object().shape({
     title: yup
       .string()
@@ -78,9 +84,16 @@ export default function AddNewAnnouncementModal(props) {
     isNotified: yup
       .boolean()
       .required('Notification cannot be disregarded'),
+    image: yup
+      .mixed()
+      .nullable()
+      .notRequired()
+      .test("FILE_SIZE", "Uploaded file is too big.", 
+          value => !value || (value && value.size <= FILE_SIZE))
+      .test("FILE_FORMAT", "Uploaded file has unsupported format.", 
+          value => !value || (value && SUPPORTED_FORMATS.includes(value.type)))
 
   })
-  const [error,setError] = useState([]);
   const handleFormSubmit = async(values, {resetForm}) => {
     if(Cookies.get('user_id')){
       console.log(values.isNotified)
@@ -98,7 +111,7 @@ export default function AddNewAnnouncementModal(props) {
           resetForm();
           props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
         }else{
-          setError(res.data.message);
+          props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"error"})
         }
       })
     }else{
@@ -121,7 +134,6 @@ export default function AddNewAnnouncementModal(props) {
         Add New Announcement
       </BootstrapDialogTitle>
     <DialogContent dividers>
-    {error && <p className="text-danger small text-center">{error}</p>}
       <Box sx={{ width: '100%' }}>
         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
             <Grid item xs={12}>

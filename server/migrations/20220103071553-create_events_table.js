@@ -36,7 +36,7 @@ module.exports = {
             allowNull:false
         },
         status:{
-            type:Sequelize.TINYINT,
+            type: Sequelize.ENUM('Ongoing','Canceled','Ended'),
             allowNull: false
         },
         startDate:{

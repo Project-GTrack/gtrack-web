@@ -1,8 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
@@ -61,7 +60,7 @@ export default function DeleteAnnouncementModal(props) {
   const announcementValidationSchema = yup.object().shape({
     password: yup.string().required("Password is required"),
   });
-  const handleFormSubmit = async(values, {resetForm}) => {
+  const handleFormSubmit = async(values) => {
     if(Cookies.get('user_id')){
       Axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/announcement/delete/${props.data[0]}`,{
         password: values.password,

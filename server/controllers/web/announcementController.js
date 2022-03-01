@@ -121,19 +121,18 @@ exports.editAnnouncement = async(req, res) => {
             announcement_id: req.params.id
         }
     })
-    // if(req.body.urls.length > 0){
-        await attachment.model.destroy({
-            where:{
-                attachment_line_id : announce.attachment_line_id
-            }
-        });
-        for(let i = 0 ; i < req.body.urls.length; i++){
-            await attachment.model.create({
-                attachment_line_id:announce.attachment_line_id,
-                filename: req.body.urls[i] 
-            });
+
+    await attachment.model.destroy({
+        where:{
+            attachment_line_id : announce.attachment_line_id
         }
-    // }
+    });
+    for(let i = 0 ; i < req.body.urls.length; i++){
+        await attachment.model.create({
+            attachment_line_id:announce.attachment_line_id,
+            filename: req.body.urls[i] 
+        });
+    }
     let post = await announcement.model.update({
         title:req.body.title,
         content:req.body.content,
@@ -155,7 +154,7 @@ exports.editAnnouncement = async(req, res) => {
     if(post){
         res.send({success:true,message:"Announcement updated successfully!",data:announce});
     }else{
-        res.send({success:false,message:"Failed to create announcement.",data:null});
+        res.send({success:false,message:"Failed to update announcement.",data:null});
     }
  
    
@@ -189,7 +188,7 @@ exports.deleteAnnouncement = async(req, res) => {
                     }
                 })
                 console.log(announce);
-                if(announce != 0){
+                if(announce !== 0){
                     posts = await announcement.model.findAll({
                         include:[
                             {
@@ -205,7 +204,7 @@ exports.deleteAnnouncement = async(req, res) => {
                     });
                     res.send({success:true,message:"Announcement has been deleted",data:posts});
                 }else{
-                    res.send({success:false,message:"Cannot Delete Announcement",data:null});
+                    res.send({success:false,message:"Failed to delete Announcement",data:null});
                 }
                 
             }else{

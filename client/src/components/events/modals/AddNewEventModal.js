@@ -104,6 +104,9 @@ export default function AddNewEventModal(props) {
     participants: yup
         .string()
         .required('Participants is required'),
+    registration_form_url: yup
+        .string()
+        .required('Link is required'),
     image: yup
         .mixed()
         .nullable()
@@ -126,6 +129,7 @@ export default function AddNewEventModal(props) {
         town:values.town,
         postal_code:values.postal_code,
         target_participants:values.participants,
+        registration_form_url:values.registration_form_url,
         status:1,
         urls:urls,
         accessToken: Cookies.get('user_id')
@@ -155,7 +159,8 @@ export default function AddNewEventModal(props) {
       barangay:'',
       town:'',
       postal_code:'',
-      participants:''
+      participants:'',
+      registration_form_url:''
     },
     enableReinitialize:true,
     validationSchema:eventValidationSchema,
@@ -317,6 +322,20 @@ export default function AddNewEventModal(props) {
         />
           {(errors.participants && touched.participants) &&
                 <p className="text-danger small ">{errors.participants}</p>
+         }
+          <TextField
+            value={values.registration_form_url}
+            onChange={handleChange('registration_form_url')}
+            onBlur={handleBlur('registration_form_url')}
+            margin="dense"
+            id="registration_form_url"
+            label="Registration Form Link"
+            type="text"
+            fullWidth
+            variant="standard"
+        />
+          {(errors.registration_form_url && touched.registration_form_url) &&
+                <p className="text-danger small ">{errors.registration_form_url}</p>
          }
         <UploadImage images={images} setImages={setImages} urls={urls} setUrls={setUrls} progress={progress} setProgress={setProgress}/>
       

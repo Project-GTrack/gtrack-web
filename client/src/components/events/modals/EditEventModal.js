@@ -112,6 +112,9 @@ export default function EditEventModal(props) {
     status: yup
         .string()
         .required('Status cannot be disregarded'),
+    registration_form_url: yup
+        .string()
+        .required('Link is required'),
     image: yup
         .mixed()
         .nullable()
@@ -136,6 +139,7 @@ export default function EditEventModal(props) {
         town:values.town,
         postal_code:values.postal_code,
         target_participants:values.target_participants,
+        registration_form_url:values.registration_form_url,
         status:values.status,
         urls:urls
       }).then(res=>{
@@ -168,6 +172,7 @@ export default function EditEventModal(props) {
       postal_code: props.data[11],
       target_participants:props.data[3],
       status:props.data[8],
+      registration_form_url:props.data[12]
     },
     enableReinitialize:true,
     validationSchema:eventValidationSchema,

@@ -168,6 +168,7 @@ exports.register = async(req, res)=>{
             street:req.body.street,
             barangay:req.body.barangay,
             gender:req.body.gender,
+            contact_no:req.body.contact_no
         });
         let drivers = await user.model.findAll({
             where:{

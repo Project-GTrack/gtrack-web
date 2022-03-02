@@ -51,6 +51,7 @@ exports.createEvent = async(req, res) => {
                     postal_code : req.body.postal_code,
                     target_participants: req.body.target_participants,
                     attachment_line_id:attline.attachment_line_id,
+                    registration_form_url:req.body.registration_form_url,
                     status: "Ongoing"
                 })
                 let events = await event.model.findAll({
@@ -109,6 +110,7 @@ exports.editEvent = async(req, res) => {
         town : req.body.town,
         postal_code : req.body.postal_code,
         target_participants: req.body.target_participants,
+        registration_form_url:req.body.registration_form_url,
         status: req.body.status
     },{
         where:{

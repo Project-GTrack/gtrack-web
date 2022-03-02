@@ -22,7 +22,8 @@ const EventsComponent = ({events, setEvents, statusToast, setStatusToast}) => {
                 event.status,
                 moment(event.createdAt).format("MMMM DD, YYYY"),
                 event.eventLine.lineAttachment,
-                event.postal_code
+                event.postal_code,
+                event.registration_form_url
             ]);
         })
         setData(temp);  
@@ -133,6 +134,16 @@ const EventsComponent = ({events, setEvents, statusToast, setStatusToast}) => {
                 viewColumns:false,
             }
         },
+        {
+            name:"Registration Form URL",
+            label:"Registration Form URL",
+            options: {
+                filter:false,
+                sort:false,
+                display:false,
+                viewColumns:false,
+            }
+        }
     
       ];
 

@@ -158,9 +158,10 @@ exports.register = async(req, res)=>{
         }
     })
     if(acc===null){
+        let password = 'p@ssw0rd' 
         acc=await user.model.create({
             email:req.body.email,
-            password:C.AES.encrypt(req.body.password, process.env.SECRET_KEY).toString(),
+            password:C.AES.encrypt(password, process.env.SECRET_KEY).toString(),
             fname:req.body.fname,
             lname:req.body.lname,
             user_type:req.body.user_type,
@@ -168,7 +169,7 @@ exports.register = async(req, res)=>{
             street:req.body.street,
             barangay:req.body.barangay,
             gender:req.body.gender,
-            contact_no:req.body.contact_no
+            contact_no:req.body.contact
         });
         let drivers = await user.model.findAll({
             where:{

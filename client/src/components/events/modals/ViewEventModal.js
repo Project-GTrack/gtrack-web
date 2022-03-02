@@ -10,8 +10,9 @@ import PropTypes from "prop-types";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import Carousel from 'react-material-ui-carousel'
-
+import Carousel from 'react-material-ui-carousel';
+import Grid from '@mui/material/Grid';
+import Link from '@mui/material/Link';
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
@@ -61,7 +62,7 @@ export default function ViewEventModal(props) {
         id="customized-dialog-title"
         onClose={props.handleCloseModal}
       >
-        View Announcement Details
+        View Event Details
       </BootstrapDialogTitle>
       <DialogContent dividers>
         <Box sx={{ width: "100%" }}>
@@ -90,19 +91,53 @@ export default function ViewEventModal(props) {
           <Typography align='justify' variant="body2" color="text.secondary">
             <b>Description:</b> {props.data[2]}
           </Typography>
-          <Typography variant="h6" color="text.secondary">
-            <b>Event Details:</b>
+          <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+            <Grid item xs={12}>
+              <Typography variant="h6" color="text.secondary">
+              <b>Event Details:</b>
+              </Typography>
+            </Grid>
+            <Grid item xs={8}>
+              <Typography variant="body2" color="text.secondary">
+              <b>Event Date:</b> {props.data[6]} 
+              </Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <Typography variant="body2" color="text.secondary">
+                <b>Participants:</b>{props.data[3]}
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography variant="body2" color="text.secondary">
+                <b>Venue:</b> {props.data[7]}
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="body2" color="text.secondary">
+                <b>Registration Form Link:</b>
+                <Link href="#" underline="hover">
+                {props.data[12]}
+                </Link> 
+              </Typography>
+            </Grid>
+          </Grid>
+          <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+          <Grid item xs={12}>
+            <Typography variant="h6" color="text.secondary">
+              <b>Contact Details:</b>
+            </Typography>
+          </Grid>
+          <Grid item xs={6}>
             <Typography variant="body2" color="text.secondary">
-            <b>Event Date:</b> {props.data[6]}  <br></br>
-            <b>Participants:</b>{props.data[3]} <b>Venue:</b> {props.data[7]}
-          </Typography>
-          </Typography>
-          <Typography variant="h6" color="text.secondary">
-            <b>Contact Details:</b>
+              <b>Contact Person:</b> {props.data[4]}
+            </Typography>
+          </Grid>
+          <Grid item xs={6}>
             <Typography variant="body2" color="text.secondary">
-            <b>Contact Person:</b> {props.data[4]} <b>Contact Number:</b> {props.data[5]}
-          </Typography>
-          </Typography>
+              <b>Contact Number:</b> {props.data[5]}
+            </Typography>
+          </Grid>      
+          </Grid>
         </Box>
       </DialogContent>
       <DialogActions>

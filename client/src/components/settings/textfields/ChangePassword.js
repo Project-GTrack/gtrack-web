@@ -1,44 +1,103 @@
 import React from "react";
 import { TextField, FormControl, Avatar,Button,Input,Stack,Box} from "@mui/material";
-import MUIDataTable from "mui-datatables";
-import CustomSelectToolbar from "../../CustomSelectToolbar";
-const ChangePassword = () => {
+import * as yup from 'yup'
+import Axios from 'axios';
+import { useFormik } from 'formik';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
+import Grid from "@mui/material/Grid";
+const ChangePassword = (props) => {
+    const navigate = useNavigate();
+    const profilePasswordValidationSchema = yup.object().shape({
+        password: yup
+            .string()
+            .required('Password is required'),
+        newPassword: yup
+            .string()
+            .required('New Password is required'),
+        confirmPassword: yup
+            .string()
+            .oneOf([yup
+                .ref('newPassword'),null
+                ],'Password must match!'),
+    })
+
+    const handleFormSubmit = async(values, {resetForm}) => {
+        if(Cookies.get('user_id')){
+          Axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/profile/change_password`,{
+            password:values.password,
+            newPassword: values.newPassword,
+            confirmPassword:values.confirmPassword,
+            accessToken: Cookies.get('user_id')
+          }).then(res=>{
+            if(res.data.success){
+              console.log(res.data.data)
+              resetForm();
+              props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
+            }else{
+              props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"error"})
+            }
+          })
+        }else{
+          navigate("/login");
+        }
+      }
+
+    const { handleChange, handleSubmit, handleBlur, values, errors,isValid,touched } = useFormik({
+        initialValues:{ password:'',newPassword:'',confirmPassword:''},
+        enableReinitialize:true,
+        validationSchema:profilePasswordValidationSchema,
+        onSubmit: handleFormSubmit
+      });
     return(
-       <div>
-            <Box
-            component="form"
-            sx={{
-            margin:'auto',
-            width:'100vh',
-            height: '100%',
-            justifyContent:'center',
-            alignItems:'center'
-            }}
-        > 
-            <Stack sx={{marginTop:2}} spacing={2}>
+        <Box sx={{ width: '100%' }}>
+             <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                <Grid item xs={12}>
                 <TextField
-                    id="outlined-password-input"
+                    value={values.password}
+                    onChange={handleChange('password')}
+                    onBlur={handleBlur('password')}
+                    id="password"
                     label="Current Password"
                     type="password"
-                    autoComplete="current-password"
+                    fullWidth
+                    
                 />
+                {(errors.password && touched.password) &&
+                <p className="text-danger small ">{errors.password}</p>
+                } 
+                </Grid>
+                <Grid item xs={12}>
                 <TextField
-                    id="outlined-password-input"
+                    value={values.newPassword}
+                    onChange={handleChange('newPassword')}
+                    onBlur={handleBlur('newPassword')}
+                    id="newPassword"
                     label="New Password"
                     type="password"
-                    autoComplete="current-password"
+                    fullWidth
                 />
+                {(errors.newPassword && touched.newPassword) &&
+                <p className="text-danger small ">{errors.newPassword}</p>
+                }
+                </Grid>
+                <Grid item xs={12}>
                 <TextField
-                    id="outlined-password-input"
+                    value={values.confirmPassword}
+                    onChange={handleChange('confirmPassword')}
+                    onBlur={handleBlur('confirmPassword')}
+                    id="confirmPassword"
                     label="Repeat New Password"
                     type="password"
-                    autoComplete="current-password"
+                    fullWidth
                 />
-            </Stack>
-            <Button variant="text" color="success" sx={{mt:2}}>Save</Button>
+                {(errors.confirmPassowrd && touched.confirmPassword) &&
+                <p className="text-danger small ">{errors.confirmPassword}</p>
+                }
+                </Grid>
+            </Grid>
+            <Button variant="text" color="success" sx={{mt:2}} disabled={!isValid} onClick={handleSubmit}>Save</Button>
         </Box>
-       
-       </div>
     );
 }
 

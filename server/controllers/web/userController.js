@@ -4,13 +4,10 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 var C = require("crypto-js");
 const { Op} = require('sequelize');
-
+const {generateAccessToken} = require('../../helpers/generateAccessToken');
 var saltRounds = 10;
 
 
-const generateAccessToken = (user) =>{
-    return jwt.sign({user_id: JSON.stringify(user)},process.env.ACCESS_TOKEN_SECRET)
-}
 
 exports.registerEmployee = async(req, res) => {
     let data = await user.model.findAll({

@@ -84,10 +84,9 @@ export default function AddNewEmployeeModal(props) {
     gender: yup
       .string()
       .required('Gender is required'),
-    password: yup
+    contact: yup
       .string()
-      .min(6, ({ min }) => `Password must be at least ${min} characters`)
-      .required('Password is required'),
+      .required('Contact is required'),
     user_type: yup
       .string()
       .required('Employee type is required'),
@@ -104,7 +103,7 @@ export default function AddNewEmployeeModal(props) {
     });
   }
   const handleFormSubmit = async(values,{resetForm}) =>{
-    axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/register`,{email:values.email,password:values.password,fname:values.fname,lname:values.lname,purok:values.purok,street:values.street,barangay:values.barangay,gender:values.gender,user_type:values.user_type})
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/register`,{email:values.email,contact:values.contact,fname:values.fname,lname:values.lname,purok:values.purok,street:values.street,barangay:values.barangay,gender:values.gender,user_type:values.user_type})
     .then(res=>{
       if(res.data.success){
         handleFirebase(values,resetForm);
@@ -116,7 +115,7 @@ export default function AddNewEmployeeModal(props) {
     })
   }
   const { handleChange, handleSubmit, handleBlur, values, errors,isValid,touched } = useFormik({
-    initialValues:{ fname:'',lname:'',email:'',password:'',purok:'',street:'',barangay:'',gender:'',user_type:''},
+    initialValues:{ fname:'',lname:'',email:'',contact:'',purok:'',street:'',barangay:'',gender:'',user_type:''},
     enableReinitialize:true,
     validationSchema:employeeRegisterValidationSchema,
     onSubmit: handleFormSubmit
@@ -226,17 +225,17 @@ export default function AddNewEmployeeModal(props) {
         <p className="text-danger small ">{errors.email}</p>
       }
       <TextField
-        value={values.password}
-        onChange={handleChange('password')}
-        onBlur={handleBlur('password')}
+        value={values.contact}
+        onChange={handleChange('contact')}
+        onBlur={handleBlur('contact')}
         margin="dense"
-        label="Default Password"
-        type="password"
+        label="Contact"
+        type="text"
         fullWidth
         variant="standard"
       />
-      {(errors.password && touched.password) &&
-        <p className="text-danger small ">{errors.password}</p>
+      {(errors.contact && touched.contact) &&
+        <p className="text-danger small ">{errors.contact}</p>
       }
       <Grid container rowSpacing={1} mt={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
         <Grid item xs={6}>

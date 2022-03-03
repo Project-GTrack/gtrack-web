@@ -6,7 +6,6 @@ const announcement=require("../../models/announcement");
 const user=require("../../models/user");
 const attLine=require("../../models/attachment_line");
 const attachment=require("../../models/attachment");
-const eventParticipant=require("../../models/event_participant");
 const report=require("../../models/report");
 const schedule=require("../../models/schedule");
 const truck=require("../../models/truck");
@@ -24,10 +23,10 @@ announcement.model.hasOne(attLine.model, {foreignKey: 'attachment_line_id', sour
 attLine.model.hasOne(announcement.model, {foreignKey: 'attachment_line_id', sourceKey: 'attachment_line_id', as: 'lineAnnouncement'});
 attLine.model.hasMany(attachment.model, {foreignKey: 'attachment_line_id', sourceKey: 'attachment_line_id',as:'lineAttachment'});
 attachment.model.belongsTo(attLine.model, {foreignKey: 'attachment_line_id', sourceKey: 'attachment_line_id', as: 'attachementLine'});
-eventParticipant.model.hasOne(event.model, {foreignKey: 'event_id', as: 'partiEvent'});
-event.model.hasMany(eventParticipant.model, {foreignKey: 'event_id', as: 'eventParti'});
-eventParticipant.model.hasOne(user.model, {foreignKey: 'user_id', as: 'partiUser'});
-user.model.hasMany(eventParticipant.model, {foreignKey: 'user_id', as: 'userPari'});
+// eventParticipant.model.hasOne(event.model, {foreignKey: 'event_id', as: 'partiEvent'});
+// event.model.hasMany(eventParticipant.model, {foreignKey: 'event_id', as: 'eventParti'});
+// eventParticipant.model.hasOne(user.model, {foreignKey: 'user_id', as: 'partiUser'});
+// user.model.hasMany(eventParticipant.model, {foreignKey: 'user_id', as: 'userPari'});
 report.model.hasOne(attLine.model, {foreignKey: 'attachment_line_id', as: 'reportLine'});
 attLine.model.hasOne(report.model, {foreignKey: 'attachment_line_id', as: 'lineReport'});
 dumpster.model.belongsTo(user.model, {foreignKey:'admin_id', as: 'dumpsterAdmin'});
@@ -36,6 +35,7 @@ user.model.hasMany(schedule.model, {foreignKey: 'driver_id', as: 'userSchedule'}
 
 exports.getEvents=async (req,res)=>{
     let posts=await event.model.findAll({
+        order:[['createdAt','DESC']],
         where:{
             deletedAt:null
         },
@@ -55,18 +55,18 @@ exports.getEvents=async (req,res)=>{
     }
 }
 
-exports.joinEvent = async (req, res) => {
-    let account=await user.model.findOne({ where: { email: req.body.email } });
-    if(account){
-        var decrypted = C.AES.decrypt(account.password,process.env.SECRET_KEY);
-        if(req.body.password===decrypted.toString(C.enc.Utf8)){
-            let events=eventParticipant.model.create({
-                event_id:req.params.id,
-                user_id:account.user_id
-            })
-            res.send({success:true,message:"You have successfully joined the event!"});
-        }else{
-            res.send({success:false,message:"Password is invalid!"});
-        }
-    }
-}
+// exports.joinEvent = async (req, res) => {
+//     let account=await user.model.findOne({ where: { email: req.body.email } });
+//     if(account){
+//         var decrypted = C.AES.decrypt(account.password,process.env.SECRET_KEY);
+//         if(req.body.password===decrypted.toString(C.enc.Utf8)){
+//             let events=eventParticipant.model.create({
+//                 event_id:req.params.id,
+//                 user_id:account.user_id
+//             })
+//             res.send({success:true,message:"You have successfully joined the event!"});
+//         }else{
+//             res.send({success:false,message:"Password is invalid!"});
+//         }
+//     }
+// }

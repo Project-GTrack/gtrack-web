@@ -95,8 +95,7 @@ export default function EditAnnouncementModal(props) {
     setUrls([...temp]);
   }, [props])
   
-  const [error,setError] = useState([]);
-  const handleFormSubmit = async(values, {resetForm}) => {
+  const handleFormSubmit = async(values) => {
     if(Cookies.get('user_id')){
       await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/admin/announcement/edit/${props.data[0]}`,{
         title:values.title,
@@ -136,7 +135,6 @@ export default function EditAnnouncementModal(props) {
       Edit Announcement
     </BootstrapDialogTitle>
     <DialogContent dividers>
-    {error && <p className="text-danger small text-center">{error}</p>}
       <Box sx={{ width: '100%' }}>
         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
             <Grid item xs={12}>

@@ -24,7 +24,7 @@ const DashboardComponent = ({dashcards,data,chartData}) => {
                     maxWidth: 'lg'
                     }}
                 >
-                    {chartData && <Chart data={chartData} />}
+                    {chartData && <Chart chartData={chartData} />}
                 </Paper>
             </Grid>
         </Grid>

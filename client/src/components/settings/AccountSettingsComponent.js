@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Container,Box, Button, Paper, List, ListItem,ListItemButton, ListItemText,Grid,Divider,Typography,Tab,Tabs } from "@mui/material";
 import General from "./textfields/General";
 import PropTypes from 'prop-types';
@@ -39,12 +39,15 @@ function TabPanel(props) {
     };
   }
 
-const AccountSettingsPage = () => {
+const AccountSettingsComponent = ({user,setUser,statusToast, setStatusToast}) => {
     const [value, setValue] = React.useState(0);
-
+    const [data,setData]=useState(null);
     const handleChange = (event, newValue) => {
       setValue(newValue);
     };
+    useEffect(()=>{
+      setData(user)
+    },[user]);
 
     return (
     <Box
@@ -65,16 +68,16 @@ const AccountSettingsPage = () => {
         <Tab label="Info" {...a11yProps(3)} />
       </Tabs>
       <TabPanel sx={{width:'100%',height:'100%'}} value={value} index={0}>
-        {/* <General/> */}
+        <General user={data} setUser={setUser} statusToast={statusToast} setStatusToast={setStatusToast}/>
       </TabPanel>
       <TabPanel sx={{width:'100%',height:'100%'}}  value={value} index={1}>
-        <ChangePassword/>
+        <ChangePassword user={user} setUser={setUser} statusToast={statusToast} setStatusToast={setStatusToast}/>
       </TabPanel>
       <TabPanel  sx={{width:'100%',height:'100%'}} value={value} index={2}>
-        {/* <Address/> */}
+        <Address user={data} setUser={setUser} statusToast={statusToast} setStatusToast={setStatusToast}/>
       </TabPanel>
       <TabPanel sx={{width:'100%',height:'100%'}}  value={value} index={3}>
-        {/* <Info/> */}
+        <Info user={data} setUser={setUser} statusToast={statusToast} setStatusToast={setStatusToast}/>
       </TabPanel>
      
     </Box>
@@ -83,4 +86,4 @@ const AccountSettingsPage = () => {
    
 }
 
-export default AccountSettingsPage;
+export default AccountSettingsComponent;

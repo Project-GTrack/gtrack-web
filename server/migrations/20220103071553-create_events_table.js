@@ -31,17 +31,25 @@ module.exports = {
             type:Sequelize.TEXT,
             allowNull:false
         },
-        participants:{
+        target_participants:{
             type:Sequelize.STRING,
             allowNull:false
         },
         status:{
-            type:Sequelize.TINYINT,
+            type: Sequelize.ENUM('Ongoing','Canceled','Ended'),
             allowNull: false
         },
-        date:{
+        startDate:{
             type:Sequelize.DATE,
             allowNull: false
+        },
+        endDate:{
+          type:Sequelize.DATE,
+          allowNull: false
+        },
+        registration_form_url:{
+          type:Sequelize.STRING,
+          allowNull:false
         },
         street:{
             type:Sequelize.STRING,

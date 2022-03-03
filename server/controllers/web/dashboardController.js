@@ -65,9 +65,9 @@ exports.viewDashboard= async(req, res)=>{
             // " INNER JOIN users u ON w.driver_id = u.user_id"+
             // " WHERE w.collection_date >= LAST_DAY(NOW()) + INTERVAL 1 DAY - INTERVAL 1 MONTH AND w.collection_date < LAST_DAY(NOW())");
             let collectionsCount = await collection.model.findAll({
-                // attributes:{
-                //     exclude:['collection_route','createdAt','updatedAt','deletedAt']
-                // },
+                attributes:{
+                    exclude:['updatedAt','deletedAt']
+                },
                include: {
                    model : user.model, as:"collectionDriver",
                    required: true,
@@ -82,9 +82,16 @@ exports.viewDashboard= async(req, res)=>{
                }
             });
          
-            // let chartDataCount = await sequelize.query("SELECT collection_date, collection_weight_volume"+
-            // " FROM waste_collections"+
-            // " WHERE DAYNAME(collection_date) IN ('Sunday')")
+            let chartDataCount = await sequelize.query("SELECT SUM(collection_weight_volume) AS weight,"+ 
+            "CONCAT"+
+            "("+
+              "STR_TO_DATE(CONCAT(YEARWEEK(collection_date, 2), ' Sunday'), '%X%V %W'),"+
+              "'&',"+
+              "STR_TO_DATE(CONCAT(YEARWEEK(collection_date, 2), ' Sunday'), '%X%V %W') + INTERVAL 6 DAY"+
+            ") AS week "+
+          "FROM waste_collections "+
+          "GROUP BY YEARWEEK(collection_date, 2) "+
+          "ORDER BY YEARWEEK(collection_date, 2) ");
 
             // let chartDataCount = await collection.model.findAll({
             //     attributes:{
@@ -99,30 +106,30 @@ exports.viewDashboard= async(req, res)=>{
             //      }
             // })
 
-                let day = moment()
-                        .startOf('month')
-                        .day('Sunday');
-                if (day.date() > 7) day.add(7,'d');
-                var month = day.month();
-                let chartDataCount=[];
-                var startDate = moment(moment().format("YYYY-MM-01"));
-                var total_price=null;
-                while(month === day.month()){
-                    total_price = await collection.model.sum('collection_weight_volume',{
-                        where: {
-                            collection_date: {
-                              [Op.between]: [new Date(startDate),new Date(day)]
-                            }
-                        }
-                    })
-                    if(total_price){
-                        chartDataCount.push({collection_weight_volume:total_price,collection_date:day.clone()})
-                    }
-                    startDate=day.clone();
-                    day.add(7,'d');
-                }
+                // let day = moment()
+                //         .startOf('month')
+                //         .day('Sunday');
+                // if (day.date() > 7) day.add(7,'d');
+                // var month = day.month();
+                // let chartDataCount=[];
+                // var startDate = moment(moment().format("YYYY-MM-01"));
+                // var total_price=null;
+                // while(month === day.month()){
+                //     total_price = await collection.model.sum('collection_weight_volume',{
+                //         where: {
+                //             collection_date: {
+                //               [Op.between]: [new Date(startDate),new Date(day)]
+                //             }
+                //         }
+                //     })
+                //     if(total_price){
+                //         chartDataCount.push({collection_weight_volume:total_price,collection_date:day.clone()})
+                //     }
+                //     startDate=day.clone();
+                //     day.add(7,'d');
+                // }
             res.send({data:admin, drivers:driversCount, trucks:trucksCount, dumpsters:dumpstersCount,
-                        collections:collectionsCount,chartData:chartDataCount});
+                        collections:collectionsCount,chartData:chartDataCount[0]});
             
         })
     }else{

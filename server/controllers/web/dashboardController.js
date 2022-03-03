@@ -66,7 +66,7 @@ exports.viewDashboard= async(req, res)=>{
             // " WHERE w.collection_date >= LAST_DAY(NOW()) + INTERVAL 1 DAY - INTERVAL 1 MONTH AND w.collection_date < LAST_DAY(NOW())");
             let collectionsCount = await collection.model.findAll({
                 attributes:{
-                    exclude:['createdAt','updatedAt','deletedAt']
+                    exclude:['updatedAt','deletedAt']
                 },
                include: {
                    model : user.model, as:"collectionDriver",

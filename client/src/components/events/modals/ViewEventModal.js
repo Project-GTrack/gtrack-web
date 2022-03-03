@@ -115,7 +115,7 @@ export default function ViewEventModal(props) {
             <Grid item xs={12}>
               <Typography variant="body2" color="text.secondary">
                 <b>Registration Form Link:</b>
-                <Link href="#" underline="hover">
+                <Link href={props.data[12]} target="_blank" underline="hover">
                 {props.data[12]}
                 </Link> 
               </Typography>

@@ -34,6 +34,7 @@ const General = (props) => {
                 Cookies.set('user_id',res.data.data.accessToken, {expires: 1});
                 props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
                 setProgress(0);
+                window.location.reload();
               }else{
                 props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"error"})
               }

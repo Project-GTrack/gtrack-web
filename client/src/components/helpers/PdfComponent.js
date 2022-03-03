@@ -60,8 +60,8 @@ const PdfComponent = forwardRef(({dashcards,chartData},ref) => {
                  <tbody>
                  {chartData.map((data,i) => (
                             <tr key={i}>
-                                <td style={{padding: "1vh", borderRight: "1px solid black"}}><p>{moment(data.collection_date).format("MMMM DD, YYYY")}</p></td>
-                                <td style={{padding: "1vh", borderLeft: "1px solid black"}}><p>{data.collection_weight_volume}</p></td>
+                                <td style={{padding: "1vh", borderRight: "1px solid black"}}><p>{moment(data.week.toString().split('&')[0]).format("MMMM DD")+" - "+moment(data.week.toString().split('&')[1]).format("MMMM DD, YYYY")}</p></td>
+                                <td style={{padding: "1vh", borderLeft: "1px solid black"}}><p>{data.weight}</p></td>
                             </tr>
                             
                         ))}

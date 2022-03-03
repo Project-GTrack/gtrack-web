@@ -55,7 +55,6 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   };
   
 export default function CollectionsModal(props) {
-  console.log(props);
   return (
     <BootstrapDialog
     onClose={props.handleCloseModal}

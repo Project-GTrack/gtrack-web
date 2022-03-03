@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -10,8 +10,7 @@ import PropTypes from "prop-types";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import { Avatar } from "@mui/material";
-
+import Carousel from 'react-material-ui-carousel'
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
@@ -50,45 +49,53 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
+
 export default function ViewAnnouncementModal(props) {
+
   return (
     <BootstrapDialog
+      fullWidth={true}
       onClose={props.handleCloseModal}
       aria-labelledby="customized-dialog-title"
       open={props.openModal}
     >
       <BootstrapDialogTitle
-        id="customized-dialog-title"
         onClose={props.handleCloseModal}
       >
         View Announcement Details
       </BootstrapDialogTitle>
       <DialogContent dividers>
         <Box sx={{ width: "100%" }}>
-         <img
-            alt="GTrack Logo"
-            className="mb-4"
-            borderWidth=""
-            style={{
-              borderRadius: "50%",
-              width: 200,
-              height: 200,
-              margin:'auto',
-              border: '2px solid black',
-              display: "block"
-            }}
-           
-            src={props.avatar}
-          ></img>
+          <Carousel sx={{height: 200,width:'100%',alignContent:'center',alignItems:'center',justifyContent:'center',margin:'auto'}}>
+          {props.data[5].length!==0?(props.data[5].map((image,i)=>{
+              return (
+                <div key = {i} className="text-center mx-auto ml-auto mr-auto">
+                  <img 
+                    src={image.filename}
+                    style={{height: 200, margin:"auto",alignSelf:"center",alignContent:"center",justifyContent:"center"}}
+                    alt={image.filename}
+                  />
+                </div>
+              )
+            })
+          ):(
+            <div className="text-white mx-auto bg-secondary" style={{width:"100%",height:200,justifyContent:"center",display:"flex"}}>
+              <p className="text-center mt-auto mb-auto">No photos uploaded</p>
+            </div>
+          )}
+          </Carousel>
        
-          <Typography variant="body2" color="text.secondary">
-            <b>Title:</b> {props.data[0]}
+          <Typography variant="body2" mt={2} color="text.secondary">
+            <b>Title:</b> {props.data[1]}
           </Typography>
           <Typography align='justify' variant="body2" color="text.secondary">
-            <b>Content:</b> {props.data[1]}
+            <b>Content:</b> {props.data[2]}
+          </Typography>
+          <Typography align='justify' variant="body2" color="text.secondary">
+            <b>Added by:</b> {props.data[3]}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            <b>Date Added:</b> {props.data[2]}
+            <b>Date Added:</b> {props.data[4]}
           </Typography>
         </Box>
       </DialogContent>

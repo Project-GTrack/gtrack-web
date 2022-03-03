@@ -61,14 +61,18 @@ const DeleteDumpsterModal = (props) => {
     props.setPrevData(props.data);
     axios
       .post(
-        `http://localhost:8000/admin/dumpster/delete-dumpster/${props.data[0]}`,
+        `${process.env.REACT_APP_BACKEND_URL}/admin/dumpster/delete-dumpster/${props.data[0]}`,
         { password: values.password, accessToken: Cookies.get("user_id") }
       )
       .then((res) => {
         resetForm();
         props.setDeleteModal(false);
-        props.setMesAlert(true);
-        props.setMessage(res.data);
+        if(res.data.success){
+          props.setDumpsters(res.data.data);
+          props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
+        }else{
+          props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"error"})
+        }
       });
   };
   const { handleChange, handleSubmit, handleBlur, values, errors, touched } =

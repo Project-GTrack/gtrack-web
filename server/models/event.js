@@ -25,17 +25,25 @@ const event = instance.sequelize.define("events",{
         type:DataTypes.TEXT,
         allowNull: false
     },
-    participants:{
+    target_participants:{
         type:DataTypes.STRING,
         allowNull: false
     },
     status:{
-        type:DataTypes.TINYINT,
+        type: DataTypes.ENUM('Ongoing','Canceled','Ended'),
         allowNull: false
     },
-    date:{
+    startDate:{
         type:DataTypes.DATE,
         allowNull: false
+    },
+    endDate:{
+        type:DataTypes.DATE,
+        allowNull: false
+    },
+    registration_form_url:{
+        type:DataTypes.STRING,
+        allowNull:false
     },
     street:{
         type:DataTypes.STRING,

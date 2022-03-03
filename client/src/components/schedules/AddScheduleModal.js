@@ -119,9 +119,10 @@ const AddScheduleModal = (props) => {
         })
         .then(res=>{
             if(res.data.success){
-                // props.setAccounts(res.data.data);
+                props.setSchedules(res.data.data);
                 props.setOpenAddModal(false);
                 resetForm();
+                props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
             }else{
                 setError(res.data.message);
             }
@@ -171,25 +172,25 @@ const AddScheduleModal = (props) => {
         let temp=[...schedule];
         temp[index].schedule=e.target.value;
         setSchedule([...temp]);
-        setFieldValue('schedule',schedule);
+        setFieldValue('schedule',[...temp]);
     }
     const handleChangeWhenDate = (e,index) =>{
         let temp=[...schedule];
         temp[index].schedule=e;
         setSchedule([...temp]);
-        setFieldValue('schedule',schedule);
+        setFieldValue('schedule',[...temp]);
     }
     const handleChangeStartTime = (e,index) =>{
         let temp=[...schedule];
         temp[index].time_start=e;
         setSchedule([...temp]);
-        setFieldValue('schedule',schedule);
+        setFieldValue('schedule',[...temp]);
     }
     const handleChangeEndTime = (e,index) =>{
         let temp=[...schedule];
         temp[index].time_end=e;
         setSchedule([...temp]);
-        setFieldValue('schedule',schedule);
+        setFieldValue('schedule',[...temp]);
     }
     const handleAddSchedule=()=>{
         let temp=[...schedule];
@@ -199,22 +200,23 @@ const AddScheduleModal = (props) => {
             time_end:new Date(moment())
         });
         setSchedule([...temp]);
-        setFieldValue('schedule',schedule);
+        setFieldValue('schedule',[...temp]);
     }
     const handleRemoveSchedule=(index)=>{
         let temp=[...schedule];
         temp.splice(index,1);
         setSchedule([...temp]);
-        setFieldValue('schedule',schedule);
+        setFieldValue('schedule',[...temp]);
     }
     const handleChangeType=(e)=>{
         setFieldValue("type",e.target.value);
-        setSchedule([{
+        let temp=[{
             schedule:"",
             time_start:new Date(moment()),
             time_end:new Date(moment())
-        }]);
-        setFieldValue('schedule',schedule);
+        }]
+        setSchedule([...temp]);
+        setFieldValue('schedule',[...temp]);
     }
   return (
     <BootstrapDialog
@@ -370,8 +372,8 @@ const AddScheduleModal = (props) => {
                     }}
                 >
                     <MenuItem value="Biodegradable">Biodegradable</MenuItem>
-                    <MenuItem value="Non-Biodegradable">Non-Biodegradable</MenuItem>
-                    <MenuItem value="Recyclable">Recyclable</MenuItem>
+                    <MenuItem value="Non-biodegradable">Non-Biodegradable</MenuItem>
+                    <MenuItem value="Residual">Residual</MenuItem>
                 </Select>
             </FormControl>
             {(errors.garbage_type && touched.garbage_type) &&

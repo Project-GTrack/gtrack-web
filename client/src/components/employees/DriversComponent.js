@@ -4,11 +4,12 @@ import EmployeeCustomToolbar from './EmployeeCustomToolbar';
 import AddNewEmployeeModal from './modals/AddNewEmployeeModal';
 import moment from 'moment';
 const DriversComponent = ({drivers,setAccounts}) => {
-  const [driverList, setDriverList] = useState([]);
+  // const [, setDriverList] = useState([]);
   const [data, setData] = useState([]);
   useEffect(() => {
-    setDriverList(drivers);
+    // setDriverList(drivers);
     var temp=[];
+    // eslint-disable-next-line array-callback-return
     drivers && drivers.map((item)=>{
       temp.push([item.fname && item.fname,item.lname && item.lname,item.email && item.email,item.contact_no && item.contact_no,`${item.purok?item.purok:""} ${item.street?item.street:""} ${item.barangay?item.barangay:""}`,item.birthday && moment().diff(item.birthday, 'years'),item.gender && item.gender,item.createdAt && moment(item.createdAt).format("MMMM DD, YYYY"),item.status && item.status===true?'Active':'Inactive',item.image]);
     })

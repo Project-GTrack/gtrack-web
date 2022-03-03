@@ -31,7 +31,10 @@ function DashboardCard(props){
     
         <div>
             <Card onClick={handleOpenModal} elevation={1}>
+              <div style={{height: "8vh"}}>
                 <CardHeader title={props.title}/>
+              </div>
+                
                 <CardContent>
                     <Typography  id={props.id}  variant="h5" color="textSecondary">
                         {props.count}

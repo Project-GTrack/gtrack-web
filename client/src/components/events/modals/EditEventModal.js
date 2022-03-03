@@ -335,6 +335,20 @@ export default function EditEventModal(props) {
           {(errors.target_participants && touched.target_participants) &&
                 <p className="text-danger small ">{errors.target_participants}</p>
          }
+          <TextField
+            value={values.registration_form_url}
+            onChange={handleChange('registration_form_url')}
+            onBlur={handleBlur('registration_form_url')}
+            margin="dense"
+            id="registration_form_url"
+            label="Registration Form Link"
+            type="text"
+            fullWidth
+            variant="standard"
+        />
+          {(errors.registration_form_url && touched.registration_form_url) &&
+                <p className="text-danger small ">{errors.registration_form_url}</p>
+         }
           <Grid item xs={12}>
           <FormControl sx={{ width:'100%' }}>
             <InputLabel htmlFor="status">Status</InputLabel>

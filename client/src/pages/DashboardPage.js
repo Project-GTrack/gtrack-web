@@ -1,14 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import PageLayout from "./PageLayout";
-
 import Axios from 'axios';
 import Cookies from 'js-cookie';
-
 import ArticleIcon from "@mui/icons-material/Article";
 import { Paper,Grid,Button} from '@mui/material';
-        
-import DashboardCard from '../components/dashboard/DashboardCard'
-import Chart from '../components/ChartComponent';
 import PersonIcon from "@mui/icons-material/Person";
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -24,12 +19,10 @@ const DashboardPage = () => {
   const componentRef = useRef();
  
   useEffect(() => {
-    console.log(componentRef);
     if(Cookies.get('user_id')){
       Axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/dashboard`,{accessToken: Cookies.get('user_id')})
       .then((res) => {
           if(res){
-            console.log(res.data)
             setData(res.data);
           }
       }) 
@@ -40,9 +33,7 @@ const DashboardPage = () => {
   },[])
   
   const {drivers,trucks,dumpsters,chartData,collections} = data;
-  useEffect(() => {
-    console.log(drivers);
-  },[data])
+ 
   const dashcards = [
     {id:1, title: "Available Drivers", count: drivers && drivers.length, icon:<PersonIcon style={{float:'right'}} fontSize="large"/>},
     {id:2, title: "Available Trucks", count: trucks && trucks.length, icon:<LocalShippingIcon style={{float:'right'}} fontSize="large"/>},

@@ -39,6 +39,7 @@ const UploadProfile = ({values,url,setUrl,progress,setProgress}) => {
       };
     const handleChange = (event) =>{
         handleUpload(event.target.files[0]);
+      
     }
   
     const handleUpload = (file) => {

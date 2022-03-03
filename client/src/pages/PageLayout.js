@@ -21,10 +21,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
 import Tooltip from "@mui/material/Tooltip";
-import Settings from "@mui/icons-material/Settings";
-import Logout from "@mui/icons-material/Logout";
 import { mainListItems } from "../components/ListItemComponent";
 import { useState } from "react";
 import ReportNotifications from "../components/ReportNotifications";
@@ -104,10 +101,17 @@ const PageLayout = ({headerTitle,children}) => {
   const [alerts, setAlerts] = useState(null);
   const [user, setUser] = useState(null);
   const getFirebaseConcerns = () => {
-    database.ref(`Concerns/`).on('value', function (snapshot) {
+    database.ref(`Concerns/`).orderByKey().on('value', function (snapshot) {
         if(snapshot.val()){
             var snap=snapshot.val();
-            var temp=Object.keys(snap).map((key) => snap[key]);
+            var temp=[];
+            // eslint-disable-next-line array-callback-return
+            Object.keys(snap).map((key) => {
+              if(snap[key].active===1){
+                temp.push(snap[key]);
+              }
+            });
+            temp=temp.reverse();
             setConcerns([...temp]);
         }else{
           setConcerns([]);
@@ -115,10 +119,17 @@ const PageLayout = ({headerTitle,children}) => {
     });
   }
   const getFirebaseReports = () => {
-    database.ref(`Reports/`).on('value', function (snapshot) {
+    database.ref(`Reports/`).orderByKey().on('value', function (snapshot) {
         if(snapshot.val()){
             var snap=snapshot.val();
-            var temp=Object.keys(snap).map((key) => snap[key]);
+            var temp=[];
+            // eslint-disable-next-line array-callback-return
+            Object.keys(snap).map((key) => {
+              if(snap[key].active===1){
+                temp.push(snap[key]);
+              }
+            });
+            temp=temp.reverse();
             setAlerts([...temp]);
         }else{
           setAlerts([]);

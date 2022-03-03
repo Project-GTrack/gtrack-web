@@ -19,7 +19,7 @@ function TabPanel(props) {
       >
         {value === index && (
           <Box sx={{ p: 3 }}>
-            <Typography>{children}</Typography>
+            {children}
           </Box>
         )}
       </div>
@@ -65,16 +65,16 @@ const AccountSettingsPage = () => {
         <Tab label="Info" {...a11yProps(3)} />
       </Tabs>
       <TabPanel sx={{width:'100%',height:'100%'}} value={value} index={0}>
-        <General/>
+        {/* <General/> */}
       </TabPanel>
       <TabPanel sx={{width:'100%',height:'100%'}}  value={value} index={1}>
         <ChangePassword/>
       </TabPanel>
       <TabPanel  sx={{width:'100%',height:'100%'}} value={value} index={2}>
-        <Address/>
+        {/* <Address/> */}
       </TabPanel>
       <TabPanel sx={{width:'100%',height:'100%'}}  value={value} index={3}>
-        <Info/>
+        {/* <Info/> */}
       </TabPanel>
      
     </Box>

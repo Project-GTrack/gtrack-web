@@ -3,14 +3,31 @@ import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Stack from '@mui/material/Stack';
+import Firebase from "../components/helpers/Firebase";
+import { useNavigate } from 'react-router-dom';
 
-
+const database=Firebase.database();
 const ReportNotifications = ({open,anchorEl,handleClose,type,reports}) => {
   const [data, setData] = useState(null);
+  const navigate = useNavigate();
   useEffect(() => {
     setData(reports);
   }, [reports,type])
-  
+  const updateFirebaseConcerns = (item) => {
+    database.ref(`Concerns/${item.concern_id}`).child("active").set(0);
+    navigate('/reports')
+  }
+  const updateFirebaseReports = (item) => {
+    database.ref(`Reports/${item.report_id}`).child("active").set(0);
+    navigate('/reports')
+  }
+  const handleRead=(type,item)=>{
+    if(type==='concern'){
+      updateFirebaseConcerns(item);
+    }else{
+      updateFirebaseReports(item);
+    }
+  }
   return (
     <Menu
         anchorEl={anchorEl}
@@ -51,14 +68,14 @@ const ReportNotifications = ({open,anchorEl,handleClose,type,reports}) => {
         data != null && data.length!==0?(
           data.map((item,i)=>{
             return (
-              <MenuItem key={i}>
-                  <Stack direction="row" spacing={1}>
-                    <Avatar src={item.sender_image}/>
-                    <Stack direction="column">
-                      <span style={{fontSize: '12px'}}>{item.sender}  | {item.classification}</span>
-                      <span style={{fontSize: '14px'}}>{item.subject}</span>
-                    </Stack>
+              <MenuItem key={i} onClick={()=>handleRead(type,item)}>
+                <Stack direction="row" spacing={1}>
+                  <Avatar src={item.sender_image}/>
+                  <Stack direction="column">
+                    <span style={{fontSize: '12px'}}>{item.sender}  | {item.classification}</span>
+                    <span style={{fontSize: '14px'}}>{item.subject}</span>
                   </Stack>
+                </Stack>
               </MenuItem>
             );
           })
@@ -71,14 +88,14 @@ const ReportNotifications = ({open,anchorEl,handleClose,type,reports}) => {
         data != null && data.length!==0?(
           data.map((item,i)=>{
             return (
-              <MenuItem key={i}>
-                  <Stack direction="row" spacing={1}>
-                    <Avatar src={item.sender_image}/>
-                    <Stack direction="column">
-                      <span style={{fontSize: '12px'}}>{item.sender}  | {item.degree}</span>
-                      <span style={{fontSize: '14px'}}>{item.subject}</span>
-                    </Stack>
+              <MenuItem key={i} onClick={()=>handleRead(type,item)}>
+                <Stack direction="row" spacing={1}>
+                  <Avatar src={item.sender_image}/>
+                  <Stack direction="column">
+                    <span style={{fontSize: '12px'}}>{item.sender}  | {item.degree}</span>
+                    <span style={{fontSize: '14px'}}>{item.subject}</span>
                   </Stack>
+                </Stack>
               </MenuItem>
             );
           })

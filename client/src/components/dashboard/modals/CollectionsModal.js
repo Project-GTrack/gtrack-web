@@ -71,7 +71,7 @@ export default function CollectionsModal(props) {
       <Table sx={{ minWidth: 500 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell align="justify">Schedule</TableCell>
+            <TableCell align="justify">Collection Date</TableCell>
             <TableCell align="justify">Route</TableCell>
             <TableCell align="justify">Weight</TableCell>
             <TableCell align="justify">Driver</TableCell>

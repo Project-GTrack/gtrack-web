@@ -3,7 +3,7 @@ import MUIDataTable from "mui-datatables";
 import EmployeeCustomToolbar from './EmployeeCustomToolbar';
 import AddNewEmployeeModal from './modals/AddNewEmployeeModal';
 import moment from 'moment';
-const DriversComponent = ({drivers,setAccounts}) => {
+const DriversComponent = ({statusToast,setStatusToast,drivers,setAccounts}) => {
   // const [, setDriverList] = useState([]);
   const [data, setData] = useState([]);
   useEffect(() => {
@@ -30,7 +30,14 @@ const DriversComponent = ({drivers,setAccounts}) => {
       filter: true,
       filterType: 'dropdown',
       customToolbarSelect:(selectedRows,displayData)=>(
-        <EmployeeCustomToolbar setAccounts={setAccounts} data={data[selectedRows.data[0].dataIndex]} selectedRows={selectedRows} displayData={displayData}/>    
+        <EmployeeCustomToolbar
+          statusToast={statusToast} 
+          setStatusToast={setStatusToast} 
+          setAccounts={setAccounts} 
+          data={data[selectedRows.data[0].dataIndex]} 
+          selectedRows={selectedRows} 
+          displayData={displayData}
+        />    
       )
     };
     return (
@@ -39,6 +46,8 @@ const DriversComponent = ({drivers,setAccounts}) => {
               <button className='btn btn-success' onClick={()=>setOpenModal(true)}><i className="fa fa-plus" aria-hidden="true"></i> Add New Employee</button>
             </div>
             <AddNewEmployeeModal
+              statusToast={statusToast} 
+              setStatusToast={setStatusToast}
               openModal={openModal}
               setOpenModal={setOpenModal}
               setAccounts={setAccounts}

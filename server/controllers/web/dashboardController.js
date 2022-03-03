@@ -65,9 +65,9 @@ exports.viewDashboard= async(req, res)=>{
             // " INNER JOIN users u ON w.driver_id = u.user_id"+
             // " WHERE w.collection_date >= LAST_DAY(NOW()) + INTERVAL 1 DAY - INTERVAL 1 MONTH AND w.collection_date < LAST_DAY(NOW())");
             let collectionsCount = await collection.model.findAll({
-                attributes:{
-                    exclude:['collection_route','createdAt','updatedAt','deletedAt']
-                },
+                // attributes:{
+                //     exclude:['collection_route','createdAt','updatedAt','deletedAt']
+                // },
                include: {
                    model : user.model, as:"collectionDriver",
                    required: true,
@@ -75,10 +75,10 @@ exports.viewDashboard= async(req, res)=>{
                 
                },
                where:{
-                    [Op.and]:[
-                        sequelize.literal('collection_date >= LAST_DAY(NOW()) + INTERVAL 1 DAY - INTERVAL 1 MONTH'),
-                        sequelize.literal('collection_date <= LAST_DAY(NOW())')
-                    ]    
+                    // [Op.and]:[
+                    //     sequelize.literal('collection_date >= LAST_DAY(NOW()) + INTERVAL 1 DAY - INTERVAL 1 MONTH'),
+                    //     sequelize.literal('collection_date <= LAST_DAY(NOW())')
+                    // ]    
                }
             });
          

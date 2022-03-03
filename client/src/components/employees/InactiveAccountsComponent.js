@@ -3,7 +3,7 @@ import MUIDataTable from "mui-datatables";
 import EmployeeCustomToolbar from './EmployeeCustomToolbar';
 import moment from 'moment';
 
-const InactiveAccountsComponent = ({inactives,setAccounts}) => {
+const InactiveAccountsComponent = ({statusToast,setStatusToast,inactives,setAccounts}) => {
     const [inactiveList, setInactiveList] = useState([]);
     const [data, setData] = useState([]);
     useEffect(() => {
@@ -22,7 +22,14 @@ const InactiveAccountsComponent = ({inactives,setAccounts}) => {
         filter: true,
         filterType: 'dropdown',
         customToolbarSelect:(selectedRows,displayData)=>(
-            <EmployeeCustomToolbar setAccounts={setAccounts} data={data[selectedRows.data[0].dataIndex]} selectedRows={selectedRows} displayData={displayData}/>   
+            <EmployeeCustomToolbar 
+                statusToast={statusToast} 
+                setStatusToast={setStatusToast} 
+                setAccounts={setAccounts} 
+                data={data[selectedRows.data[0].dataIndex]} 
+                selectedRows={selectedRows} 
+                displayData={displayData}
+            />   
         )
     };
     return (

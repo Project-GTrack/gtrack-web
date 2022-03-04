@@ -64,7 +64,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   
 const AddScheduleModal = (props) => {
     const [schedule,setSchedule]=useState([{
-        schedule:"",
+        schedule:"Monday",
         time_start:new Date(moment()),
         time_end:new Date(moment())
     }]);
@@ -155,7 +155,7 @@ const AddScheduleModal = (props) => {
     const { handleChange, handleSubmit, handleBlur, values, errors,isValid,touched, setFieldValue } = useFormik({
         initialValues:{ 
             type: "weekly",
-            schedule:[], 
+            schedule:schedule, 
             garbage_type:"",
             landmark:"", 
             purok:"",
@@ -210,11 +210,20 @@ const AddScheduleModal = (props) => {
     }
     const handleChangeType=(e)=>{
         setFieldValue("type",e.target.value);
-        let temp=[{
-            schedule:"",
-            time_start:new Date(moment()),
-            time_end:new Date(moment())
-        }]
+        let temp;
+        if(e.target.value==="weekly"){
+            temp=[{
+                schedule:"Monday",
+                time_start:new Date(moment()),
+                time_end:new Date(moment())
+            }]
+        }else{
+            temp=[{
+                schedule:new Date(moment()),
+                time_start:new Date(moment()),
+                time_end:new Date(moment())
+            }]
+        }
         setSchedule([...temp]);
         setFieldValue('schedule',[...temp]);
     }

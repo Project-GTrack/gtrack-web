@@ -10,8 +10,13 @@ import InactiveAccountsComponent from '../components/employees/InactiveAccountsC
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
+import StatusToast from '../components/helpers/StatusToast';
 const EmployeesPage = () => {
-  
+  const [statusToast, setStatusToast] = useState({
+    isOpen:false,
+    message:"",
+    colorScheme:"success"
+  });
   const [value, setValue] = useState(0);
   const [accounts, setAccounts] = useState([
     {
@@ -87,14 +92,15 @@ const EmployeesPage = () => {
       </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-          <DriversComponent drivers={accounts.drivers} setAccounts={setAccounts}/>
+          <DriversComponent drivers={accounts.drivers} setAccounts={setAccounts}  statusToast={statusToast} setStatusToast={setStatusToast}/>
       </TabPanel>
       <TabPanel value={value} index={1}>
-      <AdminsComponent admins={accounts.admins} setAccounts={setAccounts}/>
+        <AdminsComponent admins={accounts.admins} setAccounts={setAccounts} statusToast={statusToast} setStatusToast={setStatusToast}/>
       </TabPanel>
       <TabPanel value={value} index={2}>
-      <InactiveAccountsComponent inactives={accounts.inactives} setAccounts={setAccounts}/>
+        <InactiveAccountsComponent inactives={accounts.inactives} setAccounts={setAccounts} statusToast={statusToast} setStatusToast={setStatusToast}/>
       </TabPanel>
+      <StatusToast statusToast={statusToast} setStatusToast={setStatusToast}/>
     </PageLayout>
   )
 }

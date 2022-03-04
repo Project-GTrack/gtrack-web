@@ -29,7 +29,7 @@ exports.submitReport = async (req, res) => {
             degree:req.body.degree,
             status:1
         });
-        res.send({success:true,message:"Report Submitted Successfully"});
+        res.send({success:true,message:"Report Submitted Successfully",data:doc});
     }else{
         res.send({success:false,message:"Attachment not created.",data:null});
     }

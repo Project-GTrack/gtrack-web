@@ -60,7 +60,8 @@ export default function ReactivateModal(props) {
     .then(res=>{
       if(res.data.success){
         props.setAccounts(res.data.data);
-        props.setDeleteModal(false)
+        props.setDeleteModal(false);
+        props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"});
       }else{
         setError(res.data.message);
       }

@@ -106,7 +106,7 @@ exports.deactivate = async(req, res)=>{
                     status:false
                 }
             })
-            res.send({success:true,data:{admins:admins,drivers:drivers,inactives:inactives}});
+            res.send({success:true,message:"Successfully deactivated employee.",data:{admins:admins,drivers:drivers,inactives:inactives}});
         }else{
             res.send({success:false,message:"Password did not match",data:null});
         }
@@ -142,7 +142,7 @@ exports.activate = async(req, res)=>{
                     status:false
                 }
             })
-            res.send({success:true,data:{admins:admins,drivers:drivers,inactives:inactives}});
+            res.send({success:true,message:"Successfully reactivated employee.",data:{admins:admins,drivers:drivers,inactives:inactives}});
         }else{
             res.send({success:false,message:"Password did not match",data:null});
         }
@@ -186,7 +186,7 @@ exports.register = async(req, res)=>{
                 status:false
             }
         })
-        res.send({success:true,data:{admins:admins,drivers:drivers,inactives:inactives}});
+        res.send({success:true,message:"Successfully added new employee",data:{admins:admins,drivers:drivers,inactives:inactives}});
     }else{
         res.send({success:false,message:"Account already existed.",data:null});
     }   

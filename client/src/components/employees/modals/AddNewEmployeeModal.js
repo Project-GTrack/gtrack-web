@@ -61,6 +61,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   };
   
 export default function AddNewEmployeeModal(props) {
+  const digitsOnly = (value) => /^\d+$/.test(value)
   const employeeRegisterValidationSchema = yup.object().shape({
     fname: yup
       .string()
@@ -86,7 +87,8 @@ export default function AddNewEmployeeModal(props) {
       .required('Gender is required'),
     contact: yup
       .string()
-      .required('Contact is required'),
+      .required('Contact is required')
+      .test('Digits only', 'The field should be digits only', digitsOnly),
     user_type: yup
       .string()
       .required('Employee type is required'),
@@ -141,6 +143,7 @@ export default function AddNewEmployeeModal(props) {
         margin="dense"
         label="First Name"
         type="text"
+        inputProps={{ style: { textTransform: "capitalize" } }}
         fullWidth
         variant="standard"
       />
@@ -153,6 +156,7 @@ export default function AddNewEmployeeModal(props) {
         value={values.lname}
         onChange={handleChange('lname')}
         onBlur={handleBlur('lname')}
+        inputProps={{ style: { textTransform: "capitalize" } }}
         margin="dense"
         label="Last Name"
         type="text"
@@ -170,6 +174,7 @@ export default function AddNewEmployeeModal(props) {
           value={values.purok}
           onChange={handleChange('purok')}
           onBlur={handleBlur('purok')}
+          inputProps={{ style: { textTransform: "capitalize" } }}
           margin="dense"
           label="Purok"
           type="text"
@@ -185,6 +190,7 @@ export default function AddNewEmployeeModal(props) {
           value={values.street}
           onChange={handleChange('street')}
           onBlur={handleBlur('street')}
+          inputProps={{ style: { textTransform: "capitalize" } }}
           margin="dense"
           label="Street"
           type="text"
@@ -200,6 +206,7 @@ export default function AddNewEmployeeModal(props) {
           value={values.barangay}
           onChange={handleChange('barangay')}
           onBlur={handleBlur('barangay')}
+          inputProps={{ style: { textTransform: "capitalize" } }}
           margin="dense"
           label="Barangay"
           type="text"
@@ -215,6 +222,7 @@ export default function AddNewEmployeeModal(props) {
         value={values.email}
         onChange={handleChange('email')}
         onBlur={handleBlur('email')}
+        inputProps={{ style: { textTransform: "lowercase" } }}
         margin="dense"
         label="Email Address"
         type="email"

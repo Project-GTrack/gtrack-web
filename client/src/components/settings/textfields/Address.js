@@ -66,6 +66,7 @@ const Address = (props) => {
                     value= {values.purok}
                     onChange={handleChange('purok')}
                     onBlur={handleBlur('purok')}
+                    inputProps={{ style: { textTransform: "capitalize" } }}
                     id="purok" 
                     label="Purok" 
                     variant="outlined"
@@ -77,6 +78,7 @@ const Address = (props) => {
                     value= {values.street}
                     onChange={handleChange('street')}
                     onBlur={handleBlur('street')} 
+                    inputProps={{ style: { textTransform: "capitalize" } }}
                     id="street" 
                     label="Street" 
                     variant="outlined" 
@@ -88,6 +90,7 @@ const Address = (props) => {
                     value= {values.barangay}
                     onChange={handleChange('barangay')}
                     onBlur={handleBlur('barangay')} 
+                    inputProps={{ style: { textTransform: "capitalize" } }}
                     id="barangay" 
                     label="Barangay" 
                     variant="outlined" 

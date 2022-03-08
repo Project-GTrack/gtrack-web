@@ -87,6 +87,7 @@ const General = (props) => {
                     value= {values.fname}
                     onChange={handleChange('fname')}
                     onBlur={handleBlur('fname')}
+                    inputProps={{ style: { textTransform: "capitalize" } }}
                     id="fname"
                     label="First Name"
                     type="text"
@@ -99,6 +100,7 @@ const General = (props) => {
                     value={values.lname}
                     onChange={handleChange('lname')}
                     onBlur={handleBlur('lname')}
+                    inputProps={{ style: { textTransform: "capitalize" } }}
                     id="lname"
                     label="Last Name"
                     type="text"
@@ -111,9 +113,7 @@ const General = (props) => {
                     id="outlined-read-only-input"
                     label="Email"
                     value={values.email}
-                    InputProps={{
-                        readOnly: true,
-                    }}
+                    inputProps={{ readOnly: true, style: { textTransform: "lowercase" } }}
                     fullWidth
                 />
                 

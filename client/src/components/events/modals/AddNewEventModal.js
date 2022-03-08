@@ -243,6 +243,7 @@ export default function AddNewEventModal(props) {
             value={values.street}
             onChange={handleChange('street')}
             onBlur={handleBlur('street')}
+            inputProps={{ style: { textTransform: "capitalize" } }}
             margin="dense"
             id="street"
             label="Event Address - Street"
@@ -257,6 +258,7 @@ export default function AddNewEventModal(props) {
             value={values.purok}
             onChange={handleChange('purok')}
             onBlur={handleBlur('purok')}
+            inputProps={{ style: { textTransform: "capitalize" } }}
             margin="dense"
             id="purok"
             label="Event Address - Purok"
@@ -271,6 +273,7 @@ export default function AddNewEventModal(props) {
             value={values.barangay}
             onChange={handleChange('barangay')}
             onBlur={handleBlur('barangay')}
+            inputProps={{ style: { textTransform: "capitalize" } }}
             margin="dense"
             id="barangay"
             label="Event Address - Barangay"
@@ -285,6 +288,7 @@ export default function AddNewEventModal(props) {
             value={values.town}
             onChange={handleChange('town')}
             onBlur={handleBlur('town')}
+            inputProps={{ style: { textTransform: "capitalize" } }}
             margin="dense"
             id="town"
             label="Event Address - Town"
@@ -313,6 +317,7 @@ export default function AddNewEventModal(props) {
             value={values.participants}
             onChange={handleChange('participants')}
             onBlur={handleBlur('participants')}
+            inputProps={{ style: { textTransform: "capitalize" } }}
             margin="dense"
             id="participants"
             label="Participants"

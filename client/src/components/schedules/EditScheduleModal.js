@@ -399,6 +399,7 @@ const EditScheduleModal = (props) => {
                     value={values.landmark}
                     onChange={handleChange('landmark')}
                     onBlur={handleBlur('landmark')}
+                    inputProps={{ style: { textTransform: "capitalize" } }}
                     label="Landmark"
                     type="text"
                 />
@@ -413,6 +414,7 @@ const EditScheduleModal = (props) => {
                 value={values.purok}
                 onChange={handleChange('purok')}
                 onBlur={handleBlur('purok')}
+                inputProps={{ style: { textTransform: "capitalize" } }}
                 label="Purok"
                 type="text"
                 />
@@ -425,6 +427,7 @@ const EditScheduleModal = (props) => {
                 value={values.street}
                 onChange={handleChange('street')}
                 onBlur={handleBlur('street')}
+                inputProps={{ style: { textTransform: "capitalize" } }}
                 label="Street"
                 type="text"
                 />
@@ -437,6 +440,7 @@ const EditScheduleModal = (props) => {
                 value={values.barangay}
                 onChange={handleChange('barangay')}
                 onBlur={handleBlur('barangay')}
+                inputProps={{ style: { textTransform: "capitalize" } }}
                 label="Barangay"
                 type="text"
                 />

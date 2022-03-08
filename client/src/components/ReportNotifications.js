@@ -67,10 +67,12 @@ const ReportNotifications = ({open,anchorEl,handleClose,type,reports}) => {
       {(type==='concern')?(
         data != null && data.length!==0?(
           data.map((item,i)=>{
+            let sender=item.sender.split(" ");
             return (
               <MenuItem key={i} onClick={()=>handleRead(type,item)}>
                 <Stack direction="row" spacing={1}>
-                  <Avatar src={item.sender_image}/>
+                  {item.sender_image && <Avatar src={item.sender_image}/>}
+                  {item.sender_image || <Avatar sx={{fontSize:15}}>{sender[0][0]+""+sender[sender.length-1][0]}</Avatar>}
                   <Stack direction="column">
                     <span style={{fontSize: '12px'}}>{item.sender}  | {item.classification}</span>
                     <span style={{fontSize: '14px'}}>{item.subject}</span>
@@ -81,16 +83,18 @@ const ReportNotifications = ({open,anchorEl,handleClose,type,reports}) => {
           })
         ):(
           <MenuItem >
-            <div>No alerts for now</div>
+            <div>No concerns for now</div>
           </MenuItem>
         )
       ):(
         data != null && data.length!==0?(
           data.map((item,i)=>{
+            let sender=item.sender.split(" ");
             return (
               <MenuItem key={i} onClick={()=>handleRead(type,item)}>
                 <Stack direction="row" spacing={1}>
-                  <Avatar src={item.sender_image}/>
+                  {item.sender_image && <Avatar src={item.sender_image}/>}
+                  {item.sender_image || <Avatar sx={{fontSize:15}}>{sender[0][0]+""+sender[sender.length-1][0]}</Avatar>}
                   <Stack direction="column">
                     <span style={{fontSize: '12px'}}>{item.sender}  | {item.degree}</span>
                     <span style={{fontSize: '14px'}}>{item.subject}</span>

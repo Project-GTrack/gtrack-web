@@ -135,6 +135,7 @@ const AddNewDumpsterModal = (props) => {
             value={values.street}
             onChange={handleChange("street")}
             onBlur={handleBlur("street")}
+            inputProps={{ style: { textTransform: "capitalize" } }}
             variant="standard"
           />
           {errors.street && touched.street && (
@@ -149,6 +150,7 @@ const AddNewDumpsterModal = (props) => {
             value={values.purok}
             onChange={handleChange("purok")}
             onBlur={handleBlur("purok")}
+            inputProps={{ style: { textTransform: "capitalize" } }}
             variant="standard"
           />
           {errors.purok && touched.purok && (
@@ -163,6 +165,7 @@ const AddNewDumpsterModal = (props) => {
             value={values.barangay}
             onChange={handleChange("barangay")}
             onBlur={handleBlur("barangay")}
+            inputProps={{ style: { textTransform: "capitalize" } }}
             variant="standard"
           />
           {errors.barangay && touched.barangay && (

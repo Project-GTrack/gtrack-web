@@ -11,6 +11,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import StatusToast from '../components/helpers/StatusToast';
+import { Helmet } from 'react-helmet';
 const EmployeesPage = () => {
   const [statusToast, setStatusToast] = useState({
     isOpen:false,
@@ -84,6 +85,9 @@ const EmployeesPage = () => {
     };
   return (
     <PageLayout headerTitle={"Employees"}>
+      <Helmet>
+        <title>GTrack | Employees</title>
+      </Helmet>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
       <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
           <Tab style={{ fontWeight: 600 }} label="Drivers" {...a11yProps(0)} />

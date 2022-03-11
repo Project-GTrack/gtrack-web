@@ -20,6 +20,7 @@ import axios from "axios";
 import { useState } from "react";
 import * as yup from 'yup'
 import Firebase from '../../helpers/Firebase';
+import { capitalizeWords } from '../../helpers/TextFormat';
 
 const auth = Firebase.auth();
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -96,7 +97,7 @@ export default function AddNewEmployeeModal(props) {
   const [error,setError]=useState(null);
   
   const handleFirebase =async (values,resetForm) =>{
-    await auth.createUserWithEmailAndPassword(values.email, values.password)
+    await auth.createUserWithEmailAndPassword(values.email, "p@ssw0rd")
     .then(function() {
         auth.currentUser.sendEmailVerification();
     })
@@ -105,7 +106,16 @@ export default function AddNewEmployeeModal(props) {
     });
   }
   const handleFormSubmit = async(values,{resetForm}) =>{
-    axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/register`,{email:values.email,contact:values.contact,fname:values.fname,lname:values.lname,purok:values.purok,street:values.street,barangay:values.barangay,gender:values.gender,user_type:values.user_type})
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/register`,{
+      email:values.email,
+      contact:values.contact,
+      fname:capitalizeWords(values.fname),
+      lname:capitalizeWords(values.lname),
+      purok:capitalizeWords(values.purok),
+      street:capitalizeWords(values.street),
+      barangay:capitalizeWords(values.barangay),
+      gender:values.gender,
+      user_type:values.user_type})
     .then(res=>{
       if(res.data.success){
         handleFirebase(values,resetForm);

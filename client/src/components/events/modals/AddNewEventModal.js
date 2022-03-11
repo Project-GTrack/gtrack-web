@@ -18,6 +18,7 @@ import Axios from 'axios';
 import { useFormik } from 'formik';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
+import { capitalizeWords } from '../../helpers/TextFormat';
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
       padding: theme.spacing(2),
@@ -123,12 +124,12 @@ export default function AddNewEventModal(props) {
         description:values.description,
         startDate:values.startDate,
         endDate:values.endDate,
-        street:values.street,
-        purok:values.purok,
-        barangay:values.barangay,
-        town:values.town,
+        street:capitalizeWords(values.street),
+        purok:capitalizeWords(values.purok),
+        barangay:capitalizeWords(values.barangay),
+        town:capitalizeWords(values.town),
         postal_code:values.postal_code,
-        target_participants:values.participants,
+        target_participants:capitalizeWords(values.participants),
         registration_form_url:values.registration_form_url,
         status:1,
         urls:urls,

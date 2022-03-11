@@ -23,6 +23,7 @@ import TimePicker from '@mui/lab/TimePicker';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import { decodeToken } from "react-jwt";
 import Cookies from 'js-cookie';
+import { capitalizeWords } from '../helpers/TextFormat';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -105,10 +106,10 @@ const EditScheduleModal = (props) => {
             assignment_id:values.assignment_id,
             schedule:JSON.stringify({type:values.type,when:values.schedule}),
             garbage_type:values.garbage_type,
-            landmark:values.landmark, 
-            purok:values.purok,
-            street:values.street,
-            barangay:values.barangay,
+            landmark:capitalizeWords(values.landmark), 
+            purok:capitalizeWords(values.purok),
+            street:capitalizeWords(values.street),
+            barangay:capitalizeWords(values.barangay),
             town:"Compostela",
             postal_code:"6003",
         })

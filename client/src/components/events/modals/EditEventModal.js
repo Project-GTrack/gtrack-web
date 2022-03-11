@@ -23,6 +23,7 @@ import { useFormik } from 'formik';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
+import { capitalizeWords } from '../../helpers/TextFormat';
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
       padding: theme.spacing(2),
@@ -133,12 +134,12 @@ export default function EditEventModal(props) {
         description:values.description,
         startDate:values.startDate,
         endDate:values.endDate,
-        street:values.street,
-        purok:values.purok,
-        barangay:values.barangay,
-        town:values.town,
+        street:capitalizeWords(values.street),
+        purok:capitalizeWords(values.purok),
+        barangay:capitalizeWords(values.barangay),
+        town:capitalizeWords(values.town),
         postal_code:values.postal_code,
-        target_participants:values.target_participants,
+        target_participants:capitalizeWords(values.target_participants),
         registration_form_url:values.registration_form_url,
         status:values.status,
         urls:urls

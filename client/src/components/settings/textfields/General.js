@@ -1,16 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { TextField, FormControl, Avatar,Button,Input,Stack,Box} from "@mui/material";
+import { TextField,Button,Stack,Box} from "@mui/material";
 import * as yup from 'yup'
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import Axios from 'axios';
 import { useFormik } from 'formik';
 import UploadProfile from "../../helpers/UploadProfile";
+import { capitalizeWords } from "../../helpers/TextFormat";
+
 const General = (props) => {
     const navigate = useNavigate();
-    const [image,setImage] = useState(null);
+    // const [image,setImage] = useState(null);
     const [url,setUrl] = useState(null);
+    const [user,setUser] = useState({
+        fname:"",
+        lname:""
+    });
     const [progress, setProgress] = useState(0);
+
+    useEffect(() => {
+        setUser({
+          fname:props.user&&props.user.fname?props.user.fname:'',
+          lname:props.user&&props.user.lname?props.user.lname:'',
+        });
+        setUrl(props.user&&props.user.image?props.user.image:'');
+    }, [props.user])
+    
 
     const profileGeneralValidationSchema = yup.object().shape({
         fname: yup
@@ -23,9 +38,10 @@ const General = (props) => {
     
     const handleFormSubmit = () =>{
         if(Cookies.get('user_id')){
+            console.log(values);
             Axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/profile/general_info`,{
-              fname:values.fname,
-              lname: values.lname,
+              fname:capitalizeWords(values.fname),
+              lname:capitalizeWords(values.lname),
               image:url,
               accessToken: Cookies.get('user_id')
             }).then(res=>{
@@ -69,7 +85,7 @@ const General = (props) => {
             }}
         > 
             <Stack direction="row" alignItems="center" justifyContent="center" spacing={2}>
-                <UploadProfile values = {values} progress = {progress} setProgress = {setProgress} url = {url} setUrl={setUrl}/>
+                <UploadProfile values = {values} user={user} progress = {progress} setProgress = {setProgress} url = {url} setUrl={setUrl}/>
                 {/* <Button
                     variant="contained"
                     component="label"
@@ -87,7 +103,8 @@ const General = (props) => {
                     value= {values.fname}
                     onChange={handleChange('fname')}
                     onBlur={handleBlur('fname')}
-                    inputProps={{ style: { textTransform: "capitalize" } }}
+                    autoCapitalize
+                    inputProps={{ style: { textTransform: "capitalize"} }}
                     id="fname"
                     label="First Name"
                     type="text"

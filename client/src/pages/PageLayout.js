@@ -32,6 +32,7 @@ import { useNavigate } from "react-router-dom";
 import { decodeToken } from "react-jwt";
 
 const database=Firebase.database();
+const auth=Firebase.auth();
 function Copyright(props) {
   return (
     <Typography
@@ -41,7 +42,7 @@ function Copyright(props) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
+      <Link color="inherit" href="http://localhost:3000/">
         Gtrack
       </Link>{" "}
       {new Date().getFullYear()}
@@ -173,7 +174,10 @@ const PageLayout = ({headerTitle,children}) => {
     setAnchorEl(null);
   };
   const navigate = useNavigate();
-  const handleLogout = (event) => {
+  const handleLogout = async (event) => {
+    if(auth.currentUser){
+      await auth.signOut();
+    }
     Cookies.remove('user_id');
     navigate("/login");
   };
@@ -234,7 +238,8 @@ const PageLayout = ({headerTitle,children}) => {
                 aria-haspopup="true"
                 aria-expanded={openDropDown ? "true" : undefined}
               >
-                <Avatar sx={{ width: 32, height: 32 }} src={user&&user.image}></Avatar>
+                {(user&&user.image!==null) && <Avatar sx={{ width: 32, height: 32 }} src={user&&user.image}></Avatar>}
+                {(user&&user.image===null) && <Avatar sx={{ width: 32, height: 32,fontSize:15,textTransform:"uppercase"}}>{user&&user.fname[0]}{user&&user.lname[0]}</Avatar>}
               </IconButton>
             </Tooltip>
               <Menu

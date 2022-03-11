@@ -8,6 +8,7 @@ import CollectorPopup from '../components/CollectorPopup';
 import CollectionAlertDialog from '../components/CollectionAlertDialog';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import { Helmet } from 'react-helmet';
 
 const Map = ReactMapboxGl({
     accessToken:
@@ -47,12 +48,10 @@ const TrackCollectorPage = () => {
             }
         });
      }
-    const [user,setUser]=useState(null);
+    // const [user,setUser]=useState(null);
     const navigate = useNavigate();
     useEffect(() => {
-      if(Cookies.get('user_id')){
-        setUser(Cookies.get('user_id'));
-      }else{
+      if(!Cookies.get('user_id')){
         navigate("/login");
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -72,6 +71,9 @@ const TrackCollectorPage = () => {
     }
     return (
         <PageLayout headerTitle={"Track Collector"}>
+            <Helmet>
+                <title>GTrack | Track Collection</title>
+            </Helmet>
             <div style={{ height: '100vh', width: '100%' }}>
                 <Map
                     // eslint-disable-next-line react/style-prop-object

@@ -15,6 +15,7 @@ import IconButton from "@mui/material/IconButton";
 import axios from "axios";
 import ReactMapboxGl, { Marker } from "react-mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { capitalizeWords } from "../../helpers/TextFormat";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -72,9 +73,9 @@ const AddNewDumpsterModal = (props) => {
     if (coordinate.latitude != 0 && coordinate.longitude != 0) {
       axios
         .post(`${process.env.REACT_APP_BACKEND_URL}/admin/dumpster/add-dumpster`, {
-          street: values.street,
-          purok: values.purok,
-          barangay: values.barangay,
+          street: capitalizeWords(values.street),
+          purok: capitalizeWords(values.purok),
+          barangay: capitalizeWords(values.barangay),
           town: "Compostela",
           postal_code: "6003",
           latitude: coordinate.latitude,

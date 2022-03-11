@@ -7,9 +7,10 @@ import DumpstersComponent from '../components/dumpsters/DumpstersComponent';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import StatusToast from '../components/helpers/StatusToast';
+import { Helmet } from 'react-helmet';
 
 const DumpstersPage = () => {
-    const [user,setUser]=useState(null);
+    // const [user,setUser]=useState(null);
     const [dumpsters,setDumpsters]=useState([]);
     const [statusToast, setStatusToast] = useState({
       isOpen:false,
@@ -18,9 +19,7 @@ const DumpstersPage = () => {
     });
     const navigate = useNavigate();
     useEffect(() => {
-      if(Cookies.get('user_id')){
-        setUser(Cookies.get('user_id'));
-      }else{
+      if(!Cookies.get('user_id')){
         navigate("/login");
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -60,6 +59,9 @@ const DumpstersPage = () => {
       };
     return (
         <PageLayout headerTitle={"Dumpsters"}>
+          <Helmet>
+            <title>GTrack | Dumpsters</title>
+          </Helmet>
            <DumpstersComponent dumpsters={dumpsters} setDumpsters={setDumpsters} statusToast={statusToast} setStatusToast={setStatusToast}/>
            <StatusToast statusToast={statusToast} setStatusToast={setStatusToast}/>
         </PageLayout>

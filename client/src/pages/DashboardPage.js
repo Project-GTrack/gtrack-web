@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useEffect, useRef} from 'react'
 import PageLayout from "./PageLayout";
 import Axios from 'axios';
 import Cookies from 'js-cookie';
 import ArticleIcon from "@mui/icons-material/Article";
-import { Paper,Grid,Button} from '@mui/material';
+import { Button} from '@mui/material';
 import PersonIcon from "@mui/icons-material/Person";
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -12,6 +12,7 @@ import DashboardComponent from '../components/dashboard/DashboardComponent';
 import { useNavigate } from 'react-router-dom';
 import PdfComponent from '../components/helpers/PdfComponent';
 import ReactToPrint from 'react-to-print';
+import { Helmet } from 'react-helmet';
 
 const DashboardPage = () => {
   const navigate = useNavigate();
@@ -43,6 +44,9 @@ const DashboardPage = () => {
   
   return (
     <PageLayout headerTitle={"Dashboard"}>
+      <Helmet>
+        <title>GTrack | Dashboard</title>
+      </Helmet>
       <div>
         <ReactToPrint 
           trigger={() => <Button variant="contained" style={{float: 'right'}} startIcon={<ArticleIcon/>} color="success" disabled={drivers || trucks || dumpsters || chartData || collections ? false:true}>Generate Report</Button>}

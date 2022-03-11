@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import StatusToast from '../components/helpers/StatusToast';
+import { Helmet } from 'react-helmet';
 const SchedulesPage = () => {
     const [statusToast, setStatusToast] = useState({
         isOpen:false,
@@ -84,6 +85,9 @@ const SchedulesPage = () => {
       };
     return (
         <PageLayout headerTitle={"Schedules"}>
+          <Helmet>
+            <title>GTrack | Schedules</title>
+          </Helmet>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                 <Tab style={{ fontWeight: 600 }} label="Schedules" {...a11yProps(0)} />

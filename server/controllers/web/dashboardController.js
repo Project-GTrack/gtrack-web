@@ -75,10 +75,10 @@ exports.viewDashboard= async(req, res)=>{
                 
                },
                where:{
-                    [Op.and]:[
-                        sequelize.literal('collection_date >= LAST_DAY(NOW()) + INTERVAL 1 DAY - INTERVAL 1 MONTH'),
-                        sequelize.literal('collection_date <= LAST_DAY(NOW())')
-                    ]    
+                    // [Op.and]:[
+                    //     sequelize.literal('collection_date >= LAST_DAY(NOW()) + INTERVAL 1 DAY - INTERVAL 1 MONTH'),
+                    //     sequelize.literal('collection_date <= LAST_DAY(NOW())')
+                    // ]    
                }
             });
          

@@ -20,13 +20,15 @@ import { useFormik } from 'formik';
 import differenceInYears from "date-fns/differenceInYears";
 const Info = (props) => {
     const navigate = useNavigate();
+    const digitsOnly = (value) => /^\d+$/.test(value)
     const profileInfoValidationSchema = yup.object().shape({
         gender: yup
             .string()
             .required('Gender is required'),
         contact_no: yup
             .string()
-            .required('Contact number is required'),
+            .required('Contact number is required')
+            .test('Digits only', 'The field should be digits only', digitsOnly),
         birthday: yup
             .mixed()
             .test("birthday","Should be 18 years old up",(value)=>{
@@ -110,10 +112,10 @@ const Info = (props) => {
                 label="Contact Number" 
                 variant="outlined"
                 fullWidth />
-        </Grid>
-        {(errors.contact_no && touched.contact_no) &&
+          {(errors.contact_no && touched.contact_no) &&
             <p className="text-danger small">{errors.contact_no}</p>
           }
+        </Grid>
         <Grid item xs={12}>
             <TextField
                 value={values.birthday}

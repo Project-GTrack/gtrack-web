@@ -14,6 +14,7 @@ import axios from "axios";
 import { useState } from "react";
 import Cookies from "js-cookie";
 import * as yup from 'yup'
+import { useSchedulesPageContext } from "../../pages/SchedulesPage";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -48,6 +49,7 @@ const BootstrapDialogTitle = (props) => {
 };
 
 export default function DeleteScheduleModal(props) {
+  const {refetch}=useSchedulesPageContext();
   const passwordValidationSchema = yup.object().shape({
     password: yup
       .string()
@@ -58,7 +60,7 @@ export default function DeleteScheduleModal(props) {
     axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/schedule/delete/${props.data.schedule_id}`,{password:values.password,accessToken:Cookies.get("user_id")})
     .then(res=>{
       if(res.data.success){
-        props.setSchedules(res.data.data);
+        refetch();
         props.setOpenDeleteModal(false);
         props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
       }else{

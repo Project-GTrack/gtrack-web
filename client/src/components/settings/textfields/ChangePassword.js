@@ -14,6 +14,7 @@ const ChangePassword = (props) => {
             .required('Password is required'),
         newPassword: yup
             .string()
+            .min(8, ({ min }) => `Password must be at least ${min} characters`)
             .required('New Password is required'),
         confirmPassword: yup
             .string()

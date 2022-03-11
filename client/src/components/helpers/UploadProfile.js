@@ -1,6 +1,4 @@
-import React, { useState } from 'react';
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
+import React from 'react';
 import Button from '@mui/material/Button';
 import { Input } from '@mui/material';
 import Firebase from './Firebase';
@@ -9,13 +7,11 @@ import LinearProgress from '@mui/material/LinearProgress';
 import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
 import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
 const storage = Firebase.storage();
-const UploadProfile = ({values,url,setUrl,progress,setProgress}) => {
-    console.log(values);
-  const [error, setError] = useState(null);
+const UploadProfile = ({values,url,setUrl,progress,setProgress,user}) => {
+  
     function LinearProgressWithLabel(props) {
         return (
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -39,7 +35,6 @@ const UploadProfile = ({values,url,setUrl,progress,setProgress}) => {
       };
     const handleChange = (event) =>{
         handleUpload(event.target.files[0]);
-      
     }
   
     const handleUpload = (file) => {
@@ -80,7 +75,7 @@ const UploadProfile = ({values,url,setUrl,progress,setProgress}) => {
             </Box>
             
             <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar sx={{ height: '100px', width: '100px' }} src={`${url?url:values.image}`}>{`${values.fname[0]+values.lname[0]}`}</Avatar>
+            <Avatar sx={{ height: '100px', width: '100px' }} src={`${url?url:values.image}`}>{`${user.fname[0]+user.lname[0]}`}</Avatar>
             <Button
                   variant="contained"
                   component="label"
@@ -93,7 +88,6 @@ const UploadProfile = ({values,url,setUrl,progress,setProgress}) => {
                     onChange ={handleChange}
                   />
                 </Button>
-                {error && <p className='small text-danger mt-2 text-center'>{error}</p>}
             </Stack>
 
            

@@ -15,6 +15,7 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import ReactMapboxGl, { Marker } from "react-mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { capitalizeWords } from "../../helpers/TextFormat";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -88,9 +89,9 @@ const EditDumpsterModal = (props) => {
           .put(
             `${process.env.REACT_APP_BACKEND_URL}/admin/dumpster/edit-dumpster/${props.data[0]}`,
             {
-              street: values.street,
-              purok: values.purok,
-              barangay: values.barangay,
+              street: capitalizeWords(values.street),
+              purok: capitalizeWords(values.purok),
+              barangay: capitalizeWords(values.barangay),
               latitude: coordinate.latitude,
               longitude: coordinate.longitude,
               accessToken: Cookies.get("user_id"),
@@ -189,6 +190,7 @@ const EditDumpsterModal = (props) => {
             value={values.street}
             onChange={handleChange("street")}
             onBlur={handleBlur("street")}
+            inputProps={{ style: { textTransform: "capitalize" } }}
             variant="standard"
           />
           {errors.street && touched.street && (
@@ -204,6 +206,7 @@ const EditDumpsterModal = (props) => {
             value={values.purok}
             onChange={handleChange("purok")}
             onBlur={handleBlur("purok")}
+            inputProps={{ style: { textTransform: "capitalize" } }}
             variant="standard"
           />
           {errors.purok && touched.purok && (
@@ -219,6 +222,7 @@ const EditDumpsterModal = (props) => {
             value={values.barangay}
             onChange={handleChange("barangay")}
             onBlur={handleBlur("barangay")}
+            inputProps={{ style: { textTransform: "capitalize" } }}
             variant="standard"
           />
           {errors.barangay && touched.barangay && (

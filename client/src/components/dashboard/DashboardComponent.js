@@ -1,19 +1,8 @@
-import React, { useState, useEffect, forwardRef } from 'react'
-import PageLayout from "../../pages/PageLayout";
-
-import Axios from 'axios';
-import Cookies from 'js-cookie';
-
-import ArticleIcon from "@mui/icons-material/Article";
-import { Paper,Grid,Button} from '@mui/material';
+import React from 'react'
+import { Paper,Grid} from '@mui/material';
         
 import DashboardCard from './DashboardCard'
 import Chart from '../ChartComponent';
-import PersonIcon from "@mui/icons-material/Person";
-import LocalShippingIcon from '@mui/icons-material/LocalShipping';
-import DeleteIcon from "@mui/icons-material/Delete";
-import AutoDeleteIcon from '@mui/icons-material/AutoDelete';
-import { useNavigate } from 'react-router-dom';
 
 const DashboardComponent = ({dashcards,data,chartData}) => {
   return (

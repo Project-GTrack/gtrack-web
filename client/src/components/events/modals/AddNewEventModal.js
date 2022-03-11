@@ -18,6 +18,7 @@ import Axios from 'axios';
 import { useFormik } from 'formik';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
+import { capitalizeWords } from '../../helpers/TextFormat';
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
       padding: theme.spacing(2),
@@ -123,12 +124,12 @@ export default function AddNewEventModal(props) {
         description:values.description,
         startDate:values.startDate,
         endDate:values.endDate,
-        street:values.street,
-        purok:values.purok,
-        barangay:values.barangay,
-        town:values.town,
+        street:capitalizeWords(values.street),
+        purok:capitalizeWords(values.purok),
+        barangay:capitalizeWords(values.barangay),
+        town:capitalizeWords(values.town),
         postal_code:values.postal_code,
-        target_participants:values.participants,
+        target_participants:capitalizeWords(values.participants),
         registration_form_url:values.registration_form_url,
         status:1,
         urls:urls,
@@ -243,6 +244,7 @@ export default function AddNewEventModal(props) {
             value={values.street}
             onChange={handleChange('street')}
             onBlur={handleBlur('street')}
+            inputProps={{ style: { textTransform: "capitalize" } }}
             margin="dense"
             id="street"
             label="Event Address - Street"
@@ -257,6 +259,7 @@ export default function AddNewEventModal(props) {
             value={values.purok}
             onChange={handleChange('purok')}
             onBlur={handleBlur('purok')}
+            inputProps={{ style: { textTransform: "capitalize" } }}
             margin="dense"
             id="purok"
             label="Event Address - Purok"
@@ -271,6 +274,7 @@ export default function AddNewEventModal(props) {
             value={values.barangay}
             onChange={handleChange('barangay')}
             onBlur={handleBlur('barangay')}
+            inputProps={{ style: { textTransform: "capitalize" } }}
             margin="dense"
             id="barangay"
             label="Event Address - Barangay"
@@ -285,6 +289,7 @@ export default function AddNewEventModal(props) {
             value={values.town}
             onChange={handleChange('town')}
             onBlur={handleBlur('town')}
+            inputProps={{ style: { textTransform: "capitalize" } }}
             margin="dense"
             id="town"
             label="Event Address - Town"
@@ -313,6 +318,7 @@ export default function AddNewEventModal(props) {
             value={values.participants}
             onChange={handleChange('participants')}
             onBlur={handleBlur('participants')}
+            inputProps={{ style: { textTransform: "capitalize" } }}
             margin="dense"
             id="participants"
             label="Participants"

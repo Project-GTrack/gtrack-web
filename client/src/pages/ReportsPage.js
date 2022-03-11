@@ -1,27 +1,28 @@
 import Cookies from 'js-cookie'
 import React from 'react'
 import { useEffect } from 'react'
-import { useState } from 'react'
+import { Helmet } from 'react-helmet'
 import { useNavigate } from 'react-router-dom'
 import RecentReports from '../components/RecentReports'
 import ResolvedReports from '../components/ResolvedReports'
 import PageLayout from './PageLayout'
 
 const ReportsPage = () => {
-    const [user,setUser]=useState(null);
+    // const [user,setUser]=useState(null);
     const navigate = useNavigate();
     useEffect(() => {
-      if(Cookies.get('user_id')){
-        setUser(Cookies.get('user_id'));
-      }else{
+      if(!Cookies.get('user_id')){
         navigate("/login");
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
     return (
         <PageLayout headerTitle={"Reports"}>
-            <RecentReports/>
-            <ResolvedReports/>
+          <Helmet>
+            <title>GTrack | Reports</title>
+          </Helmet>
+          <RecentReports/>
+          <ResolvedReports/>
         </PageLayout>
     )
 }

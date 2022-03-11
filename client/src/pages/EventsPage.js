@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import Cookies from 'js-cookie';
 import StatusToast from '../components/helpers/StatusToast';
+import { Helmet } from 'react-helmet';
 const EventsPage = () =>{
     const navigate = useNavigate();
     const [data, setData] = useState([]);
@@ -56,6 +57,9 @@ const EventsPage = () =>{
       };
     return (
         <PageLayout headerTitle={"Events"}>
+          <Helmet>
+            <title>GTrack | Events</title>
+          </Helmet>
            <EventsComponent events = {data} setEvents = {setData} statusToast={statusToast} setStatusToast={setStatusToast}/>
            <StatusToast statusToast={statusToast} setStatusToast={setStatusToast}/>
         </PageLayout>

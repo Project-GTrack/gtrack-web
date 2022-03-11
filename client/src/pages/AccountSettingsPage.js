@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import StatusToast from '../components/helpers/StatusToast';
 import { decodeToken } from "react-jwt";
+import { Helmet } from "react-helmet";
 const AccountSettingsPage = () => {
   const [user,setUser]=useState(null);
   const navigate = useNavigate();
@@ -30,8 +31,11 @@ const AccountSettingsPage = () => {
   },[])
   return (
     <PageLayout headerTitle={"Account Settings"}>
-        <AccountSettingsComponent statusToast={statusToast} user={user} setUser={setUser} setStatusToast={setStatusToast} />
-        <StatusToast statusToast={statusToast} setStatusToast={setStatusToast}/>
+      <Helmet>
+        <title>GTrack | Account Settings</title>
+      </Helmet>
+      <AccountSettingsComponent statusToast={statusToast} user={user} setUser={setUser} setStatusToast={setStatusToast} />
+      <StatusToast statusToast={statusToast} setStatusToast={setStatusToast}/>
     </PageLayout>
   );
 };

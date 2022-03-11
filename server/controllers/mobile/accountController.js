@@ -61,18 +61,18 @@ exports.login=async (req,res)=>{
     if(account && !req.body.google_auth){
         if(!account.google_auth){
             var decrypted = C.AES.decrypt(account.password,process.env.SECRET_KEY);
-            console.log(req.body.password,decrypted.toString(C.enc.Utf8))
+            // console.log(req.body.password,decrypted.toString(C.enc.Utf8))
             if(req.body.password===decrypted.toString(C.enc.Utf8)){
-                if(account.email_verified_at){
-                    res.send({success:true,verified:true,message:"Login Successful!",data:account});
-                }else{
-                    res.send({success:false,verified:false,message:"Account not yet verified.",data:null});
-                }
+                // if(account.email_verified_at){
+                    res.send({success:true,message:"Login Successful!",data:account});
+                // }else{
+                //     res.send({success:false,verified:false,message:"Account not yet verified.",data:null});
+                // }
             }else{
                 res.send({success:false,message:"The credentials provided does not match.",data:null});
             }
         }else{
-            res.send({success:false,verified:true,message:"The credentials provided does not match.",data:null});
+            res.send({success:false,message:"Account has existing record.",data:null});
         }
     }else if(account && req.body.google_auth){
         if(account.google_auth){
@@ -126,5 +126,21 @@ exports.verifyEmail=async (req,res)=>{
         res.send({success:true,message:"Account verified.",data:acc});
     }else{
         res.send({success:false,message:"Account not found.",data:null});
+    }
+}
+
+exports.resetPassword=async (req,res)=>{
+    let account=await user.model.findOne({ 
+        where: { 
+            email: req.body.email,
+            user_type:{ [Op.not]: 'Admin'},
+            google_auth:{ [Op.not]: true},
+            status:true
+        } 
+    });
+    if(account){
+        res.send({success:true,message:"Account retrieved.",data:account});
+    }else{
+        res.send({success:false,message:"Account not found or is already associated with Google account",data:null});
     }
 }

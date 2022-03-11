@@ -2,12 +2,16 @@ import React, { useEffect, useState } from 'react'
 import MUIDataTable from "mui-datatables";
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
-import axios from 'axios';
+// import axios from 'axios';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import ScheduleDialogBox from './ScheduleDialogBox';
 import AddScheduleModal from './schedules/AddScheduleModal';
 import ScheduleCustomToolbar from './schedules/ScheduleCustomToolbar';
+import { useSchedulesPageContext } from '../pages/SchedulesPage';
 const SchedulePanel = (props) => {
+    const {queryResult}=useSchedulesPageContext();
+    const schedules=queryResult.data.data.schedule;
+    const calendarData=queryResult.data.data.calendar;
     const [calendar,setCalendar]=useState(false);
     const [data, setData] = useState([]);
     const [openAddModal,setOpenAddModal]=useState(false);
@@ -21,10 +25,6 @@ const SchedulePanel = (props) => {
     const [localizer] = useState(momentLocalizer(moment));
     const columns = ["Type","Schedule","Garbage Type","Driver","Landmark","Address","Date Created"];
 
-    // const data = [
-    // ["01/01/22", "No", "No", "Yes","01/01/22"],
-    // ];
-
     const options = {
     selectableRowsHeader: false,
     selectableRows:'single',
@@ -34,8 +34,7 @@ const SchedulePanel = (props) => {
             <ScheduleCustomToolbar
                 statusToast={props.statusToast}
                 setStatusToast={props.setStatusToast} 
-                data={props.schedules[selectedRows.data[0].dataIndex]} 
-                setSchedules={props.setSchedules} 
+                data={schedules[selectedRows.data[0].dataIndex]} 
                 openEditModal={openEditModal} 
                 setOpenEditModal={setOpenEditModal} 
                 openDeleteModal={openDeleteModal} 
@@ -79,7 +78,7 @@ const SchedulePanel = (props) => {
     useEffect(() => {
         let temp=[];
         // eslint-disable-next-line array-callback-return
-        props.schedules.map((item)=>{
+        schedules.map((item)=>{
             let sched=JSON.parse(item.schedule);
             let when="";
             // eslint-disable-next-line array-callback-return
@@ -104,13 +103,10 @@ const SchedulePanel = (props) => {
             ]);
         })
         setData([...temp]);
-        axios.get(`${process.env.REACT_APP_BACKEND_URL}/admin/schedule/display`)
-        .then(res => {
-            if(res.data.success){
-                // setSchedule(res.data.data.schedule);
+            if(calendarData){
                 let events=[];
                 // eslint-disable-next-line array-callback-return
-                res.data.data.schedule.map((date)=>{
+                calendarData.schedule.map((date)=>{
                     let tempDate=moment(date.date).format('YYYY-MM-DD');
                     let tempStartTime=moment(date.start_time).format('HH:mm:ss');
                     let tempEndTime=moment(date.end_time).format('HH:mm:ss');
@@ -124,7 +120,6 @@ const SchedulePanel = (props) => {
                 })
                 setEvent([...events]);
             }
-        })
         return ()=>{
             setEvent([]);
         }
@@ -148,7 +143,6 @@ const SchedulePanel = (props) => {
             <AddScheduleModal 
                 openAddModal={openAddModal}
                 setOpenAddModal={setOpenAddModal}
-                setSchedules={props.setSchedules}
                 statusToast={props.statusToast}
                 setStatusToast={props.setStatusToast} 
             />

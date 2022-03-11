@@ -1,10 +1,11 @@
 import React from "react";
-import { TextField, FormControl, Avatar,Button,Input,Stack,Box} from "@mui/material";
+import { TextField, Button,Stack,Box} from "@mui/material";
 import * as yup from 'yup'
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import Axios from 'axios';
 import { useFormik } from 'formik';
+import { capitalizeWords } from "../../helpers/TextFormat";
 const Address = (props) => {
     const navigate = useNavigate();
     const profileAddressValidationSchema = yup.object().shape({
@@ -22,9 +23,9 @@ const Address = (props) => {
         if(Cookies.get('user_id')){
             console.log(Cookies.get('user_id'));
             Axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/profile/address`,{
-              purok:values.purok,
-              street: values.street,
-              barangay: values.barangay,
+              purok:capitalizeWords(values.purok),
+              street: capitalizeWords(values.street),
+              barangay: capitalizeWords(values.barangay),
               accessToken: Cookies.get('user_id')
             }).then(res=>{
               if(res.data.success){
@@ -66,6 +67,7 @@ const Address = (props) => {
                     value= {values.purok}
                     onChange={handleChange('purok')}
                     onBlur={handleBlur('purok')}
+                    inputProps={{ style: { textTransform: "capitalize" } }}
                     id="purok" 
                     label="Purok" 
                     variant="outlined"
@@ -77,6 +79,7 @@ const Address = (props) => {
                     value= {values.street}
                     onChange={handleChange('street')}
                     onBlur={handleBlur('street')} 
+                    inputProps={{ style: { textTransform: "capitalize" } }}
                     id="street" 
                     label="Street" 
                     variant="outlined" 
@@ -88,6 +91,7 @@ const Address = (props) => {
                     value= {values.barangay}
                     onChange={handleChange('barangay')}
                     onBlur={handleBlur('barangay')} 
+                    inputProps={{ style: { textTransform: "capitalize" } }}
                     id="barangay" 
                     label="Barangay" 
                     variant="outlined" 

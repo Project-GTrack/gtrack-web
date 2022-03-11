@@ -11,6 +11,7 @@ import { useEffect } from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import StatusToast from '../components/helpers/StatusToast';
+import { Helmet } from 'react-helmet';
 
 const TrucksPage = () => {
     const [value, setValue] = useState(0);
@@ -70,6 +71,9 @@ const TrucksPage = () => {
       };
     return (
         <PageLayout headerTitle={"Garbage Trucks"}>
+          <Helmet>
+              <title>GTrack | Trucks</title>
+          </Helmet>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                 <Tab style={{ fontWeight: 600 }} label="Garbage Trucks" {...a11yProps(0)} />

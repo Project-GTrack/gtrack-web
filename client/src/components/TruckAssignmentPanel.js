@@ -3,8 +3,11 @@ import MUIDataTable from "mui-datatables";
 import moment from "moment";
 import AddNewAssignment from "./assignments/modals/AddNewAssignment";
 import TruckAssignmentCustomToolbar from "./assignments/TruckAssignmentCustomToolbar";
+import { useSchedulesPageContext } from "../pages/SchedulesPage";
 
-const TruckAssignmentPanel = ({assignments,setAssignments,statusToast,setStatusToast}) => {
+const TruckAssignmentPanel = ({statusToast,setStatusToast}) => {
+  const {queryResult}=useSchedulesPageContext();
+  const assignments=queryResult.data.data.assignments;
   const [data,setData]=useState([]);
   const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = () => setOpenModal(true);
@@ -50,6 +53,7 @@ const TruckAssignmentPanel = ({assignments,setAssignments,statusToast,setStatusT
       return ()=>{
           setData([]);
       }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
   // const columns = ["Schedule", "Plate Number", "Driver", "Route","Date Created","Status"];
   const columns = [
@@ -201,7 +205,6 @@ const TruckAssignmentPanel = ({assignments,setAssignments,statusToast,setStatusT
     filterType: "dropdown",
     customToolbarSelect: (selectedRows, displayData) => (
       <TruckAssignmentCustomToolbar
-        setAssignments={setAssignments}
         statusToast={statusToast}
         setStatusToast={setStatusToast}
         selectedRows={selectedRows}
@@ -219,7 +222,6 @@ const TruckAssignmentPanel = ({assignments,setAssignments,statusToast,setStatusT
         <AddNewAssignment
             openModal={openModal}
             setOpenModal={setOpenModal}
-            setAssignments={setAssignments}
             handleCloseModal={handleCloseModal}
             handleOpenModal={handleOpenModal}
             statusToast={statusToast}

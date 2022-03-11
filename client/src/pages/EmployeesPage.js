@@ -16,7 +16,7 @@ import useAxios,{ configure } from 'axios-hooks'
 import { CircularProgress } from '@mui/material';
 configure({ ssr:false })
 const defaultContext= {
-  queryResult: {data:null,loading:false},
+  queryResult: {data:null,loading:false,error:null},
   refetch: () => {},
 };
 const EmployeePageContext = React.createContext(defaultContext);
@@ -28,43 +28,14 @@ const EmployeesPage = () => {
     colorScheme:"success"
   });
   const [value, setValue] = useState(0);
-  const [accounts, setAccounts] = useState([
-    {
-      drivers:[],
-      admins:[],
-      inactives:[]
-    }
-  ]);
-  const [{ data, loading }, refetch] = useAxios({
+  const [{ data, loading, error }, refetch] = useAxios({
     url: `${process.env.REACT_APP_BACKEND_URL}/admin/get/users`,
     method:'get' 
   });
-  // console.log(data);
   const navigate = useNavigate();
-  // useEffect(() => {
-  //     if(!loading){
-  //       setAccounts(data.data);
-  //     }
-  // }, [data,loading])
   useEffect(() => {
-    if(Cookies.get('user_id')){
-      // axios.get(`${process.env.REACT_APP_BACKEND_URL}/admin/get/users`)
-      // .then(res=>{
-      //   if(res.data.success){
-      //     setAccounts(res.data.data);
-      //   }
-      // })
-    }else{
+    if(!Cookies.get('user_id')){
       navigate("/login");
-    }
-    return ()=>{
-      setAccounts([
-        {
-          drivers:[],
-          admins:[],
-          inactives:[]
-        }
-      ])
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -121,7 +92,7 @@ const EmployeesPage = () => {
             <CircularProgress size={80} color="success"/>
           </div>
         ):(
-          <EmployeePageContext.Provider value={{queryResult:{data,loading},refetch}}>
+          <EmployeePageContext.Provider value={{queryResult:{data,loading,error},refetch}}>
               <TabPanel value={value} index={0}>
                   <DriversComponent statusToast={statusToast} setStatusToast={setStatusToast}/>
               </TabPanel>

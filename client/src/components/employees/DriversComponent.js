@@ -3,8 +3,11 @@ import MUIDataTable from "mui-datatables";
 import EmployeeCustomToolbar from './EmployeeCustomToolbar';
 import AddNewEmployeeModal from './modals/AddNewEmployeeModal';
 import moment from 'moment';
-const DriversComponent = ({statusToast,setStatusToast,drivers,setAccounts}) => {
+import { useEmployeePageContext } from '../../pages/EmployeesPage';
+const DriversComponent = ({statusToast,setStatusToast,setAccounts}) => {
   // const [, setDriverList] = useState([]);
+  const {queryResult}=useEmployeePageContext();
+  const drivers=queryResult.data.data.drivers;
   const [data, setData] = useState([]);
   useEffect(() => {
     // setDriverList(drivers);

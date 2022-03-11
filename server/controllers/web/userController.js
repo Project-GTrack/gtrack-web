@@ -6,9 +6,6 @@ var C = require("crypto-js");
 const { Op} = require('sequelize');
 var moment = require('moment');
 const {generateAccessToken} = require('../../helpers/generateAccessToken');
-var saltRounds = 10;
-
-
 
 exports.registerEmployee = async(req, res) => {
     let data = await user.model.findAll({
@@ -87,25 +84,25 @@ exports.deactivate = async(req, res)=>{
                     email:req.body.email
                 }
             })
-            let drivers = await user.model.findAll({
-                where:{
-                    user_type:"Driver",
-                    status:true
-                }
-            })
-            let admins = await user.model.findAll({
-                where:{
-                    user_type:"Admin",
-                    status:true
-                }
-            })
-            let inactives = await user.model.findAll({
-                where:{
-                    user_type:{[Op.not]: 'Resident'},
-                    status:false
-                }
-            })
-            res.send({success:true,message:"Successfully deactivated employee.",data:{admins:admins,drivers:drivers,inactives:inactives}});
+            // let drivers = await user.model.findAll({
+            //     where:{
+            //         user_type:"Driver",
+            //         status:true
+            //     }
+            // })
+            // let admins = await user.model.findAll({
+            //     where:{
+            //         user_type:"Admin",
+            //         status:true
+            //     }
+            // })
+            // let inactives = await user.model.findAll({
+            //     where:{
+            //         user_type:{[Op.not]: 'Resident'},
+            //         status:false
+            //     }
+            // })
+            res.send({success:true,message:"Successfully deactivated employee."});
         }else{
             res.send({success:false,message:"Password did not match",data:null});
         }
@@ -123,25 +120,25 @@ exports.activate = async(req, res)=>{
                     email:req.body.email
                 }
             })
-            let drivers = await user.model.findAll({
-                where:{
-                    user_type:"Driver",
-                    status:true
-                }
-            })
-            let admins = await user.model.findAll({
-                where:{
-                    user_type:"Admin",
-                    status:true
-                }
-            })
-            let inactives = await user.model.findAll({
-                where:{
-                    user_type:{[Op.not]: 'Resident'},
-                    status:false
-                }
-            })
-            res.send({success:true,message:"Successfully reactivated employee.",data:{admins:admins,drivers:drivers,inactives:inactives}});
+            // let drivers = await user.model.findAll({
+            //     where:{
+            //         user_type:"Driver",
+            //         status:true
+            //     }
+            // })
+            // let admins = await user.model.findAll({
+            //     where:{
+            //         user_type:"Admin",
+            //         status:true
+            //     }
+            // })
+            // let inactives = await user.model.findAll({
+            //     where:{
+            //         user_type:{[Op.not]: 'Resident'},
+            //         status:false
+            //     }
+            // })
+            res.send({success:true,message:"Successfully reactivated employee."});
         }else{
             res.send({success:false,message:"Password did not match",data:null});
         }
@@ -167,25 +164,25 @@ exports.register = async(req, res)=>{
             gender:req.body.gender,
             contact_no:req.body.contact
         });
-        let drivers = await user.model.findAll({
-            where:{
-                user_type:"Driver",
-                status:true
-            }
-        })
-        let admins = await user.model.findAll({
-            where:{
-                user_type:"Admin",
-                status:true
-            }
-        })
-        let inactives = await user.model.findAll({
-            where:{
-                user_type:{[Op.not]: 'Resident'},
-                status:false
-            }
-        })
-        res.send({success:true,message:"Successfully added new employee",data:{admins:admins,drivers:drivers,inactives:inactives}});
+        // let drivers = await user.model.findAll({
+        //     where:{
+        //         user_type:"Driver",
+        //         status:true
+        //     }
+        // })
+        // let admins = await user.model.findAll({
+        //     where:{
+        //         user_type:"Admin",
+        //         status:true
+        //     }
+        // })
+        // let inactives = await user.model.findAll({
+        //     where:{
+        //         user_type:{[Op.not]: 'Resident'},
+        //         status:false
+        //     }
+        // })
+        res.send({success:true,message:"Successfully added new employee"});
     }else{
         res.send({success:false,message:"Account already existed.",data:null});
     }   

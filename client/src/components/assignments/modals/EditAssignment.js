@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Dialog from "@mui/material/Dialog";
@@ -13,6 +13,7 @@ import MenuItem from "@mui/material/MenuItem";
 import CloseIcon from "@mui/icons-material/Close";
 import Cookies from "js-cookie";
 import * as yup from "yup";
+import { useSchedulesPageContext } from "../../../pages/SchedulesPage";
 import { useFormik } from "formik";
 import IconButton from "@mui/material/IconButton";
 import axios from "axios";
@@ -55,26 +56,20 @@ BootstrapDialogTitle.propTypes = {
 };
 
 const EditAssignment = (props) => {
+  const {queryResult,refetch}=useSchedulesPageContext();
   const assignmentErrorHandling = yup.object().shape({
     driver: yup.string().required("Driver is required"),
     truck: yup.string().required("Truck is required"),
   });
-  const [data,setData] = useState({
-    drivers:[],
-    trucks:[]
-  })
-  useEffect(() => {
-    axios.get(`${process.env.REACT_APP_BACKEND_URL}/admin/assignment/get-drivers-trucks`)
-      .then((res) => {
-        if(res.data.success){
-          setData({drivers:res.data.data.drivers,trucks:res.data.data.trucks});
-        }
-      })
-  },[])
+  const data = {
+    drivers:queryResult.data.data.drivers,
+    trucks:queryResult.data.data.trucks
+  }
   useEffect(() => {
     values.driver = props.data[1];
     values.truck = props.data[2];
-  },[props.openModal])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[props.openModal]);
   const handleFormSubmit = async (values, { resetForm }) => {
       axios
         .put(`${process.env.REACT_APP_BACKEND_URL}/admin/assignment/edit-assignment/${props.data[0]}`, {
@@ -86,14 +81,14 @@ const EditAssignment = (props) => {
           resetForm();
           props.setOpenModal(false);
           if(res.data.success){
-            props.setAssignments(res.data.data);
+            refetch();
             props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
           }else{
             props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"info"})
           }
         });
   };
-  const { handleChange, handleSubmit, handleBlur, values, errors, touched } =
+  const { handleChange, handleSubmit, values, errors, touched } =
     useFormik({
       initialValues: {
         driver: props.data[1],

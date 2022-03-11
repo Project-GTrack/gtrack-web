@@ -14,6 +14,8 @@ import { useFormik } from "formik";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
 import Cookies from "js-cookie";
+import { useSchedulesPageContext } from "../../../pages/SchedulesPage";
+
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -54,6 +56,7 @@ BootstrapDialogTitle.propTypes = {
 };
 
 const DeleteAssignment = (props) => {
+  const {refetch}=useSchedulesPageContext();
   const assignmentErrorHandling = yup.object().shape({
     password: yup.string().required("Password is required"),
   });
@@ -68,7 +71,7 @@ const DeleteAssignment = (props) => {
         resetForm();
         props.setDeleteModal(false);
         if(res.data.success){
-          props.setAssignments(res.data.data);
+          refetch();
           props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
         }else{
           props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"error"})

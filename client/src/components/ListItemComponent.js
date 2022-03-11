@@ -13,61 +13,64 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import { useNavigate } from 'react-router-dom';
 
-export const mainListItems = (
-  <div>
-    <ListItem component="a" href="/dashboard">
+const MainListItems =()=>{
+  const navigate=useNavigate();
+  return (<div>
+    <ListItem onClick={()=>navigate('/dashboard')} sx={{cursor:"pointer"}}>
       <ListItemIcon>
         <DashboardIcon />
       </ListItemIcon>
       <ListItemText primary="Dashboard" />
     </ListItem>
-    <ListItem component="a" href="/track">
+    <ListItem onClick={()=>navigate('/track')} sx={{cursor:"pointer"}}>
       <ListItemIcon>
         <FmdGoodIcon />
       </ListItemIcon>
       <ListItemText primary="Track Collection" />
     </ListItem>
-    <ListItem component="a" href="/announcements">
+    <ListItem onClick={()=>navigate('/announcements')} sx={{cursor:"pointer"}}>
       <ListItemIcon>
         <CampaignIcon />
       </ListItemIcon>
       <ListItemText primary="Announcements" />
     </ListItem>
-    <ListItem component="a" href="/events">
+    <ListItem onClick={()=>navigate('/events')} sx={{cursor:"pointer"}}>
       <ListItemIcon>
         <EventIcon />
       </ListItemIcon>
       <ListItemText primary="Events" />
     </ListItem>
-    <ListItem component="a" href="/schedules">
+    <ListItem onClick={()=>navigate('/schedules')} sx={{cursor:"pointer"}}>
       <ListItemIcon>
         <ScheduleIcon />
       </ListItemIcon>
       <ListItemText primary="Schedules" />
     </ListItem>
-    <ListItem component="a" href="/employees" >
+    <ListItem onClick={()=>navigate('/employees')} sx={{cursor:"pointer"}}>
       <ListItemIcon>
         <PeopleIcon />
       </ListItemIcon>
       <ListItemText primary="Employees" />
     </ListItem>
-    <ListItem component="a" href="/trucks">
+    <ListItem onClick={()=>navigate('/trucks')} sx={{cursor:"pointer"}}>
       <ListItemIcon>
         <LocalShippingIcon />
       </ListItemIcon>
       <ListItemText primary="Garbage Trucks" />
     </ListItem>
-    <ListItem component="a" href="/dumpsters">
+    <ListItem onClick={()=>navigate('/dumpsters')} sx={{cursor:"pointer"}}>
       <ListItemIcon>
         <DeleteIcon />
       </ListItemIcon>
       <ListItemText primary="Dumpsters" />
     </ListItem>
-    <ListItem component="a" href="/reports">
+    <ListItem onClick={()=>navigate('/reports')} sx={{cursor:"pointer"}}>
       <ListItemIcon>
         <AssessmentIcon />
       </ListItemIcon>
       <ListItemText primary="Reports" />
     </ListItem>
   </div>
-)
+  );
+}
+export default MainListItems;

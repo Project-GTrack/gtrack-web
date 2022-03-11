@@ -24,6 +24,7 @@ import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import { decodeToken } from "react-jwt";
 import Cookies from 'js-cookie';
 import { capitalizeWords } from '../helpers/TextFormat';
+import { useSchedulesPageContext } from '../../pages/SchedulesPage';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -64,15 +65,16 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   };
   
 const AddScheduleModal = (props) => {
+    const {queryResult,refetch}=useSchedulesPageContext();
+    const driversAssignments={
+        drivers:queryResult.data.data.drivers,
+        assignments:queryResult.data.data.assignments
+    }
     const [schedule,setSchedule]=useState([{
         schedule:"Monday",
         time_start:new Date(moment()),
         time_end:new Date(moment())
     }]);
-    const [driversAssignments,setDriversAssignments]=useState({
-        drivers:[],
-        assignments:[]
-    });
     const addScheduleValidationSchema = yup.object().shape({
         type: yup
         .string()
@@ -120,7 +122,7 @@ const AddScheduleModal = (props) => {
         })
         .then(res=>{
             if(res.data.success){
-                props.setSchedules(res.data.data);
+                refetch();
                 props.setOpenAddModal(false);
                 resetForm();
                 props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
@@ -138,24 +140,17 @@ const AddScheduleModal = (props) => {
     }
     useEffect(() => {
         getCookiesJWT();
-        axios.get(`${process.env.REACT_APP_BACKEND_URL}/admin/schedule/get_drivers_assignments`)
-        .then(res=>{
-            if(res.data.success){
-                setDriversAssignments(res.data.data); 
-            }else{
-                setError(res.data.message);
-            }
-        })
         return ()=>{
-            setDriversAssignments({
-                drivers:[],
-                assignments:[]
-            });
+            setSchedule([{
+                schedule:"Monday",
+                time_start:new Date(moment()),
+                time_end:new Date(moment())
+            }]);
         }
     }, [])
     const { handleChange, handleSubmit, handleBlur, values, errors,isValid,touched, setFieldValue } = useFormik({
         initialValues:{ 
-            type: "weekly",
+            type: 'weekly',
             schedule:schedule, 
             garbage_type:"",
             landmark:"", 
@@ -170,48 +165,63 @@ const AddScheduleModal = (props) => {
         onSubmit: handleFormSubmit
     });
     const handleChangeWhenWeekly = (e,index) =>{
-        let temp=[...schedule];
+        let temp=[];
+        temp=schedule;
         temp[index].schedule=e.target.value;
-        setSchedule([...temp]);
-        setFieldValue('schedule',[...temp]);
+        setSchedule(temp);
+        setFieldValue('schedule',temp);
     }
     const handleChangeWhenDate = (e,index) =>{
-        let temp=[...schedule];
+        let temp=[];
+        temp=schedule;
         temp[index].schedule=e;
-        setSchedule([...temp]);
-        setFieldValue('schedule',[...temp]);
+        setSchedule(temp);
+        setFieldValue('schedule',temp);
     }
     const handleChangeStartTime = (e,index) =>{
-        let temp=[...schedule];
+        let temp=[];
+        temp=schedule;
         temp[index].time_start=e;
-        setSchedule([...temp]);
-        setFieldValue('schedule',[...temp]);
+        setSchedule(temp);
+        setFieldValue('schedule',temp);
     }
     const handleChangeEndTime = (e,index) =>{
-        let temp=[...schedule];
+        let temp=[];
+        temp=schedule;
         temp[index].time_end=e;
-        setSchedule([...temp]);
-        setFieldValue('schedule',[...temp]);
+        setSchedule(temp);
+        setFieldValue('schedule',temp);
     }
-    const handleAddSchedule=()=>{
-        let temp=[...schedule];
-        temp.push({
-            schedule:"",
-            time_start:new Date(moment()),
-            time_end:new Date(moment())
-        });
-        setSchedule([...temp]);
-        setFieldValue('schedule',[...temp]);
+    const handleAddSchedule=(e)=>{
+        e.preventDefault();
+        let temp=[];
+        temp=schedule;
+        if(values.type==="weekly"){
+            temp.push({
+                schedule:"Monday",
+                    time_start:new Date(moment()),
+                    time_end:new Date(moment())
+            });
+        }else{
+            temp.push({
+                schedule:new Date(moment()),
+                    time_start:new Date(moment()),
+                    time_end:new Date(moment())
+            });
+        }
+        setSchedule(temp);
+        setFieldValue('schedule',temp);
     }
     const handleRemoveSchedule=(index)=>{
-        let temp=[...schedule];
+        let temp=[];
+        temp=schedule;
         temp.splice(index,1);
-        setSchedule([...temp]);
-        setFieldValue('schedule',[...temp]);
+        setSchedule(temp);
+        setFieldValue('schedule',temp);
     }
-    const handleChangeType=(e)=>{
-        setFieldValue("type",e.target.value);
-        let temp;
+    const handleChangeType=async (e)=>{
+        e.preventDefault();
+        let temp=[];
         if(e.target.value==="weekly"){
             temp=[{
                 schedule:"Monday",
@@ -225,8 +235,9 @@ const AddScheduleModal = (props) => {
                 time_end:new Date(moment())
             }]
         }
-        setSchedule([...temp]);
+        await setSchedule([...temp]);
         setFieldValue('schedule',[...temp]);
+        setFieldValue('type',e.target.value);
     }
   return (
     <BootstrapDialog
@@ -263,7 +274,7 @@ const AddScheduleModal = (props) => {
             }
         </Grid>
         <Grid item xs={1}>
-            <button className='btn btn-primary mt-2' onClick={handleAddSchedule}>
+            <button className='btn btn-primary mt-2' onClick={(e)=>handleAddSchedule(e)}>
                 <i className="fa fa-plus" aria-hidden="true"></i>
             </button>
         </Grid>
@@ -272,7 +283,7 @@ const AddScheduleModal = (props) => {
         return (
             <Grid key={i} container rowSpacing={1} mt={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
                 <Grid item xs={5}>
-                    {values.type==='weekly' && 
+                    {values.type==='weekly'?(
                         <FormControl sx={{ width:'100%' }}>
                             <InputLabel htmlFor="Schedule">Schedule</InputLabel>
                             <Select
@@ -292,8 +303,7 @@ const AddScheduleModal = (props) => {
                                 <MenuItem value="Saturday">Saturday</MenuItem>
                             </Select>
                         </FormControl>
-                    }
-                    {values.type==='specific' &&
+                    ):(
                         <DesktopDatePicker
                             label="Date"
                             inputFormat="MM/DD/YYYY"
@@ -301,7 +311,7 @@ const AddScheduleModal = (props) => {
                             onChange={(e)=>handleChangeWhenDate(e,i)}
                             renderInput={(params) => <TextField {...params} />}
                         />
-                    }
+                    )}
                 </Grid>
                 <Grid item xs={3}>
                     <TimePicker

@@ -18,6 +18,7 @@ import * as yup from 'yup'
 import Cookies from 'js-cookie';
 import { decodeToken } from 'react-jwt';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -58,6 +59,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   };
   
 export default function AddTruckModal(props) {
+    const navigate = useNavigate();
     const [error,setError]=useState(null);
     const [user,setUser]=useState(null);
     const getCookiesJWT=()=>{
@@ -80,13 +82,14 @@ export default function AddTruckModal(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     const handleFormSubmit = async(values,{resetForm}) =>{
+        console.log(values);
         axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/truck/add`,
-        {user_id:user.user_id,plate_no:values.plate_no,model:values.model,active:true})
+        {accessToken:Cookies.get("user_id"),plate_no:values.plate_no,model:values.model,active:true})
         .then(res=>{
             if(res.data.success){
                 props.setTrucks(res.data.data);
                 props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
-                props.setOpenAddModal(false)
+                props.setOpenAddModal(false);
             }else{
                 setError(res.data.message);
             }

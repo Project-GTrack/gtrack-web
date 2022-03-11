@@ -112,7 +112,7 @@ export default function ReactivateTruckModal(props) {
       </DialogContent>
       <DialogActions>
         <button className='btn' onClick={()=>props.setOpenReactivateModal(false)}>Close</button>
-        <button className='btn btn-danger' disabled={!isValid} type="submit" onClick={handleSubmit}>Disable</button>
+        <button className='btn btn-success' disabled={!isValid} type="submit" onClick={handleSubmit}>Enable</button>
       </DialogActions>
     </BootstrapDialog>
   );

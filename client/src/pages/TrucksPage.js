@@ -25,6 +25,7 @@ const TrucksPage = () => {
         axios.get(`${process.env.REACT_APP_BACKEND_URL}/admin/truck/get`)
         .then(res=>{
           if(res.data.success){
+            console.log(res.data.data)
             setTrucks(res.data.data);
           }
         })
@@ -79,7 +80,7 @@ const TrucksPage = () => {
                 <GarbageTrucksPanel trucks={trucks.trucks} setTrucks={setTrucks} statusToast={statusToast} setStatusToast={setStatusToast}/>
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <UnderMaintenancePanel inactives={trucks.inactives} setTrucks={setTrucks}/>
+                <UnderMaintenancePanel inactives={trucks.inactives} setTrucks={setTrucks} statusToast={statusToast} setStatusToast={setStatusToast}/>
             </TabPanel>
             <StatusToast statusToast={statusToast} setStatusToast={setStatusToast}/>
         </PageLayout>

@@ -21,6 +21,7 @@ import { useState } from "react";
 import * as yup from 'yup'
 import Firebase from '../../helpers/Firebase';
 import { capitalizeWords } from '../../helpers/TextFormat';
+import { useEmployeePageContext } from '../../../pages/EmployeesPage';
 
 const auth = Firebase.auth();
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -62,6 +63,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   };
   
 export default function AddNewEmployeeModal(props) {
+  const {refetch}=useEmployeePageContext();
   const digitsOnly = (value) => /^\d+$/.test(value)
   const employeeRegisterValidationSchema = yup.object().shape({
     fname: yup
@@ -119,7 +121,8 @@ export default function AddNewEmployeeModal(props) {
     .then(res=>{
       if(res.data.success){
         handleFirebase(values,resetForm);
-        props.setAccounts(res.data.data);
+        // props.setAccounts(res.data.data);
+        refetch()
         props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"});
       }else{
         setError(res.data.message);

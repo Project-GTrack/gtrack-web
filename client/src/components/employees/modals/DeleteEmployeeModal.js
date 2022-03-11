@@ -14,6 +14,7 @@ import axios from "axios";
 import { useState } from "react";
 import Cookies from "js-cookie";
 import * as yup from 'yup'
+import { useEmployeePageContext } from "../../../pages/EmployeesPage";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -53,12 +54,14 @@ export default function DeleteEmployeeModal(props) {
       .string()
       .required('Password is required'),
   })
+  const {refetch}=useEmployeePageContext();
   const [error,setError]=useState(null);
   const handleFormSubmit = async() =>{
     axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/deactivate`,{email:props.data[2],password:values.password,accessToken:Cookies.get("user_id")})
     .then(res=>{
       if(res.data.success){
-        props.setAccounts(res.data.data);
+        // props.setAccounts(res.data.data);
+        refetch();
         props.setDeleteModal(false);
         props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"});
       }else{

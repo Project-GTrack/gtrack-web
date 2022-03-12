@@ -16,7 +16,53 @@ const truck_assignment=require("../../models/truck_assignment");
 // truck_assignment.model.hasOne(truck.model,{foreignKey: 'truck_id', as: 'truckAssignmentTruck'});
 // truck.model.belongsTo(user.model,{foreignKey: 'user_id', as: 'truckUser'});
 
-exports.display=async (req,res)=>{
+// exports.display=async (req,res)=>{
+//     var collection_sched=await schedule.model.findAll({
+//         include:[{
+//             model:user.model, as:"scheduleDriver"
+//         },
+//         {
+//             model:truck_assignment.model, as:"scheduleTruckAssignment",
+//             include:[{
+//                 model:truck.model, as:"truckAssignmentTruck"
+//             }]
+//         }]
+//     })
+//     var dates=[];
+//     var markedData=[];
+//     if(collection_sched.length!==0){
+//         collection_sched.forEach(function(sched){
+//             var schedJson=JSON.parse(sched.schedule);
+//             if(schedJson.type==="weekly"){
+//                 schedJson.when.forEach(function(when){
+//                     var day = moment()
+//                         .startOf('month')
+//                         .day(when.schedule);
+//                     if (day.date() > 7) day.add(7,'d');
+//                     var month = day.month();
+//                     while(month === day.month()){
+//                         let formatted=moment(day);
+//                         dates.push({date:formatted,start_time:when.time_start,end_time:when.time_end,details:sched});
+//                         markedData.push(formatted);
+//                         day.add(7,'d');
+//                     }
+//                 })
+//             }else{
+//                 schedJson.when.forEach(function(when){
+//                     var formatted = moment(when.schedule);
+//                     dates.push({date:formatted,start_time:when.time_start,end_time:when.time_end,details:sched});
+//                     markedData.push(formatted);
+//                 })
+//             }
+//         });
+//         res.send({success:true,message:"Schedule retrieved successfully.",data:{schedule:dates,markedDate:markedData}});
+//     }else{
+//         res.send({success:false,message:"No schedule available",data:null});
+//     }
+    
+// }
+
+const getSchedCalendar=async()=>{
     var collection_sched=await schedule.model.findAll({
         include:[{
             model:user.model, as:"scheduleDriver"
@@ -55,13 +101,11 @@ exports.display=async (req,res)=>{
                 })
             }
         });
-        res.send({success:true,message:"Schedule retrieved successfully.",data:{schedule:dates,markedDate:markedData}});
+        return {schedule:dates,markedDate:markedData};
     }else{
-        res.send({success:false,message:"No schedule available",data:null});
+        return null;
     }
-    
 }
-
 exports.getDriversAssignments=async (req,res)=>{
     var drivers=await user.model.findAll({
         where:{
@@ -77,7 +121,35 @@ exports.getDriversAssignments=async (req,res)=>{
     })
     res.send({success:true,message:"Details retrieved successfully.",data:{drivers:drivers,assignments:assignments}});
 }
-
+const getDrivers=async()=>{
+    var drivers=await user.model.findAll({
+        where:{
+            user_type:"Driver",
+            status:true
+        }
+    })
+    return drivers?drivers:null;
+}
+const getTruckAssignments=async()=>{
+    let assignments = await truck_assignment.model.findAll({
+        include:[{
+            model: user.model, as: "truckAssignmentDriver"
+        },{
+            model: schedule.model, as: "assignmentSchedule"
+        },{
+            model: truck.model, as: "truckAssignmentTruck"
+        }]
+    })
+    return assignments?assignments:null;
+}
+const getTrucks=async()=>{
+    let trucks = await truck.model.findAll({
+        where:{
+            active:1
+        }
+    })
+    return trucks?trucks:null;
+}
 exports.addSchedule=async (req,res)=>{
     let sched=await schedule.model.create(req.body);
     if(sched){
@@ -92,17 +164,18 @@ exports.addSchedule=async (req,res)=>{
     }
 }
 
-exports.getSchedule=async (req,res)=>{
+exports.getScheduleTruckAssignment=async (req,res)=>{
     let sched=await schedule.model.findAll({
         include:[
             {model:user.model, as:"scheduleDriver"},
         ]
     })
-    if(sched){
-        res.send({success:true,message:"Schedules obtained successfully",data:sched});
-    }else{
-        res.send({success:false,message:"Cannot obtain schedules",data:null});
-    }
+    let calendar=await getSchedCalendar();
+    let drivers=await getDrivers();
+    let assignments=await getTruckAssignments();
+    let trucks=await getTrucks();
+    
+    res.send({success:true,message:"Schedules obtained successfully",data:{schedule:sched,calendar,drivers,assignments,trucks}});
 }
 
 exports.updateSchedule=async (req,res)=>{
@@ -112,12 +185,7 @@ exports.updateSchedule=async (req,res)=>{
         }
     });
     if(sched){
-        sched=await schedule.model.findAll({
-            include:[
-                {model:user.model, as:"scheduleDriver"},
-            ]
-        })
-        res.send({success:true,message:"Schedule successfully updated",data:sched});
+        res.send({success:true,message:"Schedule successfully updated"});
     }else{
         res.send({success:false,message:"Cannot update schedule",data:null});
     }
@@ -135,12 +203,7 @@ exports.deleteSchedule=async (req,res)=>{
                 }
             });
             if(sched){
-                sched=await schedule.model.findAll({
-                    include:[
-                        {model:user.model, as:"scheduleDriver"},
-                    ]
-                })
-                res.send({success:true,message:"Schedule successfully deleted.",data:sched});
+                res.send({success:true,message:"Schedule successfully deleted."});
             }else{
                 res.send({success:false,message:"Cannot delete schedule",data:null});
             }

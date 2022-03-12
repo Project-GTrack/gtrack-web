@@ -22,7 +22,7 @@ import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Tooltip from "@mui/material/Tooltip";
-import { mainListItems } from "../components/ListItemComponent";
+import MainListItems from "../components/ListItemComponent";
 import { useState } from "react";
 import ReportNotifications from "../components/ReportNotifications";
 import { useEffect } from "react";
@@ -302,7 +302,9 @@ const PageLayout = ({headerTitle,children}) => {
           </Toolbar>
 
           <Divider />
-          <List>{mainListItems}</List>
+          <List>
+            <MainListItems />
+          </List>
           <Divider />
         </Drawer>
         <Box

@@ -24,6 +24,7 @@ import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import { decodeToken } from "react-jwt";
 import Cookies from 'js-cookie';
 import { capitalizeWords } from '../helpers/TextFormat';
+import { useSchedulesPageContext } from '../../pages/SchedulesPage';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -64,11 +65,16 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   };
   
 const EditScheduleModal = (props) => {
+    const {queryResult,refetch}=useSchedulesPageContext();
+    const driversAssignments={
+        drivers:queryResult.data.data.drivers,
+        assignments:queryResult.data.data.assignments
+    }
     const [schedule,setSchedule]=useState([]);
-    const [driversAssignments,setDriversAssignments]=useState({
-        drivers:[],
-        assignments:[]
-    });
+    // const [driversAssignments,setDriversAssignments]=useState({
+    //     drivers:[],
+    //     assignments:[]
+    // });
     const addScheduleValidationSchema = yup.object().shape({
         type: yup
         .string()
@@ -115,7 +121,7 @@ const EditScheduleModal = (props) => {
         })
         .then(res=>{
             if(res.data.success){
-                props.setSchedules(res.data.data);
+                refetch();
                 props.setOpenEditModal(false);
                 resetForm();
                 props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
@@ -147,20 +153,12 @@ const EditScheduleModal = (props) => {
     
     useEffect(() => {
         getCookiesJWT();
-        axios.get(`${process.env.REACT_APP_BACKEND_URL}/admin/schedule/get_drivers_assignments`)
-        .then(res=>{
-            if(res.data.success){
-                setDriversAssignments(res.data.data); 
-            }else{
-                setError(res.data.message);
-            }
-        })
         return ()=>{
-            setDriversAssignments({
-                drivers:[],
-                assignments:[]
-            });
-            setSchedule([]);
+            setSchedule([{
+                schedule:"Monday",
+                time_start:new Date(moment()),
+                time_end:new Date(moment())
+            }]);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -181,54 +179,78 @@ const EditScheduleModal = (props) => {
         onSubmit: handleFormSubmit
     });
     const handleChangeWhenWeekly = (e,index) =>{
-        let temp=[...schedule];
+        let temp=[];
+        temp=schedule;
         temp[index].schedule=e.target.value;
-        setSchedule([...temp]);
-        setFieldValue('schedule',[...temp]);
+        setSchedule(temp);
+        setFieldValue('schedule',temp);
     }
     const handleChangeWhenDate = (e,index) =>{
-        let temp=[...schedule];
+        let temp=[];
+        temp=schedule;
         temp[index].schedule=e;
-        setSchedule([...temp]);
-        setFieldValue('schedule',[...temp]);
+        setSchedule(temp);
+        setFieldValue('schedule',temp);
     }
     const handleChangeStartTime = (e,index) =>{
-        let temp=[...schedule];
+        let temp=[];
+        temp=schedule;
         temp[index].time_start=e;
-        setSchedule([...temp]);
-        setFieldValue('schedule',[...temp]);
+        setSchedule(temp);
+        setFieldValue('schedule',temp);
     }
     const handleChangeEndTime = (e,index) =>{
-        let temp=[...schedule];
+        let temp=[];
+        temp=schedule;
         temp[index].time_end=e;
-        setSchedule([...temp]);
-        setFieldValue('schedule',[...temp]);
+        setSchedule(temp);
+        setFieldValue('schedule',temp);
     }
-    const handleAddSchedule=()=>{
-        let temp=[...schedule];
-        temp.push({
-            schedule:"",
-            time_start:new Date(moment()),
-            time_end:new Date(moment())
-        });
-        setSchedule([...temp]);
-        setFieldValue('schedule',[...temp]);
+    const handleAddSchedule=(e)=>{
+        e.preventDefault();
+        let temp=[];
+        temp=schedule;
+        if(values.type==="weekly"){
+            temp.push({
+                schedule:"Monday",
+                    time_start:new Date(moment()),
+                    time_end:new Date(moment())
+            });
+        }else{
+            temp.push({
+                schedule:new Date(moment()),
+                    time_start:new Date(moment()),
+                    time_end:new Date(moment())
+            });
+        }
+        setSchedule(temp);
+        setFieldValue('schedule',temp);
     }
     const handleRemoveSchedule=(index)=>{
-        let temp=[...schedule];
+        let temp=[];
+        temp=schedule;
         temp.splice(index,1);
-        setSchedule([...temp]);
-        setFieldValue('schedule',[...temp]);
+        setSchedule(temp);
+        setFieldValue('schedule',temp);
     }
-    const handleChangeType=(e)=>{
-        setFieldValue("type",e.target.value);
-        let temp=[{
-            schedule:"",
-            time_start:new Date(moment()),
-            time_end:new Date(moment())
-        }]
-        setSchedule([...temp]);
+    const handleChangeType=async(e)=>{
+        let temp=[];
+        if(e.target.value==="weekly"){
+            temp=[{
+                schedule:"Monday",
+                time_start:new Date(moment().toISOString()),
+                time_end:new Date(moment().toISOString())
+            }]
+        }else{
+            temp=[{
+                schedule:new Date(moment().toISOString()),
+                time_start:new Date(moment().toISOString()),
+                time_end:new Date(moment().toISOString())
+            }]
+        }
+        await setSchedule([...temp]);
         setFieldValue('schedule',[...temp]);
+        setFieldValue('type',e.target.value);
     }
   return (
     <BootstrapDialog

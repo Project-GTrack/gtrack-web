@@ -10,24 +10,6 @@ const { sequelize } = require('../../connection');
 
 assignment.model.hasMany(schedule.model, {foreignKey:"assignment_id", as: "assignmentSchedule"});
 
-exports.getAssignments = async (req,res) => {
-    let assignments = await assignment.model.findAll({
-        include:[{
-            model: user.model, as: "truckAssignmentDriver"
-        },{
-            model: schedule.model, as: "assignmentSchedule"
-        },{
-            model: truck.model, as: "truckAssignmentTruck"
-        }]
-    })
-    if(assignments){
-        console.log(truck);
-        res.send({success:true, data:assignments});
-    }else{
-        console.log("NO assin");
-        res.send({success:false, data:null});
-    }
-}
 exports.addAssignment = async (req,res) => {
     if(req.body.accessToken!= undefined){
         jwt.verify(req.body.accessToken,process.env.ACCESS_TOKEN_SECRET, async(err, decoded)=>{
@@ -62,21 +44,6 @@ exports.addAssignment = async (req,res) => {
     }
     
 }
-
-exports.getDriversAndTrucks = async (req,res) => {
-    let drivers = await user.model.findAll({
-        where:{
-            user_type:"Driver"
-        }
-    })
-    let trucks = await truck.model.findAll({
-        where:{
-            active:1
-        }
-    })
-    res.send({success:true, data:{drivers:drivers,trucks:trucks}});
-}
-
 exports.editAssignment = async (req,res) => {
     if(req.body.accessToken!= undefined){
         jwt.verify(req.body.accessToken,process.env.ACCESS_TOKEN_SECRET, async(err, decoded)=>{

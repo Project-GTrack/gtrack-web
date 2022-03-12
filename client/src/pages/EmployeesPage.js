@@ -10,7 +10,6 @@ import InactiveAccountsComponent from '../components/employees/InactiveAccountsC
 // import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
-import StatusToast from '../components/helpers/StatusToast';
 import { Helmet } from 'react-helmet';
 import useAxios,{ configure } from 'axios-hooks'
 import { CircularProgress } from '@mui/material';
@@ -22,11 +21,6 @@ const defaultContext= {
 const EmployeePageContext = React.createContext(defaultContext);
 export const useEmployeePageContext = () => useContext(EmployeePageContext);
 const EmployeesPage = () => {
-  const [statusToast, setStatusToast] = useState({
-    isOpen:false,
-    message:"",
-    colorScheme:"success"
-  });
   const [value, setValue] = useState(0);
   const [{ data, loading, error }, refetch] = useAxios({
     url: `${process.env.REACT_APP_BACKEND_URL}/admin/get/users`,
@@ -94,18 +88,16 @@ const EmployeesPage = () => {
         ):(
           <EmployeePageContext.Provider value={{queryResult:{data,loading,error},refetch}}>
               <TabPanel value={value} index={0}>
-                  <DriversComponent statusToast={statusToast} setStatusToast={setStatusToast}/>
+                  <DriversComponent />
               </TabPanel>
               <TabPanel value={value} index={1}>
-                <AdminsComponent statusToast={statusToast} setStatusToast={setStatusToast}/>
+                <AdminsComponent />
               </TabPanel>
               <TabPanel value={value} index={2}>
-                <InactiveAccountsComponent statusToast={statusToast} setStatusToast={setStatusToast}/>
+                <InactiveAccountsComponent />
               </TabPanel>
           </EmployeePageContext.Provider>
         )}
-      
-      <StatusToast statusToast={statusToast} setStatusToast={setStatusToast}/>
     </PageLayout>
   )
 }

@@ -15,6 +15,7 @@ import Axios from 'axios';
 import { useFormik } from 'formik';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 import {useAnnouncementPageContext} from '../../../pages/AnnouncementsPage';  
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -56,6 +57,7 @@ BootstrapDialogTitle.propTypes = {
 };
 
 export default function DeleteAnnouncementModal(props) {
+  const { enqueueSnackbar} = useSnackbar();
   const navigate = useNavigate();
   const announcementValidationSchema = yup.object().shape({
     password: yup.string().required("Password is required"),
@@ -69,10 +71,10 @@ export default function DeleteAnnouncementModal(props) {
       }).then(res=>{
         if(res.data.success){
           props.setDeleteModal(false);
-          props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
+          enqueueSnackbar(res.data.message, { variant:'success' });
           refetch();
         }else{
-          props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"error"})
+          enqueueSnackbar(res.data.message, { variant:'error' });
         }
       })
     }else{

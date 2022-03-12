@@ -4,7 +4,7 @@ import AnnouncementCustomToolbar from './AnnouncementCustomToolbar';
 import AddNewAnnouncementModal from './modals/AddNewAnnouncementModal';
 import moment from 'moment';
 import {useAnnouncementPageContext} from '../../pages/AnnouncementsPage';   
-const AnnouncementsComponent = ({statusToast, setStatusToast}) => {
+const AnnouncementsComponent = () => {
     const {queryResult}=useAnnouncementPageContext();
     const announcements = queryResult.data.posts;
     const[data,  setData] = useState([]);
@@ -24,7 +24,7 @@ const AnnouncementsComponent = ({statusToast, setStatusToast}) => {
         })
         setData(temp);  
 
-    },[announcements, statusToast.isOpen]);
+    },[announcements]);
 
 
 
@@ -97,8 +97,6 @@ const AnnouncementsComponent = ({statusToast, setStatusToast}) => {
     filterType: 'dropdown',
     customToolbarSelect:(selectedRows,displayData)=>(
         <AnnouncementCustomToolbar 
-            statusToast={statusToast} 
-            setStatusToast={setStatusToast}  
             selectedRows={selectedRows} 
             displayData={displayData}
         />
@@ -111,8 +109,6 @@ const AnnouncementsComponent = ({statusToast, setStatusToast}) => {
             </div>
             <AddNewAnnouncementModal
                 openModal={openModal}
-                statusToast={statusToast}
-                setStatusToast={setStatusToast}
                 setOpenModal={setOpenModal} 
             />
             <MUIDataTable

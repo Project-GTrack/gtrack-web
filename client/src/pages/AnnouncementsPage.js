@@ -5,7 +5,6 @@ import PageLayout from './PageLayout';
 import AnnouncementsComponent from '../components/announcements/AnnouncementsComponent';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
-import StatusToast from '../components/helpers/StatusToast';
 import { Helmet } from 'react-helmet';
 import useAxios,{ configure } from 'axios-hooks'
 import { CircularProgress } from '@mui/material';
@@ -18,11 +17,6 @@ const AnnouncementPageContext = React.createContext(defaultContext);
 export const useAnnouncementPageContext = () => useContext(AnnouncementPageContext);
 const AnnouncementsPage = () =>{
   const navigate = useNavigate();
-  const [statusToast, setStatusToast] = useState({
-    isOpen : false,
-    message : "",
-    colorScheme:"success"
-  })
   const [{ data, loading, error }, refetch] = useAxios({
     url: `${process.env.REACT_APP_BACKEND_URL}/admin/announcement/view`,
     method:'get' 
@@ -70,10 +64,9 @@ function TabPanel(props) {
           </div>
           ):(
           <AnnouncementPageContext.Provider value={{queryResult:{data,loading,error},refetch}}>
-            <AnnouncementsComponent statusToast={statusToast} setStatusToast={setStatusToast}/>
+            <AnnouncementsComponent/>
           </AnnouncementPageContext.Provider>
           )}
-            <StatusToast statusToast={statusToast} setStatusToast={setStatusToast}/>
         </PageLayout>
     )
 }

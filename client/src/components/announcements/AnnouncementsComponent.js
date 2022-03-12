@@ -3,8 +3,10 @@ import MUIDataTable from "mui-datatables";
 import AnnouncementCustomToolbar from './AnnouncementCustomToolbar';
 import AddNewAnnouncementModal from './modals/AddNewAnnouncementModal';
 import moment from 'moment';
-const AnnouncementsComponent = ({announcements, setAnnouncements}) => {
-
+import {useAnnouncementPageContext} from '../../pages/AnnouncementsPage';   
+const AnnouncementsComponent = () => {
+    const {queryResult}=useAnnouncementPageContext();
+    const announcements = queryResult.data.posts;
     const[data,  setData] = useState([]);
     useEffect(()=>{
        
@@ -27,8 +29,11 @@ const AnnouncementsComponent = ({announcements, setAnnouncements}) => {
 
 
   const [openModal, setOpenModal] = React.useState(false);
-  const handleOpenModal = () => setOpenModal(true);
-  const handleCloseModal = () => setOpenModal(false);
+  useEffect(() => {
+    return () => {
+      setOpenModal(false);
+    }
+  }, [])
   const columns = [
     {
         name:"ID",
@@ -91,20 +96,20 @@ const AnnouncementsComponent = ({announcements, setAnnouncements}) => {
     filter: true,
     filterType: 'dropdown',
     customToolbarSelect:(selectedRows,displayData)=>(
-        <AnnouncementCustomToolbar selectedRows={selectedRows} setAnnouncements={setAnnouncements} displayData={displayData}/>
+        <AnnouncementCustomToolbar 
+            selectedRows={selectedRows} 
+            displayData={displayData}
+        />
     )
     };
     return (
         <div>
             <div className='mb-3'>
-                <button className='btn btn-success' onClick={handleOpenModal}><i className="fa fa-plus" aria-hidden="true"></i> Add New Announcement</button>
+                <button className='btn btn-success' onClick={()=>setOpenModal(true)}><i className="fa fa-plus" aria-hidden="true"></i> Add New Announcement</button>
             </div>
             <AddNewAnnouncementModal
                 openModal={openModal}
-                setAnnouncements={setAnnouncements}
                 setOpenModal={setOpenModal} 
-                handleCloseModal={handleCloseModal}
-                handleOpenModal={handleOpenModal}
             />
             <MUIDataTable
                 title={"Announcement List"}

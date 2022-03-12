@@ -2,13 +2,15 @@ import React, { useEffect, useState } from 'react'
 import MUIDataTable from "mui-datatables";
 import DumpsterCustomToolbar from './DumpsterCustomToolbar';
 import AddNewDumpsterModal from './modals/AddNewDumpsterModal';
+import { useDumpstersPageContext } from '../../pages/DumpstersPage';
 
-const DumpstersComponent = ({dumpsters,setDumpsters,statusToast, setStatusToast}) => {
+const DumpstersComponent = ({statusToast, setStatusToast}) => {
   const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
   const [data,setData]=useState([]);
-
+  const {queryResult}=useDumpstersPageContext();
+  const dumpsters = queryResult.data.data;
   useEffect(() => {
     let tempD=[];
     for(var x = 0;x < dumpsters.length;x++){
@@ -26,7 +28,8 @@ const DumpstersComponent = ({dumpsters,setDumpsters,statusToast, setStatusToast}
       return () => {
           setData([]);
       }     
-  },[dumpsters,statusToast.isOpen])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
     const columns = [
         {
         name:"ID",
@@ -77,7 +80,7 @@ const DumpstersComponent = ({dumpsters,setDumpsters,statusToast, setStatusToast}
     filter: true,
     filterType: 'dropdown',
     customToolbarSelect:(selectedRows,displayData)=>(
-        <DumpsterCustomToolbar statusToast={statusToast} setStatusToast={setStatusToast} setDumpsters={setDumpsters} selectedRows={selectedRows} displayData={displayData}/>
+        <DumpsterCustomToolbar statusToast={statusToast} setStatusToast={setStatusToast} selectedRows={selectedRows} displayData={displayData}/>
     )
     };
     return (
@@ -88,7 +91,6 @@ const DumpstersComponent = ({dumpsters,setDumpsters,statusToast, setStatusToast}
                 openModal={openModal}
                 statusToast={statusToast}
                 setStatusToast={setStatusToast} 
-                setDumpsters={setDumpsters}
                 setOpenModal={setOpenModal}
                 handleCloseModal={handleCloseModal}
                 handleOpenModal={handleOpenModal}

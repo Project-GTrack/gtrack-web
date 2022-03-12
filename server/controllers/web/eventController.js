@@ -54,26 +54,13 @@ exports.createEvent = async(req, res) => {
                     registration_form_url:req.body.registration_form_url,
                     status: "Ongoing"
                 })
-                let events = await event.model.findAll({
-                    where: {
-                        deletedAt : null
-                    },
-                    include:[{
-                        model: admin.model, as:"eventAdmin"
-                    },{
-                        model: attachment_line.model, as:"eventLine",
-                        include:[{
-                            model: attachment.model, as:"lineAttachment"
-                        }]
-                    }]
-                })
                 if(post){
-                    res.send({success:true,message:"Event created successfully!",data:events});
+                    res.send({success:true,message:"Event created successfully!"});
                 }else{
-                    res.send({success:false,message:"Failed to create event.",data:null});
+                    res.send({success:false,message:"Failed to create event."});
                 }
             }else{
-                res.send({success:false,message:"Attachment not created.",data:null});
+                res.send({success:false,message:"Attachment not created."});
         }
         })
     }
@@ -164,22 +151,9 @@ exports.deleteEvent = async(req, res) => {
                     }
                 })
                 if(post !== 0){
-                    let events = await event.model.findAll({
-                        where: {
-                            deletedAt : null
-                        },
-                        include:[{
-                            model: admin.model, as:"eventAdmin"
-                        },{
-                            model: attachment_line.model, as:"eventLine",
-                            include:[{
-                                model: attachment.model, as:"lineAttachment"
-                            }]
-                        }]
-                    })
-                    res.send({success:true,message:"Event has been deleted",data:events});
+                    res.send({success:true,message:"Event has been deleted"});
                 }else{
-                    res.send({success:false,message:"failed to delete Event",data:null});
+                    res.send({success:false,message:"failed to delete Event"});
                 }
             
             

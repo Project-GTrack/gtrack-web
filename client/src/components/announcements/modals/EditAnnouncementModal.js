@@ -19,7 +19,7 @@ import { useFormik } from 'formik';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
-
+import {useAnnouncementPageContext} from '../../../pages/AnnouncementsPage';  
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
       padding: theme.spacing(2),
@@ -64,7 +64,7 @@ export default function EditAnnouncementModal(props) {
   const [urls, setUrls] = useState([]);
   const [progress, setProgress] = useState(0);
   const navigate = useNavigate();
-
+  const {refetch}=useAnnouncementPageContext();
   const FILE_SIZE = 160 * 1024;
   const SUPPORTED_FORMATS = [
       "image/jpg",
@@ -105,7 +105,7 @@ export default function EditAnnouncementModal(props) {
         urls:urls
       }).then(res=>{
         if(res.data.success){
-          props.setAnnouncements(res.data.data);
+          refetch();
           props.setOpenModal(false);
           enqueueSnackbar(res.data.message, { variant:'success' });
         }else{

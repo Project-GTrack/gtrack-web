@@ -10,10 +10,11 @@ const StatusToast = ({statusToast,setStatusToast}) => {
 
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
-          return;
+          return <></>;
         }
     
         setStatusToast((prevState)=>({...prevState,isOpen:false}))
+        // setStatusToast({message:null,isOpen:false});
       };
     
       return (

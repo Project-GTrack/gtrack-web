@@ -24,6 +24,7 @@ import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import { capitalizeWords } from '../../helpers/TextFormat';
+import {useEventPageContext} from '../../../pages/EventsPage'; 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
       padding: theme.spacing(2),
@@ -63,6 +64,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   };
   
 export default function EditEventModal(props) {
+  const {refetch}=useEventPageContext();
   const [images, setImages] = useState([]);
   const [urls, setUrls] = useState([]);
   const [progress, setProgress] = useState(0);
@@ -146,8 +148,7 @@ export default function EditEventModal(props) {
       }).then(res=>{
        
         if(res.data.success){
-          console.log(res.data.data);
-          props.setEvents(res.data.data);
+          refetch();
           props.setOpenModal(false);
           props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
         }else{
@@ -159,7 +160,7 @@ export default function EditEventModal(props) {
       navigate("/login");
     }
   }
-  console.log(props.data[8]);
+
   const { handleChange, handleSubmit, handleBlur, values, errors,isValid,touched } = useFormik({
     initialValues:{ 
       event_name: props.data[1],

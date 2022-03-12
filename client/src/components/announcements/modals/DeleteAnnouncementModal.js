@@ -16,7 +16,7 @@ import { useFormik } from 'formik';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
-
+import {useAnnouncementPageContext} from '../../../pages/AnnouncementsPage';  
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -62,6 +62,7 @@ export default function DeleteAnnouncementModal(props) {
   const announcementValidationSchema = yup.object().shape({
     password: yup.string().required("Password is required"),
   });
+  const {refetch}=useAnnouncementPageContext();
   const handleFormSubmit = async(values) => {
     if(Cookies.get('user_id')){
       Axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/announcement/delete/${props.data[0]}`,{
@@ -71,7 +72,7 @@ export default function DeleteAnnouncementModal(props) {
         if(res.data.success){
           props.setDeleteModal(false);
           enqueueSnackbar(res.data.message, { variant:'success' });
-          props.setAnnouncements(res.data.data);
+          refetch();
         }else{
           enqueueSnackbar(res.data.message, { variant:'error' });
         }

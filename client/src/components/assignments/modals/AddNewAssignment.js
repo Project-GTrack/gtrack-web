@@ -12,6 +12,7 @@ import PropTypes from "prop-types";
 import MenuItem from "@mui/material/MenuItem";
 import CloseIcon from "@mui/icons-material/Close";
 import Cookies from "js-cookie";
+import { useSchedulesPageContext } from "../../../pages/SchedulesPage";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import IconButton from "@mui/material/IconButton";
@@ -55,22 +56,15 @@ BootstrapDialogTitle.propTypes = {
 };
 
 const AddNewAssignment = (props) => {
+  const {queryResult,refetch}=useSchedulesPageContext();
   const assignmentErrorHandling = yup.object().shape({
     driver: yup.string().required("Driver is required"),
     truck: yup.string().required("Truck is required"),
   });
-  const [data,setData] = React.useState({
-    drivers:[],
-    trucks:[]
-  })
-  React.useEffect(() => {
-    axios.get(`${process.env.REACT_APP_BACKEND_URL}/admin/assignment/get-drivers-trucks`)
-      .then((res) => {
-        if(res.data.success){
-          setData({drivers:res.data.data.drivers,trucks:res.data.data.trucks});
-        }
-      })
-  },[])
+  const data = {
+    drivers:queryResult.data.data.drivers,
+    trucks:queryResult.data.data.trucks
+  }
   const handleFormSubmit = async (values, { resetForm }) => {
       axios
         .post(`${process.env.REACT_APP_BACKEND_URL}/admin/assignment/add-assignment`, {
@@ -82,7 +76,7 @@ const AddNewAssignment = (props) => {
           resetForm();
           props.setOpenModal(false);
           if(res.data.success){
-            props.setAssignments(res.data.data);
+            refetch();
             props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
           }else{
             props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"info"})
@@ -90,7 +84,7 @@ const AddNewAssignment = (props) => {
             
         });
   };
-  const { handleChange, handleSubmit, handleBlur, values, errors, touched } =
+  const { handleChange, handleSubmit, values, errors, touched } =
     useFormik({
       initialValues: {
         driver: '',

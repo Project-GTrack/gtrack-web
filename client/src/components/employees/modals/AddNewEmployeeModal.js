@@ -123,7 +123,6 @@ export default function AddNewEmployeeModal(props) {
     .then(res=>{
       if(res.data.success){
         handleFirebase(values,resetForm);
-        // props.setAccounts(res.data.data);
         refetch();
         enqueueSnackbar(res.data.message, { variant:'success' });
       }else{

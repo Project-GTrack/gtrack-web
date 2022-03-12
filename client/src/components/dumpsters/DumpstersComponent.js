@@ -80,7 +80,7 @@ const DumpstersComponent = ({statusToast, setStatusToast}) => {
     filter: true,
     filterType: 'dropdown',
     customToolbarSelect:(selectedRows,displayData)=>(
-        <DumpsterCustomToolbar statusToast={statusToast} setStatusToast={setStatusToast} selectedRows={selectedRows} displayData={displayData}/>
+        <DumpsterCustomToolbar selectedRows={selectedRows} displayData={displayData}/>
     )
     };
     return (
@@ -89,8 +89,6 @@ const DumpstersComponent = ({statusToast, setStatusToast}) => {
                 <button className='btn btn-success' onClick={handleOpenModal}><i className="fa fa-plus" aria-hidden="true"></i> Add New Dumpster/Pickup Point</button>            </div>
             <AddNewDumpsterModal
                 openModal={openModal}
-                statusToast={statusToast}
-                setStatusToast={setStatusToast} 
                 setOpenModal={setOpenModal}
                 handleCloseModal={handleCloseModal}
                 handleOpenModal={handleOpenModal}

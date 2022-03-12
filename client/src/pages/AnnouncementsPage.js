@@ -1,4 +1,4 @@
-import React,{useState, useEffect} from 'react';
+import React,{useState, useEffect, useContext} from 'react';
 import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
 import PageLayout from './PageLayout';
@@ -8,6 +8,15 @@ import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import StatusToast from '../components/helpers/StatusToast';
 import { Helmet } from 'react-helmet';
+import useAxios,{ configure } from 'axios-hooks'
+import { CircularProgress } from '@mui/material';
+configure({ ssr:false })
+const defaultContext= {
+  queryResult: {data:null,loading:false},
+  refetch: () => {},
+};
+const AnnouncementPageContext = React.createContext(defaultContext);
+export const useAnnouncementPageContext = () => useContext(AnnouncementPageContext);
 const AnnouncementsPage = () =>{
   const navigate = useNavigate();
   const [data, setData] = useState([]);

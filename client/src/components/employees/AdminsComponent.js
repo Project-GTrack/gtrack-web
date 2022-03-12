@@ -30,7 +30,6 @@ const AdminsComponent = ({statusToast,setStatusToast}) => {
         <EmployeeCustomToolbar 
             statusToast={statusToast} 
             setStatusToast={setStatusToast} 
-            // setAccounts={setAccounts} 
             data={data[selectedRows.data[0].dataIndex]} 
             selectedRows={selectedRows} 
             displayData={displayData}

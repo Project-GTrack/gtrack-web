@@ -6,16 +6,10 @@ import AnnouncementsComponent from '../components/announcements/AnnouncementsCom
 import Axios from 'axios';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
-import StatusToast from '../components/helpers/StatusToast';
 import { Helmet } from 'react-helmet';
 const AnnouncementsPage = () =>{
   const navigate = useNavigate();
   const [data, setData] = useState([]);
-  const [statusToast, setStatusToast] = useState({
-    isOpen : false,
-    message : "",
-    colorScheme:"success"
-  })
 
   useEffect(() => {
     if(Cookies.get('user_id')){
@@ -60,8 +54,7 @@ function TabPanel(props) {
           <Helmet>
             <title>GTrack | Announcements</title>
           </Helmet>
-            <AnnouncementsComponent announcements = {data} setAnnouncements = {setData}  statusToast={statusToast} setStatusToast={setStatusToast}/>
-            <StatusToast statusToast={statusToast} setStatusToast={setStatusToast}/>
+            <AnnouncementsComponent announcements = {data} setAnnouncements = {setData}/>
         </PageLayout>
     )
 }

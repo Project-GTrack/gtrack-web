@@ -3,7 +3,7 @@ import MUIDataTable from "mui-datatables";
 import AnnouncementCustomToolbar from './AnnouncementCustomToolbar';
 import AddNewAnnouncementModal from './modals/AddNewAnnouncementModal';
 import moment from 'moment';
-const AnnouncementsComponent = ({announcements, setAnnouncements,statusToast, setStatusToast}) => {
+const AnnouncementsComponent = ({announcements, setAnnouncements}) => {
 
     const[data,  setData] = useState([]);
     useEffect(()=>{
@@ -22,7 +22,7 @@ const AnnouncementsComponent = ({announcements, setAnnouncements,statusToast, se
         })
         setData(temp);  
 
-    },[announcements, statusToast.isOpen]);
+    },[announcements]);
 
 
 
@@ -91,7 +91,7 @@ const AnnouncementsComponent = ({announcements, setAnnouncements,statusToast, se
     filter: true,
     filterType: 'dropdown',
     customToolbarSelect:(selectedRows,displayData)=>(
-        <AnnouncementCustomToolbar statusToast={statusToast} setStatusToast={setStatusToast}  selectedRows={selectedRows} setAnnouncements={setAnnouncements} displayData={displayData}/>
+        <AnnouncementCustomToolbar selectedRows={selectedRows} setAnnouncements={setAnnouncements} displayData={displayData}/>
     )
     };
     return (
@@ -102,8 +102,6 @@ const AnnouncementsComponent = ({announcements, setAnnouncements,statusToast, se
             <AddNewAnnouncementModal
                 openModal={openModal}
                 setAnnouncements={setAnnouncements}
-                statusToast={statusToast}
-                setStatusToast={setStatusToast}
                 setOpenModal={setOpenModal} 
                 handleCloseModal={handleCloseModal}
                 handleOpenModal={handleOpenModal}

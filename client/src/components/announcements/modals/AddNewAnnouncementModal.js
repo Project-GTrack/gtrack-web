@@ -21,6 +21,7 @@ import Axios from 'axios';
 import { useFormik } from 'formik';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
       padding: theme.spacing(2),
@@ -63,6 +64,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
 
 export default function AddNewAnnouncementModal(props) {
+  const { enqueueSnackbar} = useSnackbar();
   const [images, setImages] = useState([]);
   const [urls, setUrls] = useState([]);
   const [progress, setProgress] = useState(0);
@@ -109,9 +111,9 @@ export default function AddNewAnnouncementModal(props) {
           console.log(res.data.data)
           props.setOpenModal(false);
           resetForm();
-          props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
+          enqueueSnackbar(res.data.message, { variant:'success' });
         }else{
-          props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"error"})
+          enqueueSnackbar(res.data.message, { variant:'error' });
         }
       })
     }else{

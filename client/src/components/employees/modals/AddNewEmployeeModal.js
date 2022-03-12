@@ -121,7 +121,6 @@ export default function AddNewEmployeeModal(props) {
     .then(res=>{
       if(res.data.success){
         handleFirebase(values,resetForm);
-        // props.setAccounts(res.data.data);
         refetch()
         props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"});
       }else{

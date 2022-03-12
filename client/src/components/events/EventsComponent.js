@@ -3,7 +3,10 @@ import MUIDataTable from "mui-datatables";
 import EventCustomToolbar from './EventCustomToolbar';
 import AddNewEventModal from './modals/AddNewEventModal';
 import moment from 'moment';
-const EventsComponent = ({events, setEvents, statusToast, setStatusToast}) => {
+import {useEventPageContext} from '../../pages/EventsPage';  
+const EventsComponent = ({statusToast, setStatusToast}) => {
+    const {queryResult}=useEventPageContext();
+    const events = queryResult.data.data;
     const[data,  setData] = useState([]);
     useEffect(()=>{
        
@@ -159,7 +162,11 @@ const EventsComponent = ({events, setEvents, statusToast, setStatusToast}) => {
     filter: true,
     filterType: 'dropdown',
     customToolbarSelect:(selectedRows,displayData)=>(
-        <EventCustomToolbar  statusToast={statusToast} setEvents={setEvents} setStatusToast={setStatusToast} selectedRows={selectedRows} displayData={displayData}/>
+        <EventCustomToolbar  
+            statusToast={statusToast} 
+            setStatusToast={setStatusToast} 
+            selectedRows={selectedRows} 
+            displayData={displayData}/>
     )
     };
     return (
@@ -170,7 +177,6 @@ const EventsComponent = ({events, setEvents, statusToast, setStatusToast}) => {
                 <AddNewEventModal
             openModal={openModal}
             setOpenModal={setOpenModal}
-            setEvents={setEvents}
             statusToast={statusToast}
             setStatusToast={setStatusToast}
             handleCloseModal={handleCloseModal}

@@ -3,7 +3,6 @@ import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
 import PageLayout from './PageLayout';
 import AnnouncementsComponent from '../components/announcements/AnnouncementsComponent';
-import Axios from 'axios';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import StatusToast from '../components/helpers/StatusToast';
@@ -19,26 +18,22 @@ const AnnouncementPageContext = React.createContext(defaultContext);
 export const useAnnouncementPageContext = () => useContext(AnnouncementPageContext);
 const AnnouncementsPage = () =>{
   const navigate = useNavigate();
-  const [data, setData] = useState([]);
   const [statusToast, setStatusToast] = useState({
     isOpen : false,
     message : "",
     colorScheme:"success"
   })
+  const [{ data, loading, error }, refetch] = useAxios({
+    url: `${process.env.REACT_APP_BACKEND_URL}/admin/announcement/view`,
+    method:'get' 
+  });
 
   useEffect(() => {
-    if(Cookies.get('user_id')){
-      Axios.get(`${process.env.REACT_APP_BACKEND_URL}/admin/announcement/view`)
-      .then((res) => {
-          if(res){
-            setData(res.data.posts);
-          }
-      }) 
-    }else{
+    if(!Cookies.get('user_id')){
       navigate("/login");
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
+  }, [])
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
     return (
@@ -69,7 +64,15 @@ function TabPanel(props) {
           <Helmet>
             <title>GTrack | Announcements</title>
           </Helmet>
-            <AnnouncementsComponent announcements = {data} setAnnouncements = {setData}  statusToast={statusToast} setStatusToast={setStatusToast}/>
+          {loading?(
+          <div className='my-5'>
+            <CircularProgress size={80} color="success"/>
+          </div>
+          ):(
+          <AnnouncementPageContext.Provider value={{queryResult:{data,loading,error},refetch}}>
+            <AnnouncementsComponent statusToast={statusToast} setStatusToast={setStatusToast}/>
+          </AnnouncementPageContext.Provider>
+          )}
             <StatusToast statusToast={statusToast} setStatusToast={setStatusToast}/>
         </PageLayout>
     )

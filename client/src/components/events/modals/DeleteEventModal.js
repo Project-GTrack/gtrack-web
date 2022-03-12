@@ -15,7 +15,7 @@ import Axios from 'axios';
 import { useFormik } from 'formik';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
-
+import {useEventPageContext} from '../../../pages/EventsPage'; 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -56,6 +56,7 @@ BootstrapDialogTitle.propTypes = {
 };
 
 export default function DeleteEventModal(props) {
+  const {refetch}=useEventPageContext();
   const navigate = useNavigate();
   const eventValidationSchema = yup.object().shape({
     password: yup.string().required("Password is required"),
@@ -69,7 +70,7 @@ export default function DeleteEventModal(props) {
         if(res.data.success){
           props.setDeleteModal(false);
           props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
-          props.setEvents(res.data.data);
+          refetch();
         }else{
           props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"error"})
         }

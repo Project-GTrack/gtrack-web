@@ -18,7 +18,8 @@ import Axios from 'axios';
 import { useFormik } from 'formik';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
-
+import { useSnackbar } from 'notistack';
+import {useAnnouncementPageContext} from '../../../pages/AnnouncementsPage';  
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
       padding: theme.spacing(2),
@@ -58,11 +59,12 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   };
   
 export default function EditAnnouncementModal(props) {
+  const { enqueueSnackbar} = useSnackbar();
   const [images, setImages] = useState([]);
   const [urls, setUrls] = useState([]);
   const [progress, setProgress] = useState(0);
   const navigate = useNavigate();
-
+  const {refetch}=useAnnouncementPageContext();
   const FILE_SIZE = 160 * 1024;
   const SUPPORTED_FORMATS = [
       "image/jpg",
@@ -103,12 +105,11 @@ export default function EditAnnouncementModal(props) {
         urls:urls
       }).then(res=>{
         if(res.data.success){
-          props.setAnnouncements(res.data.data);
+          refetch();
           props.setOpenModal(false);
-          props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
+          enqueueSnackbar(res.data.message, { variant:'success' });
         }else{
-          props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"error"})
-      
+          enqueueSnackbar(res.data.message, { variant:'error' });
         }
       })
     }else{

@@ -4,7 +4,7 @@ import EmployeeCustomToolbar from './EmployeeCustomToolbar';
 import AddNewEmployeeModal from './modals/AddNewEmployeeModal';
 import moment from 'moment';
 import { useEmployeePageContext } from '../../pages/EmployeesPage';
-const DriversComponent = ({statusToast,setStatusToast,setAccounts}) => {
+const DriversComponent = () => {
   // const [, setDriverList] = useState([]);
   const {queryResult}=useEmployeePageContext();
   const drivers=queryResult.data.data.drivers;
@@ -34,9 +34,6 @@ const DriversComponent = ({statusToast,setStatusToast,setAccounts}) => {
       filterType: 'dropdown',
       customToolbarSelect:(selectedRows,displayData)=>(
         <EmployeeCustomToolbar
-          statusToast={statusToast} 
-          setStatusToast={setStatusToast} 
-          setAccounts={setAccounts} 
           data={data[selectedRows.data[0].dataIndex]} 
           selectedRows={selectedRows} 
           displayData={displayData}
@@ -49,11 +46,8 @@ const DriversComponent = ({statusToast,setStatusToast,setAccounts}) => {
               <button className='btn btn-success' onClick={()=>setOpenModal(true)}><i className="fa fa-plus" aria-hidden="true"></i> Add New Employee</button>
             </div>
             <AddNewEmployeeModal
-              statusToast={statusToast} 
-              setStatusToast={setStatusToast}
               openModal={openModal}
               setOpenModal={setOpenModal}
-              setAccounts={setAccounts}
             />
             <MUIDataTable
               title={"Drivers List"}

@@ -25,6 +25,7 @@ import { decodeToken } from "react-jwt";
 import Cookies from 'js-cookie';
 import { capitalizeWords } from '../helpers/TextFormat';
 import { useSchedulesPageContext } from '../../pages/SchedulesPage';
+import { useSnackbar } from 'notistack';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -65,6 +66,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   };
   
 const EditScheduleModal = (props) => {
+    const {enqueueSnackbar} = useSnackbar();
     const {queryResult,refetch}=useSchedulesPageContext();
     const driversAssignments={
         drivers:queryResult.data.data.drivers,
@@ -124,7 +126,7 @@ const EditScheduleModal = (props) => {
                 refetch();
                 props.setOpenEditModal(false);
                 resetForm();
-                props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
+                enqueueSnackbar(res.data.message, { variant:'success' });
             }else{
                 setError(res.data.message);
             }

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import * as React from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -16,6 +17,7 @@ import axios from "axios";
 import ReactMapboxGl, { Marker } from "react-mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { capitalizeWords } from "../../helpers/TextFormat";
+import { useDumpstersPageContext } from "../../../pages/DumpstersPage";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -59,6 +61,7 @@ BootstrapDialogTitle.propTypes = {
 };
 
 const AddNewDumpsterModal = (props) => {
+  const {refetch}=useDumpstersPageContext();
   const [coordinate, setCoordinate] = React.useState({
     latitude: 0,
     longitude: 0,
@@ -70,7 +73,7 @@ const AddNewDumpsterModal = (props) => {
     barangay: yup.string().required("Barangay is required"),
   });
   const handleFormSubmit = async (values, { resetForm }) => {
-    if (coordinate.latitude != 0 && coordinate.longitude != 0) {
+    if (coordinate.latitude !== 0 && coordinate.longitude !== 0) {
       axios
         .post(`${process.env.REACT_APP_BACKEND_URL}/admin/dumpster/add-dumpster`, {
           street: capitalizeWords(values.street),
@@ -88,7 +91,7 @@ const AddNewDumpsterModal = (props) => {
           setCoordinate({ latitude: 0, longitude: 0 });
           setError(null);
           if (res.data.success) {
-            props.setDumpsters(res.data.data);
+            refetch();
             props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
           }else{
             props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"info"})
@@ -181,27 +184,28 @@ const AddNewDumpsterModal = (props) => {
             </p>
           </div>
           <Map
+            // eslint-disable-next-line react/style-prop-object
             style="mapbox://styles/mapbox/streets-v9"
             containerStyle={{
               height: "36vh",
               width: "100%",
             }}
             center={
-              coordinate.latitude != 0 && coordinate.longitude != 0
+              coordinate.latitude !== 0 && coordinate.longitude !== 0
                 ? [coordinate.longitude, coordinate.latitude]
                 : [123.94964154058066, 10.482913243053028]
             }
             onClick={handleClick}
             zoom={
-              coordinate.latitude != 0 && coordinate.longitude != 0
+              coordinate.latitude !== 0 && coordinate.longitude !== 0
                 ? [15]
                 : [11]
             }
           >
-            {coordinate.latitude != 0 && coordinate.longitude != 0 ? (
+            {coordinate.latitude !== 0 && coordinate.longitude !== 0 ? (
               <Marker
                 coordinates={
-                  coordinate.latitude != 0 && coordinate.longitude != 0
+                  coordinate.latitude !== 0 && coordinate.longitude !== 0
                     ? [coordinate.longitude, coordinate.latitude]
                     : [123.94964154058066, 10.482913243053028]
                 }

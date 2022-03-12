@@ -142,6 +142,14 @@ const getTruckAssignments=async()=>{
     })
     return assignments?assignments:null;
 }
+const getTrucks=async()=>{
+    let trucks = await truck.model.findAll({
+        where:{
+            active:1
+        }
+    })
+    return trucks?trucks:null;
+}
 exports.addSchedule=async (req,res)=>{
     let sched=await schedule.model.create(req.body);
     if(sched){
@@ -165,8 +173,9 @@ exports.getScheduleTruckAssignment=async (req,res)=>{
     let calendar=await getSchedCalendar();
     let drivers=await getDrivers();
     let assignments=await getTruckAssignments();
+    let trucks=await getTrucks();
     
-    res.send({success:true,message:"Schedules obtained successfully",data:{schedule:sched,calendar,drivers,assignments}});
+    res.send({success:true,message:"Schedules obtained successfully",data:{schedule:sched,calendar,drivers,assignments,trucks}});
 }
 
 exports.updateSchedule=async (req,res)=>{

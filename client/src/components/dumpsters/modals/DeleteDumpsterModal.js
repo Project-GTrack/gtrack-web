@@ -14,6 +14,7 @@ import { useFormik } from "formik";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
 import Cookies from "js-cookie";
+import { useDumpstersPageContext } from "../../../pages/DumpstersPage";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -54,6 +55,7 @@ BootstrapDialogTitle.propTypes = {
 };
 
 const DeleteDumpsterModal = (props) => {
+  const {refetch}=useDumpstersPageContext();
   const dumpsterErrorHandling = yup.object().shape({
     password: yup.string().required("Password is required"),
   });
@@ -68,7 +70,7 @@ const DeleteDumpsterModal = (props) => {
         resetForm();
         props.setDeleteModal(false);
         if(res.data.success){
-          props.setDumpsters(res.data.data);
+          refetch();
           props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
         }else{
           props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"error"})

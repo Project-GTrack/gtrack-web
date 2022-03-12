@@ -15,6 +15,7 @@ import { useState } from "react";
 import Cookies from "js-cookie";
 import * as yup from 'yup'
 import { useSchedulesPageContext } from "../../pages/SchedulesPage";
+import { useSnackbar } from "notistack";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -49,6 +50,7 @@ const BootstrapDialogTitle = (props) => {
 };
 
 export default function DeleteScheduleModal(props) {
+  const {enqueueSnackbar} = useSnackbar();
   const {refetch}=useSchedulesPageContext();
   const passwordValidationSchema = yup.object().shape({
     password: yup
@@ -62,7 +64,7 @@ export default function DeleteScheduleModal(props) {
       if(res.data.success){
         refetch();
         props.setOpenDeleteModal(false);
-        props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
+        enqueueSnackbar(res.data.message, { variant:'success' });
       }else{
         setError(res.data.message);
       }

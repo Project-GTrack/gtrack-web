@@ -17,6 +17,7 @@ import ReactMapboxGl, { Marker } from "react-mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useDumpstersPageContext } from "../../../pages/DumpstersPage";
 import { capitalizeWords } from "../../helpers/TextFormat";
+import { useSnackbar } from "notistack";
 
 
 const Map = ReactMapboxGl({
@@ -53,6 +54,7 @@ BootstrapDialogTitle.propTypes = {
 };
 
 const EditDumpsterModal = (props) => {
+  const {enqueueSnackbar} = useSnackbar();
   const {refetch}=useDumpstersPageContext();
   const [coordinate, setCoordinate] = React.useState({
     latitude: 0,
@@ -98,9 +100,9 @@ const EditDumpsterModal = (props) => {
               props.setOpenModal(false);
               if(res.data.success){
                 refetch();
-                props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
+                enqueueSnackbar(res.data.message, { variant:'success' });
               }else{
-                props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"info"})
+                enqueueSnackbar(res.data.message, { variant:'error' });
               }
           });
       } else {

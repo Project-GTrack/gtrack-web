@@ -15,6 +15,7 @@ import { useState } from "react";
 import Cookies from "js-cookie";
 import * as yup from 'yup'
 import { useEmployeePageContext } from "../../../pages/EmployeesPage";
+import { useSnackbar } from "notistack";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -49,6 +50,7 @@ const BootstrapDialogTitle = (props) => {
 };
 
 export default function DeleteEmployeeModal(props) {
+  const {enqueueSnackbar} = useSnackbar();
   const passwordValidationSchema = yup.object().shape({
     password: yup
       .string()
@@ -63,7 +65,7 @@ export default function DeleteEmployeeModal(props) {
         // props.setAccounts(res.data.data);
         refetch();
         props.setDeleteModal(false);
-        props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"});
+        enqueueSnackbar(res.data.message, { variant:'success' });
       }else{
         setError(res.data.message);
       }

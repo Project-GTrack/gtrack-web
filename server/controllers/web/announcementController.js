@@ -94,23 +94,13 @@ exports.createAnnouncement = async(req, res) =>{
                 if(req.body.isNotified){
                    handleFirebase(req.body.title);
                 }
-                announce = await announcement.model.findAll({
-                    include:[
-                        {model: admin.model, as:"announcementAdmin"},
-                        {model: attachment_line.model, as: 'announcementLine',
-                            include:[{
-                                model: attachment.model, as:'lineAttachment'
-                            }]
-                        }
-                    ],
-                });
                 if(post){
-                    res.send({success:true,message:"Announcement created successfully!",data:announce});
+                    res.send({success:true,message:"Announcement created successfully!"});
                 }else{
-                    res.send({success:false,message:"Failed to create announcement.",data:null});
+                    res.send({success:false,message:"Failed to create announcement."});
                 }
             }else{
-                    res.send({success:false,message:"Attachment not created.",data:null});
+                    res.send({success:false,message:"Attachment not created."});
             }
         })
     }
@@ -141,20 +131,11 @@ exports.editAnnouncement = async(req, res) => {
             announcement_id: req.params.id
         }
     })
-    announce = await announcement.model.findAll({
-        include:[
-            {model: admin.model, as:"announcementAdmin"},
-            {model: attachment_line.model, as: 'announcementLine',
-                include:[{
-                    model: attachment.model, as:'lineAttachment'
-                }]
-            }
-        ],
-    });
+
     if(post){
-        res.send({success:true,message:"Announcement updated successfully!",data:announce});
+        res.send({success:true,message:"Announcement updated successfully!"});
     }else{
-        res.send({success:false,message:"Failed to update announcement.",data:null});
+        res.send({success:false,message:"Failed to update announcement."});
     }
  
    
@@ -187,24 +168,10 @@ exports.deleteAnnouncement = async(req, res) => {
                         announcement_id:req.params.id
                     }
                 })
-                console.log(announce);
                 if(announce !== 0){
-                    posts = await announcement.model.findAll({
-                        include:[
-                            {
-                                model: admin.model, as:"announcementAdmin"
-                            },
-                            {
-                                model: attachment_line.model, as: 'announcementLine',
-                                include:[{
-                                    model: attachment.model, as:'lineAttachment'
-                                }]
-                            }
-                        ],
-                    });
-                    res.send({success:true,message:"Announcement has been deleted",data:posts});
+                    res.send({success:true,message:"Announcement has been deleted"});
                 }else{
-                    res.send({success:false,message:"Failed to delete Announcement",data:null});
+                    res.send({success:false,message:"Failed to delete Announcement"});
                 }
                 
             }else{

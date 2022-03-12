@@ -7,7 +7,6 @@ import PageLayout from './PageLayout';
 import TruckAssignmentPanel from '../components/TruckAssignmentPanel';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import StatusToast from '../components/helpers/StatusToast';
 import { Helmet } from 'react-helmet';
 import useAxios,{ configure } from 'axios-hooks'
 import { CircularProgress } from '@mui/material';
@@ -20,11 +19,6 @@ const defaultContext= {
 const SchedulesPageContext = React.createContext(defaultContext);
 export const useSchedulesPageContext = () => useContext(SchedulesPageContext);
 const SchedulesPage = () => {
-    const [statusToast, setStatusToast] = useState({
-        isOpen:false,
-        message:"",
-        colorScheme:"success"
-    });
     const [value, setValue] = useState(0);
     // const [schedules,setSchedules]=useState([]);
     const [{ data, loading, error }, refetch] = useAxios({
@@ -109,14 +103,13 @@ const SchedulesPage = () => {
             ):(
             <SchedulesPageContext.Provider value={{queryResult:{data,loading,error},refetch}}>
               <TabPanel value={value} index={0}>
-                <SchedulePanel statusToast={statusToast} setStatusToast={setStatusToast} />
+                <SchedulePanel />
               </TabPanel>
               <TabPanel value={value} index={1}>
                   <TruckAssignmentPanel />
               </TabPanel>
             </SchedulesPageContext.Provider>
             )}
-            <StatusToast statusToast={statusToast} setStatusToast={setStatusToast}/>
         </PageLayout>
     )
 }

@@ -21,6 +21,9 @@ import Axios from 'axios';
 import { useFormik } from 'formik';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
+import {useAnnouncementPageContext} from '../../../pages/AnnouncementsPage';  
+
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
       padding: theme.spacing(2),
@@ -63,6 +66,8 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
 
 export default function AddNewAnnouncementModal(props) {
+  const { enqueueSnackbar} = useSnackbar();
+  const {refetch}=useAnnouncementPageContext();
   const [images, setImages] = useState([]);
   const [urls, setUrls] = useState([]);
   const [progress, setProgress] = useState(0);
@@ -105,13 +110,12 @@ export default function AddNewAnnouncementModal(props) {
         accessToken: Cookies.get('user_id')
       }).then(res=>{
         if(res.data.success){
-          props.setAnnouncements(res.data.data);
-          console.log(res.data.data)
+          refetch();
           props.setOpenModal(false);
           resetForm();
-          props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
+          enqueueSnackbar(res.data.message, { variant:'success' });
         }else{
-          props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"error"})
+          enqueueSnackbar(res.data.message, { variant:'error' });
         }
       })
     }else{
@@ -126,11 +130,11 @@ export default function AddNewAnnouncementModal(props) {
   });
   return (
     <BootstrapDialog
-      onClose={props.handleCloseModal}
+      onClose={()=>props.setOpenModal(false)}
       aria-labelledby="customized-dialog-title"
       open={props.openModal}
     >
-      <BootstrapDialogTitle id="customized-dialog-title" onClose={props.handleCloseModal}>
+      <BootstrapDialogTitle id="customized-dialog-title" onClose={()=>props.setOpenModal(false)}>
         Add New Announcement
       </BootstrapDialogTitle>
     <DialogContent dividers>

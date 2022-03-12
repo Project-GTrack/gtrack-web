@@ -32,8 +32,6 @@ const SchedulePanel = (props) => {
     filterType: 'dropdown',
         customToolbarSelect:(selectedRows,displayData)=>(
             <ScheduleCustomToolbar
-                statusToast={props.statusToast}
-                setStatusToast={props.setStatusToast} 
                 data={schedules[selectedRows.data[0].dataIndex]} 
                 openEditModal={openEditModal} 
                 setOpenEditModal={setOpenEditModal} 
@@ -143,8 +141,6 @@ const SchedulePanel = (props) => {
             <AddScheduleModal 
                 openAddModal={openAddModal}
                 setOpenAddModal={setOpenAddModal}
-                statusToast={props.statusToast}
-                setStatusToast={props.setStatusToast} 
             />
             {(!calendar)?(
                 <MUIDataTable

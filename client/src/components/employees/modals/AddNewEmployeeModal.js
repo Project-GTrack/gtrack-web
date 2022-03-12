@@ -22,6 +22,7 @@ import * as yup from 'yup'
 import Firebase from '../../helpers/Firebase';
 import { capitalizeWords } from '../../helpers/TextFormat';
 import { useEmployeePageContext } from '../../../pages/EmployeesPage';
+import { useSnackbar } from 'notistack';
 
 const auth = Firebase.auth();
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -63,6 +64,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   };
   
 export default function AddNewEmployeeModal(props) {
+  const {enqueueSnackbar} = useSnackbar();
   const {refetch}=useEmployeePageContext();
   const digitsOnly = (value) => /^\d+$/.test(value)
   const employeeRegisterValidationSchema = yup.object().shape({
@@ -121,9 +123,8 @@ export default function AddNewEmployeeModal(props) {
     .then(res=>{
       if(res.data.success){
         handleFirebase(values,resetForm);
-        // props.setAccounts(res.data.data);
-        refetch()
-        props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"});
+        refetch();
+        enqueueSnackbar(res.data.message, { variant:'success' });
       }else{
         setError(res.data.message);
       }

@@ -3,7 +3,10 @@ import MUIDataTable from "mui-datatables";
 import GarbageTrucksToolbar from './GarbageTrucksToolbar';
 import moment from 'moment';
 import AddTruckModal from './trucks/AddTruckModal';
-const GarbageTrucksPanel = ({trucks,setTrucks,statusToast,setStatusToast}) => {
+import { useTrucksPageContext } from '../pages/TrucksPage';
+const GarbageTrucksPanel = () => {
+    const {queryResult}= useTrucksPageContext();
+    const trucks = queryResult.data.data.trucks
     const columns = ["Plate Number", "Model","Added by","Date Added", "Status"];
     const [data, setData] = useState([]);
     const [openAddModal, setOpenAddModal] = useState(false);
@@ -27,10 +30,7 @@ const GarbageTrucksPanel = ({trucks,setTrucks,statusToast,setStatusToast}) => {
     filterType: 'dropdown',
     customToolbarSelect:(selectedRows,displayData)=>(
         <GarbageTrucksToolbar
-            statusToast={statusToast}
-            setStatusToast={setStatusToast} 
             data={trucks[selectedRows.data[0].dataIndex]} 
-            setTrucks={setTrucks} 
             openEditModal={openEditModal} 
             setOpenEditModal={setOpenEditModal} 
             openDeleteModal={openDeleteModal} 
@@ -51,7 +51,7 @@ const GarbageTrucksPanel = ({trucks,setTrucks,statusToast,setStatusToast}) => {
                     columns={columns}
                     options={options}
             />
-            <AddTruckModal setTrucks={setTrucks} statusToast={statusToast} setStatusToast={setStatusToast} openAddModal={openAddModal} setOpenAddModal={setOpenAddModal}/>
+            <AddTruckModal openAddModal={openAddModal} setOpenAddModal={setOpenAddModal}/>
         </div>
     )
 }

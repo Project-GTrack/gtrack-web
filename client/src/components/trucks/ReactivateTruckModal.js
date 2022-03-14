@@ -14,6 +14,8 @@ import axios from "axios";
 import { useState } from "react";
 import Cookies from "js-cookie";
 import * as yup from 'yup';
+import { useTrucksPageContext } from "../../pages/TrucksPage";
+import { useSnackbar } from "notistack";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -48,6 +50,8 @@ const BootstrapDialogTitle = (props) => {
 };
 
 export default function ReactivateTruckModal(props) {
+  const {enqueueSnackbar} = useSnackbar();
+  const {refetch}= useTrucksPageContext();
   const passwordValidationSchema = yup.object().shape({
     password: yup
       .string()
@@ -59,9 +63,9 @@ export default function ReactivateTruckModal(props) {
     {password:values.password,accessToken:Cookies.get("user_id")})
     .then(res=>{
       if(res.data.success){
-        props.setTrucks(res.data.data);
+        refetch();
+        enqueueSnackbar(res.data.message, { variant:'success' });
         props.setOpenReactivateModal(false);
-        props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
       }else{
         setError(res.data.message);
       }

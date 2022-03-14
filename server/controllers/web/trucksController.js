@@ -36,29 +36,7 @@ exports.addTruck = async(req, res) => {
                         active:1
                     })
                     if (data) {
-                        // place into function
-                        let trucksActive =await truck.model.findAll({
-                            where:{
-                                active:1,
-                                deletedAt:null
-                            },
-                            include:[{
-                                model: user.model, as:"truckUser"
-                            }
-                            ]
-                        });
-                        let trucksInactive =await truck.model.findAll({
-                            where:{
-                                active:0,
-                                deletedAt:null
-                            },
-                            include:[{
-                                model: user.model, as:"truckUser"
-                            }
-                            ]
-                        });
-                        //
-                        res.send({success:true,message:"Truck Record Successfully Created", data:{trucks:trucksActive, inactives:trucksInactive}});
+                        res.send({success:true,message:"Truck Record Successfully Created"});
 
                     }
                 } else {
@@ -109,29 +87,7 @@ exports.updateTruck = async(req, res) => {
         }
     )
     if (data) {
-        //
-        let trucksActive =await truck.model.findAll({
-            where:{
-                active:1,
-                deletedAt:null
-            },
-            include:[{
-                model: user.model, as:"truckUser"
-            }
-            ]
-        });
-        let trucksInactive =await truck.model.findAll({
-            where:{
-                active:0,
-                deletedAt:null
-            },
-            include:[{
-                model: user.model, as:"truckUser"
-            }
-            ]
-        });
-        //
-        res.send({success:true,message:"Truck Record Successfully Updated", data:{trucks:trucksActive, inactives:trucksInactive}});
+        res.send({success:true,message:"Truck Record Successfully Updated"});
     } else {
         return res.send("Something went balistic");
     }
@@ -170,27 +126,7 @@ exports.deactivateTruck = async(req,res) => {  //move to maintenance
                     }
                 )
                 if (data) {
-                    let trucksActive =await truck.model.findAll({
-                        where:{
-                            active:1,
-                            deletedAt:null
-                        },
-                        include:[{
-                            model: user.model, as:"truckUser"
-                        }
-                        ]
-                    });
-                    let trucksInactive =await truck.model.findAll({
-                        where:{
-                            active:0,
-                            deletedAt:null
-                        },
-                        include:[{
-                            model: user.model, as:"truckUser"
-                        }
-                        ]
-                    });
-                    res.send({success:true,message:"Truck Record Moved to Under Maintenance", data:{trucks:trucksActive, inactives:trucksInactive}});
+                    res.send({success:true,message:"Truck Record Moved to Under Maintenance"});
                 } else {
                     return res.send("something went wrong")
                 }
@@ -213,27 +149,7 @@ exports.activateTruck = async(req,res) => {     //move to active trucks
         }
     )
     if (data) {
-        let trucksActive =await truck.model.findAll({
-            where:{
-                active:1,
-                deletedAt:null
-            },
-            include:[{
-                model: user.model, as:"truckUser"
-            }
-            ]
-        });
-        let trucksInactive =await truck.model.findAll({
-            where:{
-                active:0,
-                deletedAt:null
-            },
-            include:[{
-                model: user.model, as:"truckUser"
-            }
-            ]
-        });
-        res.send({success:true,message:"Truck Record Moved to Garbage Trucks", data:{trucks:trucksActive, inactives:trucksInactive}});
+        res.send({success:true,message:"Truck Record Moved to Garbage Trucks"});
         
     } else {
         return res.send("Something went wrong");

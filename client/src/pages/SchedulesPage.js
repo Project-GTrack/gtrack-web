@@ -21,7 +21,6 @@ export const useSchedulesPageContext = () => useContext(SchedulesPageContext);
 const SchedulesPage = () => {
     const [value, setValue] = useState(0);
     // const [schedules,setSchedules]=useState([]);
-    const [assignments,setAssignments]=useState([]);
     const [{ data, loading, error }, refetch] = useAxios({
       url: `${process.env.REACT_APP_BACKEND_URL}/admin/schedule/get_schedules`,
       method:'get' 
@@ -107,7 +106,7 @@ const SchedulesPage = () => {
                 <SchedulePanel />
               </TabPanel>
               <TabPanel value={value} index={1}>
-                  <TruckAssignmentPanel assignments={assignments} setAssignments={setAssignments}/>
+                  <TruckAssignmentPanel />
               </TabPanel>
             </SchedulesPageContext.Provider>
             )}

@@ -17,6 +17,7 @@ import { useSchedulesPageContext } from "../../../pages/SchedulesPage";
 import { useFormik } from "formik";
 import IconButton from "@mui/material/IconButton";
 import axios from "axios";
+import { useSnackbar } from "notistack";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -56,6 +57,7 @@ BootstrapDialogTitle.propTypes = {
 };
 
 const EditAssignment = (props) => {
+  const {enqueueSnackbar} = useSnackbar();
   const {queryResult,refetch}=useSchedulesPageContext();
   const assignmentErrorHandling = yup.object().shape({
     driver: yup.string().required("Driver is required"),
@@ -82,9 +84,9 @@ const EditAssignment = (props) => {
           props.setOpenModal(false);
           if(res.data.success){
             refetch();
-            props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
+            enqueueSnackbar(res.data.message, { variant:'success' });
           }else{
-            props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"info"})
+            enqueueSnackbar(res.data.message, { variant:'error' });
           }
         });
   };

@@ -15,7 +15,7 @@ import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
 import Cookies from "js-cookie";
 import { useSchedulesPageContext } from "../../../pages/SchedulesPage";
-
+import { useSnackbar } from "notistack";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -56,12 +56,12 @@ BootstrapDialogTitle.propTypes = {
 };
 
 const DeleteAssignment = (props) => {
+  const {enqueueSnackbar} = useSnackbar();
   const {refetch}=useSchedulesPageContext();
   const assignmentErrorHandling = yup.object().shape({
     password: yup.string().required("Password is required"),
   });
   const handleFormSubmit = (values, { resetForm }) => {
-    props.setPrevData(props.data);
     axios
       .post(
         `${process.env.REACT_APP_BACKEND_URL}/admin/assignment/delete-assignment/${props.data[0]}`,
@@ -72,9 +72,9 @@ const DeleteAssignment = (props) => {
         props.setDeleteModal(false);
         if(res.data.success){
           refetch();
-          props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
+          enqueueSnackbar(res.data.message, { variant:'success' });
         }else{
-          props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"error"})
+          enqueueSnackbar(res.data.message, { variant:'error' });
         }
         
       });

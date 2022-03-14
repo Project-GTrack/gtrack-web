@@ -63,4 +63,4 @@ app.use("/admin/profile",adminProfileRoutes);
 //     });
 //   }
 
-app.listen(8000,()=> console.log("Back end is running at port 8000"));
+app.listen(process.env.PORT || 8000,()=> console.log("Back end is running at port 8000"));

@@ -6,9 +6,34 @@ import PropTypes from 'prop-types';
 import PageLayout from './PageLayout'
 import GarbageTrucksPanel from '../components/GarbageTrucksPanel';
 import UnderMaintenancePanel from '../components/UnderMaintenancePanel';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import Cookies from 'js-cookie';
+import axios from 'axios';
+import StatusToast from '../components/helpers/StatusToast';
+import { Helmet } from 'react-helmet';
 
 const TrucksPage = () => {
     const [value, setValue] = useState(0);
+    const [statusToast,setStatusToast]=useState(false);
+    const [trucks,setTrucks]=useState({
+      trucks:[],
+      inactives:[]
+    });
+    const navigate = useNavigate();
+    useEffect(() => {
+      if(Cookies.get('user_id')){
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}/admin/truck/get`)
+        .then(res=>{
+          if(res.data.success){
+            setTrucks(res.data.data);
+          }
+        })
+      }else{
+        navigate("/login");
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[])
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -45,6 +70,9 @@ const TrucksPage = () => {
       };
     return (
         <PageLayout headerTitle={"Garbage Trucks"}>
+          <Helmet>
+              <title>GTrack | Trucks</title>
+          </Helmet>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                 <Tab style={{ fontWeight: 600 }} label="Garbage Trucks" {...a11yProps(0)} />
@@ -52,11 +80,12 @@ const TrucksPage = () => {
             </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
-                <GarbageTrucksPanel/>
+                <GarbageTrucksPanel trucks={trucks.trucks} setTrucks={setTrucks} statusToast={statusToast} setStatusToast={setStatusToast}/>
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <UnderMaintenancePanel/>
+                <UnderMaintenancePanel inactives={trucks.inactives} setTrucks={setTrucks}/>
             </TabPanel>
+            <StatusToast statusToast={statusToast} setStatusToast={setStatusToast}/>
         </PageLayout>
     )
 }

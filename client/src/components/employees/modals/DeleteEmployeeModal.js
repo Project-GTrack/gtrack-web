@@ -14,6 +14,8 @@ import axios from "axios";
 import { useState } from "react";
 import Cookies from "js-cookie";
 import * as yup from 'yup'
+import { useEmployeePageContext } from "../../../pages/EmployeesPage";
+import { useSnackbar } from "notistack";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -48,18 +50,22 @@ const BootstrapDialogTitle = (props) => {
 };
 
 export default function DeleteEmployeeModal(props) {
+  const {enqueueSnackbar} = useSnackbar();
   const passwordValidationSchema = yup.object().shape({
     password: yup
       .string()
       .required('Password is required'),
   })
+  const {refetch}=useEmployeePageContext();
   const [error,setError]=useState(null);
   const handleFormSubmit = async() =>{
     axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/deactivate`,{email:props.data[2],password:values.password,accessToken:Cookies.get("user_id")})
     .then(res=>{
       if(res.data.success){
-        props.setAccounts(res.data.data);
-        props.setDeleteModal(false)
+        // props.setAccounts(res.data.data);
+        refetch();
+        props.setDeleteModal(false);
+        enqueueSnackbar(res.data.message, { variant:'success' });
       }else{
         setError(res.data.message);
       }

@@ -1,5 +1,5 @@
+/* eslint-disable jsx-a11y/alt-text */
 import * as React from "react";
-import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -13,17 +13,13 @@ import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import ReactMapboxGl, { Layer, Feature, Marker } from "react-mapbox-gl";
+import ReactMapboxGl, { Marker } from "react-mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { useDumpstersPageContext } from "../../../pages/DumpstersPage";
+import { capitalizeWords } from "../../helpers/TextFormat";
+import { useSnackbar } from "notistack";
 
-const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  "& .MuiDialogContent-root": {
-    padding: theme.spacing(2),
-  },
-  "& .MuiDialogActions-root": {
-    padding: theme.spacing(1),
-  },
-}));
+
 const Map = ReactMapboxGl({
   accessToken:
     "pk.eyJ1IjoicmpvbGl2ZXJpbyIsImEiOiJja2ZhanZrZnkwajFjMnJwN25mem1tenQ0In0.fpQUiUyn3J0vihGxhYA2PA",
@@ -58,6 +54,8 @@ BootstrapDialogTitle.propTypes = {
 };
 
 const EditDumpsterModal = (props) => {
+  const {enqueueSnackbar} = useSnackbar();
+  const {refetch}=useDumpstersPageContext();
   const [coordinate, setCoordinate] = React.useState({
     latitude: 0,
     longitude: 0,
@@ -67,8 +65,6 @@ const EditDumpsterModal = (props) => {
     street: yup.string().required("Street is required"),
     purok: yup.string().required("Purok is required"),
     barangay: yup.string().required("Barangay is required"),
-    town: yup.string().required("Town is required"),
-    postal_code: yup.string().required("Postal Code is required"),
   });
   React.useEffect(() => {
     setCoordinate({
@@ -80,41 +76,34 @@ const EditDumpsterModal = (props) => {
     values.barangay = props.data[1].split(", ")[2];
     values.town = props.data[1].split(", ")[3];
     values.postal_code = props.data[2];
-  }, [props.data[0], props.openModal]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.openModal]);
   const handleFormSubmit = (values, { resetForm }) => {
-    if (
-      values.street === props.data[1].split(", ")[0] &&
-      values.purok === props.data[1].split(", ")[1] &&
-      values.barangay === props.data[1].split(", ")[2] &&
-      values.town === props.data[1].split(", ")[3] &&
-      values.postal_code === props.data[2] &&
-      coordinate.latitude === props.data[3] &&
-      coordinate.longitude === props.data[4]
-    ) {
+    if (values.street === props.data[1].split(", ")[0] && values.purok === props.data[1].split(", ")[1] && values.barangay === props.data[1].split(", ")[2] && values.town === props.data[1].split(", ")[3] && values.postal_code === props.data[2] && coordinate.latitude === props.data[3] && coordinate.longitude === props.data[4]) {
       props.setOpenModal(false);
     } else {
-      if (coordinate.latitude != 0 && coordinate.longitude != 0) {
+      if (coordinate.latitude !== 0 && coordinate.longitude !== 0) {
         axios
           .put(
-            `http://localhost:8000/admin/dumpster/edit-dumpster/${props.data[0]}`,
+            `${process.env.REACT_APP_BACKEND_URL}/admin/dumpster/edit-dumpster/${props.data[0]}`,
             {
-              street: values.street,
-              purok: values.purok,
-              barangay: values.barangay,
-              town: values.town,
-              postal_code: values.postal_code,
+              street: capitalizeWords(values.street),
+              purok: capitalizeWords(values.purok),
+              barangay: capitalizeWords(values.barangay),
               latitude: coordinate.latitude,
               longitude: coordinate.longitude,
               accessToken: Cookies.get("user_id"),
             }
           )
           .then((res) => {
-            if (res.data.success) {
               resetForm();
               props.setOpenModal(false);
-              props.setMesAlert(true);
-              props.setMessage(res.data);
-            }
+              if(res.data.success){
+                refetch();
+                enqueueSnackbar(res.data.message, { variant:'success' });
+              }else{
+                enqueueSnackbar(res.data.message, { variant:'error' });
+              }
           });
       } else {
         setError("Please select a designated location for the dumpster");
@@ -127,8 +116,6 @@ const EditDumpsterModal = (props) => {
         street: props.data[1].split(", ")[0],
         purok: props.data[1].split(", ")[1],
         barangay: props.data[1].split(", ")[2],
-        town: props.data[1].split(", ")[3],
-        postal_code: props.data[2],
       },
       enableReinitialize: true,
       validationSchema: dumpsterErrorHandling,
@@ -154,35 +141,37 @@ const EditDumpsterModal = (props) => {
       <DialogContent dividers>
         <div style={{ height: "38vh", width: "100%" }}>
           <Map
+            // eslint-disable-next-line react/style-prop-object
             style="mapbox://styles/mapbox/streets-v9"
             containerStyle={{
               height: "36vh",
               width: "100%",
             }}
             center={
-              coordinate.latitude == 0 && coordinate.longitude == 0
+              coordinate.latitude === 0 && coordinate.longitude === 0
                 ? [props.data[4], props.data[3]]
                 : [coordinate.longitude, coordinate.latitude]
             }
             zoom={
-              (props.data[3] != 0 && props.data[4] != 0) ||
-              (coordinate.latitude != 0 && coordinate.longitude != 0)
+              (props.data[3] !== 0 && props.data[4] !== 0) ||
+              (coordinate.latitude !== 0 && coordinate.longitude !== 0)
                 ? [15]
                 : [11]
             }
             onClick={handleClick}
           >
-            {(props.data[3] != 0 && props.data[4] != 0) ||
-            (coordinate.latitude != 0 && coordinate.longitude != 0) ? (
+            {(props.data[3] !== 0 && props.data[4] !== 0) ||
+            (coordinate.latitude !== 0 && coordinate.longitude !== 0) ? (
               <Marker
                 coordinates={
-                  coordinate.latitude == 0 && coordinate.longitude == 0
+                  coordinate.latitude === 0 && coordinate.longitude === 0
                     ? [props.data[4], props.data[3]]
                     : [coordinate.longitude, coordinate.latitude]
                 }
                 anchor="bottom"
               >
-                <img style={mystyle} src="/dumpster_marker_icon.png" />
+                <img style={mystyle} 
+                src="/dumpster_marker_icon.png" />
               </Marker>
             ) : (
               <></>
@@ -201,6 +190,7 @@ const EditDumpsterModal = (props) => {
             value={values.street}
             onChange={handleChange("street")}
             onBlur={handleBlur("street")}
+            inputProps={{ style: { textTransform: "capitalize" } }}
             variant="standard"
           />
           {errors.street && touched.street && (
@@ -216,6 +206,7 @@ const EditDumpsterModal = (props) => {
             value={values.purok}
             onChange={handleChange("purok")}
             onBlur={handleBlur("purok")}
+            inputProps={{ style: { textTransform: "capitalize" } }}
             variant="standard"
           />
           {errors.purok && touched.purok && (
@@ -231,40 +222,11 @@ const EditDumpsterModal = (props) => {
             value={values.barangay}
             onChange={handleChange("barangay")}
             onBlur={handleBlur("barangay")}
+            inputProps={{ style: { textTransform: "capitalize" } }}
             variant="standard"
           />
           {errors.barangay && touched.barangay && (
             <p className="text-danger small ">{errors.barangay}</p>
-          )}
-          <TextField
-            autoFocus
-            margin="dense"
-            id="town"
-            label="Town"
-            type="text"
-            fullWidth
-            value={values.town}
-            onChange={handleChange("town")}
-            onBlur={handleBlur("town")}
-            variant="standard"
-          />
-          {errors.town && touched.town && (
-            <p className="text-danger small ">{errors.town}</p>
-          )}
-          <TextField
-            autoFocus
-            margin="dense"
-            id="postal"
-            label="Postal Code"
-            type="text"
-            fullWidth
-            value={values.postal_code}
-            onChange={handleChange("postal_code")}
-            onBlur={handleBlur("postal_code")}
-            variant="standard"
-          />
-          {errors.postal_code && touched.postal_code && (
-            <p className="text-danger small ">{errors.postal_code}</p>
           )}
         </Box>
       </DialogContent>

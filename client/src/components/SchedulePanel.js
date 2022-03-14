@@ -1,24 +1,29 @@
 import React, { useEffect, useState } from 'react'
 import MUIDataTable from "mui-datatables";
-import CustomSelectToolbar from './CustomSelectToolbar';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
-import axios from 'axios';
+// import axios from 'axios';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import ScheduleDialogBox from './ScheduleDialogBox';
-const SchedulePanel = () => {
+import AddScheduleModal from './schedules/AddScheduleModal';
+import ScheduleCustomToolbar from './schedules/ScheduleCustomToolbar';
+import { useSchedulesPageContext } from '../pages/SchedulesPage';
+const SchedulePanel = (props) => {
+    const {queryResult}=useSchedulesPageContext();
+    const schedules=queryResult.data.data.schedule;
+    const calendarData=queryResult.data.data.calendar;
     const [calendar,setCalendar]=useState(false);
+    const [data, setData] = useState([]);
+    const [openAddModal,setOpenAddModal]=useState(false);
+    const [openEditModal,setOpenEditModal]=useState(false);
+    const [openDeleteModal,setOpenDeleteModal]=useState(false);
     const [open,setOpen]=useState({
         isOpen:false,
         data:null
     });
     const [event,setEvent]=useState([]);
-    const [localizer,setLocalizer] = useState(momentLocalizer(moment));
-    const columns = ["Schedule", "Residual", "Biodegradable", "Non-biodegradable","Date Created"];
-
-    const data = [
-    ["01/01/22", "No", "No", "Yes","01/01/22"],
-    ];
+    const [localizer] = useState(momentLocalizer(moment));
+    const columns = ["Type","Schedule","Garbage Type","Driver","Landmark","Address","Date Created"];
 
     const options = {
     selectableRowsHeader: false,
@@ -26,7 +31,15 @@ const SchedulePanel = () => {
     filter: true,
     filterType: 'dropdown',
         customToolbarSelect:(selectedRows,displayData)=>(
-            <CustomSelectToolbar selectedRows={selectedRows} displayData={displayData}/>
+            <ScheduleCustomToolbar
+                data={schedules[selectedRows.data[0].dataIndex]} 
+                openEditModal={openEditModal} 
+                setOpenEditModal={setOpenEditModal} 
+                openDeleteModal={openDeleteModal} 
+                setOpenDeleteModal={setOpenDeleteModal} 
+                selectedRows={selectedRows} 
+                displayData={displayData}
+            />
         )
     };
     const CustomToolbar=(props)=>{
@@ -61,24 +74,54 @@ const SchedulePanel = () => {
         );
     }
     useEffect(() => {
-        axios.get(`${process.env.REACT_APP_BACKEND_URL}/admin/schedule/display`)
-        .then(res => {
-            if(res.data.success){
-                // setSchedule(res.data.data.schedule);
+        let temp=[];
+        // eslint-disable-next-line array-callback-return
+        schedules.map((item)=>{
+            let sched=JSON.parse(item.schedule);
+            let when="";
+            // eslint-disable-next-line array-callback-return
+            sched.when.map((itemNew)=>{
+                if(sched.type==='weekly'){
+                    when=when+itemNew.schedule+"/";
+                }else{
+                    when=when+moment(itemNew.schedule).format("MMMM DD, YYYY")+"/";
+                }
+            })
+            temp.push([
+                sched.type==='weekly'?"Weekly":"Specific",
+                when.split(/[/,]+/).join(',').replace(/(^,)|(,$)/g, ""),
+                item.garbage_type,
+                item.scheduleDriver.fname+" "+item.scheduleDriver.lname,
+                item.landmark,
+                `${item.purok?item.purok:""} ${item.street?item.street:""} ${item.barangay?item.barangay:""}`,
+                item.createdAt && moment(item.createdAt).format("MMMM DD, YYYY"),
+                item.schedule_id,
+                item.assignment_id,
+                item.driver_id
+            ]);
+        })
+        setData([...temp]);
+            if(calendarData){
                 let events=[];
                 // eslint-disable-next-line array-callback-return
-                res.data.data.schedule.map((date)=>{
+                calendarData.schedule.map((date)=>{
+                    let tempDate=moment(date.date).format('YYYY-MM-DD');
+                    let tempStartTime=moment(date.start_time).format('HH:mm:ss');
+                    let tempEndTime=moment(date.end_time).format('HH:mm:ss');
                     events.push({
                         title: date.details.landmark+" | "+date.details.garbage_type,
                         allDay: false,
-                        start: new Date(moment(date.date)), // 10.00 AM
-                        end: new Date(moment(date.date)),
+                        start: new Date(moment(tempDate+tempStartTime,'YYYY-MM-DDLT').toISOString()), // 10.00 AM
+                        end: new Date(moment(tempDate+tempEndTime,'YYYY-MM-DDLT').toISOString()),
                         resource: JSON.stringify(date) // 2.00 PM
                     })
                 })
                 setEvent([...events]);
             }
-        })
+        return ()=>{
+            setEvent([]);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     const handleSelect=(event)=>{
         setOpen({isOpen:true,data:JSON.parse(event.resource)});
@@ -88,13 +131,17 @@ const SchedulePanel = () => {
             <div className='mb-3'>
             {(!calendar)?(
                 <>
-                    <button className='btn btn-success'><i className="fa fa-plus" aria-hidden="true"></i> Add New Schedule</button>
+                    <button className='btn btn-success' onClick={()=>setOpenAddModal(true)}><i className="fa fa-plus" aria-hidden="true"></i> Add New Schedule</button>
                     <button onClick={()=>setCalendar(true)} className='btn btn-secondary mx-2'><i className="fa fa-calendar" aria-hidden="true"></i> View Calendar</button>
                 </>
             ):(
                 <button onClick={()=>setCalendar(false)} className='btn btn-secondary'><i className="fa fa-arrow-left" aria-hidden="true"></i> Back</button>
             )}
             </div>
+            <AddScheduleModal 
+                openAddModal={openAddModal}
+                setOpenAddModal={setOpenAddModal}
+            />
             {(!calendar)?(
                 <MUIDataTable
                     title={"Schedule List"}

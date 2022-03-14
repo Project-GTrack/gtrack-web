@@ -11,7 +11,7 @@ schedule.model.belongsTo(user.model,{foreignKey: 'admin_id', as: 'scheduleAdmin'
 schedule.model.belongsTo(user.model,{foreignKey: 'driver_id', as: 'scheduleDriver'});
 schedule.model.hasOne(truck_assignment.model,{foreignKey: 'assignment_id', as: 'scheduleTruckAssignment'});
 truck_assignment.model.belongsTo(user.model,{foreignKey: 'driver_id', as: 'truckAssignmentDriver'});
-truck_assignment.model.hasOne(truck.model,{foreignKey: 'truck_id', as: 'truckAssignmentTruck'});
+truck_assignment.model.hasOne(truck.model,{foreignKey: 'truck_id', sourceKey: 'truck_id',as: 'truckAssignmentTruck'});
 truck.model.belongsTo(user.model,{foreignKey: 'user_id', as: 'truckUser'});
 
 exports.display=async (req,res)=>{

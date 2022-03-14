@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import * as React from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -13,8 +14,11 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import IconButton from "@mui/material/IconButton";
 import axios from "axios";
-import ReactMapboxGl, { Layer, Feature, Marker } from "react-mapbox-gl";
+import ReactMapboxGl, { Marker } from "react-mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { capitalizeWords } from "../../helpers/TextFormat";
+import { useDumpstersPageContext } from "../../../pages/DumpstersPage";
+import { useSnackbar } from "notistack";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -58,6 +62,8 @@ BootstrapDialogTitle.propTypes = {
 };
 
 const AddNewDumpsterModal = (props) => {
+  const {enqueueSnackbar} = useSnackbar();
+  const {refetch}=useDumpstersPageContext();
   const [coordinate, setCoordinate] = React.useState({
     latitude: 0,
     longitude: 0,
@@ -67,29 +73,30 @@ const AddNewDumpsterModal = (props) => {
     street: yup.string().required("Street is required"),
     purok: yup.string().required("Purok is required"),
     barangay: yup.string().required("Barangay is required"),
-    town: yup.string().required("Town is required"),
-    postal_code: yup.string().required("Postal Code is required"),
   });
   const handleFormSubmit = async (values, { resetForm }) => {
-    if (coordinate.latitude != 0 && coordinate.longitude != 0) {
+    if (coordinate.latitude !== 0 && coordinate.longitude !== 0) {
       axios
-        .post("http://localhost:8000/admin/dumpster/add-dumpster", {
-          street: values.street,
-          purok: values.purok,
-          barangay: values.barangay,
-          town: values.town,
-          postal_code: values.postal_code,
+        .post(`${process.env.REACT_APP_BACKEND_URL}/admin/dumpster/add-dumpster`, {
+          street: capitalizeWords(values.street),
+          purok: capitalizeWords(values.purok),
+          barangay: capitalizeWords(values.barangay),
+          town: "Compostela",
+          postal_code: "6003",
           latitude: coordinate.latitude,
           longitude: coordinate.longitude,
           accessToken: Cookies.get("user_id"),
         })
         .then((res) => {
+          resetForm();
+          props.setOpenModal(false);
+          setCoordinate({ latitude: 0, longitude: 0 });
+          setError(null);
           if (res.data.success) {
-            resetForm();
-            props.setOpenModal(false);
-            props.setMesAlert(true);
-            props.setMessage(res.data);
-            setCoordinate({ latitude: 0, longitude: 0 });
+            refetch();
+            enqueueSnackbar(res.data.message, { variant:'success' });
+          }else{
+            enqueueSnackbar(res.data.message, { variant:'error' });
           }
         });
     } else {
@@ -102,8 +109,6 @@ const AddNewDumpsterModal = (props) => {
         street: "",
         purok: "",
         barangay: "",
-        town: "",
-        postal_code: "",
       },
       enableReinitialize: true,
       validationSchema: dumpsterErrorHandling,
@@ -136,6 +141,7 @@ const AddNewDumpsterModal = (props) => {
             value={values.street}
             onChange={handleChange("street")}
             onBlur={handleBlur("street")}
+            inputProps={{ style: { textTransform: "capitalize" } }}
             variant="standard"
           />
           {errors.street && touched.street && (
@@ -150,6 +156,7 @@ const AddNewDumpsterModal = (props) => {
             value={values.purok}
             onChange={handleChange("purok")}
             onBlur={handleBlur("purok")}
+            inputProps={{ style: { textTransform: "capitalize" } }}
             variant="standard"
           />
           {errors.purok && touched.purok && (
@@ -164,38 +171,11 @@ const AddNewDumpsterModal = (props) => {
             value={values.barangay}
             onChange={handleChange("barangay")}
             onBlur={handleBlur("barangay")}
+            inputProps={{ style: { textTransform: "capitalize" } }}
             variant="standard"
           />
           {errors.barangay && touched.barangay && (
             <p className="text-danger small ">{errors.barangay}</p>
-          )}
-          <TextField
-            margin="dense"
-            id="town"
-            label="Town"
-            type="text"
-            fullWidth
-            value={values.town}
-            onChange={handleChange("town")}
-            onBlur={handleBlur("town")}
-            variant="standard"
-          />
-          {errors.town && touched.town && (
-            <p className="text-danger small ">{errors.town}</p>
-          )}
-          <TextField
-            margin="dense"
-            id="postal"
-            label="Postal Code"
-            type="text"
-            fullWidth
-            value={values.postal_code}
-            onChange={handleChange("postal_code")}
-            onBlur={handleBlur("postal_code")}
-            variant="standard"
-          />
-          {errors.postal_code && touched.postal_code && (
-            <p className="text-danger small ">{errors.postal_code}</p>
           )}
           <div style={{ marginTop: "20px", marginBottom: "-18px" }}>
             <p>
@@ -206,27 +186,28 @@ const AddNewDumpsterModal = (props) => {
             </p>
           </div>
           <Map
+            // eslint-disable-next-line react/style-prop-object
             style="mapbox://styles/mapbox/streets-v9"
             containerStyle={{
               height: "36vh",
               width: "100%",
             }}
             center={
-              coordinate.latitude != 0 && coordinate.longitude != 0
+              coordinate.latitude !== 0 && coordinate.longitude !== 0
                 ? [coordinate.longitude, coordinate.latitude]
                 : [123.94964154058066, 10.482913243053028]
             }
             onClick={handleClick}
             zoom={
-              coordinate.latitude != 0 && coordinate.longitude != 0
+              coordinate.latitude !== 0 && coordinate.longitude !== 0
                 ? [15]
                 : [11]
             }
           >
-            {coordinate.latitude != 0 && coordinate.longitude != 0 ? (
+            {coordinate.latitude !== 0 && coordinate.longitude !== 0 ? (
               <Marker
                 coordinates={
-                  coordinate.latitude != 0 && coordinate.longitude != 0
+                  coordinate.latitude !== 0 && coordinate.longitude !== 0
                     ? [coordinate.longitude, coordinate.latitude]
                     : [123.94964154058066, 10.482913243053028]
                 }

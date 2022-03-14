@@ -1,19 +1,38 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect,useContext} from 'react';
 import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
 import PageLayout from './PageLayout';
 import EventsComponent from '../components/events/EventsComponent';
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
+import StatusToast from '../components/helpers/StatusToast';
+import { Helmet } from 'react-helmet';
+import useAxios,{ configure } from 'axios-hooks'
+import { CircularProgress } from '@mui/material';
+configure({ ssr:false })
+const defaultContext= {
+  queryResult: {data:null,loading:false},
+  refetch: () => {},
+};
+const EventPageContext = React.createContext(defaultContext);
+export const useEventPageContext = () => useContext(EventPageContext);
 const EventsPage = () =>{
-    const [value, setValue] = useState(0);
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
-    function a11yProps(index) {
-        return {
-            id: `simple-tab-${index}`,
-            'aria-controls': `simple-tabpanel-${index}`,
-        };
-    }
+    const navigate = useNavigate();
+    const [statusToast, setStatusToast] = useState({
+      isOpen : false,
+      message : "",
+      colorScheme:"success"
+    })
+    const [{ data, loading, error }, refetch] = useAxios({
+      url: `${process.env.REACT_APP_BACKEND_URL}/admin/event/view`,
+      method:'get' 
+    });
+    useEffect(() => {
+      if(!Cookies.get('user_id')){
+        navigate("/login");
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
     function TabPanel(props) {
         const { children, value, index, ...other } = props;
       
@@ -41,7 +60,19 @@ const EventsPage = () =>{
       };
     return (
         <PageLayout headerTitle={"Events"}>
-           <EventsComponent/>
+          <Helmet>
+            <title>GTrack | Events</title>
+          </Helmet>
+          {loading?(
+          <div className='my-5'>
+            <CircularProgress size={80} color="success"/>
+          </div>
+          ):(
+            <EventPageContext.Provider value={{queryResult:{data,loading,error},refetch}}>
+              <EventsComponent statusToast={statusToast} setStatusToast={setStatusToast}/>
+            </EventPageContext.Provider>
+           )}
+           <StatusToast statusToast={statusToast} setStatusToast={setStatusToast}/>
         </PageLayout>
     )
 }

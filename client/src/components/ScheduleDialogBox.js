@@ -5,6 +5,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
+import moment from 'moment';
 
 
 const ScheduleDialogBox = ({open,setOpen}) => {
@@ -37,7 +38,7 @@ const ScheduleDialogBox = ({open,setOpen}) => {
                 </Stack>
                 <Stack direction="row" spacing={2}>
                     <span className='text-success'><i className="fa fa-clock-o" aria-hidden="true"></i></span>
-                    <span>{open.data.start_time + " - " + open.data.end_time}</span>
+                    <span>{moment(open.data.start_time).format("hh:mm A") + " - " + moment(open.data.end_time).format("hh:mm A")}</span>
                 </Stack>
             </DialogContent>
             <DialogActions>

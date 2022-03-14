@@ -4,13 +4,8 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 var C = require("crypto-js");
 const { Op} = require('sequelize');
-
-var saltRounds = 10;
-
-
-const generateAccessToken = (user) =>{
-    return jwt.sign({user_id: JSON.stringify(user)},process.env.ACCESS_TOKEN_SECRET)
-}
+var moment = require('moment');
+const {generateAccessToken} = require('../../helpers/generateAccessToken');
 
 exports.registerEmployee = async(req, res) => {
     let data = await user.model.findAll({
@@ -22,6 +17,7 @@ exports.registerEmployee = async(req, res) => {
        req.body.password = "p@ssw0rd";
        var hash = C.AES.encrypt(req.body.password,process.env.SECRET_KEY).toString();
     //    hash = bcrypt.hashSync(req.body.password,saltRounds);
+    console.log( hash);
        req.body.password = hash;
        await user.model.create(req.body);
        return res.status(200).send("Sign-up success");
@@ -37,8 +33,8 @@ exports.login = async(req, res) => {
             status:true
         }
     })
-    // console.log(data);
     if(data !== null ){
+        
         var bytes  = C.AES.decrypt(data.password, process.env.SECRET_KEY);
         var originalText = bytes.toString(C.enc.Utf8);
         if(originalText === req.body.password && data.password != ""){
@@ -88,25 +84,25 @@ exports.deactivate = async(req, res)=>{
                     email:req.body.email
                 }
             })
-            let drivers = await user.model.findAll({
-                where:{
-                    user_type:"Driver",
-                    status:true
-                }
-            })
-            let admins = await user.model.findAll({
-                where:{
-                    user_type:"Admin",
-                    status:true
-                }
-            })
-            let inactives = await user.model.findAll({
-                where:{
-                    user_type:{[Op.not]: 'Resident'},
-                    status:false
-                }
-            })
-            res.send({success:true,data:{admins:admins,drivers:drivers,inactives:inactives}});
+            // let drivers = await user.model.findAll({
+            //     where:{
+            //         user_type:"Driver",
+            //         status:true
+            //     }
+            // })
+            // let admins = await user.model.findAll({
+            //     where:{
+            //         user_type:"Admin",
+            //         status:true
+            //     }
+            // })
+            // let inactives = await user.model.findAll({
+            //     where:{
+            //         user_type:{[Op.not]: 'Resident'},
+            //         status:false
+            //     }
+            // })
+            res.send({success:true,message:"Successfully deactivated employee."});
         }else{
             res.send({success:false,message:"Password did not match",data:null});
         }
@@ -124,25 +120,25 @@ exports.activate = async(req, res)=>{
                     email:req.body.email
                 }
             })
-            let drivers = await user.model.findAll({
-                where:{
-                    user_type:"Driver",
-                    status:true
-                }
-            })
-            let admins = await user.model.findAll({
-                where:{
-                    user_type:"Admin",
-                    status:true
-                }
-            })
-            let inactives = await user.model.findAll({
-                where:{
-                    user_type:{[Op.not]: 'Resident'},
-                    status:false
-                }
-            })
-            res.send({success:true,data:{admins:admins,drivers:drivers,inactives:inactives}});
+            // let drivers = await user.model.findAll({
+            //     where:{
+            //         user_type:"Driver",
+            //         status:true
+            //     }
+            // })
+            // let admins = await user.model.findAll({
+            //     where:{
+            //         user_type:"Admin",
+            //         status:true
+            //     }
+            // })
+            // let inactives = await user.model.findAll({
+            //     where:{
+            //         user_type:{[Op.not]: 'Resident'},
+            //         status:false
+            //     }
+            // })
+            res.send({success:true,message:"Successfully reactivated employee."});
         }else{
             res.send({success:false,message:"Password did not match",data:null});
         }
@@ -155,9 +151,10 @@ exports.register = async(req, res)=>{
         }
     })
     if(acc===null){
+        let password = 'p@ssw0rd' 
         acc=await user.model.create({
             email:req.body.email,
-            password:C.AES.encrypt(req.body.password, process.env.SECRET_KEY).toString(),
+            password:C.AES.encrypt(password, process.env.SECRET_KEY).toString(),
             fname:req.body.fname,
             lname:req.body.lname,
             user_type:req.body.user_type,
@@ -165,28 +162,74 @@ exports.register = async(req, res)=>{
             street:req.body.street,
             barangay:req.body.barangay,
             gender:req.body.gender,
+            contact_no:req.body.contact
         });
-        let drivers = await user.model.findAll({
-            where:{
-                user_type:"Driver",
-                status:true
-            }
-        })
-        let admins = await user.model.findAll({
-            where:{
-                user_type:"Admin",
-                status:true
-            }
-        })
-        let inactives = await user.model.findAll({
-            where:{
-                user_type:{[Op.not]: 'Resident'},
-                status:false
-            }
-        })
-        res.send({success:true,data:{admins:admins,drivers:drivers,inactives:inactives}});
+        // let drivers = await user.model.findAll({
+        //     where:{
+        //         user_type:"Driver",
+        //         status:true
+        //     }
+        // })
+        // let admins = await user.model.findAll({
+        //     where:{
+        //         user_type:"Admin",
+        //         status:true
+        //     }
+        // })
+        // let inactives = await user.model.findAll({
+        //     where:{
+        //         user_type:{[Op.not]: 'Resident'},
+        //         status:false
+        //     }
+        // })
+        res.send({success:true,message:"Successfully added new employee"});
     }else{
         res.send({success:false,message:"Account already existed.",data:null});
     }   
         
+}
+
+exports.resetPassword=async (req,res)=>{
+    let account=await user.model.findOne({ where: { email: req.body.email } });
+    if(account){
+        let acc=await user.model.update({password:C.AES.encrypt(req.body.password, process.env.SECRET_KEY).toString(),},{
+            where:{
+                email:req.body.email
+            }
+        })
+        acc = await user.model.findOne({where:{email:req.body.email}});
+        res.send({success:true,message:"Password reset successful.",data:acc});
+    }else{
+        res.send({success:false,message:"Cannot reset password.",data:null});
+    }
+}
+
+exports.verifyEmail=async (req,res)=>{
+    let account=await user.model.findOne({ where: { email: req.body.email } });
+    if(account){
+        let acc=await user.model.update({email_verified_at:moment()},{
+            where:{
+                email:req.body.email
+            }
+        })
+        acc = await user.model.findOne({where:{email:req.body.email}});
+        res.send({success:true,message:"Email verification successful.",data:acc});
+    }else{
+        res.send({success:false,message:"Cannot verify email.",data:null});
+    }
+}
+
+exports.forgotPassword=async (req,res)=>{
+    let account=await user.model.findOne({ 
+        where: { 
+            email: req.body.email,
+            user_type: "Admin",
+            status:true
+        } 
+    });
+    if(account){
+        res.send({success:true,message:"Email retrieved.",data:account});
+    }else{
+        res.send({success:false,message:"Cannot find email address.",data:null});
+    }
 }

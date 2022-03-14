@@ -3,12 +3,16 @@ import MUIDataTable from "mui-datatables";
 import EmployeeCustomToolbar from './EmployeeCustomToolbar';
 import AddNewEmployeeModal from './modals/AddNewEmployeeModal';
 import moment from 'moment';
-const DriversComponent = ({drivers,setAccounts}) => {
-  const [driverList, setDriverList] = useState([]);
+import { useEmployeePageContext } from '../../pages/EmployeesPage';
+const DriversComponent = () => {
+  // const [, setDriverList] = useState([]);
+  const {queryResult}=useEmployeePageContext();
+  const drivers=queryResult.data.data.drivers;
   const [data, setData] = useState([]);
   useEffect(() => {
-    setDriverList(drivers);
+    // setDriverList(drivers);
     var temp=[];
+    // eslint-disable-next-line array-callback-return
     drivers && drivers.map((item)=>{
       temp.push([item.fname && item.fname,item.lname && item.lname,item.email && item.email,item.contact_no && item.contact_no,`${item.purok?item.purok:""} ${item.street?item.street:""} ${item.barangay?item.barangay:""}`,item.birthday && moment().diff(item.birthday, 'years'),item.gender && item.gender,item.createdAt && moment(item.createdAt).format("MMMM DD, YYYY"),item.status && item.status===true?'Active':'Inactive',item.image]);
     })
@@ -29,7 +33,11 @@ const DriversComponent = ({drivers,setAccounts}) => {
       filter: true,
       filterType: 'dropdown',
       customToolbarSelect:(selectedRows,displayData)=>(
-        <EmployeeCustomToolbar setAccounts={setAccounts} data={data[selectedRows.data[0].dataIndex]} selectedRows={selectedRows} displayData={displayData}/>    
+        <EmployeeCustomToolbar
+          data={data[selectedRows.data[0].dataIndex]} 
+          selectedRows={selectedRows} 
+          displayData={displayData}
+        />    
       )
     };
     return (
@@ -40,7 +48,6 @@ const DriversComponent = ({drivers,setAccounts}) => {
             <AddNewEmployeeModal
               openModal={openModal}
               setOpenModal={setOpenModal}
-              setAccounts={setAccounts}
             />
             <MUIDataTable
               title={"Drivers List"}

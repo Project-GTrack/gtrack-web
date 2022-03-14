@@ -2,13 +2,17 @@ import React, { useEffect, useState } from 'react'
 import MUIDataTable from "mui-datatables";
 import EmployeeCustomToolbar from './EmployeeCustomToolbar';
 import moment from 'moment';
+import { useEmployeePageContext } from '../../pages/EmployeesPage';
 
-const AdminsComponent = ({admins,setAccounts}) => {
-    const [adminList, setAdminList] = useState([]);
+const AdminsComponent = ({statusToast,setStatusToast}) => {
+    const {queryResult}=useEmployeePageContext();
+    const admins=queryResult.data.data.admins;
+    // const [adminList, setAdminList] = useState([]);
     const [data, setData] = useState([]);
     useEffect(() => {
-        setAdminList(admins);
+        // setAdminList(admins);
         var temp=[];
+        // eslint-disable-next-line array-callback-return
         admins && admins.map((item)=>{
             temp.push([item.fname && item.fname,item.lname && item.lname,item.email && item.email,item.contact_no && item.contact_no,`${item.purok?item.purok:""} ${item.street?item.street:""} ${item.barangay?item.barangay:""}`,item.birthday && moment().diff(item.birthday, 'years'),item.gender && item.gender,item.createdAt && moment(item.createdAt).format("MMMM DD, YYYY"),item.status && item.status===true?'Active':'Inactive',item.image]);
         })
@@ -23,7 +27,13 @@ const AdminsComponent = ({admins,setAccounts}) => {
     filter: true,
     filterType: 'dropdown',
     customToolbarSelect:(selectedRows,displayData)=>(
-        <EmployeeCustomToolbar setAccounts={setAccounts} data={data[selectedRows.data[0].dataIndex]} selectedRows={selectedRows} displayData={displayData}/>   
+        <EmployeeCustomToolbar 
+            statusToast={statusToast} 
+            setStatusToast={setStatusToast} 
+            data={data[selectedRows.data[0].dataIndex]} 
+            selectedRows={selectedRows} 
+            displayData={displayData}
+        />   
     )
     };
     return (

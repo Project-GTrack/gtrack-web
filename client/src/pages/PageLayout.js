@@ -21,19 +21,18 @@ import EmailIcon from '@mui/icons-material/Email';
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
 import Tooltip from "@mui/material/Tooltip";
-import Settings from "@mui/icons-material/Settings";
-import Logout from "@mui/icons-material/Logout";
-import { mainListItems } from "../components/ListItemComponent";
+import MainListItems from "../components/ListItemComponent";
 import { useState } from "react";
 import ReportNotifications from "../components/ReportNotifications";
 import { useEffect } from "react";
 import Firebase from "../components/helpers/Firebase";
 import Cookies from 'js-cookie';
 import { useNavigate } from "react-router-dom";
+import { decodeToken } from "react-jwt";
 
 const database=Firebase.database();
+const auth=Firebase.auth();
 function Copyright(props) {
   return (
     <Typography
@@ -43,7 +42,7 @@ function Copyright(props) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
+      <Link color="inherit" href="http://localhost:3000/">
         Gtrack
       </Link>{" "}
       {new Date().getFullYear()}
@@ -101,11 +100,19 @@ const mdTheme = createTheme();
 const PageLayout = ({headerTitle,children}) => {
   const [concerns, setConcerns] = useState(null);
   const [alerts, setAlerts] = useState(null);
+  const [user, setUser] = useState(null);
   const getFirebaseConcerns = () => {
-    database.ref(`Concerns/`).on('value', function (snapshot) {
+    database.ref(`Concerns/`).orderByKey().on('value', function (snapshot) {
         if(snapshot.val()){
             var snap=snapshot.val();
-            var temp=Object.keys(snap).map((key) => snap[key]);
+            var temp=[];
+            // eslint-disable-next-line array-callback-return
+            Object.keys(snap).map((key) => {
+              if(snap[key].active===1){
+                temp.push(snap[key]);
+              }
+            });
+            temp=temp.reverse();
             setConcerns([...temp]);
         }else{
           setConcerns([]);
@@ -113,17 +120,32 @@ const PageLayout = ({headerTitle,children}) => {
     });
   }
   const getFirebaseReports = () => {
-    database.ref(`Reports/`).on('value', function (snapshot) {
+    database.ref(`Reports/`).orderByKey().on('value', function (snapshot) {
         if(snapshot.val()){
             var snap=snapshot.val();
-            var temp=Object.keys(snap).map((key) => snap[key]);
+            var temp=[];
+            // eslint-disable-next-line array-callback-return
+            Object.keys(snap).map((key) => {
+              if(snap[key].active===1){
+                temp.push(snap[key]);
+              }
+            });
+            temp=temp.reverse();
             setAlerts([...temp]);
         }else{
           setAlerts([]);
         }
     });
   }
+  const getCookiesJWT=()=>{
+    const cookie=Cookies.get("user_id");
+    if(cookie){
+      const decodedToken = decodeToken(cookie);
+      setUser(JSON.parse(decodedToken.user_id));
+    }
+  }
   useEffect(() => {
+    getCookiesJWT();
     getFirebaseConcerns();
     getFirebaseReports();
   }, [])
@@ -152,7 +174,10 @@ const PageLayout = ({headerTitle,children}) => {
     setAnchorEl(null);
   };
   const navigate = useNavigate();
-  const handleLogout = (event) => {
+  const handleLogout = async (event) => {
+    if(auth.currentUser){
+      await auth.signOut();
+    }
     Cookies.remove('user_id');
     navigate("/login");
   };
@@ -213,7 +238,8 @@ const PageLayout = ({headerTitle,children}) => {
                 aria-haspopup="true"
                 aria-expanded={openDropDown ? "true" : undefined}
               >
-                <Avatar sx={{ width: 32, height: 32 }}></Avatar>
+                {(user&&user.image!==null) && <Avatar sx={{ width: 32, height: 32 }} src={user&&user.image}></Avatar>}
+                {(user&&user.image===null) && <Avatar sx={{ width: 32, height: 32,fontSize:15,textTransform:"uppercase"}}>{user&&user.fname[0]}{user&&user.lname[0]}</Avatar>}
               </IconButton>
             </Tooltip>
               <Menu
@@ -276,7 +302,9 @@ const PageLayout = ({headerTitle,children}) => {
           </Toolbar>
 
           <Divider />
-          <List>{mainListItems}</List>
+          <List>
+            <MainListItems />
+          </List>
           <Divider />
         </Drawer>
         <Box

@@ -14,6 +14,8 @@ import { useFormik } from "formik";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
 import Cookies from "js-cookie";
+import { useDumpstersPageContext } from "../../../pages/DumpstersPage";
+import { useSnackbar } from "notistack";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -54,21 +56,26 @@ BootstrapDialogTitle.propTypes = {
 };
 
 const DeleteDumpsterModal = (props) => {
+  const {enqueueSnackbar} = useSnackbar();
+  const {refetch}=useDumpstersPageContext();
   const dumpsterErrorHandling = yup.object().shape({
     password: yup.string().required("Password is required"),
   });
   const handleFormSubmit = (values, { resetForm }) => {
-    props.setPrevData(props.data);
     axios
       .post(
-        `http://localhost:8000/admin/dumpster/delete-dumpster/${props.data[0]}`,
+        `${process.env.REACT_APP_BACKEND_URL}/admin/dumpster/delete-dumpster/${props.data[0]}`,
         { password: values.password, accessToken: Cookies.get("user_id") }
       )
       .then((res) => {
         resetForm();
         props.setDeleteModal(false);
-        props.setMesAlert(true);
-        props.setMessage(res.data);
+        if(res.data.success){
+          refetch();
+          enqueueSnackbar(res.data.message, { variant:'success' });
+        }else{
+          enqueueSnackbar(res.data.message, { variant:'error' });
+        }
       });
   };
   const { handleChange, handleSubmit, handleBlur, values, errors, touched } =

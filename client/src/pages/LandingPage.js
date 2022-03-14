@@ -6,12 +6,26 @@ import Toolbar from '@mui/material/Toolbar';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Link from '@mui/material/Link';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import Cookies from 'js-cookie';
+import Helmet from 'react-helmet'
 
 const theme = createTheme();
 const LandingPage = () => {
     const navigate = useNavigate();
+    // const [user,setUser]=useState(null);
+    useEffect(() => {
+      if(Cookies.get('user_id')){
+        // setUser(Cookies.get('user_id'));
+        navigate("/dashboard")
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[])
     return (
     <ThemeProvider theme={theme}>
+      <Helmet>
+        <title>GTrack Compostela</title>
+      </Helmet>
       <CssBaseline />
       <AppBar
         position="absolute"

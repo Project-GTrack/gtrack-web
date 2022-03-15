@@ -42,7 +42,7 @@ function Copyright(props) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="http://localhost:3000/">
+      <Link color="inherit" href={`${process.env.REACT_APP_FRONTEND_URL}`}>
         Gtrack
       </Link>{" "}
       {new Date().getFullYear()}

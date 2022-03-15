@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useContext, useState} from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
@@ -12,24 +12,26 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 import StatusToast from '../components/helpers/StatusToast';
 import { Helmet } from 'react-helmet';
+import useAxios,{ configure } from 'axios-hooks'
+import { CircularProgress } from '@mui/material';
+configure({ ssr:false })
+const defaultContext= {
+  queryResult: {data:null,loading:false,error:null},
+  refetch: () => {},
+};
+const TrucksPageContext = React.createContext(defaultContext);
+export const useTrucksPageContext = () => useContext(TrucksPageContext);
 
 const TrucksPage = () => {
     const [value, setValue] = useState(0);
-    const [statusToast,setStatusToast]=useState(false);
-    const [trucks,setTrucks]=useState({
-      trucks:[],
-      inactives:[]
+
+    const [{ data, loading, error }, refetch] = useAxios({
+      url: `${process.env.REACT_APP_BACKEND_URL}/admin/truck/get`,
+      method:'get' 
     });
     const navigate = useNavigate();
     useEffect(() => {
-      if(Cookies.get('user_id')){
-        axios.get(`${process.env.REACT_APP_BACKEND_URL}/admin/truck/get`)
-        .then(res=>{
-          if(res.data.success){
-            setTrucks(res.data.data);
-          }
-        })
-      }else{
+      if(!Cookies.get('user_id')){
         navigate("/login");
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -79,13 +81,20 @@ const TrucksPage = () => {
                 <Tab style={{ fontWeight: 600 }} label="Under Maintenance Trucks" {...a11yProps(1)} />
             </Tabs>
             </Box>
-            <TabPanel value={value} index={0}>
-                <GarbageTrucksPanel trucks={trucks.trucks} setTrucks={setTrucks} statusToast={statusToast} setStatusToast={setStatusToast}/>
+            {loading?(
+          <div className='my-5'>
+            <CircularProgress size={80} color="success"/>
+          </div>
+        ):(
+          <TrucksPageContext.Provider value={{queryResult:{data,loading,error},refetch}}>
+             <TabPanel value={value} index={0}>
+                <GarbageTrucksPanel/>
             </TabPanel>
             <TabPanel value={value} index={1}>
-                <UnderMaintenancePanel inactives={trucks.inactives} setTrucks={setTrucks}/>
+                <UnderMaintenancePanel/>
             </TabPanel>
-            <StatusToast statusToast={statusToast} setStatusToast={setStatusToast}/>
+          </TrucksPageContext.Provider>
+        )}
         </PageLayout>
     )
 }

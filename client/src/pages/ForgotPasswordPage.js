@@ -23,7 +23,7 @@ function Copyright(props) {
   return (
     <Typography variant="body2" color="text.dark" align="center" {...props}>
       {'Copyright © '}
-      <Link color="inherit" href="http://localhost:3000/">
+      <Link color="inherit" href={`${process.env.REACT_APP_FRONTEND_URL}`}>
         GTrack
       </Link>{' '}
       {new Date().getFullYear()}

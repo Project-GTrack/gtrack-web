@@ -15,6 +15,7 @@ import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
 import Cookies from "js-cookie";
 import { useDumpstersPageContext } from "../../../pages/DumpstersPage";
+import { useSnackbar } from "notistack";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -55,12 +56,12 @@ BootstrapDialogTitle.propTypes = {
 };
 
 const DeleteDumpsterModal = (props) => {
+  const {enqueueSnackbar} = useSnackbar();
   const {refetch}=useDumpstersPageContext();
   const dumpsterErrorHandling = yup.object().shape({
     password: yup.string().required("Password is required"),
   });
   const handleFormSubmit = (values, { resetForm }) => {
-    props.setPrevData(props.data);
     axios
       .post(
         `${process.env.REACT_APP_BACKEND_URL}/admin/dumpster/delete-dumpster/${props.data[0]}`,
@@ -71,9 +72,9 @@ const DeleteDumpsterModal = (props) => {
         props.setDeleteModal(false);
         if(res.data.success){
           refetch();
-          props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
+          enqueueSnackbar(res.data.message, { variant:'success' });
         }else{
-          props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"error"})
+          enqueueSnackbar(res.data.message, { variant:'error' });
         }
       });
   };

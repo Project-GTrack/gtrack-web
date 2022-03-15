@@ -19,6 +19,7 @@ const GarbageTrucksPanel = () => {
         var temp=[];
         // eslint-disable-next-line array-callback-return
         trucks && trucks.map((item)=>{
+          // eslint-disable-next-line eqeqeq
           temp.push([item.plate_no && item.plate_no,item.model && item.model,item.truckUser.fname+ " " +item.truckUser.lname,item.createdAt && moment(item.createdAt).format("MMMM DD, YYYY"),item.active && item.active==true?'Active':'Inactive']);
         })
         setData(temp);

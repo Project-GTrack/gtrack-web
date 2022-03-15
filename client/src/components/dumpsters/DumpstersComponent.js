@@ -2,49 +2,34 @@ import React, { useEffect, useState } from 'react'
 import MUIDataTable from "mui-datatables";
 import DumpsterCustomToolbar from './DumpsterCustomToolbar';
 import AddNewDumpsterModal from './modals/AddNewDumpsterModal';
-import Cookies from 'js-cookie';
-import axios from 'axios';
-import MessageModal from "./modals/MessageModal";
-const DumpstersComponent = (props) => {
-  const [openModal, setOpenModal] = React.useState(false);
-  const [openDeleteModal, setDeleteModal] = React.useState(false);
-  const[openEditModal, setEditModal] = React.useState(false);
-  const [prevData,setPrevData]=React.useState(null);
-  const [gender, setGender] = React.useState("Male");
-  const [message,setMessage]=useState({
-      success:false,
-      content:"",
-  });
-  const [mesAlert,setMesAlert]=useState(false);
+import { useDumpstersPageContext } from '../../pages/DumpstersPage';
+
+const DumpstersComponent = ({statusToast, setStatusToast}) => {
+  const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
-  const handleOpenMesModal = () => setMesAlert(true);
-  const handleCloseMesModal = () => setMesAlert(false);
   const [data,setData]=useState([]);
-
+  const {queryResult}=useDumpstersPageContext();
+  const dumpsters = queryResult.data.data;
   useEffect(() => {
-        axios.get('http://localhost:8000/admin/dumpster/get-dumpsters')
-      .then((res) => {
-          if(res.data.success){
-            let tempD=[];
-            for(var x = 0;x<res.data.data.length;x++){
-                  var address = res.data.data[x].street.toString().charAt(0).toUpperCase() + res.data.data[x].street.slice(1) +", "+res.data.data[x].purok.toString().charAt(0).toUpperCase()+ res.data.data[x].purok.slice(1)+", "+res.data.data[x].barangay.toString().charAt(0).toUpperCase()+ res.data.data[x].barangay.slice(1)+", "+res.data.data[x].town.toString().charAt(0).toUpperCase()+ res.data.data[x].town.slice(1);
-                  var temp = [
-                      res.data.data[x].dumpster_id,
-                      address,
-                      res.data.data[x].postal_code,
-                      res.data.data[x].latitude,
-                      res.data.data[x].longitude
-                  ]
-                  tempD.push(temp);
-              }
-              setData(tempD);
-          }
-        
-      })
-      setPrevData(null);
-  },[mesAlert])
-    // const columns = ["ID","Address", "Postal Code", "Latitude", "Longitude"];
+    let tempD=[];
+    for(var x = 0;x < dumpsters.length;x++){
+          var address = dumpsters[x].street.toString().charAt(0).toUpperCase() + dumpsters[x].street.slice(1) +", "+dumpsters[x].purok.toString().charAt(0).toUpperCase()+ dumpsters[x].purok.slice(1)+", "+dumpsters[x].barangay.toString().charAt(0).toUpperCase()+ dumpsters[x].barangay.slice(1)+", "+dumpsters[x].town.toString().charAt(0).toUpperCase()+ dumpsters[x].town.slice(1);
+          var temp = [
+              dumpsters[x].dumpster_id,
+              address,
+              dumpsters[x].postal_code,
+              dumpsters[x].latitude,
+              dumpsters[x].longitude
+          ]
+          tempD.push(temp);
+      }
+      setData(tempD);  
+      return () => {
+          setData([]);
+      }     
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
     const columns = [
         {
         name:"ID",
@@ -95,28 +80,19 @@ const DumpstersComponent = (props) => {
     filter: true,
     filterType: 'dropdown',
     customToolbarSelect:(selectedRows,displayData)=>(
-        <DumpsterCustomToolbar openEditModal={openEditModal} setEditModal={setEditModal} openDeleteModal={openDeleteModal} setDeleteModal={setDeleteModal} setMessage={setMessage} setMesAlert={setMesAlert} selectedRows={selectedRows} displayData={displayData}/>
+        <DumpsterCustomToolbar selectedRows={selectedRows} displayData={displayData}/>
     )
     };
     return (
         <div>
             <div className='mb-3'>
                 <button className='btn btn-success' onClick={handleOpenModal}><i className="fa fa-plus" aria-hidden="true"></i> Add New Dumpster/Pickup Point</button>            </div>
-                <AddNewDumpsterModal
-            openModal={openModal}
-            setMessage={setMessage}
-            setMesAlert={setMesAlert}
-            setOpenModal={setOpenModal}
-            handleCloseModal={handleCloseModal}
-            handleOpenModal={handleOpenModal}
-          />
-          <MessageModal
-            openModal={mesAlert}
-            message={message}
-            setOpenModal={setMesAlert}
-            handleCloseModal={handleCloseMesModal}
-            handleOpenModal={handleOpenMesModal}
-          />
+            <AddNewDumpsterModal
+                openModal={openModal}
+                setOpenModal={setOpenModal}
+                handleCloseModal={handleCloseModal}
+                handleOpenModal={handleOpenModal}
+            />
             <MUIDataTable
                 title={"Dumpsters List"}
                 data={data}

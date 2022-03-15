@@ -7,17 +7,17 @@ import moment from 'moment';
 
 
 
-export default function Chart(chartData) {
+export default function Chart({chartData}) {
   const theme = useTheme();
   // Generate Collection Data
 function createData(date, volume) {
   return { date, volume };
 }
-
 const data = [];
-for(let i = 0; i < chartData.data.length; i++ ){
- 
-  data.push(createData(moment(chartData.data[i].collection_date).format("LL"), chartData.data[i].collection_weight_volume));
+let temp = [];
+for(let i = 0; i < chartData.length; i++ ){
+  temp = chartData[i].week.toString().split('&');
+  data.push(createData(moment(temp[0]).format("MMM DD")+" - "+moment(temp[1]).format("MMM DD,YYYY"), chartData[i].weight));
 }
 
  

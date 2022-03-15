@@ -20,6 +20,9 @@ import axios from "axios";
 import { useState } from "react";
 import * as yup from 'yup'
 import Firebase from '../../helpers/Firebase';
+import { capitalizeWords } from '../../helpers/TextFormat';
+import { useEmployeePageContext } from '../../../pages/EmployeesPage';
+import { useSnackbar } from 'notistack';
 
 const auth = Firebase.auth();
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -61,6 +64,9 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   };
   
 export default function AddNewEmployeeModal(props) {
+  const {enqueueSnackbar} = useSnackbar();
+  const {refetch}=useEmployeePageContext();
+  const digitsOnly = (value) => /^\d+$/.test(value)
   const employeeRegisterValidationSchema = yup.object().shape({
     fname: yup
       .string()
@@ -84,10 +90,10 @@ export default function AddNewEmployeeModal(props) {
     gender: yup
       .string()
       .required('Gender is required'),
-    password: yup
+    contact: yup
       .string()
-      .min(6, ({ min }) => `Password must be at least ${min} characters`)
-      .required('Password is required'),
+      .required('Contact is required')
+      .test('Digits only', 'The field should be digits only', digitsOnly),
     user_type: yup
       .string()
       .required('Employee type is required'),
@@ -95,7 +101,7 @@ export default function AddNewEmployeeModal(props) {
   const [error,setError]=useState(null);
   
   const handleFirebase =async (values,resetForm) =>{
-    await auth.createUserWithEmailAndPassword(values.email, values.password)
+    await auth.createUserWithEmailAndPassword(values.email, "p@ssw0rd")
     .then(function() {
         auth.currentUser.sendEmailVerification();
     })
@@ -104,18 +110,28 @@ export default function AddNewEmployeeModal(props) {
     });
   }
   const handleFormSubmit = async(values,{resetForm}) =>{
-    axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/register`,{email:values.email,password:values.password,fname:values.fname,lname:values.lname,purok:values.purok,street:values.street,barangay:values.barangay,gender:values.gender,user_type:values.user_type})
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/register`,{
+      email:values.email,
+      contact:values.contact,
+      fname:capitalizeWords(values.fname),
+      lname:capitalizeWords(values.lname),
+      purok:capitalizeWords(values.purok),
+      street:capitalizeWords(values.street),
+      barangay:capitalizeWords(values.barangay),
+      gender:values.gender,
+      user_type:values.user_type})
     .then(res=>{
       if(res.data.success){
         handleFirebase(values,resetForm);
-        props.setAccounts(res.data.data);
+        refetch();
+        enqueueSnackbar(res.data.message, { variant:'success' });
       }else{
         setError(res.data.message);
       }
     })
   }
   const { handleChange, handleSubmit, handleBlur, values, errors,isValid,touched } = useFormik({
-    initialValues:{ fname:'',lname:'',email:'',password:'',purok:'',street:'',barangay:'',gender:'',user_type:''},
+    initialValues:{ fname:'',lname:'',email:'',contact:'',purok:'',street:'',barangay:'',gender:'',user_type:''},
     enableReinitialize:true,
     validationSchema:employeeRegisterValidationSchema,
     onSubmit: handleFormSubmit
@@ -141,6 +157,7 @@ export default function AddNewEmployeeModal(props) {
         margin="dense"
         label="First Name"
         type="text"
+        inputProps={{ style: { textTransform: "capitalize" } }}
         fullWidth
         variant="standard"
       />
@@ -153,6 +170,7 @@ export default function AddNewEmployeeModal(props) {
         value={values.lname}
         onChange={handleChange('lname')}
         onBlur={handleBlur('lname')}
+        inputProps={{ style: { textTransform: "capitalize" } }}
         margin="dense"
         label="Last Name"
         type="text"
@@ -170,6 +188,7 @@ export default function AddNewEmployeeModal(props) {
           value={values.purok}
           onChange={handleChange('purok')}
           onBlur={handleBlur('purok')}
+          inputProps={{ style: { textTransform: "capitalize" } }}
           margin="dense"
           label="Purok"
           type="text"
@@ -185,6 +204,7 @@ export default function AddNewEmployeeModal(props) {
           value={values.street}
           onChange={handleChange('street')}
           onBlur={handleBlur('street')}
+          inputProps={{ style: { textTransform: "capitalize" } }}
           margin="dense"
           label="Street"
           type="text"
@@ -200,6 +220,7 @@ export default function AddNewEmployeeModal(props) {
           value={values.barangay}
           onChange={handleChange('barangay')}
           onBlur={handleBlur('barangay')}
+          inputProps={{ style: { textTransform: "capitalize" } }}
           margin="dense"
           label="Barangay"
           type="text"
@@ -215,6 +236,7 @@ export default function AddNewEmployeeModal(props) {
         value={values.email}
         onChange={handleChange('email')}
         onBlur={handleBlur('email')}
+        inputProps={{ style: { textTransform: "lowercase" } }}
         margin="dense"
         label="Email Address"
         type="email"
@@ -225,17 +247,17 @@ export default function AddNewEmployeeModal(props) {
         <p className="text-danger small ">{errors.email}</p>
       }
       <TextField
-        value={values.password}
-        onChange={handleChange('password')}
-        onBlur={handleBlur('password')}
+        value={values.contact}
+        onChange={handleChange('contact')}
+        onBlur={handleBlur('contact')}
         margin="dense"
-        label="Default Password"
-        type="password"
+        label="Contact"
+        type="text"
         fullWidth
         variant="standard"
       />
-      {(errors.password && touched.password) &&
-        <p className="text-danger small ">{errors.password}</p>
+      {(errors.contact && touched.contact) &&
+        <p className="text-danger small ">{errors.contact}</p>
       }
       <Grid container rowSpacing={1} mt={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
         <Grid item xs={6}>

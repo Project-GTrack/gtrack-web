@@ -15,11 +15,16 @@ import Axios from "axios";
 import Alert from '@mui/material/Alert';
 import CircularProgress from '@mui/material/CircularProgress';
 import Cookies from 'js-cookie';
+import Firebase from '../components/helpers/Firebase';
+import AlertDialog from '../components/helpers/AlertDialog';
+import { Helmet } from 'react-helmet';
+
+const auth=Firebase.auth();
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.dark" align="center" {...props}>
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
+      <Link color="inherit" href="http://localhost:3000/">
         GTrack
       </Link>{' '}
       {new Date().getFullYear()}
@@ -31,8 +36,8 @@ function Copyright(props) {
 
 const theme = createTheme();
 const SignInPage = () => {
-  
-    const { register,watch, handleSubmit } = useForm();
+    const [open, setOpen] = useState(false);
+    const { register, handleSubmit } = useForm();
     const [user, setUser] = useState({
       email:"",
       password:""
@@ -56,25 +61,49 @@ const SignInPage = () => {
       severity:null,
     });
     const navigate = useNavigate();
-
+    React.useEffect(() => {
+      if(Cookies.get('user_id')){
+        navigate("/dashboard");
+      }
+    }, [navigate]);
+    const handleFirebase = async(accessToken)=>{
+      await auth.signInWithEmailAndPassword(user.email, user.password)
+      .then(function() {
+        setLoading(false);
+        if(auth.currentUser.emailVerified){
+          Cookies.set('user_id', accessToken, {expires: 1});
+          navigate("/dashboard");
+        }else{
+            setOpen(true);
+        }
+      })
+      .catch(function(err) {
+          setLoading(false);
+          setAlert({visibility:true, message:err.message,severity:"error"});
+      });
+  }
+  const handleResendEmail=()=>{
+    auth.currentUser.sendEmailVerification();
+  }
     const handleFormSubmit = (event) => {
-      var mins = new Date(new Date().getTime() + 15 * 60 * 1000);
+      // var mins = new Date(new Date().getTime() + 15 * 60 * 1000);
       event.preventDefault();
       setErrors(AdminLoginValidation(user));
+      setLoading(true);
       if(Object.keys(AdminLoginValidation(user)).length === 0){
         Axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/login`,{
           email: user.email,
           password: user.password
         }).then((res)=>{
           if(res.data.success){
-            setLoading(true);
-            Cookies.set('user_id', res.data.accessToken, {expires: mins});
-            navigate("/dashboard");
-    
+            handleFirebase(res.data.accessToken);
           }else{
+            setLoading(false);
             setAlert({visibility:true, message:res.data.message,severity:"error"});
           }
         })
+      }else{
+        setLoading(false);
       }
        
 
@@ -83,10 +112,20 @@ const SignInPage = () => {
     
       return (
         <ThemeProvider theme={theme}>
+          <Helmet>
+            <title>Sign in to GTrack</title>
+          </Helmet>
           <Container component="main" maxWidth="xs">
             <div>
               {alert.visibility  ? <Alert  sx={{mt:1}} severity={alert.severity} >{alert.message}</Alert> : <></> }
             </div>
+            <AlertDialog 
+              title={"Email Verification Link"} 
+              message={"Do you want to send another verification link to your email?"} 
+              open={open} 
+              setOpen={setOpen} 
+              handleSubmit={handleResendEmail}
+            />
             <CssBaseline />
             <Box
               sx={{
@@ -139,7 +178,7 @@ const SignInPage = () => {
                   helperText= {errors.password}
                   autoComplete="current-password"
                 />
-                  
+                <Link onClick={()=>navigate('/forgot_password')} sx={{cursor:'pointer'}}>Forgot Password?</Link>
                 <Button
                   disabled={loading || (!user.email && !user.password)}
                   type="submit"

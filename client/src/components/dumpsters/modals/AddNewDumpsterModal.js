@@ -1,12 +1,7 @@
+/* eslint-disable jsx-a11y/alt-text */
 import * as React from "react";
-import Grid from "@mui/material/Grid";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import FormControl from "@mui/material/FormControl";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import InputLabel from "@mui/material/InputLabel";
-import Select from "@mui/material/Select";
-import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -15,13 +10,15 @@ import DialogActions from "@mui/material/DialogActions";
 import PropTypes from "prop-types";
 import CloseIcon from "@mui/icons-material/Close";
 import Cookies from "js-cookie";
+import * as yup from "yup";
+import { useFormik } from "formik";
 import IconButton from "@mui/material/IconButton";
-import { useForm } from "react-hook-form";
-import MenuItem from "@mui/material/MenuItem";
 import axios from "axios";
-// import IconDump from "../../../../public/dumpster_marker_icon.png"
-import ReactMapboxGl, { Layer, Feature, Marker } from "react-mapbox-gl";
+import ReactMapboxGl, { Marker } from "react-mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { capitalizeWords } from "../../helpers/TextFormat";
+import { useDumpstersPageContext } from "../../../pages/DumpstersPage";
+import { useSnackbar } from "notistack";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -65,53 +62,62 @@ BootstrapDialogTitle.propTypes = {
 };
 
 const AddNewDumpsterModal = (props) => {
+  const {enqueueSnackbar} = useSnackbar();
+  const {refetch}=useDumpstersPageContext();
   const [coordinate, setCoordinate] = React.useState({
     latitude: 0,
     longitude: 0,
   });
-  const {register, handleSubmit, resetField} = useForm({
-    mode: "onChange",
-    defaultValues: {
-      street:"",
-      purok:"",
-      barangay:"",
-      town:"",
-      postal_code:""
-    }
+  const [error, setError] = React.useState(null);
+  const dumpsterErrorHandling = yup.object().shape({
+    street: yup.string().required("Street is required"),
+    purok: yup.string().required("Purok is required"),
+    barangay: yup.string().required("Barangay is required"),
   });
-  React.useEffect(() => {
-    resetField("street");
-    resetField("purok");
-    resetField("barangay");
-    resetField("town");
-    resetField("postal_code");
-    setCoordinate({latitude:0,longitude:0});
-    
-  },[props.openModal])
+  const handleFormSubmit = async (values, { resetForm }) => {
+    if (coordinate.latitude !== 0 && coordinate.longitude !== 0) {
+      axios
+        .post(`${process.env.REACT_APP_BACKEND_URL}/admin/dumpster/add-dumpster`, {
+          street: capitalizeWords(values.street),
+          purok: capitalizeWords(values.purok),
+          barangay: capitalizeWords(values.barangay),
+          town: "Compostela",
+          postal_code: "6003",
+          latitude: coordinate.latitude,
+          longitude: coordinate.longitude,
+          accessToken: Cookies.get("user_id"),
+        })
+        .then((res) => {
+          resetForm();
+          props.setOpenModal(false);
+          setCoordinate({ latitude: 0, longitude: 0 });
+          setError(null);
+          if (res.data.success) {
+            refetch();
+            enqueueSnackbar(res.data.message, { variant:'success' });
+          }else{
+            enqueueSnackbar(res.data.message, { variant:'error' });
+          }
+        });
+    } else {
+      setError("Please select a designated location for the dumpster");
+    }
+  };
+  const { handleChange, handleSubmit, handleBlur, values, errors, touched } =
+    useFormik({
+      initialValues: {
+        street: "",
+        purok: "",
+        barangay: "",
+      },
+      enableReinitialize: true,
+      validationSchema: dumpsterErrorHandling,
+      onSubmit: handleFormSubmit,
+    });
   const handleClick = (map, event) => {
     setCoordinate({ latitude: event.lngLat.lat, longitude: event.lngLat.lng });
     console.log(event.lngLat);
   };
-  const onSubmit = (data) => {
-    if(coordinate.latitude != 0 && coordinate.longitude != 0){
-      axios.post('http://localhost:8000/admin/dumpster/add-dumpster', {street:data.street,purok:data.purok,barangay:data.barangay,town:data.town,postal_code:data.postal_code,latitude:coordinate.latitude,longitude:coordinate.longitude,accessToken: Cookies.get('user_id')})
-      .then((res) => {
-        if(res.data.success){
-          props.setOpenModal(false);
-          props.setMesAlert(true);
-          props.setMessage(res.data);
-          setCoordinate({latitude:0,longitude:0});
-          resetField("street");
-          resetField("purok");
-          resetField("barangay");
-          resetField("town");
-          resetField("postal_code");
-        }
-      })
-    }
-    
-  }
- 
   return (
     <BootstrapDialog
       onClose={props.handleCloseModal}
@@ -124,120 +130,84 @@ const AddNewDumpsterModal = (props) => {
       >
         Add New Dumpster
       </BootstrapDialogTitle>
-      <form onSubmit={handleSubmit(onSubmit)}>
       <DialogContent dividers>
         <Box sx={{ width: "100%" }}>
           <TextField
-            autoFocus
             margin="dense"
             id="street"
             label="Street"
             type="text"
             fullWidth
-            required {...register("street")}
+            value={values.street}
+            onChange={handleChange("street")}
+            onBlur={handleBlur("street")}
+            inputProps={{ style: { textTransform: "capitalize" } }}
             variant="standard"
           />
+          {errors.street && touched.street && (
+            <p className="text-danger small ">{errors.street}</p>
+          )}
           <TextField
-            autoFocus
             margin="dense"
             id="purok"
             label="Purok"
             type="text"
             fullWidth
-            required {...register("purok")}
+            value={values.purok}
+            onChange={handleChange("purok")}
+            onBlur={handleBlur("purok")}
+            inputProps={{ style: { textTransform: "capitalize" } }}
             variant="standard"
           />
+          {errors.purok && touched.purok && (
+            <p className="text-danger small ">{errors.purok}</p>
+          )}
           <TextField
-            autoFocus
             margin="dense"
             id="barangay"
             label="Barangay"
             type="text"
             fullWidth
-            required {...register("barangay")}
+            value={values.barangay}
+            onChange={handleChange("barangay")}
+            onBlur={handleBlur("barangay")}
+            inputProps={{ style: { textTransform: "capitalize" } }}
             variant="standard"
           />
-          <TextField
-            autoFocus
-            margin="dense"
-            id="town"
-            label="Town"
-            type="text"
-            fullWidth
-            required {...register("town")}
-            variant="standard"
-          />
-          <TextField
-            autoFocus
-            margin="dense"
-            id="postal"
-            label="Postal Code"
-            type="text"
-            fullWidth
-            required {...register("postal_code")}
-            variant="standard"
-          />
-          <div style={{marginTop: '20px', marginBottom:'-18px'}}>
-            <p><i>Please select within the map the designated location of the dumpster</i></p>
+          {errors.barangay && touched.barangay && (
+            <p className="text-danger small ">{errors.barangay}</p>
+          )}
+          <div style={{ marginTop: "20px", marginBottom: "-18px" }}>
+            <p>
+              <i>
+                Please select within the map the designated location of the
+                dumpster
+              </i>
+            </p>
           </div>
-          {/* <Grid
-            container
-            rowSpacing={1}
-            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-          >
-            <Grid item xs={6}>
-              <TextField
-                padding={5}
-                autoFocus
-                margin="dense"
-                id="latitude"
-                placeholder="Latitude"
-                type="text"
-                readonly
-                disabled
-                value={coordinate.latitude != 0 ? coordinate.latitude : ""}
-                fullWidth
-                variant="standard"
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                padding={5}
-                autoFocus
-                margin="dense"
-                id="longitude"
-                placeholder="Longitude"
-                type="text"
-                readonly
-                disabled
-                value={coordinate.longitude != 0 ? coordinate.longitude : ""}
-                fullWidth
-                variant="standard"
-              />
-            </Grid>
-          </Grid> */}
           <Map
+            // eslint-disable-next-line react/style-prop-object
             style="mapbox://styles/mapbox/streets-v9"
             containerStyle={{
               height: "36vh",
               width: "100%",
             }}
             center={
-              coordinate.latitude != 0 && coordinate.longitude != 0
+              coordinate.latitude !== 0 && coordinate.longitude !== 0
                 ? [coordinate.longitude, coordinate.latitude]
                 : [123.94964154058066, 10.482913243053028]
             }
             onClick={handleClick}
             zoom={
-              coordinate.latitude != 0 && coordinate.longitude != 0
+              coordinate.latitude !== 0 && coordinate.longitude !== 0
                 ? [15]
                 : [11]
             }
           >
-            {coordinate.latitude != 0 && coordinate.longitude != 0 ? (
+            {coordinate.latitude !== 0 && coordinate.longitude !== 0 ? (
               <Marker
                 coordinates={
-                  coordinate.latitude != 0 && coordinate.longitude != 0
+                  coordinate.latitude !== 0 && coordinate.longitude !== 0
                     ? [coordinate.longitude, coordinate.latitude]
                     : [123.94964154058066, 10.482913243053028]
                 }
@@ -249,13 +219,18 @@ const AddNewDumpsterModal = (props) => {
               <></>
             )}
           </Map>
-          
+          {error && <p className="text-danger small text-center">{error}</p>}
         </Box>
       </DialogContent>
       <DialogActions>
-        <button type="submit" className="btn btn-success">Add</button>
+        <button
+          type="submit"
+          className="btn btn-success"
+          onClick={handleSubmit}
+        >
+          Add
+        </button>
       </DialogActions>
-      </form>
     </BootstrapDialog>
   );
 };

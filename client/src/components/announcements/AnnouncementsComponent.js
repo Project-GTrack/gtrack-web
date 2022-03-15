@@ -1,16 +1,94 @@
-import React from 'react'
+import React, { useState ,useEffect } from 'react'
 import MUIDataTable from "mui-datatables";
 import AnnouncementCustomToolbar from './AnnouncementCustomToolbar';
 import AddNewAnnouncementModal from './modals/AddNewAnnouncementModal';
+import moment from 'moment';
+import {useAnnouncementPageContext} from '../../pages/AnnouncementsPage';   
 const AnnouncementsComponent = () => {
-  const [openModal, setOpenModal] = React.useState(false);
-  const handleOpenModal = () => setOpenModal(true);
-  const handleCloseModal = () => setOpenModal(false);
-    const columns = ["Title", "Content", "Date Added"];
+    const {queryResult}=useAnnouncementPageContext();
+    const announcements = queryResult.data.posts;
+    const[data,  setData] = useState([]);
+    useEffect(()=>{
+       
+        var temp = [];
+        // eslint-disable-next-line array-callback-return
+        announcements && announcements.map((announcement)=>{
+            temp.push([
+                announcement.announcement_id,
+                announcement.title, 
+                announcement.content,
+                announcement.announcementAdmin.fname+" "+announcement.announcementAdmin.lname,
+                moment(announcement.createdAt).format("MMMM DD, YYYY"),
+                announcement.announcementLine.lineAttachment
+            ]);
+        })
+        setData(temp);  
 
-    const data = [
-    ["Compostela Municipal Coastal Cleanup 2020", "The coastal cleanup is scheduled quarterly every year in the hopes to increase awareness in the preservation of the major waterways in the city as well as remove as much garbage as possible from these waterways.", "10/12/2020"],
-    ];
+    },[announcements]);
+
+
+
+  const [openModal, setOpenModal] = React.useState(false);
+  useEffect(() => {
+    return () => {
+      setOpenModal(false);
+    }
+  }, [])
+  const columns = [
+    {
+        name:"ID",
+        label:"ID",
+        options: {
+            filter:false,
+            sort:false,
+            display:false,
+            viewColumns:false,
+        }
+    },
+    {
+        name:"Title",
+        label:"Title",
+        options: {
+            filter:true,
+            sort:true,
+        }
+    },
+    {
+        name:"Content",
+        label:"Content",
+        options: {
+            filter:true,
+            sort:true,
+        }
+    },
+    {
+        name:"Added by",
+        label:"Added by",
+        options: {
+            filter:true,
+            sort:true,
+        }
+    },
+    {
+        name:"Date Added",
+        label:"Date Added",
+        options: {
+            filter:true,
+            sort:true,
+        }
+    },
+    {
+        name:"Image",
+        label:"Image",
+        options: {
+            filter:false,
+            sort:false,
+            display:false,
+            viewColumns:false,
+        }
+    },
+
+  ];
 
     const options = {
     selectableRowsHeader: false,
@@ -18,18 +96,21 @@ const AnnouncementsComponent = () => {
     filter: true,
     filterType: 'dropdown',
     customToolbarSelect:(selectedRows,displayData)=>(
-        <AnnouncementCustomToolbar selectedRows={selectedRows} displayData={displayData}/>
+        <AnnouncementCustomToolbar 
+            selectedRows={selectedRows} 
+            displayData={displayData}
+        />
     )
     };
     return (
         <div>
             <div className='mb-3'>
-                <button className='btn btn-success' onClick={handleOpenModal}><i className="fa fa-plus" aria-hidden="true"></i> Add New Announcement</button>            </div>
-                <AddNewAnnouncementModal
-            openModal={openModal}
-            handleCloseModal={handleCloseModal}
-            handleOpenModal={handleOpenModal}
-          />
+                <button className='btn btn-success' onClick={()=>setOpenModal(true)}><i className="fa fa-plus" aria-hidden="true"></i> Add New Announcement</button>
+            </div>
+            <AddNewAnnouncementModal
+                openModal={openModal}
+                setOpenModal={setOpenModal} 
+            />
             <MUIDataTable
                 title={"Announcement List"}
                 data={data}

@@ -6,7 +6,7 @@ const attachment=require("../../models/attachment");
 const admin=require("../../models/user");
 const jwt=require("jsonwebtoken");
 var C = require("crypto-js");
-const Firebase = require('../../helpers/Firebase');
+const Firebase = require('../../helpers/firebase');
 const { Expo } = require('expo-server-sdk');
 
 const database=Firebase.database();

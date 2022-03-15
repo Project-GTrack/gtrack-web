@@ -54,6 +54,7 @@ app.use("/admin/announcement",adminAnnouncementRoutes);
 app.use("/admin/assignment", assignmentRoutes);
 app.use("/admin/event",adminEventRoutes);
 app.use("/admin/profile",adminProfileRoutes);
+app.use("/admin/truck",truckWebRoutes);
 
 // if (process.env.NODE_ENV === 'production') {
 //     // Serve any static files

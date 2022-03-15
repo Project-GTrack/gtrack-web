@@ -48,12 +48,13 @@
     "recharts": "^2.1.8",
     "use-axios-client": "^2.0.0",
     "web-vitals": "^2.1.2",
+    "worker-loader": "^3.0.8",
     "yup": "^0.32.11"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "heroku-postbuild": "npm run build && npm install",
+    "heroku-postbuild": "npm install && npm run build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

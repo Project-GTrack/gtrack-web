@@ -32,30 +32,32 @@ exports.register=async (req,res)=>{
 
 exports.login=async (req,res)=>{
     let account = await user.model.findOne({where:{email:req.body.email,user_type:{ [Op.not]: 'Admin'},status:true}});
-    let sched = await schedule.model.findAll({
-        where:{
-            driver_id:account.user_id,
-        }
-    });
-    if(sched.length != 0){
-        for(x = 0;x < sched.length;x++){
-            if(JSON.parse(sched[x].schedule).type === "weekly"){
-                for(y = 0;y<JSON.parse(sched[x].schedule).when.length && days.indexOf(JSON.parse(sched[x].schedule).when[y].schedule) !== moment().day();y++){}
-                console.log("weekly",y);
-            }else{
-                for(y = 0;y<JSON.parse(sched[x].schedule).when.length && moment(JSON.parse(sched[x].schedule).when[y].schedule).format('YYYY-MM-DD') !== moment().toISOString().split('T')[0];y++){}
-                console.log("specific",y);
+    if(!req.body.google_auth){
+        let sched = await schedule.model.findAll({
+            where:{
+                driver_id:account.user_id,
             }
-            console.log(y,JSON.parse(sched[x].schedule).when.length)
-            if(y!==JSON.parse(sched[x].schedule).when.length){
-                account = await user.model.findOne({where:{email:req.body.email}, include:[{
-                    model: schedule.model, as: "userSchedule",
-                    where:{
-                        schedule_id:sched[x].schedule_id,
-                    }
-                }]});
+        });
+        if(sched.length != 0){
+            for(x = 0;x < sched.length;x++){
+                if(JSON.parse(sched[x].schedule).type === "weekly"){
+                    for(y = 0;y<JSON.parse(sched[x].schedule).when.length && days.indexOf(JSON.parse(sched[x].schedule).when[y].schedule) !== moment().day();y++){}
+                    console.log("weekly",y);
+                }else{
+                    for(y = 0;y<JSON.parse(sched[x].schedule).when.length && moment(JSON.parse(sched[x].schedule).when[y].schedule).format('YYYY-MM-DD') !== moment().toISOString().split('T')[0];y++){}
+                    console.log("specific",y);
+                }
+                console.log(y,JSON.parse(sched[x].schedule).when.length)
+                if(y!==JSON.parse(sched[x].schedule).when.length){
+                    account = await user.model.findOne({where:{email:req.body.email}, include:[{
+                        model: schedule.model, as: "userSchedule",
+                        where:{
+                            schedule_id:sched[x].schedule_id,
+                        }
+                    }]});
+                }
+              
             }
-          
         }
     }
     if(account && !req.body.google_auth){

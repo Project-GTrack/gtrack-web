@@ -16,7 +16,7 @@ import { useFormik } from 'formik';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import {useEventPageContext} from '../../../pages/EventsPage'; 
-
+import { useSnackbar } from 'notistack';
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
@@ -56,6 +56,7 @@ BootstrapDialogTitle.propTypes = {
 };
 
 export default function DeleteEventModal(props) {
+  const { enqueueSnackbar} = useSnackbar();
   const {refetch}=useEventPageContext();
   const navigate = useNavigate();
   const eventValidationSchema = yup.object().shape({
@@ -69,10 +70,10 @@ export default function DeleteEventModal(props) {
       }).then(res=>{
         if(res.data.success){
           props.setDeleteModal(false);
-          props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
+          enqueueSnackbar(res.data.message, { variant:'success' });
           refetch();
         }else{
-          props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"error"})
+          enqueueSnackbar(res.data.message, { variant:'error' });
         }
       })
     }else{

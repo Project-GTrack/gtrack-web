@@ -9,7 +9,12 @@ import CollectionAlertDialog from '../components/CollectionAlertDialog';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { Helmet } from 'react-helmet';
+import mapboxgl from 'mapbox-gl/dist/mapbox-gl-csp';
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import MapboxWorker from 'worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker';
 
+mapboxgl.workerClass = MapboxWorker;
+mapboxgl.accessToken = 'pk.eyJ1IjoicmpvbGl2ZXJpbyIsImEiOiJja2ZhanZrZnkwajFjMnJwN25mem1tenQ0In0.fpQUiUyn3J0vihGxhYA2PA';
 const Map = ReactMapboxGl({
     accessToken:
       'pk.eyJ1IjoicmpvbGl2ZXJpbyIsImEiOiJja2ZhanZrZnkwajFjMnJwN25mem1tenQ0In0.fpQUiUyn3J0vihGxhYA2PA'
@@ -26,8 +31,8 @@ const TrackCollectorPage = () => {
         isOpen:false,
         data:null
     });
-    const [drivers,setDrivers]=useState(null);
-    const [dumpsters,setDumpsters]=useState(null);
+    const [drivers,setDrivers]=useState([]);
+    const [dumpsters,setDumpsters]=useState([]);
     const getFirebaseDrivers = () => {
         database.ref(`Drivers/`).on('value', function (snapshot) {
             if(snapshot.val()){
@@ -36,6 +41,7 @@ const TrackCollectorPage = () => {
                 setDrivers([...temp]);
             }else{
                 setOpen(true);
+                setDrivers([]);
             }
         });
      }

@@ -5,7 +5,6 @@ import PageLayout from './PageLayout';
 import EventsComponent from '../components/events/EventsComponent';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import StatusToast from '../components/helpers/StatusToast';
 import { Helmet } from 'react-helmet';
 import useAxios,{ configure } from 'axios-hooks'
 import { CircularProgress } from '@mui/material';
@@ -18,11 +17,7 @@ const EventPageContext = React.createContext(defaultContext);
 export const useEventPageContext = () => useContext(EventPageContext);
 const EventsPage = () =>{
     const navigate = useNavigate();
-    const [statusToast, setStatusToast] = useState({
-      isOpen : false,
-      message : "",
-      colorScheme:"success"
-    })
+   
     const [{ data, loading, error }, refetch] = useAxios({
       url: `${process.env.REACT_APP_BACKEND_URL}/admin/event/view`,
       method:'get' 
@@ -69,10 +64,9 @@ const EventsPage = () =>{
           </div>
           ):(
             <EventPageContext.Provider value={{queryResult:{data,loading,error},refetch}}>
-              <EventsComponent statusToast={statusToast} setStatusToast={setStatusToast}/>
+              <EventsComponent/>
             </EventPageContext.Provider>
            )}
-           <StatusToast statusToast={statusToast} setStatusToast={setStatusToast}/>
         </PageLayout>
     )
 }

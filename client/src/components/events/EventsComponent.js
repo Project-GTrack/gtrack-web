@@ -4,7 +4,7 @@ import EventCustomToolbar from './EventCustomToolbar';
 import AddNewEventModal from './modals/AddNewEventModal';
 import moment from 'moment';
 import {useEventPageContext} from '../../pages/EventsPage';  
-const EventsComponent = ({statusToast, setStatusToast}) => {
+const EventsComponent = () => {
     const {queryResult}=useEventPageContext();
     const events = queryResult.data.data;
     const[data,  setData] = useState([]);
@@ -31,7 +31,7 @@ const EventsComponent = ({statusToast, setStatusToast}) => {
         })
         setData(temp);  
 
-    },[events, statusToast.isOpen]);
+    },[events]);
     const columns = [
         {
             name:"ID",
@@ -163,10 +163,9 @@ const EventsComponent = ({statusToast, setStatusToast}) => {
     filterType: 'dropdown',
     customToolbarSelect:(selectedRows,displayData)=>(
         <EventCustomToolbar  
-            statusToast={statusToast} 
-            setStatusToast={setStatusToast} 
             selectedRows={selectedRows} 
-            displayData={displayData}/>
+            displayData={displayData}
+        />
     )
     };
     return (
@@ -177,8 +176,6 @@ const EventsComponent = ({statusToast, setStatusToast}) => {
                 <AddNewEventModal
             openModal={openModal}
             setOpenModal={setOpenModal}
-            statusToast={statusToast}
-            setStatusToast={setStatusToast}
             handleCloseModal={handleCloseModal}
             handleOpenModal={handleOpenModal}
           />

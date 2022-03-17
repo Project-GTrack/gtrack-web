@@ -11,8 +11,8 @@ const AdminLoginValidation = (user) =>{
           }
         if (!user.password) {
             errors.password = "Password is required";
-          } else if (user.password.length < 5) {
-            errors.password = "Password must be more that 5 characters";
+          } else if (user.password.length < 8) {
+            errors.password = "Password must be more that 8 characters";
         }
     
     

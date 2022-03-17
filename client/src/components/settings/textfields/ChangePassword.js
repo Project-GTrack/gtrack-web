@@ -6,7 +6,12 @@ import { useFormik } from 'formik';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import Grid from "@mui/material/Grid";
+import { useSnackbar } from 'notistack';
+import Firebase from '../../helpers/Firebase';
+
+const auth = Firebase.auth();
 const ChangePassword = (props) => {
+  const { enqueueSnackbar} = useSnackbar();
     const navigate = useNavigate();
     const profilePasswordValidationSchema = yup.object().shape({
         password: yup
@@ -22,6 +27,15 @@ const ChangePassword = (props) => {
                 .ref('newPassword'),null
                 ],'Password must match!'),
     })
+    const handleFirebase =async (values,resetForm,data) =>{
+      if(auth.currentUser){
+        await auth.currentUser.updatePassword(values.newPassword);
+        resetForm();
+        enqueueSnackbar(data.message, { variant:'success' });
+      }else{
+        console.log("NO CURRENT USER");
+      }
+    }
 
     const handleFormSubmit = async(values, {resetForm}) => {
         if(Cookies.get('user_id')){
@@ -32,11 +46,9 @@ const ChangePassword = (props) => {
             accessToken: Cookies.get('user_id')
           }).then(res=>{
             if(res.data.success){
-              console.log(res.data.data)
-              resetForm();
-              props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
+              handleFirebase(values, resetForm, res.data);
             }else{
-              props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"error"})
+              enqueueSnackbar(res.data.message, { variant:'error' });
             }
           })
         }else{

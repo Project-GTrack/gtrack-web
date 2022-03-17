@@ -53,8 +53,7 @@ exports.changeGeneral = async(req, res) => {
             if(admin !== null){
                 let acc = await user.model.update({
                     fname: req.body.fname,
-                    lname:req.body.lname,
-                    image:req.body.image
+                    lname:req.body.lname
                 },{
                     where:{
                         email:admin.email
@@ -144,6 +143,39 @@ exports.changeInfo = async(req, res)=>{
                     res.send({success:true,message:"Update Info successfully.",data:{acc,accessToken}});
                 }else{
                     res.send({success:false,message:"Failed to update info.",data:null});
+                }
+            }
+        })
+    }
+}
+exports.changeProfilePhotoOnly = async(req, res)  => {
+    if(req.body.accessToken != undefined){
+        jwt.verify(req.body.accessToken, process.env.ACCESS_TOKEN_SECRET, async(err, decoded)=>{
+            let admin = await user.model.findOne({
+                where:{
+                    user_id : JSON.parse(decoded.user_id).user_id,
+                    user_type : 'Admin',
+                    status:true
+                }
+            })
+            if(admin !== null){
+                let acc = await user.model.update({
+                    image:req.body.image
+                },{
+                    where:{
+                        email:admin.email
+                    }
+                })
+                if(acc){
+                    acc=await user.model.findOne({ 
+                        where: { 
+                            user_id : JSON.parse(decoded.user_id).user_id,
+                        } 
+                    });
+                    const accessToken = generateAccessToken(acc);
+                    res.send({success:true,message:"Update profile photo successfully.",data:{acc,accessToken}});
+                }else{
+                    res.send({success:false,message:"Failed to update profile photo.",data:null});
                 }
             }
         })

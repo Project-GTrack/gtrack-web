@@ -7,10 +7,10 @@ import Axios from 'axios';
 import { useFormik } from 'formik';
 import UploadProfile from "../../helpers/UploadProfile";
 import { capitalizeWords } from "../../helpers/TextFormat";
-
+import { useSnackbar } from 'notistack';
 const General = (props) => {
+    const { enqueueSnackbar} = useSnackbar();
     const navigate = useNavigate();
-    // const [image,setImage] = useState(null);
     const [url,setUrl] = useState(null);
     const [user,setUser] = useState({
         fname:"",
@@ -38,21 +38,17 @@ const General = (props) => {
     
     const handleFormSubmit = () =>{
         if(Cookies.get('user_id')){
-            console.log(values);
             Axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/profile/general_info`,{
               fname:capitalizeWords(values.fname),
               lname:capitalizeWords(values.lname),
-              image:url,
               accessToken: Cookies.get('user_id')
             }).then(res=>{
               if(res.data.success){
                 props.setUser(res.data.data.acc);
                 Cookies.set('user_id',res.data.data.accessToken, {expires: 1});
-                props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
-                setProgress(0);
-                window.location.reload();
+                enqueueSnackbar(res.data.message, { variant:'success' });
               }else{
-                props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"error"})
+                enqueueSnackbar(res.data.message, { variant:'error' });
               }
             })
           }else{
@@ -86,16 +82,6 @@ const General = (props) => {
         > 
             <Stack direction="row" alignItems="center" justifyContent="center" spacing={2}>
                 <UploadProfile values = {values} user={user} progress = {progress} setProgress = {setProgress} url = {url} setUrl={setUrl}/>
-                {/* <Button
-                    variant="contained"
-                    component="label"
-                    color = 'primary'
-                    size='small'
-                    
-                >
-                Choose Image
-                <Input type="file" hidden/>
-                </Button> */}
             </Stack>
             <Stack sx={{marginTop:2}} spacing={2}>
            
@@ -103,7 +89,6 @@ const General = (props) => {
                     value= {values.fname}
                     onChange={handleChange('fname')}
                     onBlur={handleBlur('fname')}
-                    autoCapitalize
                     inputProps={{ style: { textTransform: "capitalize"} }}
                     id="fname"
                     label="First Name"

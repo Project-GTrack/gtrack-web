@@ -25,6 +25,7 @@ import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import { capitalizeWords } from '../../helpers/TextFormat';
 import {useEventPageContext} from '../../../pages/EventsPage'; 
+import { useSnackbar } from 'notistack';
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
       padding: theme.spacing(2),
@@ -64,6 +65,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   };
   
 export default function EditEventModal(props) {
+  const { enqueueSnackbar} = useSnackbar();
   const {refetch}=useEventPageContext();
   const [images, setImages] = useState([]);
   const [urls, setUrls] = useState([]);
@@ -150,10 +152,9 @@ export default function EditEventModal(props) {
         if(res.data.success){
           refetch();
           props.setOpenModal(false);
-          props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
+          enqueueSnackbar(res.data.message, { variant:'success' });
         }else{
-          props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"error"})
-      
+          enqueueSnackbar(res.data.message, { variant:'error' });
         }
       })
     }else{

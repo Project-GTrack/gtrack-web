@@ -6,7 +6,9 @@ import { useNavigate } from "react-router-dom";
 import Axios from 'axios';
 import { useFormik } from 'formik';
 import { capitalizeWords } from "../../helpers/TextFormat";
+import { useSnackbar } from 'notistack';
 const Address = (props) => {
+    const { enqueueSnackbar} = useSnackbar();
     const navigate = useNavigate();
     const profileAddressValidationSchema = yup.object().shape({
         purok: yup
@@ -32,9 +34,9 @@ const Address = (props) => {
                 console.log(res.data.data.acc);
                 props.setUser(res.data.data.acc);
                 Cookies.set('user_id',res.data.data.accessToken, {expires: 1});
-                props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
+                enqueueSnackbar(res.data.message, { variant:'success' });
               }else{
-                props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"error"})
+                enqueueSnackbar(res.data.message, { variant:'error' });
               }
             })
           }else{

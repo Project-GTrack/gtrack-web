@@ -18,7 +18,9 @@ import { useNavigate } from "react-router-dom";
 import Axios from 'axios';
 import { useFormik } from 'formik';
 import differenceInYears from "date-fns/differenceInYears";
+import { useSnackbar } from 'notistack';
 const Info = (props) => {
+    const { enqueueSnackbar} = useSnackbar();
     const navigate = useNavigate();
     const digitsOnly = (value) => /^\d+$/.test(value)
     const profileInfoValidationSchema = yup.object().shape({
@@ -50,9 +52,9 @@ const Info = (props) => {
                 console.log(res.data.data.acc);
                 props.setUser(res.data.data.acc);
                 Cookies.set('user_id',res.data.data.accessToken, {expires: 1});
-                props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
+                enqueueSnackbar(res.data.message, { variant:'success' });
               }else{
-                props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"error"})
+                enqueueSnackbar(res.data.message, { variant:'error' });
               }
             })
           }else{

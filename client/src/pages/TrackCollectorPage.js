@@ -31,8 +31,8 @@ const TrackCollectorPage = () => {
         isOpen:false,
         data:null
     });
-    const [drivers,setDrivers]=useState(null);
-    const [dumpsters,setDumpsters]=useState(null);
+    const [drivers,setDrivers]=useState([]);
+    const [dumpsters,setDumpsters]=useState([]);
     const getFirebaseDrivers = () => {
         database.ref(`Drivers/`).on('value', function (snapshot) {
             if(snapshot.val()){
@@ -41,6 +41,7 @@ const TrackCollectorPage = () => {
                 setDrivers([...temp]);
             }else{
                 setOpen(true);
+                setDrivers([]);
             }
         });
      }

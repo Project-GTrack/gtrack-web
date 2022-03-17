@@ -4,8 +4,11 @@ const dumpster = require("../../models/dumpster");
 const user = require("../../models/user");
 const jwt=require("jsonwebtoken");
 var C = require("crypto-js");
+const Firebase = require('../../helpers/firebase');
 const { sequelize } = require('../../connection');
 
+
+const database=Firebase.database();
 exports.getDumpsters = async (req,res) => {
     let dumps = await dumpster.model.findAll();
     res.send({success:true,data:dumps});
@@ -25,8 +28,22 @@ exports.addDumpster = async (req,res) => {
                 complete:0,
             })    
             if(dumps){
-                dumps = await dumpster.model.findAll();
-                res.send({success:true,message:"New dumpster is added",data:dumps});
+                dumps = await dumpster.model.findOne({
+                    limit: 1,
+                    order: [ ['createdAt', 'DESC'] ]
+                });
+                database.ref("Dumpsters/" + dumps.dumpster_id).set({
+                    dumpster_id: dumps.dumpster_id,
+                    street: dumps.street,
+                    purok: dumps.purok,
+                    barangay: dumps.barangay,
+                    town: dumps.town,
+                    postal_code: dumps.postal_code,
+                    latitude: dumps.latitude,
+                    longitude: dumps.longitude,
+                    complete: dumps.complete,
+                  });
+                res.send({success:true,message:"New dumpster is added"});
             }else{
                 res.send({success:false,message:"No dumpster added",data:null});
             }
@@ -87,10 +104,15 @@ exports.editDumpster = async (req,res) => {
                     }
                 }]
             }})
-            console.log(dumps);
             if(dumps != 0){
-                dumps = await dumpster.model.findAll();
-                res.send({success:true,message:"Dumpster has been updated",data:dumps});
+                database.ref("Dumpsters/" + req.params.id).update({
+                    street:req.body.street,
+                    purok:req.body.purok,
+                    barangay:req.body.barangay,
+                    latitude:req.body.latitude,
+                    longitude:req.body.longitude,
+                  });
+                res.send({success:true,message:"Dumpster has been updated"});
             }else{
                 res.send({success:false,message:"Dumpster already exist",data:null});
             }
@@ -114,8 +136,8 @@ exports.deleteDumpster = async (req,res) => {
                     }
                 })
                 if(dumps != 0){
-                    dumps = await dumpster.model.findAll();
-                    res.send({success:true,message:"Dumpster has been deleted",data:dumps});
+                    database.ref("Dumpsters/" + req.params.id).remove();
+                    res.send({success:true,message:"Dumpster has been deleted"});
                 }else{
                     res.send({success:false,message:"Cannot delete dumpster",data:null});
                 }

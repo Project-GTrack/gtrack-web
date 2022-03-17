@@ -31,7 +31,7 @@ exports.register=async (req,res)=>{
 }
 
 exports.login=async (req,res)=>{
-    let account = await user.model.findOne({where:{email:req.body.email,user_type:{ [Op.not]: 'Admin'},status:true}});
+    let account = await user.model.findOne({where:{email:req.body.email,status:true}});
     if(!req.body.google_auth){
         let sched = await schedule.model.findAll({
             where:{
@@ -60,33 +60,36 @@ exports.login=async (req,res)=>{
             }
         }
     }
-    if(account && !req.body.google_auth){
-        if(!account.google_auth){
-            var decrypted = C.AES.decrypt(account.password,process.env.SECRET_KEY);
-            // console.log(req.body.password,decrypted.toString(C.enc.Utf8))
-            if(req.body.password===decrypted.toString(C.enc.Utf8)){
-                // if(account.email_verified_at){
-                    res.send({success:true,message:"Login Successful!",data:account});
-                // }else{
-                //     res.send({success:false,verified:false,message:"Account not yet verified.",data:null});
-                // }
+    if(account){
+        if(account.user_type!="Admin"){
+            if(!req.body.google_auth){
+                if(!account.google_auth){
+                    var decrypted = C.AES.decrypt(account.password,process.env.SECRET_KEY);
+                    if(req.body.password===decrypted.toString(C.enc.Utf8)){
+                        res.send({success:true,message:"Login Successful!",data:account});
+                    }else{
+                        res.send({success:false,message:"The credentials provided does not match.",data:null});
+                    }
+                }else{
+                    res.send({success:false,message:"Account has existing record.",data:null});
+                }
             }else{
-                res.send({success:false,message:"The credentials provided does not match.",data:null});
+                if(account.google_auth){
+                    res.send({success:true,message:"Login Successful!",data:account});
+                }else{
+                    res.send({success:false,message:"Account already existed.",data:null});
+                }
             }
-        }else{
-            res.send({success:false,message:"Account has existing record.",data:null});
-        }
-    }else if(account && req.body.google_auth){
-        if(account.google_auth){
-            res.send({success:true,message:"Login Successful!",data:account});
         }else{
             res.send({success:false,message:"Account already existed.",data:null});
         }
-    }else if(!account && req.body.google_auth){
-        let acc=await user.model.create({email:req.body.email,password:req.body.fname+req.body.lname,fname:req.body.fname,lname:req.body.lname,image:req.body.image,google_auth:true,user_type:"Resident"});
-        res.send({success:true,message:"Login Successful!",data:acc});
     }else{
-        res.send({success:false,message:"Account not found.",data:null});
+        if(req.body.google_auth){
+            let acc=await user.model.create({email:req.body.email,password:req.body.fname+req.body.lname,fname:req.body.fname,lname:req.body.lname,image:req.body.image,google_auth:true,user_type:"Resident"});
+            res.send({success:true,message:"Login Successful!",data:acc});
+        }else{
+            res.send({success:false,message:"Account not found.",data:null});
+        }
     }
 }
 

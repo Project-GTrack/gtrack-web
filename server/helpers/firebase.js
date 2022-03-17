@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config(); 
 const firebase = require("firebase/app");
 require('firebase/database');
 

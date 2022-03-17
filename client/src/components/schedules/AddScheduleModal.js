@@ -217,9 +217,11 @@ const AddScheduleModal = (props) => {
     const handleRemoveSchedule=(index)=>{
         let temp=[];
         temp=schedule;
-        temp.splice(index,1);
-        setSchedule(temp);
-        setFieldValue('schedule',temp);
+        if(temp.length>1){
+            temp.splice(index,1);
+            setSchedule(temp);
+            setFieldValue('schedule',temp);
+        }
     }
     const handleChangeType=async (e)=>{
         e.preventDefault();

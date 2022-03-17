@@ -11,7 +11,6 @@ app.use(bodyParser.json());
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 app.use(cookieParser());
-app.listen(8000,()=> console.log("Back end is running at port 8000"));
 
 //INCLUDE MODULES HERE (MOBILE)
 const accountRoutes=require('./routes/mobile/accountRoutes');
@@ -33,6 +32,7 @@ const adminAnnouncementRoutes = require('./routes/web/adminAnnouncementRoutes');
 const assignmentRoutes = require('./routes/web/assignmentRoutes');
 const adminEventRoutes = require('./routes/web/adminEventRoutes');
 const adminProfileRoutes = require('./routes/web/adminProfileRoutes');
+const truckWebRoutes = require('./routes/web/truckRoutes');
 
 //MOBILE ROUTES HERE
 app.use("/mobile",accountRoutes);
@@ -54,3 +54,15 @@ app.use("/admin/announcement",adminAnnouncementRoutes);
 app.use("/admin/assignment", assignmentRoutes);
 app.use("/admin/event",adminEventRoutes);
 app.use("/admin/profile",adminProfileRoutes);
+app.use("/admin/truck",truckWebRoutes);
+
+// if (process.env.NODE_ENV === 'production') {
+//     // Serve any static files
+//     app.use(express.static(path.join(__dirname, '../client/build')));
+//     // Handle React routing, return all requests to React app
+//     app.get('*', function(req, res) {
+//       res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+//     });
+//   }
+
+app.listen(process.env.PORT || 8000,()=> console.log("Back end is running at port 8000"));

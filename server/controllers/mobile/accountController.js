@@ -32,7 +32,7 @@ exports.register=async (req,res)=>{
 
 exports.login=async (req,res)=>{
     let account = await user.model.findOne({where:{email:req.body.email,status:true}});
-    if(!req.body.google_auth){
+    if(account && !req.body.google_auth){
         let sched = await schedule.model.findAll({
             where:{
                 driver_id:account.user_id,

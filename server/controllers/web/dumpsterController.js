@@ -10,7 +10,9 @@ const { sequelize } = require('../../connection');
 
 const database=Firebase.database();
 exports.getDumpsters = async (req,res) => {
-    let dumps = await dumpster.model.findAll();
+    let dumps = await dumpster.model.findAll({
+        order: [['createdAt','DESC']]
+    });
     res.send({success:true,data:dumps});
 }
 exports.addDumpster = async (req,res) => {

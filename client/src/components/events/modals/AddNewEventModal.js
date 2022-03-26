@@ -202,7 +202,7 @@ export default function AddNewEventModal(props) {
             maxRows={10}
             aria-label="maximum height"
             placeholder="Description"
-            style={{ width: '100%', height: 200 }}
+            style={{ width: '100%', height: 200, padding:5 }}
         />
          {(errors.description && touched.description) &&
                 <p className="text-danger small ">{errors.description}</p>

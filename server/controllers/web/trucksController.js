@@ -51,6 +51,7 @@ exports.addTruck = async(req, res) => {
 
 exports.getTrucks = async(req, res) => {
     let trucksActive =await truck.model.findAll({
+        order: [['createdAt','DESC']],
         where:{
             active:1,
             deletedAt:null

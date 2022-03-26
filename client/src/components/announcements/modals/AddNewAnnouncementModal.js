@@ -161,7 +161,7 @@ export default function AddNewAnnouncementModal(props) {
                 onBlur={handleBlur('content')}
                 maxRows={10}
                 placeholder="Content"
-                style={{ width: '100%', height: 200 }}
+                style={{ width: '100%', height: 200,padding:11 }}
               />
               {(errors.content && touched.content) &&
                 <p className="text-danger small ">{errors.content}</p>

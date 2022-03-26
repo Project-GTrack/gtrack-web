@@ -3,7 +3,10 @@ import MUIDataTable from "mui-datatables";
 import GarbageTrucksToolbar from './GarbageTrucksToolbar';
 import { useEffect } from 'react';
 import moment from 'moment';
-const UnderMaintenancePanel = ({inactives,setTrucks,statusToast,setStatusToast}) => {
+import { useTrucksPageContext } from '../pages/TrucksPage';
+const UnderMaintenancePanel = () => {
+    const {queryResult}= useTrucksPageContext();
+    const inactives = queryResult.data.data.inactives
     const columns = ["Plate Number", "Model","Added by","Date Added", "Status"];
     const [data, setData] = useState([]);
     const [openReactivateModal, setOpenReactivateModal] = useState(false);
@@ -26,10 +29,7 @@ const UnderMaintenancePanel = ({inactives,setTrucks,statusToast,setStatusToast})
         filterType: 'dropdown',
         customToolbarSelect:(selectedRows,displayData)=>(
             <GarbageTrucksToolbar 
-                statusToast={statusToast}
-                setStatusToast={setStatusToast} 
                 data={inactives[selectedRows.data[0].dataIndex]} 
-                setTrucks={setTrucks} 
                 openReactivateModal={openReactivateModal} 
                 setOpenReactivateModal={setOpenReactivateModal}
                 selectedRows={selectedRows} 

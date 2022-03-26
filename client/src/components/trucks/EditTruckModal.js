@@ -18,6 +18,8 @@ import * as yup from 'yup';
 import Cookies from 'js-cookie';
 import { decodeToken } from 'react-jwt';
 import { useEffect } from 'react';
+import { useSnackbar } from 'notistack';
+import { useTrucksPageContext } from '../../pages/TrucksPage';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -58,6 +60,8 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   };
   
 export default function EditTruckModal(props) {
+    const {enqueueSnackbar} = useSnackbar();
+    const {refetch}= useTrucksPageContext();
     const [error,setError]=useState(null);
     const [,setUser]=useState(null);
     const getCookiesJWT=()=>{
@@ -84,8 +88,8 @@ export default function EditTruckModal(props) {
         {plate_no:values.plate_no,model:values.model})
         .then(res=>{
             if(res.data.success){
-                props.setTrucks(res.data.data);
-                props.setStatusToast({isOpen:true,message:res.data.message,colorScheme:"success"})
+                refetch();
+                enqueueSnackbar(res.data.message, { variant:'success' });
                 props.setOpenEditModal(false)
             }else{
                 setError(res.data.message);

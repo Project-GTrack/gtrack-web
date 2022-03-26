@@ -62,7 +62,8 @@ export default function DriversModal(props) {
       temp.push([driver&&driver.fname+" "+driver&&driver.lname, 
                   driver&&driver.email,
                   driver&&driver.contact_no,
-                  driver&&driver.street+" "+driver.purok+" "+driver.barangay+", "+driver.town,
+                  // eslint-disable-next-line no-useless-concat
+                  driver&&driver.street?driver.street:' '+" "+driver.purok?driver.purok:' '+" "+driver.barangay?driver.barangay:' '+", "+driver.town?driver.town:' ',
                   moment(driver.createdAt).format("LL")]);
     })
     setData(temp);

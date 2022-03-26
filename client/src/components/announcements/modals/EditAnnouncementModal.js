@@ -160,7 +160,7 @@ export default function EditAnnouncementModal(props) {
                 maxRows={10}
                 aria-label="maximum height"
                 placeholder= "Content"
-                style={{ width: '100%', height: 200 }}
+                style={{ width: '100%', height: 200, padding:11 }}
               />
               {(errors.content && touched.content) &&
                 <p className="text-danger small ">{errors.content}</p>

@@ -9,10 +9,68 @@ import CollectionAlertDialog from '../components/CollectionAlertDialog';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { Helmet } from 'react-helmet';
+import mapboxgl from 'mapbox-gl/dist/mapbox-gl-csp';
+import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
+import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import MapboxWorker from 'worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker';
 
+mapboxgl.workerClass = MapboxWorker;
+mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_API_ACCESS_TOKEN;
 const Map = ReactMapboxGl({
-    accessToken:
-      'pk.eyJ1IjoicmpvbGl2ZXJpbyIsImEiOiJja2ZhanZrZnkwajFjMnJwN25mem1tenQ0In0.fpQUiUyn3J0vihGxhYA2PA'
+    accessToken:process.env.REACT_APP_MAPBOX_API_ACCESS_TOKEN
+});
+const coordinatesGeocoder = function (query) {
+    // Match anything which looks like
+    // decimal degrees coordinate pair.
+    const matches = query.match(
+    /^[ ]*(?:Lat: )?(-?\d+\.?\d*)[, ]+(?:Lng: )?(-?\d+\.?\d*)[ ]*$/i
+    );
+    if (!matches) {
+    return null;
+    }
+     
+    function coordinateFeature(lng, lat) {
+    return {
+    center: [lng, lat],
+    geometry: {
+    type: 'Point',
+    coordinates: [lng, lat]
+    },
+    place_name: 'Lat: ' + lat + ' Lng: ' + lng,
+    place_type: ['coordinate'],
+    properties: {},
+    type: 'Feature'
+    };
+    }
+     
+    const coord1 = Number(matches[1]);
+    const coord2 = Number(matches[2]);
+    const geocodes = [];
+     
+    if (coord1 < -90 || coord1 > 90) {
+    // must be lng, lat
+    geocodes.push(coordinateFeature(coord1, coord2));
+    }
+     
+    if (coord2 < -90 || coord2 > 90) {
+    // must be lat, lng
+    geocodes.push(coordinateFeature(coord2, coord1));
+    }
+     
+    if (geocodes.length === 0) {
+    // else could be either lng, lat or lat, lng
+    geocodes.push(coordinateFeature(coord1, coord2));
+    geocodes.push(coordinateFeature(coord2, coord1));
+    }
+     
+    return geocodes;
+};
+const geocoder = new MapboxGeocoder({
+    accessToken: process.env.REACT_APP_MAPBOX_API_ACCESS_TOKEN,
+    mapboxgl: mapboxgl,
+    localGeocoder:coordinatesGeocoder,
+    placeholder:"Places or (Lat,Lng)"
 });
 const database=Firebase.database();
 const TrackCollectorPage = () => {
@@ -26,8 +84,8 @@ const TrackCollectorPage = () => {
         isOpen:false,
         data:null
     });
-    const [drivers,setDrivers]=useState(null);
-    const [dumpsters,setDumpsters]=useState(null);
+    const [drivers,setDrivers]=useState([]);
+    const [dumpsters,setDumpsters]=useState([]);
     const getFirebaseDrivers = () => {
         database.ref(`Drivers/`).on('value', function (snapshot) {
             if(snapshot.val()){
@@ -36,6 +94,7 @@ const TrackCollectorPage = () => {
                 setDrivers([...temp]);
             }else{
                 setOpen(true);
+                setDrivers([]);
             }
         });
      }
@@ -74,13 +133,24 @@ const TrackCollectorPage = () => {
             <Helmet>
                 <title>GTrack | Track Collection</title>
             </Helmet>
-            <div style={{ height: '100vh', width: '100%' }}>
+            <div style={{ height: '100vh'}}>
                 <Map
+                className='mapboxgl-map'
                     // eslint-disable-next-line react/style-prop-object
                     style="mapbox://styles/mapbox/streets-v9"
                     containerStyle={{
-                        height: '100%',
-                        width: '100%'
+                        height: '100%'
+                    }}
+                    onData={(map)=>{
+                        map.resize();
+                    }}
+                    onStyleLoad={(map,e)=>{
+                        map.addControl(geocoder)
+                        map.addControl(new mapboxgl.GeolocateControl({
+                            trackUserLocation: true,
+                            showUserHeading: true,
+                        }))
+                        map.addControl(new mapboxgl.NavigationControl())
                     }}
                     center={position}
                 >

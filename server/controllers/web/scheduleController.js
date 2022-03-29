@@ -132,6 +132,7 @@ const getDrivers=async()=>{
 }
 const getTruckAssignments=async()=>{
     let assignments = await truck_assignment.model.findAll({
+        order: [['createdAt','DESC']],
         include:[{
             model: user.model, as: "truckAssignmentDriver"
         },{
@@ -166,6 +167,7 @@ exports.addSchedule=async (req,res)=>{
 
 exports.getScheduleTruckAssignment=async (req,res)=>{
     let sched=await schedule.model.findAll({
+        order: [['createdAt','DESC']],
         include:[
             {model:user.model, as:"scheduleDriver"},
         ]

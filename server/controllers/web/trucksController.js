@@ -41,10 +41,10 @@ exports.addTruck = async(req, res) => {
 
                     }
                 } else {
-                    return res.send("Truck Record already exists");
+                    res.send({success:false,message:"Truck Record already exists"});
                 }
             } else {
-                return res.send("Something Big went wrong you don't have admin rights");
+                res.send({success:false,message:"Something Big went wrong you don't have admin rights"});
             }
         }
     )}
@@ -52,6 +52,7 @@ exports.addTruck = async(req, res) => {
 
 exports.getTrucks = async(req, res) => {
     let trucksActive =await truck.model.findAll({
+        order: [['createdAt','DESC']],
         where:{
             active:1,
             deletedAt:null
@@ -98,7 +99,10 @@ exports.updateTruck = async(req, res) => {
     )
     if (data) {
         res.send({success:true,message:"Truck Record Successfully Updated"});
-    } 
+    } else {
+        res.send({success:false,message:"Cannot update truck"});
+    }
+  
 }
 exports.deleteTruck = async(req, res) => {
     
@@ -147,19 +151,26 @@ exports.deactivateTruck = async(req,res) => {  //move to maintenance
 
 
 exports.activateTruck = async(req,res) => {     //move to active trucks
-    let data = await truck.model.update(
-        {
-            active:1
-        },{
-            where:{
-                truck_id:req.params.id
+    jwt.verify(req.body.accessToken,process.env.ACCESS_TOKEN_SECRET, async(err,decoded) => {
+        var decodedData=JSON.parse(decoded.user_id);
+        var bytes  = C.AES.decrypt(decodedData.password, process.env.SECRET_KEY);
+        if (req.body.password === bytes.toString(C.enc.Utf8)) {
+            let data = await truck.model.update(
+                {
+                    active:1
+                },{
+                    where:{
+                        truck_id:req.params.id
+                    }
+                }
+            )
+            if (data) {
+                res.send({success:true,message:"Truck Record Moved to Garbage Trucks"});
+            } else {
+                res.send({success:false,message:"Cannot activate truck"});
             }
-        }
-    )
-    if (data) {
-        res.send({success:true,message:"Truck Record Moved to Garbage Trucks"});
-        
-    } else {
-        return res.send("Something went wrong");
-    }
+        } else{
+            res.send({success:false,message:"Incorrect password."});
+        }         
+    })
 }

@@ -23,20 +23,7 @@ exports.addAssignment = async (req,res) => {
                 res.send({success:false,message:"Truck assignment already exist",data:null});
             }else{
                 let assigned = await assignment.model.create(req.body);
-                if(assigned){
-                    assigned = await assignment.model.findAll({
-                        include:[{
-                            model: user.model, as: "truckAssignmentDriver"
-                        },{
-                            model: schedule.model, as: "assignmentSchedule"
-                        },{
-                            model: truck.model, as: "truckAssignmentTruck"
-                        }]
-                    })
-                    res.send({success:true,message:"New truck assignment is added",data:assigned});
-                }else{
-                    res.send({success:false,message:"Cannot add truck assignment",data:null});
-                }
+                res.send({success:true,message:"New truck assignment is added"});
             }
             
         })
@@ -47,16 +34,14 @@ exports.addAssignment = async (req,res) => {
 exports.editAssignment = async (req,res) => {
     if(req.body.accessToken!= undefined){
         jwt.verify(req.body.accessToken,process.env.ACCESS_TOKEN_SECRET, async(err, decoded)=>{
-                let assign = 0;
                 let checkAssign = await assignment.model.findOne({
                     where:{
                         driver_id:req.body.driver_id,
                         truck_id:req.body.truck_id
                     }
                 })
-                console.log(checkAssign);
                 if(!checkAssign){
-                    assign = await assignment.model.update(req.body,{
+                    checkAssign = await assignment.model.update(req.body,{
                         where:{
                             assignment_id:req.params.id,
                             [Op.or]:[{
@@ -70,19 +55,7 @@ exports.editAssignment = async (req,res) => {
                             }]
                         }
                     })
-                
-                }
-                if(assign != 0){
-                    assign = await assignment.model.findAll({
-                        include:[{
-                            model: user.model, as: "truckAssignmentDriver"
-                        },{
-                            model: schedule.model, as: "assignmentSchedule"
-                        },{
-                            model: truck.model, as: "truckAssignmentTruck"
-                        }]
-                    })
-                    res.send({success:true,message:"Truck assignment has been updated",data:assign});
+                    res.send({success:true,message:"Truck assignment has been updated"});
                 }else{
                     res.send({success:false,message:"Truck assignment already exist",data:null});
                 }
@@ -103,16 +76,7 @@ exports.deleteAssignment = async (req,res) => {
                         assignment_id:req.params.id
                     }
                 })
-                assign = await assignment.model.findAll({
-                    include:[{
-                        model: user.model, as: "truckAssignmentDriver"
-                    },{
-                        model: schedule.model, as: "assignmentSchedule"
-                    },{
-                        model: truck.model, as: "truckAssignmentTruck"
-                    }]
-                })
-                res.send({success:true,message:"Truck assignment has been deleted",data:assign});
+                res.send({success:true,message:"Truck assignment has been deleted"});
             }else{
                 res.send({success:false,message:"Password did not match",data:null});
             }

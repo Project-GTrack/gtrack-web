@@ -21,8 +21,7 @@ import { useSnackbar } from "notistack";
 
 
 const Map = ReactMapboxGl({
-  accessToken:
-    "pk.eyJ1IjoicmpvbGl2ZXJpbyIsImEiOiJja2ZhanZrZnkwajFjMnJwN25mem1tenQ0In0.fpQUiUyn3J0vihGxhYA2PA",
+  accessToken:process.env.REACT_APP_MAPBOX_API_ACCESS_TOKEN,
 });
 const BootstrapDialogTitle = (props) => {
   const { children, onClose, ...other } = props;

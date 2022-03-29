@@ -9,8 +9,6 @@ import UnderMaintenancePanel from '../components/UnderMaintenancePanel';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import Cookies from 'js-cookie';
-import axios from 'axios';        //unused
-import StatusToast from '../components/helpers/StatusToast'; //unused
 import { Helmet } from 'react-helmet';
 import useAxios,{ configure } from 'axios-hooks'
 import { CircularProgress } from '@mui/material';

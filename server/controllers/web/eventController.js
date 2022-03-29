@@ -9,6 +9,7 @@ var C = require("crypto-js");
 
 exports.viewEvents = async(req, res) => {
     let events = await event.model.findAll({
+        order: [['createdAt','DESC']],
         where: {
             deletedAt : null
         },

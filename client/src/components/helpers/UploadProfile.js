@@ -9,9 +9,12 @@ import PropTypes from 'prop-types';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
+import { useSnackbar } from 'notistack';
+import Cookies from "js-cookie";
+import Axios from 'axios';
 const storage = Firebase.storage();
 const UploadProfile = ({values,url,setUrl,progress,setProgress,user}) => {
-  
+  const { enqueueSnackbar} = useSnackbar();
     function LinearProgressWithLabel(props) {
         return (
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -57,7 +60,22 @@ const UploadProfile = ({values,url,setUrl,progress,setProgress,user}) => {
             .child(filename)
             .getDownloadURL()
             .then((url)=>{
-            setUrl(url);
+              setUrl(url);
+              Axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/profile/change_profile_photo`,{
+                image:url,
+                accessToken: Cookies.get('user_id')
+              }).then( res => {
+                if(res.data.success){
+                  // props.setUser(res.data.data.acc);
+                  Cookies.set('user_id',res.data.data.accessToken, {expires: 1});
+                  enqueueSnackbar(res.data.message, { variant:'success' });
+                  setProgress(0);
+                  window.location.reload();
+                }else{
+                  enqueueSnackbar(res.data.message, { variant:'error' });
+                }
+              });
+           
             })
           }
         )

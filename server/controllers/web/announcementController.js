@@ -13,6 +13,7 @@ const database=Firebase.database();
 let expo = new Expo();
 exports.viewAnnouncements = async(req, res) => {
     let announcements=await announcement.model.findAll({
+        order: [['createdAt','DESC']],
         where:{
             deletedAt:null
         },

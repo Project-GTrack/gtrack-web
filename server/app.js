@@ -33,6 +33,7 @@ const assignmentRoutes = require('./routes/web/assignmentRoutes');
 const adminEventRoutes = require('./routes/web/adminEventRoutes');
 const adminProfileRoutes = require('./routes/web/adminProfileRoutes');
 const truckWebRoutes = require('./routes/web/truckRoutes');
+const reportsandConcernsRoutes = require('./routes/web/reportRoutes');
 
 //MOBILE ROUTES HERE
 app.use("/mobile",accountRoutes);
@@ -54,6 +55,8 @@ app.use("/admin/announcement",adminAnnouncementRoutes);
 app.use("/admin/assignment", assignmentRoutes);
 app.use("/admin/event",adminEventRoutes);
 app.use("/admin/profile",adminProfileRoutes);
+app.use("/admin/truck", truckWebRoutes);
+app.use("/admin/report", reportsandConcernsRoutes)
 
 // if (process.env.NODE_ENV === 'production') {
 //     // Serve any static files

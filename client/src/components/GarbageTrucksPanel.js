@@ -11,10 +11,11 @@ const GarbageTrucksPanel = () => {
     const [data, setData] = useState([]);
     const [openAddModal, setOpenAddModal] = useState(false);
     const [openEditModal,setOpenEditModal]=useState(false);
-    const [openDeleteModal,setOpenDeleteModal]=useState(false);
+    const [openDeleteModal,setOpenDeleteModal]=useState(false); 
     // const data = [
     // ["AB123", "Suzuki", "01/01/22", "Active",],
     // ];
+ 
     useEffect(() => {
         var temp=[];
         // eslint-disable-next-line array-callback-return
@@ -23,6 +24,7 @@ const GarbageTrucksPanel = () => {
         })
         setData(temp);
     }, [trucks])
+
     const options = {
     selectableRowsHeader: false,
     selectableRows:'single',
@@ -38,8 +40,8 @@ const GarbageTrucksPanel = () => {
             selectedRows={selectedRows} 
             displayData={displayData}
         />
-    )
-    };
+    )};
+    
     return (
         <div>
             <div className='mb-3'>

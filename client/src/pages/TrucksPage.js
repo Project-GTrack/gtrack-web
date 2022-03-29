@@ -9,8 +9,8 @@ import UnderMaintenancePanel from '../components/UnderMaintenancePanel';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import Cookies from 'js-cookie';
-import axios from 'axios';
-import StatusToast from '../components/helpers/StatusToast';
+import axios from 'axios';        //unused
+import StatusToast from '../components/helpers/StatusToast'; //unused
 import { Helmet } from 'react-helmet';
 import useAxios,{ configure } from 'axios-hooks'
 import { CircularProgress } from '@mui/material';
@@ -22,6 +22,8 @@ const defaultContext= {
 const TrucksPageContext = React.createContext(defaultContext);
 export const useTrucksPageContext = () => useContext(TrucksPageContext);
 
+
+// Start of trucks page use state
 const TrucksPage = () => {
     const [value, setValue] = useState(0);
 

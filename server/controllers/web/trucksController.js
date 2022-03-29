@@ -10,6 +10,7 @@ const e = require("express");
 
 
 
+
 // Start of Truck Model Controllers
 
 
@@ -75,6 +76,15 @@ exports.getTrucks = async(req, res) => {
 
 
 exports.updateTruck = async(req, res) => {
+    let check = await truck.model.findOne({
+        where:{
+            plate_no:req.body.plate_no
+        }
+    })
+
+    if (check) {
+        return res.send({success:false,message:"Truck with that plate number already exists"});
+    }
     
     let data = await truck.model.update(
         {
@@ -88,10 +98,7 @@ exports.updateTruck = async(req, res) => {
     )
     if (data) {
         res.send({success:true,message:"Truck Record Successfully Updated"});
-    } else {
-        return res.send("Something went balistic");
-    }
-  
+    } 
 }
 exports.deleteTruck = async(req, res) => {
     
@@ -107,7 +114,6 @@ exports.deleteTruck = async(req, res) => {
     }
 
 }
-
 
 
 exports.deactivateTruck = async(req,res) => {  //move to maintenance
@@ -128,9 +134,11 @@ exports.deactivateTruck = async(req,res) => {  //move to maintenance
                 if (data) {
                     res.send({success:true,message:"Truck Record Moved to Under Maintenance"});
                 } else {
-                    return res.send("something went wrong")
+                    res.send("something went wrong")
                 }
-            }           
+            } else {
+                res.send({success:false,message:"Password is incorrect"});
+            }          
         })
     }
 }

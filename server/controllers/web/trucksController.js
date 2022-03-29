@@ -10,6 +10,7 @@ const e = require("express");
 
 
 
+
 // Start of Truck Model Controllers
 
 
@@ -76,6 +77,15 @@ exports.getTrucks = async(req, res) => {
 
 
 exports.updateTruck = async(req, res) => {
+    let check = await truck.model.findOne({
+        where:{
+            plate_no:req.body.plate_no
+        }
+    })
+
+    if (check) {
+        return res.send({success:false,message:"Truck with that plate number already exists"});
+    }
     
     let data = await truck.model.update(
         {
@@ -110,7 +120,6 @@ exports.deleteTruck = async(req, res) => {
 }
 
 
-
 exports.deactivateTruck = async(req,res) => {  //move to maintenance
     if (req.body.accessToken) {  
         jwt.verify(req.body.accessToken,process.env.ACCESS_TOKEN_SECRET, async(err,decoded) => {
@@ -129,11 +138,11 @@ exports.deactivateTruck = async(req,res) => {  //move to maintenance
                 if (data) {
                     res.send({success:true,message:"Truck Record Moved to Under Maintenance"});
                 } else {
-                    res.send({success:false,message:"Cannot deactivate truck"});
+                    res.send("something went wrong")
                 }
-            } else{
-                res.send({success:false,message:"Incorrect password."});
-            }         
+            } else {
+                res.send({success:false,message:"Password is incorrect"});
+            }          
         })
     }
 }

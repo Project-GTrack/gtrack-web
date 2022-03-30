@@ -133,13 +133,16 @@ const TrackCollectorPage = () => {
             <Helmet>
                 <title>GTrack | Track Collection</title>
             </Helmet>
-            <div style={{ height: '100vh', width: '100%' }}>
+            <div style={{ height: '100vh'}}>
                 <Map
+                className='mapboxgl-map'
                     // eslint-disable-next-line react/style-prop-object
                     style="mapbox://styles/mapbox/streets-v9"
                     containerStyle={{
-                        height: '100%',
-                        width: '100%'
+                        height: '100%'
+                    }}
+                    onData={(map)=>{
+                        map.resize();
                     }}
                     onStyleLoad={(map,e)=>{
                         map.addControl(geocoder)

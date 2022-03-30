@@ -54,12 +54,14 @@ exports.logout = async(req, res)=>{
 }
 exports.display = async(req, res)=>{
     let drivers = await user.model.findAll({
+        order: [['createdAt','DESC']],
         where:{
             user_type:"Driver",
             status:true
         }
     })
     let admins = await user.model.findAll({
+        order: [['createdAt','DESC']],
         where:{
             user_type:"Admin",
             status:true

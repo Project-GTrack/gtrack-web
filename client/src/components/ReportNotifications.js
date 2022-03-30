@@ -71,8 +71,11 @@ const ReportNotifications = ({open,anchorEl,handleClose,type,reports}) => {
             return (
               <MenuItem key={i} onClick={()=>handleRead(type,item)}>
                 <Stack direction="row" spacing={1}>
-                  {item.sender_image && <Avatar src={item.sender_image}/>}
-                  {item.sender_image || <Avatar sx={{fontSize:15}}>{sender[0][0]+""+sender[sender.length-1][0]}</Avatar>}
+                  {item.sender_image?(
+                    <Avatar src={item.sender_image}/>
+                  ):(
+                    <Avatar sx={{fontSize:15}}>{sender[0][0]+""+sender[sender.length-1][0]}</Avatar>
+                  )}
                   <Stack direction="column">
                     <span style={{fontSize: '12px'}}>{item.sender}  | {item.classification}</span>
                     <span style={{fontSize: '14px'}}>{item.subject}</span>
@@ -93,8 +96,11 @@ const ReportNotifications = ({open,anchorEl,handleClose,type,reports}) => {
             return (
               <MenuItem key={i} onClick={()=>handleRead(type,item)}>
                 <Stack direction="row" spacing={1}>
-                  {item.sender_image && <Avatar src={item.sender_image}/>}
-                  {item.sender_image || <Avatar sx={{fontSize:15}}>{sender[0][0]+""+sender[sender.length-1][0]}</Avatar>}
+                  {item.sender_image?(
+                    <Avatar src={item.sender_image}/>
+                  ):(
+                    <Avatar sx={{fontSize:15}}>{sender[0][0]+""+sender[sender.length-1][0]}</Avatar>
+                  )}
                   <Stack direction="column">
                     <span style={{fontSize: '12px'}}>{item.sender}  | {item.degree}</span>
                     <span style={{fontSize: '14px'}}>{item.subject}</span>

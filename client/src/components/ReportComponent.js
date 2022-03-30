@@ -2,10 +2,9 @@ import React, { useState } from 'react'
 import MUIDataTable from "mui-datatables";
 import ReportsandConcernsToolbar from './ReportsandConcernsToolbar';
 import { useEffect } from 'react';
-import moment from 'moment';
 import { useReportsandConcernsPageContext } from '../pages/ReportsPage';
 
-const Reports = () => {
+const ReportComponent = () => {
     const {queryResult}= useReportsandConcernsPageContext();
     const reports = queryResult.data.data.reports
     const columns = ["Subject", "Message","Driver","Longitude", "Latitude", "Degree"];
@@ -18,9 +17,13 @@ const Reports = () => {
         var temp=[];
         // eslint-disable-next-line array-callback-return
         reports && reports.map((item)=>{
-          temp.push([item.subject && item.subject, item.message && item.message, item.reportDriver.fname+""+item.reportDriver.lname, item.longitude, item.latitude, item.degree]);
+          temp.push([item.subject && item.subject, item.message && item.message, item.reportDriver.fname+" "+item.reportDriver.lname, item.longitude, item.latitude, item.degree]);
         })
         setData(temp);
+        return()=>{
+            setOpenResolveModal(false);
+            setOpenDeleteModal(false);
+        }
     }, [reports])
 
     const options = {
@@ -54,4 +57,4 @@ const Reports = () => {
     )
 }
 
-export default Reports
+export default ReportComponent

@@ -5,9 +5,9 @@ var C = require("crypto-js");
 const report = require("../../models/report");
 const concern = require("../../models/concern");
 const attachment_line = require("../../models/attachment_line");
+const attachment=require("../../models/attachment");
 const user = require("../../models/user");
 const e = require("express");
-const { NULL } = require("mysql/lib/protocol/constants/types");
 
 
 report.model.belongsTo(user.model,{foreignKey:'driver_id', as: 'reportDriver'});
@@ -80,6 +80,11 @@ exports.getReports = async(req,res) => {
         }, 
         include:[{
             model: user.model, as:"reportDriver"
+        },{
+            model: attachment_line.model, as:"reportAttachmentLine",
+            include:[{
+                model: attachment.model, as:"lineAttachment"
+            }]
         }] 
     });
     let concernsUnresolved = await concern.model.findAll({
@@ -89,6 +94,11 @@ exports.getReports = async(req,res) => {
         }, 
         include:[{
             model: user.model, as:"concernResident"
+        },{
+            model: attachment_line.model, as:"concernAttachmentLine",
+            include:[{
+                model: attachment.model, as:"lineAttachment"
+            }]
         }] 
     });
     let reportsResolved = await report.model.findAll({
@@ -98,6 +108,11 @@ exports.getReports = async(req,res) => {
         }, 
         include:[{
             model: user.model, as:"reportDriver"
+        },{
+            model: attachment_line.model, as:"reportAttachmentLine",
+            include:[{
+                model: attachment.model, as:"lineAttachment"
+            }]
         }] 
     });
     let concernsResolved = await concern.model.findAll({
@@ -107,6 +122,11 @@ exports.getReports = async(req,res) => {
         }, 
         include:[{
             model: user.model, as:"concernResident"
+        },{
+            model: attachment_line.model, as:"concernAttachmentLine",
+            include:[{
+                model: attachment.model, as:"lineAttachment"
+            }]
         }] 
     });
     res.send({ success:true, data:{reports:reportsUnresolved, concerns:concernsUnresolved, reportsResolved:reportsResolved, concernsResolved:concernsResolved }});

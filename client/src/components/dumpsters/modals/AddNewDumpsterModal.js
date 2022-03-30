@@ -212,7 +212,7 @@ const AddNewDumpsterModal = (props) => {
                 }
                 anchor="bottom"
               >
-                <img style={mystyle} src="/dumpster_marker_icon.png" />
+                <img style={mystyle} src="/images/dumpster_marker_icon.png" />
               </Marker>
             ) : (
               <></>

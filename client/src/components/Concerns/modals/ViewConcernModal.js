@@ -1,7 +1,8 @@
+/* eslint-disable no-useless-concat */
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable eqeqeq */
 import * as React from "react";
-import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
@@ -10,21 +11,10 @@ import PropTypes from "prop-types";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import ReactMapboxGl, { Marker } from "react-mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import Carousel from "react-material-ui-carousel";
+import moment from 'moment';
 
-const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  "& .MuiDialogContent-root": {
-    padding: theme.spacing(2),
-  },
-  "& .MuiDialogActions-root": {
-    padding: theme.spacing(1),
-  },
-}));
-const Map = ReactMapboxGl({
-  accessToken:
-    "pk.eyJ1IjoicmpvbGl2ZXJpbyIsImEiOiJja2ZhanZrZnkwajFjMnJwN25mem1tenQ0In0.fpQUiUyn3J0vihGxhYA2PA",
-});
 const BootstrapDialogTitle = (props) => {
   const { children, onClose, ...other } = props;
 
@@ -55,75 +45,68 @@ BootstrapDialogTitle.propTypes = {
 };
 
 const ViewReportModal = (props) => {
-  const AnyReactComponent = ({ text }) => <div>{text}</div>;
-    const defaultProps = {
-        center: {
-          lat: 10.99835602,
-          lng: 77.01502627
-        },
-        zoom: 11
-    };
-    const controlButtonDiv = document.createElement('button');
-    controlButtonDiv.style.cursor = 'pointer';
-    controlButtonDiv.setAttribute('class','btn btn-light rounded mx-2 mt-2')
-    controlButtonDiv.innerHTML='<i class="fa fa-location-arrow" aria-hidden="true"></i>'
-    const handleOnLoad = map => {
-        map.controls[window.google.maps.ControlPosition.TOP_RIGHT].push(controlButtonDiv);
-    };
   return (
     <Dialog
      fullWidth={true}
-      onClose={props.handleCloseModal}
+      onClose={()=>props.setOpenViewModal(false)}
       aria-labelledby="customized-dialog-title"
-      open={props.openModal}
+      open={props.openViewModal}
     >
       <BootstrapDialogTitle
         id="customized-dialog-title"
-        onClose={props.handleCloseModal}
-
+        onClose={()=>props.setOpenViewModal(false)}
       >
-        Report Details
+        Concern Details
       </BootstrapDialogTitle>
       <DialogContent dividers>
       <Box sx={{ width: "100%" }} paddingTop={2} paddingBottom={2}>
-      <Typography variant="body2" color="text.secondary">
-           <b style={{fontSize: 20}}>{props.data[1]} </b> 
-          </Typography>
-          </Box>
-      <div style={{ height: '40vh', width: '100%' }}>
-      <Map
-            style="mapbox://styles/mapbox/streets-v9"
-            containerStyle={{
-              height: "36vh",
-              width: "100%",
-            }}
-            center={
-              props.data[3] != 0 && props.data[4] != 0
-                ? [props.data[4], props.data[3]]
-                : [123.94964154058066, 10.482913243053028]
-            }
-            zoom={
-              props.data[3]  != 0 && props.data[4] != 0
-                ? [15]
-                : [11]
-            }
-          >
-            {props.data[3] != 0 && props.data[4] != 0 ? (
-              <Marker
-                coordinates={
-                  props.data[3] != 0 && props.data[4] != 0
-                    ? [props.data[4], props.data[3]]
-                    : [123.94964154058066, 10.482913243053028]
-                }
-                anchor="bottom"
-              >
-                <img style={mystyle} src="/dumpster_marker_icon.png" />
-              </Marker>
-            ) : (
-              <></>
+        <Carousel sx={{height: 200,width:'100%',alignContent:'center',alignItems:'center',justifyContent:'center',margin:'auto'}}>
+            {props.data.concernAttachmentLine.lineAttachment.length!==0?(props.data.concernAttachmentLine.lineAttachment.map((image,i)=>{
+                return (
+                  <div key = {i} className="text-center mx-auto ml-auto mr-auto">
+                    <img 
+                      src={image.filename}
+                      style={{height: 200, margin:"auto",alignSelf:"center",alignContent:"center",justifyContent:"center"}}
+                      alt={image.filename}
+                    />
+                  </div>
+                )
+              })
+            ):(
+              <div className="text-white mx-auto bg-secondary" style={{width:"100%",height:200,justifyContent:"center",display:"flex"}}>
+                <p className="text-center mt-auto mb-auto">No photos uploaded</p>
+              </div>
             )}
-          </Map>
-          </div>
+          </Carousel>
+          <Typography variant="body2" mt={2} color="text.dark">
+            <b>Subject:</b> {props.data.subject}
+          </Typography>
+          <Typography align='justify' variant="body2" color="text.dark">
+            <b>Message:</b> {props.data.message}
+          </Typography>
+          <Typography align='justify' variant="body2" color="text.dark">
+            <b>Classification:</b> {props.data.classification}
+          </Typography>
+          <Typography variant="body2" color="text.dark">
+            <b>Date Sent:</b> {moment(props.data.createdAt).format("MMMM DD, YYYY")}
+          </Typography>
+          <hr/>
+          <Typography variant="body2" color="text.dark">
+            Sender Details
+          </Typography>
+          <Typography variant="body2" mt={2} color="text.dark">
+            <b>Name:</b> {props.data.concernResident.fname+" "+props.data.concernResident.lname}
+          </Typography>
+          <Typography align='justify' variant="body2" color="text.dark">
+            <b>Address:</b> {props.data.concernResident.purok?props.data.concernResident.purok:''+" "+props.data.concernResident.street?props.data.concernResident.street:''+" "+props.data.concernResident.barangay?props.data.concernResident.barangay:''}
+          </Typography>
+          <Typography align='justify' variant="body2" color="text.dark">
+            <b>Contact Number:</b> {props.data.concernResident.contact_no?props.data.concernResident.contact_no:''}
+          </Typography>
+          <Typography variant="body2" color="text.dark">
+            <b>Email:</b> {props.data.concernResident.email}
+          </Typography>
+      </Box>
       </DialogContent>
       <DialogActions>
       <button className='btn' onClick={()=>props.setOpenViewModal(false)}>Close</button>
@@ -131,8 +114,4 @@ const ViewReportModal = (props) => {
     </Dialog>
   );
 }
-const mystyle = {
-  height: "25px",
-  width: "25px",
-};
 export default ViewReportModal;

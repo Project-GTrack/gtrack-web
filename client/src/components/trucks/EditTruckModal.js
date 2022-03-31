@@ -113,9 +113,8 @@ export default function EditTruckModal(props) {
             </BootstrapDialogTitle>
             <DialogContent dividers>
             <Box sx={{ width: '100%' }}>
+            {error && <p className="text-danger small text-center">{error}</p>}
                 <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                {error && <p className="text-danger small text-center">{error}</p>}
-                
             <Grid item xs={12}>
                 <TextField
                     value={values.plate_no}
@@ -146,9 +145,9 @@ export default function EditTruckModal(props) {
             </Box>
             </DialogContent>
             <DialogActions>
-            <Button type="submit"  className='text-dark' disabled={!isValid} onClick={handleSubmit}>
+            <button type="submit"  className='btn btn-success' disabled={!isValid} onClick={handleSubmit}>
                 Update
-            </Button>
+            </button>
             </DialogActions>
         </BootstrapDialog>
     );

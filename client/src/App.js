@@ -6,7 +6,6 @@ import DashboardPage from './pages/DashboardPage';
 import EmployeesPage from './pages/EmployeesPage';
 import SchedulesPage from './pages/SchedulesPage';
 import DumpstersPage from './pages/DumpstersPage';
-import ReportsPage from './pages/ReportsPage';
 import TrackCollectorPage from './pages/TrackCollectorPage';
 import AnnouncementsPage from './pages/AnnouncementsPage';
 import EventsPage from './pages/EventsPage';
@@ -17,6 +16,7 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import FirebaseAction from './pages/FirebaseAction';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import Helmet from 'react-helmet'
+import ReportsPage from './pages/ReportsPage';
 function App() {
   return (
     <div className='App'>

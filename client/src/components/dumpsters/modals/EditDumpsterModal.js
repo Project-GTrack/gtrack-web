@@ -170,7 +170,7 @@ const EditDumpsterModal = (props) => {
                 anchor="bottom"
               >
                 <img style={mystyle} 
-                src="/dumpster_marker_icon.png" />
+                src="/images/dumpster_marker_icon.png" />
               </Marker>
             ) : (
               <></>

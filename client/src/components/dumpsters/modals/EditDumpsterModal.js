@@ -96,9 +96,9 @@ const EditDumpsterModal = (props) => {
           )
           .then((res) => {
               resetForm();
-              props.setOpenModal(false);
               if(res.data.success){
                 refetch();
+                props.setOpenModal(false);
                 enqueueSnackbar(res.data.message, { variant:'success' });
               }else{
                 enqueueSnackbar(res.data.message, { variant:'error' });

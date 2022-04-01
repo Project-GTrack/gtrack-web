@@ -109,10 +109,10 @@ export default function AddNewAnnouncementModal(props) {
         isNotified:values.isNotified,
         accessToken: Cookies.get('user_id')
       }).then(res=>{
+        resetForm();
         if(res.data.success){
           refetch();
           props.setOpenModal(false);
-          resetForm();
           enqueueSnackbar(res.data.message, { variant:'success' });
         }else{
           enqueueSnackbar(res.data.message, { variant:'error' });

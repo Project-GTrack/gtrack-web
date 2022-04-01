@@ -2,7 +2,6 @@ import * as React from 'react';
 import Grid from "@mui/material/Grid";
 import { styled } from '@mui/material/styles';
 import Box from "@mui/material/Box";
-import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -62,7 +61,6 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 export default function EditTruckModal(props) {
     const {enqueueSnackbar} = useSnackbar();
     const {refetch}= useTrucksPageContext();
-    const [error,setError]=useState(null);
     const [,setUser]=useState(null);
     const getCookiesJWT=()=>{
         const cookie=Cookies.get("user_id");
@@ -88,11 +86,11 @@ export default function EditTruckModal(props) {
         {plate_no:values.plate_no,model:values.model})
         .then(res=>{
             if(res.data.success){
-                refetch();
-                enqueueSnackbar(res.data.message, { variant:'success' });
-                props.setOpenEditModal(false)
+              refetch();
+              enqueueSnackbar(res.data.message, { variant:'success' });
+              props.setOpenEditModal(false)
             }else{
-                setError(res.data.message);
+              enqueueSnackbar(res.data.message, { variant:'error' });
             }
         })
     }
@@ -113,7 +111,6 @@ export default function EditTruckModal(props) {
             </BootstrapDialogTitle>
             <DialogContent dividers>
             <Box sx={{ width: '100%' }}>
-            {error && <p className="text-danger small text-center">{error}</p>}
                 <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
             <Grid item xs={12}>
                 <TextField

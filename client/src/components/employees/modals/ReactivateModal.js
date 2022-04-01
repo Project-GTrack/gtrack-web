@@ -11,7 +11,6 @@ import IconButton from "@mui/material/IconButton";
 import TextField from '@mui/material/TextField';
 import { useFormik } from 'formik';
 import axios from "axios";
-import { useState } from "react";
 import Cookies from "js-cookie";
 import * as yup from 'yup'
 import { useEmployeePageContext } from "../../../pages/EmployeesPage";
@@ -59,7 +58,6 @@ export default function ReactivateModal(props) {
   })
   
   const {refetch}=useEmployeePageContext();
-  const [error,setError]=useState(null);
   const handleFormSubmit = async() =>{
     axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/activate`,{email:props.data[2],password:values.password,accessToken:Cookies.get("user_id")})
     .then(res=>{
@@ -69,7 +67,7 @@ export default function ReactivateModal(props) {
         props.setDeleteModal(false);
         enqueueSnackbar(res.data.message, { variant:'success' });
       }else{
-        setError(res.data.message);
+        enqueueSnackbar(res.data.message, { variant:'error' });
       }
     })
   }
@@ -100,7 +98,6 @@ export default function ReactivateModal(props) {
       {(errors.password && touched.password) &&
         <p className="text-danger small mt-2">{errors.password}</p>
       }
-      {error && <p className="text-danger small mt-2">{error}</p>}
       <TextField
         onChange={handleChange('password')}
         value={values.password}

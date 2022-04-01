@@ -107,7 +107,6 @@ const EditScheduleModal = (props) => {
         .required('Barangay is required'),
     })
     const [,setUser]=useState(null);
-    const [error,setError]=useState(null);
     const handleFormSubmit = async(values,{resetForm}) =>{
         axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/schedule/update/${props.data.schedule_id}`,{
             driver_id:values.driver_id,
@@ -128,7 +127,7 @@ const EditScheduleModal = (props) => {
                 resetForm();
                 enqueueSnackbar(res.data.message, { variant:'success' });
             }else{
-                setError(res.data.message);
+                enqueueSnackbar(res.data.message, { variant:'error' });
             }
         })
     }
@@ -267,7 +266,6 @@ const EditScheduleModal = (props) => {
     </BootstrapDialogTitle>
     <DialogContent dividers>
     <Box sx={{ width: '100%' }}>
-    {error && <p className="text-danger small text-center">{error}</p>}
     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
         <Grid item xs={11}>
             <FormControl sx={{ width:'100%' }}>

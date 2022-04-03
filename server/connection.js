@@ -1,8 +1,8 @@
 const {Sequelize} = require("sequelize");
 require('dotenv').config("./.env");
-const sequelize = new Sequelize('gtrack','root','',{
-    host:'localhost',
-    dialect:'mysql',
+const sequelize = new Sequelize(process.env.DATABASE,process.env.USERNAME,process.env.PASSWORD,{
+    host:process.env.HOST,
+    dialect:process.env.DIALECT,
     pool:{
         max:10,
         min:0,

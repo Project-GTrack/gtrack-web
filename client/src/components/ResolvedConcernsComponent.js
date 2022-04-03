@@ -1,14 +1,13 @@
 import React, { useState } from 'react'
 import MUIDataTable from "mui-datatables";
-import ReportsandConcernsToolbar from './ReportsandConcernsToolbar';
 import { useEffect } from 'react';
-import moment from 'moment';
 import { useReportsandConcernsPageContext } from '../pages/ReportsPage';
+import ConcernToolbar from './ConcernToolbar';
 
-const TEST = () => {
+const ResolvedConcernsComponent = () => {
     const {queryResult}= useReportsandConcernsPageContext();
     const concernsResolved = queryResult.data.data.concernsResolved
-    const columns = ["Subject", "Message","Driver","Longitude", "Latitude", "Degree"];
+    const columns = ["Subject", "Message","Resident","Classification"];
     const [data, setData] = useState([]);
     const [openResolveModal, setOpenResolveModal] = useState(false);
     const [openViewModal, setOpenViewModal]=useState(false);
@@ -18,9 +17,12 @@ const TEST = () => {
         var temp=[];
         // eslint-disable-next-line array-callback-return
         concernsResolved && concernsResolved.map((item)=>{
-          temp.push([item.subject && item.subject, item.message && item.message, item.concernResident.fname+""+item.concernResident.lname, item.longitude, item.latitude, item.degree]);
+          temp.push([item.subject && item.subject, item.message && item.message, item.concernResident.fname+" "+item.concernResident.lname, item.classification]);
         })
         setData(temp);
+        return()=>{
+            setOpenDeleteModal(false);
+        }
     }, [concernsResolved])
 
     const options = {
@@ -29,12 +31,12 @@ const TEST = () => {
         filter: true,
         filterType: 'dropdown',
         customToolbarSelect:(selectedRows,displayData)=>(
-            <ReportsandConcernsToolbar
+            <ConcernToolbar
                 data={concernsResolved[selectedRows.data[0].dataIndex]} 
                 openResolveModal={openResolveModal} 
-                setOpenResolveModal={setOpenResolveModal}
-                openViewModal={openViewModal} 
+                openViewModal={openViewModal}
                 setOpenViewModal={setOpenViewModal}
+                setOpenResolveModal={setOpenResolveModal}
                 openDeleteModal={openDeleteModal} 
                 setOpenDeleteModal={setOpenDeleteModal}
                 selectedRows={selectedRows} 
@@ -54,4 +56,4 @@ const TEST = () => {
     )
 }
 
-export default TEST
+export default ResolvedConcernsComponent

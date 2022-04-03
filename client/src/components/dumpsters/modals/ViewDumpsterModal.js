@@ -1,3 +1,6 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable react/style-prop-object */
+/* eslint-disable jsx-a11y/alt-text */
 import * as React from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -116,7 +119,7 @@ const ViewDumpsterModal = (props) => {
                 }
                 anchor="bottom"
               >
-                <img style={mystyle} src="/dumpster_marker_icon.png" />
+                <img style={mystyle} src="/images/dumpster_marker_icon.png" />
               </Marker>
             ) : (
               <></>

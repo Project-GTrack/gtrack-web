@@ -97,7 +97,7 @@ export default function DeleteEventModal(props) {
         id="customized-dialog-title"
         onClose={props.handleCloseDeleteModal}
       >
-        Are you sure you want to delete this Announcement Record?
+        Are you sure to delete this record?
       </BootstrapDialogTitle>
       <DialogContent dividers>
         <Box sx={{ width: "100%" }}>

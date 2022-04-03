@@ -88,11 +88,11 @@ const AddNewDumpsterModal = (props) => {
         })
         .then((res) => {
           resetForm();
-          props.setOpenModal(false);
           setCoordinate({ latitude: 0, longitude: 0 });
           setError(null);
           if (res.data.success) {
             refetch();
+            props.setOpenModal(false);
             enqueueSnackbar(res.data.message, { variant:'success' });
           }else{
             enqueueSnackbar(res.data.message, { variant:'error' });
@@ -212,7 +212,7 @@ const AddNewDumpsterModal = (props) => {
                 }
                 anchor="bottom"
               >
-                <img style={mystyle} src="/dumpster_marker_icon.png" />
+                <img style={mystyle} src="/images/dumpster_marker_icon.png" />
               </Marker>
             ) : (
               <></>

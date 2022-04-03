@@ -69,9 +69,9 @@ const DeleteAssignment = (props) => {
       )
       .then((res) => {
         resetForm();
-        props.setDeleteModal(false);
         if(res.data.success){
           refetch();
+          props.setDeleteModal(false);
           enqueueSnackbar(res.data.message, { variant:'success' });
         }else{
           enqueueSnackbar(res.data.message, { variant:'error' });

@@ -22,7 +22,8 @@ import { useFormik } from 'formik';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
-import {useAnnouncementPageContext} from '../../../pages/AnnouncementsPage';  
+import {useAnnouncementPageContext} from '../../../pages/AnnouncementsPage'; 
+import { CircularProgress } from '@mui/material'; 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -72,6 +73,7 @@ export default function AddNewAnnouncementModal(props) {
   const [urls, setUrls] = useState([]);
   const [progress, setProgress] = useState(0);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const FILE_SIZE = 160 * 1024;
   const SUPPORTED_FORMATS = [
       "image/jpg",
@@ -100,6 +102,7 @@ export default function AddNewAnnouncementModal(props) {
 
   })
   const handleFormSubmit = async(values, {resetForm}) => {
+    setLoading(true);
     if(Cookies.get('user_id')){
       console.log(values.isNotified)
       Axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/announcement/create`,{
@@ -109,6 +112,7 @@ export default function AddNewAnnouncementModal(props) {
         isNotified:values.isNotified,
         accessToken: Cookies.get('user_id')
       }).then(res=>{
+        setLoading(false);
         resetForm();
         if(res.data.success){
           refetch();
@@ -180,8 +184,8 @@ export default function AddNewAnnouncementModal(props) {
       </Box>
     </DialogContent>
       <DialogActions>
-        <Button type="submit"  className='text-dark' disabled={!isValid} onClick={handleSubmit}>
-          Save
+        <Button type="submit" className='text-dark' disabled={!isValid} onClick={handleSubmit}>
+          {loading?<><CircularProgress size={20}/> Adding...</>:"Add"}
         </Button>
       </DialogActions>
   </BootstrapDialog>

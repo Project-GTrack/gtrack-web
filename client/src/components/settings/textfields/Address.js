@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { TextField, Button,Stack,Box} from "@mui/material";
 import * as yup from 'yup'
 import Cookies from "js-cookie";
@@ -7,8 +7,10 @@ import Axios from 'axios';
 import { useFormik } from 'formik';
 import { capitalizeWords } from "../../helpers/TextFormat";
 import { useSnackbar } from 'notistack';
+import { CircularProgress } from '@mui/material';
 const Address = (props) => {
     const { enqueueSnackbar} = useSnackbar();
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const profileAddressValidationSchema = yup.object().shape({
         purok: yup
@@ -22,6 +24,7 @@ const Address = (props) => {
             .required('Barangay is required')
     })
     const handleFormSubmit = () =>{
+        setLoading(true);
         if(Cookies.get('user_id')){
             console.log(Cookies.get('user_id'));
             Axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/profile/address`,{
@@ -30,6 +33,7 @@ const Address = (props) => {
               barangay: capitalizeWords(values.barangay),
               accessToken: Cookies.get('user_id')
             }).then(res=>{
+                setLoading(false);
               if(res.data.success){
                 console.log(res.data.data.acc);
                 props.setUser(res.data.data.acc);
@@ -102,7 +106,9 @@ const Address = (props) => {
                 <p className="text-danger small ">{errors.barangay}</p>
                 } 
             </Stack>
-            <Button variant="text" color="success" sx={{mt:2}} disabled={!isValid} onClick={handleSubmit}>Save</Button>
+            <Button variant="text" color="success" sx={{mt:2}} disabled={!isValid} onClick={handleSubmit}>
+            {loading?<><CircularProgress size={20}/> Saving...</>:"Save"}
+          </Button>
         </Box>
     );
 }

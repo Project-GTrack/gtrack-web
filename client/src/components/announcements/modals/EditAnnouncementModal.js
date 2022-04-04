@@ -20,6 +20,8 @@ import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import {useAnnouncementPageContext} from '../../../pages/AnnouncementsPage';  
+import { CircularProgress } from '@mui/material';
+
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
       padding: theme.spacing(2),
@@ -62,6 +64,7 @@ export default function EditAnnouncementModal(props) {
   const { enqueueSnackbar} = useSnackbar();
   const [images, setImages] = useState([]);
   const [urls, setUrls] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const navigate = useNavigate();
   const {refetch}=useAnnouncementPageContext();
@@ -98,12 +101,14 @@ export default function EditAnnouncementModal(props) {
   }, [props])
   
   const handleFormSubmit = async(values) => {
+    setLoading(true);
     if(Cookies.get('user_id')){
       await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/admin/announcement/edit/${props.data[0]}`,{
         title:values.title,
         content: values.content,
         urls:urls
       }).then(res=>{
+        setLoading(false);
         if(res.data.success){
           refetch();
           props.setOpenModal(false);
@@ -171,8 +176,8 @@ export default function EditAnnouncementModal(props) {
       </Box>
     </DialogContent>
     <DialogActions>
-      <Button  type="submit"  className='text-dark' disabled={!isValid} onClick={handleSubmit}>
-        Save
+      <Button type="submit" className='text-dark' disabled={!isValid} onClick={handleSubmit}>
+        {loading?<><CircularProgress size={20}/> Updating...</>:"Update"}
       </Button>
     </DialogActions>
   </BootstrapDialog>

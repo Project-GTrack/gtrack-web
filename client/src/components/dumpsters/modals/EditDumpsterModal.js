@@ -18,7 +18,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { useDumpstersPageContext } from "../../../pages/DumpstersPage";
 import { capitalizeWords } from "../../helpers/TextFormat";
 import { useSnackbar } from "notistack";
-
+import { CircularProgress } from '@mui/material';
 
 const Map = ReactMapboxGl({
   accessToken:process.env.REACT_APP_MAPBOX_API_ACCESS_TOKEN,
@@ -55,6 +55,7 @@ BootstrapDialogTitle.propTypes = {
 const EditDumpsterModal = (props) => {
   const {enqueueSnackbar} = useSnackbar();
   const {refetch}=useDumpstersPageContext();
+  const [loading, setLoading] = React.useState(false);
   const [coordinate, setCoordinate] = React.useState({
     latitude: 0,
     longitude: 0,
@@ -78,6 +79,7 @@ const EditDumpsterModal = (props) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.openModal]);
   const handleFormSubmit = (values, { resetForm }) => {
+    setLoading(true);
     if (values.street === props.data[1].split(", ")[0] && values.purok === props.data[1].split(", ")[1] && values.barangay === props.data[1].split(", ")[2] && values.town === props.data[1].split(", ")[3] && values.postal_code === props.data[2] && coordinate.latitude === props.data[3] && coordinate.longitude === props.data[4]) {
       props.setOpenModal(false);
     } else {
@@ -95,6 +97,7 @@ const EditDumpsterModal = (props) => {
             }
           )
           .then((res) => {
+            setLoading(false);
               resetForm();
               if(res.data.success){
                 refetch();
@@ -230,13 +233,7 @@ const EditDumpsterModal = (props) => {
         </Box>
       </DialogContent>
       <DialogActions>
-        <button
-          type="submit"
-          className="btn btn-success"
-          onClick={handleSubmit}
-        >
-          Edit
-        </button>
+        <button className='btn btn-success' type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Updating...</>:"Update"}</button>
       </DialogActions>
     </Dialog>
   );

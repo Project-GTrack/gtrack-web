@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -17,6 +17,7 @@ import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import {useAnnouncementPageContext} from '../../../pages/AnnouncementsPage';  
+import { CircularProgress } from '@mui/material'; 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -58,17 +59,20 @@ BootstrapDialogTitle.propTypes = {
 
 export default function DeleteAnnouncementModal(props) {
   const { enqueueSnackbar} = useSnackbar();
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const announcementValidationSchema = yup.object().shape({
     password: yup.string().required("Password is required"),
   });
   const {refetch}=useAnnouncementPageContext();
   const handleFormSubmit = async(values) => {
+    setLoading(true);
     if(Cookies.get('user_id')){
       Axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/announcement/delete/${props.data[0]}`,{
         password: values.password,
         accessToken: Cookies.get('user_id')
       }).then(res=>{
+        setLoading(false);
         if(res.data.success){
           props.setDeleteModal(false);
           enqueueSnackbar(res.data.message, { variant:'success' });
@@ -128,7 +132,7 @@ export default function DeleteAnnouncementModal(props) {
       </DialogContent>
       <DialogActions>
       <button className='btn' onClick={props.handleCloseDeleteModal}>Close</button>
-        <button className='btn btn-danger' type="submit" onClick={handleSubmit}>Delete</button>
+      <button className='btn btn-danger' type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Deleting...</>:"Delete"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

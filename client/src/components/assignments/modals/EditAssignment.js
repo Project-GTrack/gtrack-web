@@ -111,7 +111,7 @@ const EditAssignment = (props) => {
         id="customized-dialog-title"
         onClose={props.handleCloseModal}
       >
-        Add New Truck Assignment
+        Edit Truck Assignment
       </BootstrapDialogTitle>
       <DialogContent dividers>
         <Box sx={{ width: "50vh" }}>

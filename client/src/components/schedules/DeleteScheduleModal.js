@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -15,6 +15,7 @@ import Cookies from "js-cookie";
 import * as yup from 'yup'
 import { useSchedulesPageContext } from "../../pages/SchedulesPage";
 import { useSnackbar } from "notistack";
+import { CircularProgress } from "@mui/material";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -51,14 +52,17 @@ const BootstrapDialogTitle = (props) => {
 export default function DeleteScheduleModal(props) {
   const {enqueueSnackbar} = useSnackbar();
   const {refetch}=useSchedulesPageContext();
+  const [loading, setLoading] = useState(false);
   const passwordValidationSchema = yup.object().shape({
     password: yup
       .string()
       .required('Password is required'),
   })
   const handleFormSubmit = async() =>{
+    setLoading(true);
     axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/schedule/delete/${props.data.schedule_id}`,{password:values.password,accessToken:Cookies.get("user_id")})
     .then(res=>{
+      setLoading(false);
       if(res.data.success){
         refetch();
         props.setOpenDeleteModal(false);
@@ -112,7 +116,7 @@ export default function DeleteScheduleModal(props) {
       </DialogContent>
       <DialogActions>
         <button className='btn' onClick={()=>props.setOpenDeleteModal(false)}>Close</button>
-        <button className='btn btn-danger' disabled={!isValid} type="submit" onClick={handleSubmit}>Delete</button>
+        <button className='btn btn-danger' disabled={!isValid} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Deleting...</>:"Delete"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

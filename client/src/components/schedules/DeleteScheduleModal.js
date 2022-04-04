@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -11,11 +11,11 @@ import IconButton from "@mui/material/IconButton";
 import TextField from '@mui/material/TextField';
 import { useFormik } from 'formik';
 import axios from "axios";
-import { useState } from "react";
 import Cookies from "js-cookie";
 import * as yup from 'yup'
 import { useSchedulesPageContext } from "../../pages/SchedulesPage";
 import { useSnackbar } from "notistack";
+import { CircularProgress } from "@mui/material";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -52,21 +52,23 @@ const BootstrapDialogTitle = (props) => {
 export default function DeleteScheduleModal(props) {
   const {enqueueSnackbar} = useSnackbar();
   const {refetch}=useSchedulesPageContext();
+  const [loading, setLoading] = useState(false);
   const passwordValidationSchema = yup.object().shape({
     password: yup
       .string()
       .required('Password is required'),
   })
-  const [error,setError]=useState(null);
   const handleFormSubmit = async() =>{
+    setLoading(true);
     axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/schedule/delete/${props.data.schedule_id}`,{password:values.password,accessToken:Cookies.get("user_id")})
     .then(res=>{
+      setLoading(false);
       if(res.data.success){
         refetch();
         props.setOpenDeleteModal(false);
         enqueueSnackbar(res.data.message, { variant:'success' });
       }else{
-        setError(res.data.message);
+        enqueueSnackbar(res.data.message, { variant:'error' });
       }
     })
   }
@@ -97,7 +99,6 @@ export default function DeleteScheduleModal(props) {
       {(errors.password && touched.password) &&
         <p className="text-danger small mt-2">{errors.password}</p>
       }
-      {error && <p className="text-danger small mt-2">{error}</p>}
       <TextField
         onChange={handleChange('password')}
         value={values.password}
@@ -115,7 +116,7 @@ export default function DeleteScheduleModal(props) {
       </DialogContent>
       <DialogActions>
         <button className='btn' onClick={()=>props.setOpenDeleteModal(false)}>Close</button>
-        <button className='btn btn-danger' disabled={!isValid} type="submit" onClick={handleSubmit}>Delete</button>
+        <button className='btn btn-danger' disabled={!isValid} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Deleting...</>:"Delete"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

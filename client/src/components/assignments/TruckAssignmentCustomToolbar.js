@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-has-content */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import EditAssignment from "./modals/EditAssignment";
 import DeleteAssignment from "./modals/DeleteAssignment";
 const TruckAssignmentCustomToolbar = ({selectedRows,displayData}) => {
@@ -9,6 +9,13 @@ const TruckAssignmentCustomToolbar = ({selectedRows,displayData}) => {
     const handleCloseEditModal = () => setEditModal(false);
     const handleOpenDeleteModal = () => setDeleteModal(true); 
     const handleCloseDeleteModal = () => setDeleteModal(false);
+    useEffect(() => {
+      return () => {
+        setEditModal(false);
+        setDeleteModal(false);
+      }
+    }, [])
+    
     return (
           <div>
               <button onClick={handleOpenEditModal} className="btn btn-warning "><i className="fa fa-pencil-square-o" aria-hidden="true"></i></button>

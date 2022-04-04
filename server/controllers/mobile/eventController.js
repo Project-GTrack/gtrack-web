@@ -1,4 +1,4 @@
-const { Sequelize } = require("sequelize");
+const { Sequelize, Op } = require("sequelize");
 require('dotenv').config("../../.env");
 var C = require("crypto-js");
 const event=require("../../models/event");
@@ -37,7 +37,7 @@ exports.getEvents=async (req,res)=>{
     let posts=await event.model.findAll({
         order:[['createdAt','DESC']],
         where:{
-            deletedAt:null
+            status: "Ongoing"
         },
         include:[{
             model: user.model, as:"eventAdmin"

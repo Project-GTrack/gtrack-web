@@ -26,6 +26,7 @@ import Cookies from 'js-cookie';
 import { capitalizeWords } from '../helpers/TextFormat';
 import { useSchedulesPageContext } from '../../pages/SchedulesPage';
 import { useSnackbar } from 'notistack';
+import { CircularProgress } from '@mui/material';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -72,6 +73,7 @@ const AddScheduleModal = (props) => {
         drivers:queryResult.data.data.drivers,
         assignments:queryResult.data.data.assignments
     }
+    const [loading, setLoading] = useState(false);
     const [schedule,setSchedule]=useState([{
         schedule:"Monday",
         time_start:new Date(moment()),
@@ -107,8 +109,8 @@ const AddScheduleModal = (props) => {
         .required('Barangay is required'),
     })
     const [user,setUser]=useState(null);
-    const [error,setError]=useState(null);
     const handleFormSubmit = async(values,{resetForm}) =>{
+        setLoading(true);
         axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/schedule/add`,{
             admin_id:user.user_id,
             driver_id:values.driver_id,
@@ -123,13 +125,14 @@ const AddScheduleModal = (props) => {
             postal_code:"6003",
         })
         .then(res=>{
+            setLoading(false);
             if(res.data.success){
                 refetch();
                 props.setOpenAddModal(false);
                 resetForm();
                 enqueueSnackbar(res.data.message, { variant:'success' });
             }else{
-                setError(res.data.message);
+                enqueueSnackbar(res.data.message, { variant:'error' });
             }
         })
     }
@@ -254,7 +257,6 @@ const AddScheduleModal = (props) => {
     </BootstrapDialogTitle>
     <DialogContent dividers>
     <Box sx={{ width: '100%' }}>
-    {error && <p className="text-danger small text-center">{error}</p>}
     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 1, md: 1 }}>
         <Grid item xs={11}>
             <FormControl sx={{ width:'100%' }}>
@@ -465,8 +467,8 @@ const AddScheduleModal = (props) => {
       </Box>
     </DialogContent>
     <DialogActions>
-      <Button type="submit"  className='text-dark' disabled={!isValid} onClick={handleSubmit}>
-        Add Schedule
+      <Button type="submit" className='text-dark' disabled={!isValid} onClick={handleSubmit}>
+      {loading?<><CircularProgress size={20}/> Adding...</>:"Add Schedule"}
       </Button>
     </DialogActions>
   </BootstrapDialog>

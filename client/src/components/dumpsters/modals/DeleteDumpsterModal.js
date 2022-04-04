@@ -16,6 +16,7 @@ import TextField from "@mui/material/TextField";
 import Cookies from "js-cookie";
 import { useDumpstersPageContext } from "../../../pages/DumpstersPage";
 import { useSnackbar } from "notistack";
+import { CircularProgress } from '@mui/material';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -58,20 +59,23 @@ BootstrapDialogTitle.propTypes = {
 const DeleteDumpsterModal = (props) => {
   const {enqueueSnackbar} = useSnackbar();
   const {refetch}=useDumpstersPageContext();
+  const [loading, setLoading] = React.useState(false);
   const dumpsterErrorHandling = yup.object().shape({
     password: yup.string().required("Password is required"),
   });
   const handleFormSubmit = (values, { resetForm }) => {
+    setLoading(true);
     axios
       .post(
         `${process.env.REACT_APP_BACKEND_URL}/admin/dumpster/delete-dumpster/${props.data[0]}`,
         { password: values.password, accessToken: Cookies.get("user_id") }
       )
       .then((res) => {
+        setLoading(false);
         resetForm();
-        props.setDeleteModal(false);
         if(res.data.success){
           refetch();
+          props.setDeleteModal(false);
           enqueueSnackbar(res.data.message, { variant:'success' });
         }else{
           enqueueSnackbar(res.data.message, { variant:'error' });
@@ -131,9 +135,7 @@ const DeleteDumpsterModal = (props) => {
         <button className="btn" onClick={props.handleCloseDeleteModal}>
           Close
         </button>
-        <button type="submit" className="btn btn-danger" onClick={handleSubmit}>
-          Delete
-        </button>
+        <button className='btn btn-danger' type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Deleting...</>:"Delete"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

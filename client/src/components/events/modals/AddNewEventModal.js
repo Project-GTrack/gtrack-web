@@ -21,6 +21,7 @@ import { useNavigate } from 'react-router-dom';
 import { capitalizeWords } from '../../helpers/TextFormat';
 import {useEventPageContext} from '../../../pages/EventsPage'; 
 import { useSnackbar } from 'notistack';
+import { CircularProgress } from '@mui/material'; 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
       padding: theme.spacing(2),
@@ -66,7 +67,7 @@ export default function AddNewEventModal(props) {
   const [urls, setUrls] = useState([]);
   const [progress, setProgress] = useState(0);
   const navigate = useNavigate();
-
+  const [loading, setLoading] = useState(false);
   const FILE_SIZE = 160 * 1024;
   const SUPPORTED_FORMATS = [
       "image/jpg",
@@ -122,6 +123,7 @@ export default function AddNewEventModal(props) {
             value => !value || (value && SUPPORTED_FORMATS.includes(value.type)))
   })
   const handleFormSubmit = async(values, {resetForm}) => {
+    setLoading(true);
     if(Cookies.get('user_id')){
       Axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/event/create`,{
         event_name:values.event_name,
@@ -139,6 +141,7 @@ export default function AddNewEventModal(props) {
         urls:urls,
         accessToken: Cookies.get('user_id')
       }).then(res=>{
+        setLoading(false);
         if(res.data.success){
           refetch();
           props.setOpenModal(false);
@@ -202,7 +205,7 @@ export default function AddNewEventModal(props) {
             maxRows={10}
             aria-label="maximum height"
             placeholder="Description"
-            style={{ width: '100%', height: 200 }}
+            style={{ width: '100%', height: 200, padding:5 }}
         />
          {(errors.description && touched.description) &&
                 <p className="text-danger small ">{errors.description}</p>
@@ -351,9 +354,9 @@ export default function AddNewEventModal(props) {
 </Box>
     </DialogContent>
     <DialogActions>
-      <Button  type="submit"  className='text-dark' disabled={!isValid} onClick={handleSubmit}>
-        Save
-      </Button>
+    <Button type="submit" className='text-dark' disabled={!isValid} onClick={handleSubmit}>
+          {loading?<><CircularProgress size={20}/> Adding...</>:"Add"}
+        </Button>
     </DialogActions>
   </BootstrapDialog>
   );

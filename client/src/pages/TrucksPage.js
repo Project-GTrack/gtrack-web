@@ -20,6 +20,8 @@ const defaultContext= {
 const TrucksPageContext = React.createContext(defaultContext);
 export const useTrucksPageContext = () => useContext(TrucksPageContext);
 
+
+// Start of trucks page use state
 const TrucksPage = () => {
     const [value, setValue] = useState(0);
 

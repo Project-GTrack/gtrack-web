@@ -12,9 +12,9 @@ import TextField from '@mui/material/TextField';
 import { useFormik } from 'formik';
 import axios from "axios";
 import Cookies from "js-cookie";
-import * as yup from 'yup'
-import { useEmployeePageContext } from "../../../pages/EmployeesPage";
+import * as yup from 'yup';
 import { useSnackbar } from "notistack";
+import { useReportsandConcernsPageContext } from "../../pages/ReportsPage";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -27,7 +27,6 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
 const BootstrapDialogTitle = (props) => {
   const { children, onClose, ...other } = props;
-
   return (
     <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
       {children}
@@ -49,50 +48,49 @@ const BootstrapDialogTitle = (props) => {
   );
 };
 
-export default function ReactivateModal(props) {
+export default function DeleteReportModal(props) {
   const {enqueueSnackbar} = useSnackbar();
+  const {refetch}= useReportsandConcernsPageContext();
   const passwordValidationSchema = yup.object().shape({
     password: yup
       .string()
       .required('Password is required'),
   })
-  
-  const {refetch}=useEmployeePageContext();
   const handleFormSubmit = async() =>{
-    axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/activate`,{email:props.data[2],password:values.password,accessToken:Cookies.get("user_id")})
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/report/deleteReport/${props.data.report_id}`,
+    {password:values.password,accessToken:Cookies.get("user_id")})
     .then(res=>{
       if(res.data.success){
-        // props.setAccounts(res.data.data);
         refetch();
-        props.setDeleteModal(false);
         enqueueSnackbar(res.data.message, { variant:'success' });
+        props.setOpenDeleteModal(false);
       }else{
         enqueueSnackbar(res.data.message, { variant:'error' });
       }
     })
   }
-  const { handleChange, handleSubmit, handleBlur, values, errors,isValid,touched } = useFormik({
-    initialValues:{ password:''},
+  const { handleChange, handleSubmit,handleBlur, values, errors,isValid,touched } = useFormik({
+    initialValues:{ password:""},
     enableReinitialize:true,
     validationSchema:passwordValidationSchema,
     onSubmit: handleFormSubmit
   });
   return (
     <BootstrapDialog
-      onClose={()=>props.setDeleteModal(false)}
+      onClose={()=>props.setOpenDeleteModal(false)}
       aria-labelledby="customized-dialog-title"
       open={props.openDeleteModal}
     >
       <BootstrapDialogTitle
         id="customized-dialog-title"
       >
-        Are you sure you want to Reactivate this Employee Record?
+        Do you wish to Delete this Report?
       </BootstrapDialogTitle>
       <DialogContent dividers>
         <Box sx={{ width: "100%" }}>
         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
     <Grid item xs={6} marginTop={2}>
-      Confirm using your password
+    Confirm using your password
     </Grid>
     <Grid item xs={6} marginTop={-2}>
       {(errors.password && touched.password) &&
@@ -114,8 +112,8 @@ export default function ReactivateModal(props) {
         </Box>
       </DialogContent>
       <DialogActions>
-        <button className='btn' onClick={()=>props.setDeleteModal(false)}>Close</button>
-        <button className='btn btn-success' type="submit" disabled={!isValid} onClick={handleSubmit}>Activate</button>
+        <button className='btn' onClick={()=>props.setOpenDeleteModal(false)}>Close</button>
+        <button className='btn btn-danger' disabled={!isValid} type="submit" onClick={handleSubmit}>Delete</button>
       </DialogActions>
     </BootstrapDialog>
   );

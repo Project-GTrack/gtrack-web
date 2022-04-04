@@ -2,7 +2,6 @@ import * as React from 'react';
 import Grid from "@mui/material/Grid";
 import { styled } from '@mui/material/styles';
 import Box from "@mui/material/Box";
-import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -18,7 +17,6 @@ import * as yup from 'yup'
 import Cookies from 'js-cookie';
 import { decodeToken } from 'react-jwt';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import { useTrucksPageContext } from '../../pages/TrucksPage';
 
@@ -63,8 +61,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 export default function AddTruckModal(props) {
     const {enqueueSnackbar} = useSnackbar();
     const {refetch}= useTrucksPageContext();
-    const navigate = useNavigate();
-    const [error,setError]=useState(null);
+    // eslint-disable-next-line no-unused-vars
     const [user,setUser]=useState(null);
     const getCookiesJWT=()=>{
         const cookie=Cookies.get("user_id");
@@ -91,11 +88,11 @@ export default function AddTruckModal(props) {
         {accessToken:Cookies.get("user_id"),plate_no:values.plate_no,model:values.model,active:true})
         .then(res=>{
             if(res.data.success){
-                refetch();
-                enqueueSnackbar(res.data.message, { variant:'success' });
-                props.setOpenAddModal(false);
+              refetch();
+              enqueueSnackbar(res.data.message, { variant:'success' });
+              props.setOpenAddModal(false);
             }else{
-                setError(res.data.message);
+              enqueueSnackbar(res.data.message, { variant:'error' });
             }
         })
     }
@@ -117,8 +114,6 @@ export default function AddTruckModal(props) {
             <DialogContent dividers>
             <Box sx={{ width: '100%' }}>
                 <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                {error && <p className="text-danger small text-center">{error}</p>}
-                
             <Grid item xs={12}>
                 <TextField
                     value={values.plate_no}
@@ -149,9 +144,9 @@ export default function AddTruckModal(props) {
             </Box>
             </DialogContent>
             <DialogActions>
-            <Button type="submit"  className='text-dark' disabled={!isValid} onClick={handleSubmit}>
+            <button type="submit"  className='btn btn-success' disabled={!isValid} onClick={handleSubmit}>
                 Add Truck
-            </Button>
+            </button>
             </DialogActions>
         </BootstrapDialog>
     );

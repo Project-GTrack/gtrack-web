@@ -3,9 +3,6 @@ import moment from 'moment';
 
 
 const PdfComponent = forwardRef(({dashcards,chartData},ref) => {
-    // useEffect(() => {
-    //     console.log("yeahh",dashcards,chartData)
-    // },[])
   return (
     <div ref={ref} style={{margin: "2vh"}}>
         <center>
@@ -40,14 +37,9 @@ const PdfComponent = forwardRef(({dashcards,chartData},ref) => {
              </table>
              <p><i>Figure 1. Number of Assets and Collections within the month of {moment().format("MMMM")}</i></p>
              </center>
-             
-          {/* {dashcards.map(dashcard => (
-          <div className="col" item key={dashcard.id} xs={12} md={6} lg={3}>
-            <DashboardCard id={dashcard.id} data={data} title={dashcard.title} count={dashcard.count} icon={dashcard.icon}/>
-          </div>
-          ))}       */}
           <div xs={12} style={{marginTop: "25vh", marginBottom: "4vh"}}>
-          <p><strong>Total Garbage Weight Collected Per Week</strong></p>
+          <p><strong>Total Garbage Weight Collected </strong></p>
+          <p style={{textIndent: "50px"}}>The total garbage weight collected for the month of {moment().format("MMMM")} is <b>{chartData.reduce((total, currentValue)=> total = total + currentValue.weight, 0)} </b> Tons</p>
           <p style={{textIndent: "50px"}}>The figure below shows the total garbage weight collected weekly within the month of {moment().format("MMMM")}</p>
           <center>
              <table style={{border: "1px solid black" }}>

@@ -148,6 +148,10 @@ const PageLayout = ({headerTitle,children}) => {
     getCookiesJWT();
     getFirebaseConcerns();
     getFirebaseReports();
+    return()=>{
+      setAlerts([]);
+      setConcerns([]);
+    }
   }, [])
   
   const [type, setType] = useState(null);

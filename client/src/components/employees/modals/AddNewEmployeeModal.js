@@ -17,7 +17,6 @@ import IconButton from "@mui/material/IconButton";
 import MenuItem from "@mui/material/MenuItem";
 import { useFormik } from 'formik';
 import axios from "axios";
-import { useState } from "react";
 import * as yup from 'yup'
 import Firebase from '../../helpers/Firebase';
 import { capitalizeWords } from '../../helpers/TextFormat';
@@ -98,7 +97,6 @@ export default function AddNewEmployeeModal(props) {
       .string()
       .required('Employee type is required'),
   })
-  const [error,setError]=useState(null);
   
   const handleFirebase =async (values,resetForm) =>{
     await auth.createUserWithEmailAndPassword(values.email, "p@ssw0rd")
@@ -106,7 +104,8 @@ export default function AddNewEmployeeModal(props) {
         auth.currentUser.sendEmailVerification();
     })
     .catch(function(error) {
-        setError(error.message);
+        // setError(error.message);
+        enqueueSnackbar(error.message, { variant:'error' });
     });
   }
   const handleFormSubmit = async(values,{resetForm}) =>{
@@ -126,7 +125,7 @@ export default function AddNewEmployeeModal(props) {
         refetch();
         enqueueSnackbar(res.data.message, { variant:'success' });
       }else{
-        setError(res.data.message);
+        enqueueSnackbar(res.data.message, { variant:'error' });
       }
     })
   }
@@ -147,7 +146,6 @@ export default function AddNewEmployeeModal(props) {
     </BootstrapDialogTitle>
     <DialogContent dividers>
     <Box sx={{ width: '100%' }}>
-    {error && <p className="text-danger small text-center">{error}</p>}
   <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
     <Grid item xs={6}>
       <TextField

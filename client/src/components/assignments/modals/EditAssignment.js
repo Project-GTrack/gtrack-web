@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect,useState} from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Dialog from "@mui/material/Dialog";
@@ -18,6 +18,7 @@ import { useFormik } from "formik";
 import IconButton from "@mui/material/IconButton";
 import axios from "axios";
 import { useSnackbar } from "notistack";
+import { CircularProgress } from '@mui/material'; 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -59,6 +60,7 @@ BootstrapDialogTitle.propTypes = {
 const EditAssignment = (props) => {
   const {enqueueSnackbar} = useSnackbar();
   const {queryResult,refetch}=useSchedulesPageContext();
+  const [loading, setLoading] = useState(false);
   const assignmentErrorHandling = yup.object().shape({
     driver: yup.string().required("Driver is required"),
     truck: yup.string().required("Truck is required"),
@@ -73,17 +75,19 @@ const EditAssignment = (props) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[props.openModal]);
   const handleFormSubmit = async (values, { resetForm }) => {
-      axios
+    setLoading(true);
+      await axios
         .put(`${process.env.REACT_APP_BACKEND_URL}/admin/assignment/edit-assignment/${props.data[0]}`, {
           driver_id:values.driver,
           truck_id:values.truck,
           accessToken: Cookies.get("user_id"),
         })
         .then((res) => {
+          setLoading(false);
           resetForm();
-          props.setOpenModal(false);
           if(res.data.success){
             refetch();
+            props.setOpenModal(false);
             enqueueSnackbar(res.data.message, { variant:'success' });
           }else{
             enqueueSnackbar(res.data.message, { variant:'error' });
@@ -111,7 +115,7 @@ const EditAssignment = (props) => {
         id="customized-dialog-title"
         onClose={props.handleCloseModal}
       >
-        Add New Truck Assignment
+        Edit Truck Assignment
       </BootstrapDialogTitle>
       <DialogContent dividers>
         <Box sx={{ width: "50vh" }}>
@@ -161,13 +165,7 @@ const EditAssignment = (props) => {
         </Box>
       </DialogContent>
       <DialogActions>
-        <button
-          type="submit"
-          className="btn btn-success"
-          onClick={handleSubmit}
-        >
-          Edit
-        </button>
+      <button className='btn btn-success' type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Updating...</>:"Update"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

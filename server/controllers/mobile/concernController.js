@@ -14,7 +14,7 @@ exports.send=async (req,res)=>{
         images.forEach(function(file){ 
             let att=attachment.model.create({attachment_line_id:attLine.attachment_line_id,filename:file});
         });
-        let concernData=await concern.model.create({resident_id:account.user_id,attachment_line_id:attLine.attachment_line_id,subject:req.body.subject,message:req.body.message,status:false,classification:req.body.classification});
+        let concernData=await concern.model.create({resident_id:account.user_id,attachment_line_id:attLine.attachment_line_id,subject:req.body.subject,message:req.body.message,status:true,classification:req.body.classification});
         if(concernData){
             res.send({success:true,message:"Concern sent successfully!",data:concernData});
         }else{

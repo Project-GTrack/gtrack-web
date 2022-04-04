@@ -54,19 +54,23 @@ exports.logout = async(req, res)=>{
 }
 exports.display = async(req, res)=>{
     let drivers = await user.model.findAll({
+        order: [['createdAt','DESC']],
         where:{
             user_type:"Driver",
             status:true
         }
     })
     let admins = await user.model.findAll({
+        order: [['createdAt','DESC']],
         where:{
+            email:{[Op.not]: 'gtrackcompostela@gmail.com'},
             user_type:"Admin",
             status:true
         }
     })
     let inactives = await user.model.findAll({
         where:{
+            email:{[Op.not]: 'gtrackcompostela@gmail.com'},
             user_type:{[Op.not]: 'Resident'},
             status:false
         }
@@ -161,6 +165,8 @@ exports.register = async(req, res)=>{
             purok:req.body.purok,
             street:req.body.street,
             barangay:req.body.barangay,
+            town:"Compostela",
+            postal_code:"6003",
             gender:req.body.gender,
             contact_no:req.body.contact
         });

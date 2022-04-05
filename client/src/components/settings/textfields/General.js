@@ -8,8 +8,10 @@ import { useFormik } from 'formik';
 import UploadProfile from "../../helpers/UploadProfile";
 import { capitalizeWords } from "../../helpers/TextFormat";
 import { useSnackbar } from 'notistack';
+import { CircularProgress } from '@mui/material';
 const General = (props) => {
     const { enqueueSnackbar} = useSnackbar();
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const [url,setUrl] = useState(null);
     const [user,setUser] = useState({
@@ -37,12 +39,14 @@ const General = (props) => {
     })
     
     const handleFormSubmit = () =>{
+      setLoading(true);
         if(Cookies.get('user_id')){
             Axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/profile/general_info`,{
               fname:capitalizeWords(values.fname),
               lname:capitalizeWords(values.lname),
               accessToken: Cookies.get('user_id')
             }).then(res=>{
+              setLoading(false);
               if(res.data.success){
                 props.setUser(res.data.data.acc);
                 Cookies.set('user_id',res.data.data.accessToken, {expires: 1});
@@ -129,7 +133,9 @@ const General = (props) => {
                     fullWidth
                 />
             </Stack>
-           <Button variant="text" color="success" sx={{mt:2}} disabled={!isValid} onClick={handleSubmit}>Save</Button>
+            <Button variant="text" color="success" sx={{mt:2}} disabled={!isValid} onClick={handleSubmit}>
+            {loading?<><CircularProgress size={20}/> Saving...</>:"Save"}
+          </Button>
         </Box>
        
     );

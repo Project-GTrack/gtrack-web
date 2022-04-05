@@ -19,6 +19,7 @@ import { decodeToken } from 'react-jwt';
 import { useEffect } from 'react';
 import { useSnackbar } from 'notistack';
 import { useTrucksPageContext } from '../../pages/TrucksPage';
+import { CircularProgress } from '@mui/material';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -60,6 +61,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   
 export default function AddTruckModal(props) {
     const {enqueueSnackbar} = useSnackbar();
+    const [loading, setLoading] = React.useState(false);
     const {refetch}= useTrucksPageContext();
     // eslint-disable-next-line no-unused-vars
     const [user,setUser]=useState(null);
@@ -83,10 +85,11 @@ export default function AddTruckModal(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     const handleFormSubmit = async(values,{resetForm}) =>{
-        console.log(values);
+        setLoading(true);
         axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/truck/add`,
         {accessToken:Cookies.get("user_id"),plate_no:values.plate_no,model:values.model,active:true})
         .then(res=>{
+          setLoading(false);
             if(res.data.success){
               refetch();
               enqueueSnackbar(res.data.message, { variant:'success' });
@@ -145,7 +148,7 @@ export default function AddTruckModal(props) {
             </DialogContent>
             <DialogActions>
             <button type="submit"  className='btn btn-success' disabled={!isValid} onClick={handleSubmit}>
-                Add Truck
+              {loading?<><CircularProgress size={20}/> Adding...</>:"Add Truck"}
             </button>
             </DialogActions>
         </BootstrapDialog>

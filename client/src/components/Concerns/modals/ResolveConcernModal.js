@@ -15,6 +15,7 @@ import Cookies from "js-cookie";
 import * as yup from 'yup';
 import { useSnackbar } from "notistack";
 import { useReportsandConcernsPageContext } from "../../../pages/ReportsPage";
+import { CircularProgress } from "@mui/material";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -50,6 +51,7 @@ const BootstrapDialogTitle = (props) => {
 
 export default function ResolveConcernMOdal(props) {
   const {enqueueSnackbar} = useSnackbar();
+  const [loading, setLoading] = React.useState(false);
   const {refetch}= useReportsandConcernsPageContext();
   const passwordValidationSchema = yup.object().shape({
     password: yup
@@ -57,9 +59,11 @@ export default function ResolveConcernMOdal(props) {
       .required('Password is required'),
   })
   const handleFormSubmit = async() =>{
+    setLoading(true);
     axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/report/resolveConcern/${props.data.concern_id}`,
     {password:values.password,accessToken:Cookies.get("user_id")})
     .then(res=>{
+      setLoading(false);
       if(res.data.success){
         refetch();
         enqueueSnackbar(res.data.message, { variant:'success' });
@@ -113,7 +117,7 @@ export default function ResolveConcernMOdal(props) {
       </DialogContent>
       <DialogActions>
         <button className='btn' onClick={()=>props.setOpenResolveModal(false)}>Close</button>
-        <button className='btn btn-success' disabled={!isValid} type="submit" onClick={handleSubmit}>Resolve</button>
+        <button className='btn btn-success' disabled={!isValid} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Resolving...</>:"Resolve"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

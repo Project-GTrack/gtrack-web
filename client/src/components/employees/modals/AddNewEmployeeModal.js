@@ -22,6 +22,7 @@ import Firebase from '../../helpers/Firebase';
 import { capitalizeWords } from '../../helpers/TextFormat';
 import { useEmployeePageContext } from '../../../pages/EmployeesPage';
 import { useSnackbar } from 'notistack';
+import { CircularProgress } from '@mui/material';
 
 const auth = Firebase.auth();
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -65,6 +66,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 export default function AddNewEmployeeModal(props) {
   const {enqueueSnackbar} = useSnackbar();
   const {refetch}=useEmployeePageContext();
+  const [loading, setLoading] = React.useState(false);
   const digitsOnly = (value) => /^\d+$/.test(value)
   const employeeRegisterValidationSchema = yup.object().shape({
     fname: yup
@@ -109,6 +111,7 @@ export default function AddNewEmployeeModal(props) {
     });
   }
   const handleFormSubmit = async(values,{resetForm}) =>{
+    setLoading(true);
     axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/register`,{
       email:values.email,
       contact:values.contact,
@@ -120,6 +123,7 @@ export default function AddNewEmployeeModal(props) {
       gender:values.gender,
       user_type:values.user_type})
     .then(res=>{
+      setLoading(false);
       if(res.data.success){
         handleFirebase(values,resetForm);
         refetch();
@@ -305,7 +309,7 @@ export default function AddNewEmployeeModal(props) {
     </DialogContent>
     <DialogActions>
       <Button type="submit"  className='text-dark' disabled={!isValid} onClick={handleSubmit}>
-        Add Employee
+      {loading?<><CircularProgress size={20}/> Adding...</>:"Add Employee"}
       </Button>
     </DialogActions>
   </BootstrapDialog>

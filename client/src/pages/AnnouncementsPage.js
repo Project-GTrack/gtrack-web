@@ -28,6 +28,10 @@ const AnnouncementsPage = () =>{
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+  useEffect(() => {
+    refetch();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
     return (

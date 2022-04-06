@@ -82,11 +82,9 @@ exports.updateTruck = async(req, res) => {
             plate_no:req.body.plate_no
         }
     })
-
-    if (check) {
+    if (check && req.params.id!=check.truck_id) {
         return res.send({success:false,message:"Truck with that plate number already exists"});
     }
-    
     let data = await truck.model.update(
         {
             plate_no: req.body.plate_no,
@@ -100,7 +98,7 @@ exports.updateTruck = async(req, res) => {
     if (data) {
         res.send({success:true,message:"Truck Record Successfully Updated"});
     } else {
-        res.send({success:false,message:"Cannot update truck"});
+        res.send({success:false,message:"Truck with that plate number already exists"});
     }
   
 }

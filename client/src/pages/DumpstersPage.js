@@ -25,6 +25,10 @@ const DumpstersPage = () => {
       url: `${process.env.REACT_APP_BACKEND_URL}/admin/dumpster/get-dumpsters`,
       method:'get' 
     });
+    useEffect(() => {
+      refetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[])
     return (
         <PageLayout headerTitle={"Dumpsters"}>
           <Helmet>

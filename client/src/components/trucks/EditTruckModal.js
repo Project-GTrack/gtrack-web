@@ -19,6 +19,7 @@ import { decodeToken } from 'react-jwt';
 import { useEffect } from 'react';
 import { useSnackbar } from 'notistack';
 import { useTrucksPageContext } from '../../pages/TrucksPage';
+import { CircularProgress } from '@mui/material';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -61,6 +62,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 export default function EditTruckModal(props) {
     const {enqueueSnackbar} = useSnackbar();
     const {refetch}= useTrucksPageContext();
+    const [loading, setLoading] = useState(false);
     const [,setUser]=useState(null);
     const getCookiesJWT=()=>{
         const cookie=Cookies.get("user_id");
@@ -82,17 +84,19 @@ export default function EditTruckModal(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     const handleFormSubmit = async(values,{resetForm}) =>{
-        axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/truck/update/${props.data.truck_id}`,
-        {plate_no:values.plate_no,model:values.model})
-        .then(res=>{
-            if(res.data.success){
-              refetch();
-              enqueueSnackbar(res.data.message, { variant:'success' });
-              props.setOpenEditModal(false)
-            }else{
-              enqueueSnackbar(res.data.message, { variant:'error' });
-            }
-        })
+      setLoading(true);
+      axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/truck/update/${props.data.truck_id}`,
+      {plate_no:values.plate_no,model:values.model})
+      .then(res=>{
+        setLoading(false);
+          if(res.data.success){
+            refetch();
+            enqueueSnackbar(res.data.message, { variant:'success' });
+            props.setOpenEditModal(false)
+          }else{
+            enqueueSnackbar(res.data.message, { variant:'error' });
+          }
+      })
     }
     const { handleChange, handleSubmit, handleBlur, values, errors,isValid,touched } = useFormik({
         initialValues:{plate_no:props.data.plate_no,model:props.data.model},
@@ -143,7 +147,7 @@ export default function EditTruckModal(props) {
             </DialogContent>
             <DialogActions>
             <button type="submit"  className='btn btn-success' disabled={!isValid} onClick={handleSubmit}>
-                Update
+              {loading?<><CircularProgress size={20}/> Updating...</>:"Update"}
             </button>
             </DialogActions>
         </BootstrapDialog>

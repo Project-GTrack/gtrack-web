@@ -17,6 +17,8 @@ import FirebaseAction from './pages/FirebaseAction';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import Helmet from 'react-helmet'
 import ReportsPage from './pages/ReportsPage';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
+import PageNotFound from './pages/PageNotFound';
 function App() {
   return (
     <div className='App'>
@@ -39,6 +41,8 @@ function App() {
           <Route path="/trucks" element={<TrucksPage/>} />
           <Route path="/action" element={<FirebaseAction/>} />
           <Route path="/forgot_password" element={<ForgotPasswordPage/>} />
+          <Route path="/privacy_policy" element={<PrivacyPolicyPage/>} />
+          <Route path="*" element={<PageNotFound/>} />
         </Routes>
       </LocalizationProvider>
     </div>

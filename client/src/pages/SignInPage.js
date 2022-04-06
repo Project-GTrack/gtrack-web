@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -66,6 +67,10 @@ const SignInPage = () => {
         navigate("/dashboard");
       }
     }, [navigate]);
+    const handleCreateFirebase=async(email,password)=>{
+      await auth.createUserWithEmailAndPassword(email,password);
+      setOpen(true);
+    }
     const handleFirebase = async(accessToken)=>{
       await auth.signInWithEmailAndPassword(user.email, user.password)
       .then(function() {
@@ -74,12 +79,16 @@ const SignInPage = () => {
           Cookies.set('user_id', accessToken, {expires: 1});
           navigate("/dashboard");
         }else{
-            setOpen(true);
+          setOpen(true);
         }
       })
       .catch(function(err) {
           setLoading(false);
-          setAlert({visibility:true, message:err.message,severity:"error"});
+          if(err.code=="auth/user-not-found"){
+            handleCreateFirebase(user.email, user.password);
+          }else{
+            setAlert({visibility:true, message:err.message,severity:"error"});
+          }
       });
   }
   const handleResendEmail=()=>{

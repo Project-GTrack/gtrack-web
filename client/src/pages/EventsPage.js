@@ -1,4 +1,4 @@
-import React,{useState,useEffect,useContext} from 'react';
+import React,{useEffect,useContext} from 'react';
 import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
 import PageLayout from './PageLayout';
@@ -28,6 +28,10 @@ const EventsPage = () =>{
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+    useEffect(() => {
+      refetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[])
     function TabPanel(props) {
         const { children, value, index, ...other } = props;
       

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container,Box, Button, Paper, List, ListItem,ListItemButton, ListItemText,Grid,Divider,Typography,Tab,Tabs } from "@mui/material";
+import { Box,Tab,Tabs } from "@mui/material";
 import General from "./textfields/General";
 import PropTypes from 'prop-types';
 import ChangePassword from "./textfields/ChangePassword";
@@ -63,21 +63,21 @@ const AccountSettingsComponent = ({user,setUser}) => {
         sx={{ borderRight: 1, borderColor: 'divider' }}
       >
         <Tab label="General" {...a11yProps(0)} />
-        <Tab label="Change Password" {...a11yProps(1)} />
+        <Tab label="Information" {...a11yProps(1)} />
         <Tab label="Address" {...a11yProps(2)} />
-        <Tab label="Info" {...a11yProps(3)} />
+        <Tab label="Password" {...a11yProps(3)} />
       </Tabs>
       <TabPanel sx={{width:'100%',height:'100%'}} value={value} index={0}>
         <General user={data} setUser={setUser}/>
       </TabPanel>
       <TabPanel sx={{width:'100%',height:'100%'}}  value={value} index={1}>
-        <ChangePassword user={user} setUser={setUser}/>
+        <Info user={data} setUser={setUser}/>
       </TabPanel>
       <TabPanel  sx={{width:'100%',height:'100%'}} value={value} index={2}>
         <Address user={data} setUser={setUser}/>
       </TabPanel>
       <TabPanel sx={{width:'100%',height:'100%'}}  value={value} index={3}>
-        <Info user={data} setUser={setUser}/>
+        <ChangePassword user={user} setUser={setUser}/>
       </TabPanel>
      
     </Box>

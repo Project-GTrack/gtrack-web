@@ -25,8 +25,9 @@ const ChangePassword = (props) => {
         confirmPassword: yup
             .string()
             .oneOf([yup
-                .ref('newPassword'),null
-                ],'Password must match!'),
+                .ref('newPassword')
+                ],'Password must match!')
+            .required('New Password is required'),
     })
     const handleFirebase =async (values,resetForm,data) =>{
       if(auth.currentUser){
@@ -107,7 +108,7 @@ const ChangePassword = (props) => {
                     type="password"
                     fullWidth
                 />
-                {(errors.confirmPassowrd && touched.confirmPassword) &&
+                {(errors.confirmPassword && touched.confirmPassword) &&
                 <p className="text-danger small ">{errors.confirmPassword}</p>
                 }
                 </Grid>

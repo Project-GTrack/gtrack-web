@@ -70,12 +70,13 @@ const ViewReportModal = (props) => {
     const handleOnLoad = map => {
         map.controls[window.google.maps.ControlPosition.TOP_RIGHT].push(controlButtonDiv);
     };
+    console.log(props.data);
   return (
     <Dialog
      fullWidth={true}
       onClose={props.handleCloseModal}
       aria-labelledby="customized-dialog-title"
-      open={props.openModal}
+      open={props.openViewModal}
     >
       <BootstrapDialogTitle
         id="customized-dialog-title"
@@ -98,21 +99,21 @@ const ViewReportModal = (props) => {
               width: "100%",
             }}
             center={
-              props.data[3] != 0 && props.data[4] != 0
-                ? [props.data[4], props.data[3]]
+              props.data.longitude != 0 && props.data.latitude != 0
+                ? [props.data.longitude, props.data.latitude]
                 : [123.94964154058066, 10.482913243053028]
             }
             zoom={
-              props.data[3]  != 0 && props.data[4] != 0
+              props.data.longitude  != 0 && props.data.latitude != 0
                 ? [15]
                 : [11]
             }
           >
-            {props.data[3] != 0 && props.data[4] != 0 ? (
+            {props.data.longitude != 0 && props.data.latitude != 0 ? (
               <Marker
                 coordinates={
-                  props.data[3] != 0 && props.data[4] != 0
-                    ? [props.data[4], props.data[3]]
+                  props.data.longitude != 0 && props.data.latitude != 0
+                    ? [props.data.longitude, props.data.latitude]
                     : [123.94964154058066, 10.482913243053028]
                 }
                 anchor="bottom"

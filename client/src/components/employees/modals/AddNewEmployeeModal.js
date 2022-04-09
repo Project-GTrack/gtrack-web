@@ -17,12 +17,12 @@ import IconButton from "@mui/material/IconButton";
 import MenuItem from "@mui/material/MenuItem";
 import { useFormik } from 'formik';
 import axios from "axios";
-import { useState } from "react";
 import * as yup from 'yup'
 import Firebase from '../../helpers/Firebase';
 import { capitalizeWords } from '../../helpers/TextFormat';
 import { useEmployeePageContext } from '../../../pages/EmployeesPage';
 import { useSnackbar } from 'notistack';
+import { CircularProgress } from '@mui/material';
 
 const auth = Firebase.auth();
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -66,6 +66,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 export default function AddNewEmployeeModal(props) {
   const {enqueueSnackbar} = useSnackbar();
   const {refetch}=useEmployeePageContext();
+  const [loading, setLoading] = React.useState(false);
   const digitsOnly = (value) => /^\d+$/.test(value)
   const employeeRegisterValidationSchema = yup.object().shape({
     fname: yup
@@ -98,7 +99,6 @@ export default function AddNewEmployeeModal(props) {
       .string()
       .required('Employee type is required'),
   })
-  const [error,setError]=useState(null);
   
   const handleFirebase =async (values,resetForm) =>{
     await auth.createUserWithEmailAndPassword(values.email, "p@ssw0rd")
@@ -106,10 +106,12 @@ export default function AddNewEmployeeModal(props) {
         auth.currentUser.sendEmailVerification();
     })
     .catch(function(error) {
-        setError(error.message);
+        // setError(error.message);
+        enqueueSnackbar(error.message, { variant:'error' });
     });
   }
   const handleFormSubmit = async(values,{resetForm}) =>{
+    setLoading(true);
     axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/register`,{
       email:values.email,
       contact:values.contact,
@@ -121,12 +123,13 @@ export default function AddNewEmployeeModal(props) {
       gender:values.gender,
       user_type:values.user_type})
     .then(res=>{
+      setLoading(false);
       if(res.data.success){
         handleFirebase(values,resetForm);
         refetch();
         enqueueSnackbar(res.data.message, { variant:'success' });
       }else{
-        setError(res.data.message);
+        enqueueSnackbar(res.data.message, { variant:'error' });
       }
     })
   }
@@ -147,7 +150,6 @@ export default function AddNewEmployeeModal(props) {
     </BootstrapDialogTitle>
     <DialogContent dividers>
     <Box sx={{ width: '100%' }}>
-    {error && <p className="text-danger small text-center">{error}</p>}
   <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
     <Grid item xs={6}>
       <TextField
@@ -307,7 +309,7 @@ export default function AddNewEmployeeModal(props) {
     </DialogContent>
     <DialogActions>
       <Button type="submit"  className='text-dark' disabled={!isValid} onClick={handleSubmit}>
-        Add Employee
+      {loading?<><CircularProgress size={20}/> Adding...</>:"Add Employee"}
       </Button>
     </DialogActions>
   </BootstrapDialog>

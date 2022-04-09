@@ -19,6 +19,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { capitalizeWords } from "../../helpers/TextFormat";
 import { useDumpstersPageContext } from "../../../pages/DumpstersPage";
 import { useSnackbar } from "notistack";
+import { CircularProgress } from '@mui/material';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -62,6 +63,7 @@ BootstrapDialogTitle.propTypes = {
 
 const AddNewDumpsterModal = (props) => {
   const {enqueueSnackbar} = useSnackbar();
+  const [loading, setLoading] = React.useState(false);
   const {refetch}=useDumpstersPageContext();
   const [coordinate, setCoordinate] = React.useState({
     latitude: 0,
@@ -74,6 +76,7 @@ const AddNewDumpsterModal = (props) => {
     barangay: yup.string().required("Barangay is required"),
   });
   const handleFormSubmit = async (values, { resetForm }) => {
+    setLoading(true);
     if (coordinate.latitude !== 0 && coordinate.longitude !== 0) {
       axios
         .post(`${process.env.REACT_APP_BACKEND_URL}/admin/dumpster/add-dumpster`, {
@@ -87,12 +90,13 @@ const AddNewDumpsterModal = (props) => {
           accessToken: Cookies.get("user_id"),
         })
         .then((res) => {
+          setLoading(false);
           resetForm();
-          props.setOpenModal(false);
           setCoordinate({ latitude: 0, longitude: 0 });
           setError(null);
           if (res.data.success) {
             refetch();
+            props.setOpenModal(false);
             enqueueSnackbar(res.data.message, { variant:'success' });
           }else{
             enqueueSnackbar(res.data.message, { variant:'error' });
@@ -212,7 +216,7 @@ const AddNewDumpsterModal = (props) => {
                 }
                 anchor="bottom"
               >
-                <img style={mystyle} src="/dumpster_marker_icon.png" />
+                <img style={mystyle} src="/images/dumpster_marker_icon.png" />
               </Marker>
             ) : (
               <></>
@@ -222,13 +226,7 @@ const AddNewDumpsterModal = (props) => {
         </Box>
       </DialogContent>
       <DialogActions>
-        <button
-          type="submit"
-          className="btn btn-success"
-          onClick={handleSubmit}
-        >
-          Add
-        </button>
+        <button className='btn btn-success' type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Adding...</>:"Add"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

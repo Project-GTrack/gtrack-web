@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { TextField, FormControl, Avatar,Button,Input,Stack,Box} from "@mui/material";
 import * as yup from 'yup'
 import Axios from 'axios';
@@ -8,10 +8,11 @@ import { useNavigate } from 'react-router-dom';
 import Grid from "@mui/material/Grid";
 import { useSnackbar } from 'notistack';
 import Firebase from '../../helpers/Firebase';
-
+import { CircularProgress } from '@mui/material';
 const auth = Firebase.auth();
 const ChangePassword = (props) => {
   const { enqueueSnackbar} = useSnackbar();
+  const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const profilePasswordValidationSchema = yup.object().shape({
         password: yup
@@ -24,8 +25,9 @@ const ChangePassword = (props) => {
         confirmPassword: yup
             .string()
             .oneOf([yup
-                .ref('newPassword'),null
-                ],'Password must match!'),
+                .ref('newPassword')
+                ],'Password must match!')
+            .required('New Password is required'),
     })
     const handleFirebase =async (values,resetForm,data) =>{
       if(auth.currentUser){
@@ -38,6 +40,7 @@ const ChangePassword = (props) => {
     }
 
     const handleFormSubmit = async(values, {resetForm}) => {
+      setLoading(true);
         if(Cookies.get('user_id')){
           Axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/profile/change_password`,{
             password:values.password,
@@ -45,6 +48,7 @@ const ChangePassword = (props) => {
             confirmPassword:values.confirmPassword,
             accessToken: Cookies.get('user_id')
           }).then(res=>{
+            setLoading(false);
             if(res.data.success){
               handleFirebase(values, resetForm, res.data);
             }else{
@@ -104,12 +108,14 @@ const ChangePassword = (props) => {
                     type="password"
                     fullWidth
                 />
-                {(errors.confirmPassowrd && touched.confirmPassword) &&
+                {(errors.confirmPassword && touched.confirmPassword) &&
                 <p className="text-danger small ">{errors.confirmPassword}</p>
                 }
                 </Grid>
             </Grid>
-            <Button variant="text" color="success" sx={{mt:2}} disabled={!isValid} onClick={handleSubmit}>Save</Button>
+            <Button variant="text" color="success" sx={{mt:2}} disabled={!isValid} onClick={handleSubmit}>
+            {loading?<><CircularProgress size={20}/> Saving...</>:"Save"}
+          </Button>
         </Box>
     );
 }

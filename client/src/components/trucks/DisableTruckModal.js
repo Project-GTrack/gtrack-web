@@ -11,11 +11,11 @@ import IconButton from "@mui/material/IconButton";
 import TextField from '@mui/material/TextField';
 import { useFormik } from 'formik';
 import axios from "axios";
-import { useState } from "react";
 import Cookies from "js-cookie";
 import * as yup from 'yup';
 import { useSnackbar } from "notistack";
 import { useTrucksPageContext } from "../../pages/TrucksPage";
+import { CircularProgress } from "@mui/material";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -52,22 +52,24 @@ const BootstrapDialogTitle = (props) => {
 export default function DisableTruckModal(props) {
   const {enqueueSnackbar} = useSnackbar();
   const {refetch}= useTrucksPageContext();
+  const [loading, setLoading] = React.useState(false);
   const passwordValidationSchema = yup.object().shape({
     password: yup
       .string()
       .required('Password is required'),
   })
-  const [error,setError]=useState(null);
   const handleFormSubmit = async() =>{
+    setLoading(true);
     axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/truck/disable/${props.data.truck_id}`,
     {password:values.password,accessToken:Cookies.get("user_id")})
     .then(res=>{
+      setLoading(false);
       if(res.data.success){
         refetch();
         enqueueSnackbar(res.data.message, { variant:'success' });
         props.setOpenDeleteModal(false);
       }else{
-        setError(res.data.message);
+        enqueueSnackbar(res.data.message, { variant:'error' });
       }
     })
   }
@@ -98,7 +100,6 @@ export default function DisableTruckModal(props) {
       {(errors.password && touched.password) &&
         <p className="text-danger small mt-2">{errors.password}</p>
       }
-      {error && <p className="text-danger small mt-2">{error}</p>}
       <TextField
         onChange={handleChange('password')}
         value={values.password}
@@ -116,7 +117,7 @@ export default function DisableTruckModal(props) {
       </DialogContent>
       <DialogActions>
         <button className='btn' onClick={()=>props.setOpenDeleteModal(false)}>Close</button>
-        <button className='btn btn-danger' disabled={!isValid} type="submit" onClick={handleSubmit}>Disable</button>
+        <button className='btn btn-danger' disabled={!isValid} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Disabling...</>:"Disable"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

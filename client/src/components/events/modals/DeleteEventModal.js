@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -17,6 +17,7 @@ import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import {useEventPageContext} from '../../../pages/EventsPage'; 
 import { useSnackbar } from 'notistack';
+import { CircularProgress } from '@mui/material'; 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
@@ -59,15 +60,18 @@ export default function DeleteEventModal(props) {
   const { enqueueSnackbar} = useSnackbar();
   const {refetch}=useEventPageContext();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const eventValidationSchema = yup.object().shape({
     password: yup.string().required("Password is required"),
   });
   const handleFormSubmit = async(values) => {
+    setLoading(true);
     if(Cookies.get('user_id')){
       Axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/event/delete/${props.data[0]}`,{
         password: values.password,
         accessToken: Cookies.get('user_id')
       }).then(res=>{
+        setLoading(false);
         if(res.data.success){
           props.setDeleteModal(false);
           enqueueSnackbar(res.data.message, { variant:'success' });
@@ -97,7 +101,7 @@ export default function DeleteEventModal(props) {
         id="customized-dialog-title"
         onClose={props.handleCloseDeleteModal}
       >
-        Are you sure you want to delete this Announcement Record?
+        Are you sure to delete this record?
       </BootstrapDialogTitle>
       <DialogContent dividers>
         <Box sx={{ width: "100%" }}>
@@ -127,7 +131,7 @@ export default function DeleteEventModal(props) {
       </DialogContent>
       <DialogActions>
       <button className='btn' onClick={props.handleCloseDeleteModal}>Close</button>
-        <button className='btn btn-danger' type="submit" onClick={handleSubmit}>Delete</button>
+      <button className='btn btn-danger' type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Deleting...</>:"Delete"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

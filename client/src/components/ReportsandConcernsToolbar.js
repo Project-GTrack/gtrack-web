@@ -12,19 +12,19 @@ const ReportsandConcernsToolbar = (props) => {
         {props.data.status? (
             <>
              <button onClick={()=>props.setOpenResolveModal(true)} className="btn btn-success mx-2"><i className="fa fa-check" aria-hidden="true"></i></button>
-                    <button onClick={()=>props.setOpenViewModal(true)} className="btn btn-primary mx-2"><i className="fa fa-info-circle" aria-hidden="true"></i></button>
+                    <button onClick={()=>props.setOpenViewModal(true)} className="btn btn-primary"><i className="fa fa-info-circle" aria-hidden="true"></i></button>
                     <button onClick={()=>props.setOpenDeleteModal(true)} className="btn btn-danger mx-2"><i className="fa fa-trash" aria-hidden="true"></i></button>
-                    <ResolveReportModal data={props.data} statusToast={props.statusToast} setStatusToast={props.setStatusToast} setTrucks={props.setTbrucks} openResolveModal={props.openResolveModal} setOpenResolveModal={props.setOpenResolveModal}/>
-                    <ViewReportModal data={props.data} statusToast={props.statusToast} setStatusToast={props.setStatusToast} setTrucks={props.setTrucks} openViewModal={props.openViewModal} setOpenViewModal={props.setOpenViewModal}/>
-                    <DeleteReportModal data={props.data} statusToast={props.statusToast} setStatusToast={props.setStatusToast} setTrucks={props.setTrucks} openDeleteModal={props.openDeleteModal} setOpenDeleteModal={props.setOpenDeleteModal}/>
+                    <ResolveReportModal data={props.data} openResolveModal={props.openResolveModal} setOpenResolveModal={props.setOpenResolveModal}/>
+                    <ViewReportModal data={props.data} openViewModal={props.openViewModal} setOpenViewModal={props.setOpenViewModal}/>
+                    <DeleteReportModal data={props.data} openDeleteModal={props.openDeleteModal} setOpenDeleteModal={props.setOpenDeleteModal}/>
             </>
 
         ):(
             <>
-                 <button onClick={()=>props.setOpenViewModal(true)} className="btn btn-primary mx-2"><i className="fa fa-info-circle" aria-hidden="true"></i></button>
+                 <button onClick={()=>props.setOpenViewModal(true)} className="btn btn-primary"><i className="fa fa-info-circle" aria-hidden="true"></i></button>
                     <button onClick={()=>props.setOpenDeleteModal(true)} className="btn btn-danger mx-2"><i className="fa fa-trash" aria-hidden="true"></i></button>
-                    <ViewReportModal data={props.data} statusToast={props.statusToast} setStatusToast={props.setStatusToast} setTrucks={props.setTrucks} openViewModal={props.openViewModal} setOpenViewModal={props.setOpenViewModal}/>
-                    <DeleteReportModal data={props.data} statusToast={props.statusToast} setStatusToast={props.setStatusToast} setTrucks={props.setTrucks} openDeleteModal={props.openDeleteModal} setOpenDeleteModal={props.setOpenDeleteModal}/>
+                    <ViewReportModal data={props.data} openViewModal={props.openViewModal} setOpenViewModal={props.setOpenViewModal}/>
+                    <DeleteReportModal data={props.data} openDeleteModal={props.openDeleteModal} setOpenDeleteModal={props.setOpenDeleteModal}/>
             </>
         )}
                    

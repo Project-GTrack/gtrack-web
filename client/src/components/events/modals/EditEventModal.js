@@ -26,6 +26,7 @@ import moment from 'moment';
 import { capitalizeWords } from '../../helpers/TextFormat';
 import {useEventPageContext} from '../../../pages/EventsPage'; 
 import { useSnackbar } from 'notistack';
+import { CircularProgress } from '@mui/material';
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
       padding: theme.spacing(2),
@@ -66,6 +67,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   
 export default function EditEventModal(props) {
   const { enqueueSnackbar} = useSnackbar();
+  const [loading, setLoading] = useState(false);
   const {refetch}=useEventPageContext();
   const [images, setImages] = useState([]);
   const [urls, setUrls] = useState([]);
@@ -131,6 +133,7 @@ export default function EditEventModal(props) {
   })
 
   const handleFormSubmit = async(values) => {
+    setLoading(true);
     console.log(values.status);
     if(Cookies.get('user_id')){
       await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/admin/event/edit/${props.data[0]}`,{
@@ -148,7 +151,7 @@ export default function EditEventModal(props) {
         status:values.status,
         urls:urls
       }).then(res=>{
-       
+        setLoading(false);
         if(res.data.success){
           refetch();
           props.setOpenModal(false);
@@ -379,8 +382,8 @@ export default function EditEventModal(props) {
     </Box>
     </DialogContent>
     <DialogActions>
-      <Button  type="submit"  className='text-dark' disabled={!isValid} onClick={handleSubmit}>
-        Save
+    <Button type="submit" className='text-dark' disabled={!isValid} onClick={handleSubmit}>
+        {loading?<><CircularProgress size={20}/> Updating...</>:"Update"}
       </Button>
     </DialogActions>
   </BootstrapDialog>

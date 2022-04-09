@@ -18,6 +18,8 @@ import { useFormik } from "formik";
 import IconButton from "@mui/material/IconButton";
 import axios from "axios";
 import { useSnackbar } from "notistack";
+import { CircularProgress } from '@mui/material'; 
+
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -59,6 +61,7 @@ BootstrapDialogTitle.propTypes = {
 const AddNewAssignment = (props) => {
   const {enqueueSnackbar} = useSnackbar();
   const {queryResult,refetch}=useSchedulesPageContext();
+  const [loading, setLoading] = React.useState(false);
   const assignmentErrorHandling = yup.object().shape({
     driver: yup.string().required("Driver is required"),
     truck: yup.string().required("Truck is required"),
@@ -68,17 +71,19 @@ const AddNewAssignment = (props) => {
     trucks:queryResult.data.data.trucks
   }
   const handleFormSubmit = async (values, { resetForm }) => {
-      axios
+    setLoading(true);
+    await axios
         .post(`${process.env.REACT_APP_BACKEND_URL}/admin/assignment/add-assignment`, {
           driver_id:values.driver,
           truck_id:values.truck,
           accessToken: Cookies.get("user_id"),
         })
         .then((res) => {
+          setLoading(false);
           resetForm();
-          props.setOpenModal(false);
           if(res.data.success){
             refetch();
+            props.setOpenModal(false);
             enqueueSnackbar(res.data.message, { variant:'success' });
           }else{
             enqueueSnackbar(res.data.message, { variant:'error' });
@@ -157,13 +162,7 @@ const AddNewAssignment = (props) => {
         </Box>
       </DialogContent>
       <DialogActions>
-        <button
-          type="submit"
-          className="btn btn-success"
-          onClick={handleSubmit}
-        >
-          Add
-        </button>
+      <button className='btn btn-success' type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Adding...</>:"Add"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

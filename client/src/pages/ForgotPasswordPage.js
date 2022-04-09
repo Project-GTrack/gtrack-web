@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import * as React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -53,7 +54,11 @@ const ForgotPasswordPage = () => {
         navigate("/dashboard");
       }
     }, [navigate]);
-    
+    const handleCreateFirebase=async(email)=>{
+      await auth.createUserWithEmailAndPassword(email,"p@ssw0rd");
+      await auth.sendPasswordResetEmail(email);
+      setAlert({visibility:true, message:"An email to reset your password has been sent!",severity:"success"});
+    }
     const handleFormSubmit = () => {
         setLoading(true);
         Axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/forgot_password`,{
@@ -66,7 +71,11 @@ const ForgotPasswordPage = () => {
                 setAlert({visibility:true, message:"An email to reset your password has been sent!",severity:"success"});
             }, error => {
                 setLoading(false);
-                setAlert({visibility:true, message:error.message,severity:"error"});
+                if(error.code=="auth/user-not-found"){
+                  handleCreateFirebase(values.email);
+                }else{
+                  setAlert({visibility:true, message:error.message,severity:"error"});
+                }
             });
         }else{
             setLoading(false);

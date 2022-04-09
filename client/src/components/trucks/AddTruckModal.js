@@ -2,7 +2,6 @@ import * as React from 'react';
 import Grid from "@mui/material/Grid";
 import { styled } from '@mui/material/styles';
 import Box from "@mui/material/Box";
-import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -18,9 +17,9 @@ import * as yup from 'yup'
 import Cookies from 'js-cookie';
 import { decodeToken } from 'react-jwt';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import { useTrucksPageContext } from '../../pages/TrucksPage';
+import { CircularProgress } from '@mui/material';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -62,9 +61,9 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   
 export default function AddTruckModal(props) {
     const {enqueueSnackbar} = useSnackbar();
+    const [loading, setLoading] = React.useState(false);
     const {refetch}= useTrucksPageContext();
-    const navigate = useNavigate();
-    const [error,setError]=useState(null);
+    // eslint-disable-next-line no-unused-vars
     const [user,setUser]=useState(null);
     const getCookiesJWT=()=>{
         const cookie=Cookies.get("user_id");
@@ -86,16 +85,17 @@ export default function AddTruckModal(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     const handleFormSubmit = async(values,{resetForm}) =>{
-        console.log(values);
+        setLoading(true);
         axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/truck/add`,
         {accessToken:Cookies.get("user_id"),plate_no:values.plate_no,model:values.model,active:true})
         .then(res=>{
+          setLoading(false);
             if(res.data.success){
-                refetch();
-                enqueueSnackbar(res.data.message, { variant:'success' });
-                props.setOpenAddModal(false);
+              refetch();
+              enqueueSnackbar(res.data.message, { variant:'success' });
+              props.setOpenAddModal(false);
             }else{
-                setError(res.data.message);
+              enqueueSnackbar(res.data.message, { variant:'error' });
             }
         })
     }
@@ -117,8 +117,6 @@ export default function AddTruckModal(props) {
             <DialogContent dividers>
             <Box sx={{ width: '100%' }}>
                 <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                {error && <p className="text-danger small text-center">{error}</p>}
-                
             <Grid item xs={12}>
                 <TextField
                     value={values.plate_no}
@@ -150,7 +148,7 @@ export default function AddTruckModal(props) {
             </DialogContent>
             <DialogActions>
             <button type="submit"  className='btn btn-success' disabled={!isValid} onClick={handleSubmit}>
-                Add Truck
+              {loading?<><CircularProgress size={20}/> Adding...</>:"Add Truck"}
             </button>
             </DialogActions>
         </BootstrapDialog>

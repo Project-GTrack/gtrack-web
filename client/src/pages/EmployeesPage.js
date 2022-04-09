@@ -33,7 +33,10 @@ const EmployeesPage = () => {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-  
+  useEffect(() => {
+    refetch();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
   const handleChange = (event, newValue) => {
       setValue(newValue);
   };

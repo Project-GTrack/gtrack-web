@@ -2,7 +2,6 @@ import * as React from 'react';
 import Grid from "@mui/material/Grid";
 import { styled } from '@mui/material/styles';
 import Box from "@mui/material/Box";
-import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -20,6 +19,7 @@ import { decodeToken } from 'react-jwt';
 import { useEffect } from 'react';
 import { useSnackbar } from 'notistack';
 import { useTrucksPageContext } from '../../pages/TrucksPage';
+import { CircularProgress } from '@mui/material';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -62,7 +62,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 export default function EditTruckModal(props) {
     const {enqueueSnackbar} = useSnackbar();
     const {refetch}= useTrucksPageContext();
-    const [error,setError]=useState(null);
+    const [loading, setLoading] = useState(false);
     const [,setUser]=useState(null);
     const getCookiesJWT=()=>{
         const cookie=Cookies.get("user_id");
@@ -84,17 +84,19 @@ export default function EditTruckModal(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     const handleFormSubmit = async(values,{resetForm}) =>{
-        axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/truck/update/${props.data.truck_id}`,
-        {plate_no:values.plate_no,model:values.model})
-        .then(res=>{
-            if(res.data.success){
-                refetch();
-                enqueueSnackbar(res.data.message, { variant:'success' });
-                props.setOpenEditModal(false)
-            }else{
-                setError(res.data.message);
-            }
-        })
+      setLoading(true);
+      axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/truck/update/${props.data.truck_id}`,
+      {plate_no:values.plate_no,model:values.model})
+      .then(res=>{
+        setLoading(false);
+          if(res.data.success){
+            refetch();
+            enqueueSnackbar(res.data.message, { variant:'success' });
+            props.setOpenEditModal(false)
+          }else{
+            enqueueSnackbar(res.data.message, { variant:'error' });
+          }
+      })
     }
     const { handleChange, handleSubmit, handleBlur, values, errors,isValid,touched } = useFormik({
         initialValues:{plate_no:props.data.plate_no,model:props.data.model},
@@ -113,7 +115,6 @@ export default function EditTruckModal(props) {
             </BootstrapDialogTitle>
             <DialogContent dividers>
             <Box sx={{ width: '100%' }}>
-            {error && <p className="text-danger small text-center">{error}</p>}
                 <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
             <Grid item xs={12}>
                 <TextField
@@ -146,7 +147,7 @@ export default function EditTruckModal(props) {
             </DialogContent>
             <DialogActions>
             <button type="submit"  className='btn btn-success' disabled={!isValid} onClick={handleSubmit}>
-                Update
+              {loading?<><CircularProgress size={20}/> Updating...</>:"Update"}
             </button>
             </DialogActions>
         </BootstrapDialog>

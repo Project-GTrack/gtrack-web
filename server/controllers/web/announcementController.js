@@ -96,7 +96,7 @@ exports.createAnnouncement = async(req, res) =>{
                    handleFirebase(req.body.title);
                 }
                 if(post){
-                    res.send({success:true,message:"Announcement created successfully!"});
+                    res.send({success:true,message:"Announcement successfully Created!"});
                 }else{
                     res.send({success:false,message:"Failed to create announcement."});
                 }
@@ -134,7 +134,7 @@ exports.editAnnouncement = async(req, res) => {
     })
 
     if(post){
-        res.send({success:true,message:"Announcement updated successfully!"});
+        res.send({success:true,message:"Announcement successfully Updated!"});
     }else{
         res.send({success:false,message:"Failed to update announcement."});
     }
@@ -170,7 +170,7 @@ exports.deleteAnnouncement = async(req, res) => {
                     }
                 })
                 if(announce !== 0){
-                    res.send({success:true,message:"Announcement has been deleted"});
+                    res.send({success:true,message:"Announcement successfully Deleted"});
                 }else{
                     res.send({success:false,message:"Failed to delete Announcement"});
                 }

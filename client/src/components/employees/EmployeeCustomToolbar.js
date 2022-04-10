@@ -17,7 +17,7 @@ const EmployeeCustomToolbar = ({data,selectedRows,displayData}) => {
     return (
         <div>
             <button onClick={()=>setOpenModal(true)} className="btn btn-primary "><i className="fa fa-info-circle" aria-hidden="true"></i></button>
-            <button onClick={()=>setDeleteModal(true)} className={(displayData[selectedRows.data[0].dataIndex].data[8] === "Active")?"btn btn-danger mx-2":"btn btn-success mx-2"}><i className={(displayData[selectedRows.data[0].dataIndex].data[8] === "Active")?"fa fa-eye-slash":"fa fa-eye"} aria-hidden="true"></i></button>
+            <button onClick={()=>setDeleteModal(true)} className={(displayData[selectedRows.data[0].dataIndex].data[8] === "Active")?"btn btn-danger mx-2":"btn btn-success mx-2"}><i className={(displayData[selectedRows.data[0].dataIndex].data[8] === "Active")?"fa fa-minus-circle":"fa fa-check"} aria-hidden="true"></i></button>
             <ViewEmployeeModal data={data} openModal={openModal} setOpenModal={setOpenModal} handleCloseModal={()=>setOpenModal(false)}/>
             {displayData[selectedRows.data[0].dataIndex].data[8] === "Active"?(
                 <DeleteEmployeeModal data={displayData[selectedRows.data[0].dataIndex].data} openDeleteModal={openDeleteModal} setDeleteModal={setDeleteModal}/>

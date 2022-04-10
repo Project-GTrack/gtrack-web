@@ -110,7 +110,7 @@ exports.deleteTruck = async(req, res) => {
         }
     })
     if (data) {
-        return res.send("Truck record successfully deleted");
+        return res.send("Truck Record successfully deleted");
     }else{
         return res.send("Something went wrong")
     }

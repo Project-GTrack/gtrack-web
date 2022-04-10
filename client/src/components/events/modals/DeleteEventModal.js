@@ -101,7 +101,7 @@ export default function DeleteEventModal(props) {
         id="customized-dialog-title"
         onClose={props.handleCloseDeleteModal}
       >
-        Are you sure to delete this record?
+        Delete this Event?
       </BootstrapDialogTitle>
       <DialogContent dividers>
         <Box sx={{ width: "100%" }}>
@@ -130,8 +130,7 @@ export default function DeleteEventModal(props) {
         </Box>
       </DialogContent>
       <DialogActions>
-      <button className='btn' onClick={props.handleCloseDeleteModal}>Close</button>
-      <button className='btn btn-danger' type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Deleting...</>:"Delete"}</button>
+      <button className='btn btn-danger' type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Deleting...</>:"Delete Event"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

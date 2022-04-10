@@ -31,7 +31,6 @@ const BootstrapDialogTitle = (props) => {
   return (
     <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
       {children}
-      {onClose ? (
         <IconButton
           aria-label="close"
           onClick={onClose}
@@ -44,7 +43,7 @@ const BootstrapDialogTitle = (props) => {
         >
           <CloseIcon />
         </IconButton>
-      ) : null}
+
     </DialogTitle>
   );
 };
@@ -81,14 +80,14 @@ export default function DisableTruckModal(props) {
   });
   return (
     <BootstrapDialog
-      onClose={()=>props.setOpenDeleteModal(false)}
+      onClick={()=>props.setOpenDeleteModal(false)}
       aria-labelledby="customized-dialog-title"
       open={props.openDeleteModal}
     >
       <BootstrapDialogTitle
         id="customized-dialog-title"
       >
-        Are you sure you want to disable this truck?
+        Disable this Truck?
       </BootstrapDialogTitle>
       <DialogContent dividers>
         <Box sx={{ width: "100%" }}>
@@ -116,8 +115,7 @@ export default function DisableTruckModal(props) {
         </Box>
       </DialogContent>
       <DialogActions>
-        <button className='btn' onClick={()=>props.setOpenDeleteModal(false)}>Close</button>
-        <button className='btn btn-danger' disabled={!isValid} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Disabling...</>:"Disable"}</button>
+        <button className='btn btn-danger' disabled={!isValid} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Disabling...</>:"Disable Truck"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

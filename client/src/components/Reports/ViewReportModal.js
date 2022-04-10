@@ -109,7 +109,7 @@ const ViewReportModal = (props) => {
             ) : (
               <></>
             )}
-          </Carousel>
+          </Map>
           <Typography variant="body2" mt={2} color="text.dark">
             <b>Subject:</b> {props.data.subject}
           </Typography>
@@ -176,11 +176,8 @@ const ViewReportModal = (props) => {
                 <></>
               )}
             </Map>
-          </div>
+          </div>\</div>
       </DialogContent>
-      <DialogActions>
-      <button className='btn' onClick={()=>props.setOpenViewModal(false)}>Close</button>
-      </DialogActions>
     </Dialog>
   );
 }

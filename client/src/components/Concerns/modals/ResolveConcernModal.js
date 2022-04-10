@@ -31,7 +31,7 @@ const BootstrapDialogTitle = (props) => {
   return (
     <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
       {children}
-      {onClose ? (
+
         <IconButton
           aria-label="close"
           onClick={onClose}
@@ -44,7 +44,7 @@ const BootstrapDialogTitle = (props) => {
         >
           <CloseIcon />
         </IconButton>
-      ) : null}
+
     </DialogTitle>
   );
 };
@@ -81,14 +81,14 @@ export default function ResolveConcernMOdal(props) {
   });
   return (
     <BootstrapDialog
-      onClose={()=>props.setOpenResolveModal(false)}
+      onClick={()=>props.setOpenResolveModal(false)}
       aria-labelledby="customized-dialog-title"
       open={props.openResolveModal}
     >
       <BootstrapDialogTitle
         id="customized-dialog-title"
       >
-        Do you wish to Resolve this Concern?
+       Resolve this Concern?
       </BootstrapDialogTitle>
       <DialogContent dividers>
         <Box sx={{ width: "100%" }}>
@@ -116,8 +116,7 @@ export default function ResolveConcernMOdal(props) {
         </Box>
       </DialogContent>
       <DialogActions>
-        <button className='btn' onClick={()=>props.setOpenResolveModal(false)}>Close</button>
-        <button className='btn btn-success' disabled={!isValid} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Resolving...</>:"Resolve"}</button>
+        <button className='btn btn-success' disabled={!isValid} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Resolving...</>:"Resolve Concern"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

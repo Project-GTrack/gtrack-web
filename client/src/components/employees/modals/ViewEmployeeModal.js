@@ -125,9 +125,6 @@ export default function ViewEmployeeModal(props) {
         </div>
       </DialogContent>
       <DialogActions>
-        <Button autoFocus onClick={props.handleCloseModal}>
-          Close
-        </Button>
       </DialogActions>
     </BootstrapDialog>
   );

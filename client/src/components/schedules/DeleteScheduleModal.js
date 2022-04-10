@@ -6,6 +6,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
+import PropTypes from "prop-types";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import TextField from '@mui/material/TextField';
@@ -31,7 +32,6 @@ const BootstrapDialogTitle = (props) => {
   return (
     <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
       {children}
-      {onClose ? (
         <IconButton
           aria-label="close"
           onClick={onClose}
@@ -44,9 +44,13 @@ const BootstrapDialogTitle = (props) => {
         >
           <CloseIcon />
         </IconButton>
-      ) : null}
     </DialogTitle>
   );
+};
+
+BootstrapDialogTitle.propTypes = {
+  children: PropTypes.node,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default function DeleteScheduleModal(props) {
@@ -80,14 +84,15 @@ export default function DeleteScheduleModal(props) {
   });
   return (
     <BootstrapDialog
-      onClose={()=>props.setOpenDeleteModal(false)}
+      onClick={()=>props.setOpenDeleteModal(false)}
       aria-labelledby="customized-dialog-title"
       open={props.openDeleteModal}
     >
       <BootstrapDialogTitle
         id="customized-dialog-title"
+        onClose={props.handleCloseDeleteModal}
       >
-        Are you sure you want to delete this schedule?
+        Delete this Schedule?
       </BootstrapDialogTitle>
       <DialogContent dividers>
         <Box sx={{ width: "100%" }}>
@@ -115,8 +120,7 @@ export default function DeleteScheduleModal(props) {
         </Box>
       </DialogContent>
       <DialogActions>
-        <button className='btn' onClick={()=>props.setOpenDeleteModal(false)}>Close</button>
-        <button className='btn btn-danger' disabled={!isValid} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Deleting...</>:"Delete"}</button>
+        <button className='btn btn-danger' disabled={!isValid} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Deleting...</>:"Delete Schedule"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

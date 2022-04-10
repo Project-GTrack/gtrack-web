@@ -45,7 +45,7 @@ exports.addDumpster = async (req,res) => {
                     longitude: dumps.longitude,
                     complete: dumps.complete,
                   });
-                res.send({success:true,message:"New dumpster is added"});
+                res.send({success:true,message:"Dumpster Location successfully Created!"});
             }else{
                 res.send({success:false,message:"No dumpster added",data:null});
             }
@@ -114,7 +114,7 @@ exports.editDumpster = async (req,res) => {
                     latitude:req.body.latitude,
                     longitude:req.body.longitude,
                   });
-                res.send({success:true,message:"Dumpster has been updated"});
+                res.send({success:true,message:"Dumpster Location successfully Updated"});
             }else{
                 res.send({success:false,message:"Dumpster already exist",data:null});
             }
@@ -139,7 +139,7 @@ exports.deleteDumpster = async (req,res) => {
                 })
                 if(dumps != 0){
                     database.ref("Dumpsters/" + req.params.id).remove();
-                    res.send({success:true,message:"Dumpster has been deleted"});
+                    res.send({success:true,message:"Dumpster Location successfully Deleted"});
                 }else{
                     res.send({success:false,message:"Cannot delete dumpster",data:null});
                 }

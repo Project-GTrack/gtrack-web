@@ -354,9 +354,9 @@ export default function AddNewEventModal(props) {
 </Box>
     </DialogContent>
     <DialogActions>
-    <Button type="submit" className='text-dark' disabled={!isValid} onClick={handleSubmit}>
-          {loading?<><CircularProgress size={20}/> Adding...</>:"Add"}
-        </Button>
+    <button type="submit" className='btn btn-success' disabled={!isValid} onClick={handleSubmit}>
+          {loading?<><CircularProgress size={20}/> Adding...</>:"Add Event"}
+        </button>
     </DialogActions>
   </BootstrapDialog>
   );

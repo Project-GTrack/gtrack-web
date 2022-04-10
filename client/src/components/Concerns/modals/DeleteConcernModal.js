@@ -31,7 +31,6 @@ const BootstrapDialogTitle = (props) => {
   return (
     <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
       {children}
-      {onClose ? (
         <IconButton
           aria-label="close"
           onClick={onClose}
@@ -44,7 +43,6 @@ const BootstrapDialogTitle = (props) => {
         >
           <CloseIcon />
         </IconButton>
-      ) : null}
     </DialogTitle>
   );
 };
@@ -81,14 +79,14 @@ export default function DeleteConcernModal(props) {
   });
   return (
     <BootstrapDialog
-      onClose={()=>props.setOpenDeleteModal(false)}
+      onClick={()=>props.setOpenDeleteModal(false)}
       aria-labelledby="customized-dialog-title"
       open={props.openDeleteModal}
     >
       <BootstrapDialogTitle
         id="customized-dialog-title"
       >
-        Do you wish to Delete this Concern?
+        Delete this Concern?
       </BootstrapDialogTitle>
       <DialogContent dividers>
         <Box sx={{ width: "100%" }}>
@@ -116,8 +114,8 @@ export default function DeleteConcernModal(props) {
         </Box>
       </DialogContent>
       <DialogActions>
-        <button className='btn' onClick={()=>props.setOpenDeleteModal(false)}>Close</button>
-        <button className='btn btn-danger' disabled={!isValid} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Deleting...</>:"Delete"}</button>
+
+        <button className='btn btn-danger' disabled={!isValid} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Deleting...</>:"Delete Concern"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

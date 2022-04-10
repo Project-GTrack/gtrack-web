@@ -99,7 +99,7 @@ const DeleteDumpsterModal = (props) => {
         id="customized-dialog-title"
         onClose={props.handleCloseDeleteModal}
       >
-        Delete this Dumpster Record?
+        Delete this Dumpster Location?
       </BootstrapDialogTitle>
       <DialogContent dividers>
         <Box sx={{ width: "100%" }}>
@@ -132,10 +132,7 @@ const DeleteDumpsterModal = (props) => {
         </Box>
       </DialogContent>
       <DialogActions>
-        <button className="btn" onClick={props.handleCloseDeleteModal}>
-          Close
-        </button>
-        <button className='btn btn-danger' type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Deleting...</>:"Delete"}</button>
+        <button className='btn btn-danger' type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Deleting...</>:"Delete Dumpster"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

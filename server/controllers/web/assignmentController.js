@@ -23,7 +23,7 @@ exports.addAssignment = async (req,res) => {
                 res.send({success:false,message:"Truck assignment already exist",data:null});
             }else{
                 let assigned = await assignment.model.create(req.body);
-                res.send({success:true,message:"New truck assignment is added"});
+                res.send({success:true,message:"Truck Assignment successfully Created"});
             }
             
         })
@@ -55,7 +55,7 @@ exports.editAssignment = async (req,res) => {
                             }]
                         }
                     })
-                    res.send({success:true,message:"Truck assignment has been updated"});
+                    res.send({success:true,message:"Truck Assignment successfully Updated"});
                 }else{
                     res.send({success:false,message:"Truck assignment already exist",data:null});
                 }
@@ -76,7 +76,7 @@ exports.deleteAssignment = async (req,res) => {
                         assignment_id:req.params.id
                     }
                 })
-                res.send({success:true,message:"Truck assignment has been deleted"});
+                res.send({success:true,message:"Truck assignment successfully Deleted"});
             }else{
                 res.send({success:false,message:"Password did not match",data:null});
             }

@@ -467,9 +467,9 @@ const AddScheduleModal = (props) => {
       </Box>
     </DialogContent>
     <DialogActions>
-      <Button type="submit" className='text-dark' disabled={!isValid} onClick={handleSubmit}>
+      <button type="submit" className='btn btn-success' disabled={!isValid} onClick={handleSubmit}>
       {loading?<><CircularProgress size={20}/> Adding...</>:"Add Schedule"}
-      </Button>
+      </button>
     </DialogActions>
   </BootstrapDialog>
   );

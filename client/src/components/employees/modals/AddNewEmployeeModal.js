@@ -308,9 +308,9 @@ export default function AddNewEmployeeModal(props) {
       </Box>
     </DialogContent>
     <DialogActions>
-      <Button type="submit"  className='text-dark' disabled={!isValid} onClick={handleSubmit}>
+      <button type="submit"  className='btn btn-success' disabled={!isValid} onClick={handleSubmit}>
       {loading?<><CircularProgress size={20}/> Adding...</>:"Add Employee"}
-      </Button>
+      </button>
     </DialogActions>
   </BootstrapDialog>
   );

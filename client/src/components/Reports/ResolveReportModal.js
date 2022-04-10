@@ -31,7 +31,6 @@ const BootstrapDialogTitle = (props) => {
   return (
     <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
       {children}
-      {onClose ? (
         <IconButton
           aria-label="close"
           onClick={onClose}
@@ -44,7 +43,6 @@ const BootstrapDialogTitle = (props) => {
         >
           <CloseIcon />
         </IconButton>
-      ) : null}
     </DialogTitle>
   );
 };
@@ -81,7 +79,7 @@ export default function ResolveReportModal(props) {
   });
   return (
     <BootstrapDialog
-      onClose={()=>props.setOpenResolveModal(false)}
+      onClick={()=>props.setOpenResolveModal(false)}
       aria-labelledby="customized-dialog-title"
       open={props.openResolveModal}
     >
@@ -116,8 +114,7 @@ export default function ResolveReportModal(props) {
         </Box>
       </DialogContent>
       <DialogActions>
-        <button className='btn' onClick={()=>props.setOpenResolveModal(false)}>Close</button>
-        <button className='btn btn-success' disabled={!isValid} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Resolving...</>:"Resolve"}</button>
+        <button className='btn btn-success' disabled={!isValid} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Resolving...</>:"Resolve Report"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

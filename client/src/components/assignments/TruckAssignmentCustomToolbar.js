@@ -18,7 +18,7 @@ const TruckAssignmentCustomToolbar = ({selectedRows,displayData}) => {
     
     return (
           <div>
-              <button onClick={handleOpenEditModal} className="btn btn-warning "><i className="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+              <button onClick={handleOpenEditModal} className="btn btn-warning "><i className="fa fa-pencil" aria-hidden="true"></i></button>
               <button onClick={handleOpenDeleteModal} className="btn btn-danger mx-2"><i className="fa fa-trash" aria-hidden="true"></i></button>
               <EditAssignment data={displayData[selectedRows.data[0].dataIndex].data} openModal={openEditModal} setOpenModal={setEditModal} handleCloseModal={handleCloseEditModal}/>
               <DeleteAssignment data={displayData[selectedRows.data[0].dataIndex].data} openDeleteModal={openDeleteModal} setDeleteModal={setDeleteModal} handleCloseDeleteModal={handleCloseDeleteModal}/>

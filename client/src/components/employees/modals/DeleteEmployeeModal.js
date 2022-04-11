@@ -117,7 +117,7 @@ export default function DeleteEmployeeModal(props) {
       </DialogContent>
       <DialogActions>
         <button className='btn' onClick={()=>props.setDeleteModal(false)}>Close</button>
-        <button className='btn btn-danger' disabled={!isValid} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Deactivating...</>:"Deactivate"}</button>
+        <button className='btn btn-danger' disabled={!isValid||loading} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Deactivating...</>:"Deactivate"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

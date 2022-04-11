@@ -117,7 +117,7 @@ export default function ResolveReportModal(props) {
       </DialogContent>
       <DialogActions>
         <button className='btn' onClick={()=>props.setOpenResolveModal(false)}>Close</button>
-        <button className='btn btn-success' disabled={!isValid} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Resolving...</>:"Resolve"}</button>
+        <button className='btn btn-success' disabled={!isValid||loading} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Resolving...</>:"Resolve"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

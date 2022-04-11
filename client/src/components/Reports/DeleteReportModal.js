@@ -117,7 +117,7 @@ export default function DeleteReportModal(props) {
       </DialogContent>
       <DialogActions>
         <button className='btn' onClick={()=>props.setOpenDeleteModal(false)}>Close</button>
-        <button className='btn btn-danger' disabled={!isValid} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Deleting...</>:"Delete"}</button>
+        <button className='btn btn-danger' disabled={!isValid||loading} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Deleting...</>:"Delete"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

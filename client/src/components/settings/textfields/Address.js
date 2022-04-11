@@ -106,7 +106,7 @@ const Address = (props) => {
                 <p className="text-danger small ">{errors.barangay}</p>
                 } 
             </Stack>
-            <Button variant="text" color="success" sx={{mt:2}} disabled={!isValid} onClick={handleSubmit}>
+            <Button variant="text" color="success" sx={{mt:2}} disabled={!isValid||loading} onClick={handleSubmit}>
             {loading?<><CircularProgress size={20}/> Saving...</>:"Save"}
           </Button>
         </Box>

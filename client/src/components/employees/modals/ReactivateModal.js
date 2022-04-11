@@ -119,7 +119,7 @@ export default function ReactivateModal(props) {
       </DialogContent>
       <DialogActions>
         <button className='btn' onClick={()=>props.setDeleteModal(false)}>Close</button>
-        <button className='btn btn-success' type="submit" disabled={!isValid} onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Activating...</>:"Activate"}</button>
+        <button className='btn btn-success' type="submit" disabled={!isValid||loading} onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Activating...</>:"Activate"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

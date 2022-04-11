@@ -135,7 +135,7 @@ const DeleteDumpsterModal = (props) => {
         <button className="btn" onClick={props.handleCloseDeleteModal}>
           Close
         </button>
-        <button className='btn btn-danger' type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Deleting...</>:"Delete"}</button>
+        <button className='btn btn-danger' disabled={loading} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Deleting...</>:"Delete"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

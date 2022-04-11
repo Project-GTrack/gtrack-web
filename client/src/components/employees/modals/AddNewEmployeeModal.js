@@ -253,7 +253,7 @@ export default function AddNewEmployeeModal(props) {
         onChange={handleChange('contact')}
         onBlur={handleBlur('contact')}
         margin="dense"
-        label="Contact"
+        label="Contact Number"
         type="text"
         fullWidth
         variant="standard"

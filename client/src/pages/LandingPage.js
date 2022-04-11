@@ -57,7 +57,7 @@ const LandingPage = () => {
                 <div className='col my-auto'>
                     <h1 className='text-white'><strong>Download the app here <i className="fa fa-download" aria-hidden="true"></i></strong></h1>
                     <h5 className='text-white'>Available on Android devices for now.</h5>
-                    <button className='btn btn-lg  btn-outline-light rounded-pill mt-3'> <i className="fa fa-android" aria-hidden="true"></i>&nbsp;Get Now</button>
+                    <a href="https://play.google.com/store/apps/details?id=com.gtrack.mobile" type="button" className='btn btn-lg  btn-outline-light rounded-pill mt-3'> <i className="fa fa-android" aria-hidden="true"></i>&nbsp;Get Now</a>
                 </div>
             </div>
           </div>

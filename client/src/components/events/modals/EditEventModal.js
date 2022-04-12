@@ -1,4 +1,4 @@
-import React,{useState, useEffect} from 'react';
+import React,{useState} from 'react';
 import Grid from "@mui/material/Grid";
 import { styled } from '@mui/material/styles';
 import Box from "@mui/material/Box";
@@ -6,7 +6,6 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from "@mui/material/MenuItem";
 import Select from '@mui/material/Select';
-import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -204,7 +203,6 @@ export default function EditEventModal(props) {
             label="Event Name"
             type="text"
             fullWidth
-            variant="standard"
         />
          {(errors.event_name && touched.event_name) &&
                 <p className="text-danger small ">{errors.event_name}</p>
@@ -267,7 +265,6 @@ export default function EditEventModal(props) {
             label="Event Address - Street"
             type="text"
             fullWidth
-            variant="standard"
         />
           {(errors.street && touched.street) &&
                 <p className="text-danger small ">{errors.street}</p>
@@ -282,7 +279,6 @@ export default function EditEventModal(props) {
             label="Event Address - Purok"
             type="text"
             fullWidth
-            variant="standard"
         />
           {(errors.purok && touched.purok) &&
                 <p className="text-danger small ">{errors.purok}</p>
@@ -297,7 +293,6 @@ export default function EditEventModal(props) {
             label="Event Address - Barangay"
             type="text"
             fullWidth
-            variant="standard"
         />
           {(errors.barangay && touched.barangay) &&
                 <p className="text-danger small ">{errors.barangay}</p>
@@ -312,7 +307,6 @@ export default function EditEventModal(props) {
             label="Event Address - Town"
             type="text"
             fullWidth
-            variant="standard"
         />
           {(errors.town && touched.town) &&
                 <p className="text-danger small ">{errors.town}</p>
@@ -326,7 +320,6 @@ export default function EditEventModal(props) {
             label="Event Address - Postal Code"
             type="text"
             fullWidth
-            variant="standard"
         />
           {(errors.postal_code && touched.postal_code) &&
                 <p className="text-danger small ">{errors.postal_code}</p>
@@ -340,7 +333,6 @@ export default function EditEventModal(props) {
             label="Participants"
             type="text"
             fullWidth
-            variant="standard"
         />
           {(errors.target_participants && touched.target_participants) &&
                 <p className="text-danger small ">{errors.target_participants}</p>
@@ -354,7 +346,6 @@ export default function EditEventModal(props) {
             label="Registration Form Link"
             type="text"
             fullWidth
-            variant="standard"
         />
           {(errors.registration_form_url && touched.registration_form_url) &&
                 <p className="text-danger small ">{errors.registration_form_url}</p>
@@ -382,9 +373,9 @@ export default function EditEventModal(props) {
     </Box>
     </DialogContent>
     <DialogActions>
-    <Button type="submit" className='text-dark' disabled={!isValid||loading} onClick={handleSubmit}>
-        {loading?<><CircularProgress size={20}/> Updating...</>:"Update"}
-      </Button>
+      <button type="submit" className='btn btn-success' disabled={!isValid||loading} onClick={handleSubmit}>
+        {loading?<><CircularProgress size={20}/> Updating...</>:"Update Event"}
+      </button>
     </DialogActions>
   </BootstrapDialog>
   );

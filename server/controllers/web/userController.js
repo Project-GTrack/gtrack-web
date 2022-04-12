@@ -188,9 +188,9 @@ exports.register = async(req, res)=>{
         //         status:false
         //     }
         // })
-        res.send({success:true,message:"Successfully added new employee"});
+        res.send({success:true,message:"Employee successfully Created"});
     }else{
-        res.send({success:false,message:"Account already existed.",data:null});
+        res.send({success:false,message:"Account already exists",data:null});
     }   
         
 }

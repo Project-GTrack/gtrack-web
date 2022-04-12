@@ -56,7 +56,7 @@ exports.createEvent = async(req, res) => {
                     status: "Ongoing"
                 })
                 if(post){
-                    res.send({success:true,message:"Event created successfully!"});
+                    res.send({success:true,message:"Event successfully Created!"});
                 }else{
                     res.send({success:false,message:"Failed to create event."});
                 }
@@ -119,7 +119,7 @@ exports.editEvent = async(req, res) => {
         }]
     })
     if(result){
-        res.send({success:true,message:"Event updated successfully!",data:events});
+        res.send({success:true,message:"Event successfully Updated!",data:events});
     }else{
         res.send({success:false,message:"Failed to update event.",data:null});
     }
@@ -152,7 +152,7 @@ exports.deleteEvent = async(req, res) => {
                     }
                 })
                 if(post !== 0){
-                    res.send({success:true,message:"Event has been deleted"});
+                    res.send({success:true,message:"Event successfully Deleted"});
                 }else{
                     res.send({success:false,message:"failed to delete Event"});
                 }

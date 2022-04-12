@@ -23,9 +23,9 @@ const DumpsterCustomToolbar = ({selectedRows,displayData}) => {
     
     return (
           <div>
-              <button onClick={handleOpenModal} className="btn btn-primary mx-1"><i className="fa fa-info-circle" aria-hidden="true"></i></button>
-              <button onClick={handleOpenEditModal} className="btn btn-warning mx-1 "><i className="fa fa-pencil-square-o" aria-hidden="true"></i></button>
-              <button onClick={handleDeleteModal} className="btn btn-danger mx-1"><i className="fa fa-trash" aria-hidden="true"></i></button>
+              <button onClick={handleOpenModal} className="btn btn-primary mx-2"><i className="fa fa-info-circle" aria-hidden="true"></i></button>
+              <button onClick={handleOpenEditModal} className="btn btn-warning "><i className="fa fa-pencil" aria-hidden="true"></i></button>
+              <button onClick={handleDeleteModal} className="btn btn-danger mx-2"><i className="fa fa-trash" aria-hidden="true"></i></button>
               <ViewDumpsterModal data={displayData[selectedRows.data[0].dataIndex].data} openModal={openModal} setOpenModal={setOpenModal} handleCloseModal={handleCloseModal}/>
               <EditDumpsterModal data={displayData[selectedRows.data[0].dataIndex].data} openModal={openEditModal} setOpenModal={setEditModal} handleCloseModal={handleCloseEditModal}/>
               <DeleteDumpsterModal data={displayData[selectedRows.data[0].dataIndex].data} openDeleteModal={openDeleteModal} setDeleteModal={setDeleteModal} handleCloseDeleteModal={handleCloseDeleteModal}/>

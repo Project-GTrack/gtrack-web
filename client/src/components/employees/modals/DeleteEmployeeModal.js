@@ -31,7 +31,7 @@ const BootstrapDialogTitle = (props) => {
   return (
     <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
       {children}
-      {onClose ? (
+
         <IconButton
           aria-label="close"
           onClick={onClose}
@@ -44,7 +44,7 @@ const BootstrapDialogTitle = (props) => {
         >
           <CloseIcon />
         </IconButton>
-      ) : null}
+
     </DialogTitle>
   );
 };
@@ -81,14 +81,14 @@ export default function DeleteEmployeeModal(props) {
   });
   return (
     <BootstrapDialog
-      onClose={()=>props.setDeleteModal(false)}
+      onClick={()=>props.setDeleteModal(false)}
       aria-labelledby="customized-dialog-title"
       open={props.openDeleteModal}
     >
       <BootstrapDialogTitle
         id="customized-dialog-title"
       >
-        Are you sure you want to Deactivate this Employee Record?
+        Deactivate this Employee?
       </BootstrapDialogTitle>
       <DialogContent dividers>
         <Box sx={{ width: "100%" }}>
@@ -116,7 +116,6 @@ export default function DeleteEmployeeModal(props) {
         </Box>
       </DialogContent>
       <DialogActions>
-        <button className='btn' onClick={()=>props.setDeleteModal(false)}>Close</button>
         <button className='btn btn-danger' disabled={!isValid||loading} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Deactivating...</>:"Deactivate"}</button>
       </DialogActions>
     </BootstrapDialog>

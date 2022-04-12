@@ -159,7 +159,7 @@ exports.addSchedule=async (req,res)=>{
                 {model:user.model, as:"scheduleDriver"},
             ]
         })
-        res.send({success:true,message:"New schedule is added",data:sched});
+        res.send({success:true,message:"Schedule successfully Created",data:sched});
     }else{
         res.send({success:false,message:"Cannot add new schedule",data:null});
     }
@@ -187,7 +187,7 @@ exports.updateSchedule=async (req,res)=>{
         }
     });
     if(sched){
-        res.send({success:true,message:"Schedule successfully updated"});
+        res.send({success:true,message:"Schedule successfully Updated"});
     }else{
         res.send({success:false,message:"Cannot update schedule",data:null});
     }
@@ -205,7 +205,7 @@ exports.deleteSchedule=async (req,res)=>{
                 }
             });
             if(sched){
-                res.send({success:true,message:"Schedule successfully deleted."});
+                res.send({success:true,message:"Schedule successfully Deleted."});
             }else{
                 res.send({success:false,message:"Cannot delete schedule",data:null});
             }

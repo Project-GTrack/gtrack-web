@@ -32,7 +32,7 @@ const BootstrapDialogTitle = (props) => {
   return (
     <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
       {children}
-      {onClose ? (
+
         <IconButton
           aria-label="close"
           onClick={onClose}
@@ -45,7 +45,7 @@ const BootstrapDialogTitle = (props) => {
         >
           <CloseIcon />
         </IconButton>
-      ) : null}
+
     </DialogTitle>
   );
 };
@@ -83,14 +83,14 @@ export default function ReactivateModal(props) {
   });
   return (
     <BootstrapDialog
-      onClose={()=>props.setDeleteModal(false)}
+      onClick={()=>props.setDeleteModal(false)}
       aria-labelledby="customized-dialog-title"
       open={props.openDeleteModal}
     >
       <BootstrapDialogTitle
         id="customized-dialog-title"
       >
-        Are you sure you want to Reactivate this Employee Record?
+        Reactivate this Employee?
       </BootstrapDialogTitle>
       <DialogContent dividers>
         <Box sx={{ width: "100%" }}>
@@ -118,7 +118,6 @@ export default function ReactivateModal(props) {
         </Box>
       </DialogContent>
       <DialogActions>
-        <button className='btn' onClick={()=>props.setDeleteModal(false)}>Close</button>
         <button className='btn btn-success' type="submit" disabled={!isValid||loading} onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Activating...</>:"Activate"}</button>
       </DialogActions>
     </BootstrapDialog>

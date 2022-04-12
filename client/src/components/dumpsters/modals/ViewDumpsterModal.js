@@ -127,11 +127,6 @@ const ViewDumpsterModal = (props) => {
           </Map>
           </div>
       </DialogContent>
-      <DialogActions>
-        <Button autoFocus onClick={props.handleCloseModal}>
-          Close
-        </Button>
-      </DialogActions>
     </Dialog>
   );
 }

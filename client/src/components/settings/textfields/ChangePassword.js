@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { TextField, FormControl, Avatar,Button,Input,Stack,Box} from "@mui/material";
+import { TextField,Box} from "@mui/material";
 import * as yup from 'yup'
 import Axios from 'axios';
 import { useFormik } from 'formik';
@@ -113,9 +113,9 @@ const ChangePassword = (props) => {
                 }
                 </Grid>
             </Grid>
-            <Button variant="text" color="success" sx={{mt:2}} disabled={!isValid||loading} onClick={handleSubmit}>
-            {loading?<><CircularProgress size={20}/> Saving...</>:"Save"}
-          </Button>
+            <button className='btn btn-success mt-2' type="submit"  disabled={!isValid||loading} onClick={handleSubmit}>
+              {loading?<><CircularProgress size={20}/> Saving...</>:"Save"}
+            </button>
         </Box>
     );
 }

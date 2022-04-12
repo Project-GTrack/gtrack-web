@@ -193,7 +193,6 @@ const EditDumpsterModal = (props) => {
             onChange={handleChange("street")}
             onBlur={handleBlur("street")}
             inputProps={{ style: { textTransform: "capitalize" } }}
-            variant="standard"
           />
           {errors.street && touched.street && (
             <p className="text-danger small ">{errors.street}</p>
@@ -209,7 +208,6 @@ const EditDumpsterModal = (props) => {
             onChange={handleChange("purok")}
             onBlur={handleBlur("purok")}
             inputProps={{ style: { textTransform: "capitalize" } }}
-            variant="standard"
           />
           {errors.purok && touched.purok && (
             <p className="text-danger small ">{errors.purok}</p>
@@ -225,7 +223,6 @@ const EditDumpsterModal = (props) => {
             onChange={handleChange("barangay")}
             onBlur={handleBlur("barangay")}
             inputProps={{ style: { textTransform: "capitalize" } }}
-            variant="standard"
           />
           {errors.barangay && touched.barangay && (
             <p className="text-danger small ">{errors.barangay}</p>

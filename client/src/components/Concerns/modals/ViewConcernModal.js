@@ -109,7 +109,6 @@ const ViewReportModal = (props) => {
       </Box>
       </DialogContent>
       <DialogActions>
-      <button className='btn' onClick={()=>props.setOpenViewModal(false)}>Close</button>
       </DialogActions>
     </Dialog>
   );

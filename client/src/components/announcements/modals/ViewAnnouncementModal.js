@@ -100,9 +100,7 @@ export default function ViewAnnouncementModal(props) {
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button autoFocus onClick={props.handleCloseModal}>
-          Close
-        </Button>
+
       </DialogActions>
     </BootstrapDialog>
   );

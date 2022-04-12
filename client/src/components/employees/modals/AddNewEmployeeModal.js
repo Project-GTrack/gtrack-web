@@ -5,7 +5,6 @@ import Box from "@mui/material/Box";
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
-import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -161,7 +160,6 @@ export default function AddNewEmployeeModal(props) {
         type="text"
         inputProps={{ style: { textTransform: "capitalize" } }}
         fullWidth
-        variant="standard"
       />
       {(errors.fname && touched.fname) &&
         <p className="text-danger small ">{errors.fname}</p>
@@ -177,7 +175,6 @@ export default function AddNewEmployeeModal(props) {
         label="Last Name"
         type="text"
         fullWidth
-        variant="standard"
       />
       {(errors.lname && touched.lname) &&
         <p className="text-danger small ">{errors.lname}</p>
@@ -195,7 +192,6 @@ export default function AddNewEmployeeModal(props) {
           label="Purok"
           type="text"
           fullWidth
-          variant="standard"
         />
         {(errors.purok && touched.purok) &&
           <p className="text-danger small ">{errors.purok}</p>
@@ -211,7 +207,6 @@ export default function AddNewEmployeeModal(props) {
           label="Street"
           type="text"
           fullWidth
-          variant="standard"
         />
         {(errors.street && touched.street) &&
           <p className="text-danger small ">{errors.street}</p>
@@ -227,7 +222,6 @@ export default function AddNewEmployeeModal(props) {
           label="Barangay"
           type="text"
           fullWidth
-          variant="standard"
         />
         {(errors.barangay && touched.barangay) &&
           <p className="text-danger small ">{errors.barangay}</p>
@@ -243,7 +237,6 @@ export default function AddNewEmployeeModal(props) {
         label="Email Address"
         type="email"
         fullWidth
-        variant="standard"
       />
       {(errors.email && touched.email) &&
         <p className="text-danger small ">{errors.email}</p>
@@ -256,7 +249,6 @@ export default function AddNewEmployeeModal(props) {
         label="Contact Number"
         type="text"
         fullWidth
-        variant="standard"
       />
       {(errors.contact && touched.contact) &&
         <p className="text-danger small ">{errors.contact}</p>
@@ -308,9 +300,9 @@ export default function AddNewEmployeeModal(props) {
       </Box>
     </DialogContent>
     <DialogActions>
-      <Button type="submit"  className='text-dark' disabled={!isValid||loading} onClick={handleSubmit}>
+      <button type="submit"  className='btn btn-success' disabled={!isValid||loading} onClick={handleSubmit}>
       {loading?<><CircularProgress size={20}/> Adding...</>:"Add Employee"}
-      </Button>
+      </button>
     </DialogActions>
   </BootstrapDialog>
   );

@@ -2,7 +2,6 @@ import React, {useState,useEffect} from 'react';
 import Grid from "@mui/material/Grid";
 import { styled } from '@mui/material/styles';
 import Box from "@mui/material/Box";
-import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -176,9 +175,9 @@ export default function EditAnnouncementModal(props) {
       </Box>
     </DialogContent>
     <DialogActions>
-      <Button type="submit" className='text-dark' disabled={!isValid||loading} onClick={handleSubmit}>
-        {loading?<><CircularProgress size={20}/> Updating...</>:"Update"}
-      </Button>
+      <button type="submit" className='btn btn-success' disabled={!isValid||loading} onClick={handleSubmit}>
+        {loading?<><CircularProgress size={20}/> Updating...</>:"Update Announcement"}
+      </button>
     </DialogActions>
   </BootstrapDialog>
   );

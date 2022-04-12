@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { TextField, Button,Stack,Box} from "@mui/material";
+import { TextField, Stack,Box} from "@mui/material";
 import * as yup from 'yup'
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
@@ -106,9 +106,9 @@ const Address = (props) => {
                 <p className="text-danger small ">{errors.barangay}</p>
                 } 
             </Stack>
-            <Button variant="text" color="success" sx={{mt:2}} disabled={!isValid||loading} onClick={handleSubmit}>
-            {loading?<><CircularProgress size={20}/> Saving...</>:"Save"}
-          </Button>
+            <button className='btn btn-success mt-2' type="submit" disabled={!isValid||loading} onClick={handleSubmit}>
+              {loading?<><CircularProgress size={20}/> Saving...</>:"Save"}
+            </button>
         </Box>
     );
 }

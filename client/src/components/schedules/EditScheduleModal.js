@@ -5,7 +5,6 @@ import Box from "@mui/material/Box";
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
-import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -481,9 +480,9 @@ const EditScheduleModal = (props) => {
       </Box>
     </DialogContent>
     <DialogActions>
-      <Button type="submit" className='text-dark' disabled={!isValid||loading} onClick={handleSubmit}>
+      <button type="submit" className='btn btn-success' disabled={!isValid||loading} onClick={handleSubmit}>
         {loading?<><CircularProgress size={20}/> Updating...</>:"Update Schedule"}
-      </Button>
+      </button>
     </DialogActions>
   </BootstrapDialog>
   );

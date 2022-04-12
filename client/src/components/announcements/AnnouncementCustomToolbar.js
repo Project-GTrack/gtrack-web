@@ -31,9 +31,9 @@ const AnnouncementCustomToolbar = ({selectedRows,displayData}) => {
     const handleCloseEditModal = () => setEditModal(false);
     return (
           <div>
-              <button onClick={handleOpenModal} className="btn btn-success mx-1 "><i className="fa fa-eye" aria-hidden="true"></i></button>
-              <button onClick={handleOpenEditModal} className="btn btn-warning mx-1 "><i className="fa fa-pencil-square-o" aria-hidden="true"></i></button>
-              <button onClick={handleDeleteModal} className="btn btn-danger mx-1"><i className="fa fa-trash" aria-hidden="true"></i></button>
+              <button onClick={handleOpenModal} className="btn btn-primary mx-2 "><i className="fa fa-info-circle" aria-hidden="true"></i></button>
+              <button onClick={handleOpenEditModal} className="btn btn-warning "><i className="fa fa-pencil" aria-hidden="true"></i></button>
+              <button onClick={handleDeleteModal} className="btn btn-danger mx-2"><i className="fa fa-trash" aria-hidden="true"></i></button>
               <ViewAnnouncementModal data={displayData[selectedRows.data[0].dataIndex].data}  openModal={openModal} setOpenModal={setOpenModal} handleCloseModal={handleCloseModal}/>
               <EditAnnouncementModal data={displayData[selectedRows.data[0].dataIndex].data} openModal={openEditModal} setOpenModal={setEditModal} handleCloseModal={handleCloseEditModal}/>
               <DeleteAnnouncementModal data={displayData[selectedRows.data[0].dataIndex].data} openDeleteModal={openDeleteModal} setDeleteModal={setDeleteModal} handleCloseDeleteModal={handleCloseDeleteModal}/>

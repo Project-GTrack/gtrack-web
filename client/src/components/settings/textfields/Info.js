@@ -1,18 +1,10 @@
 import React, {useState} from "react";
-import { TextField, Grid,Button,Stack,Box} from "@mui/material";
+import { TextField, Grid,Stack,Box} from "@mui/material";
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import PropTypes from 'prop-types';
-import CloseIcon from '@mui/icons-material/Close';
-import IconButton from "@mui/material/IconButton";
 import MenuItem from "@mui/material/MenuItem";
-import * as yup from 'yup'
-import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
+import * as yup from 'yup';
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import Axios from 'axios';
@@ -143,9 +135,9 @@ const Info = (props) => {
                 
                
             </Stack>
-            <Button variant="text" color="success" sx={{mt:2}} disabled={!isValid||loading} onClick={handleSubmit}>
-            {loading?<><CircularProgress size={20}/> Saving...</>:"Save"}
-          </Button>
+            <button className='btn btn-success mt-2' type="submit"  disabled={!isValid||loading} onClick={handleSubmit}>
+              {loading?<><CircularProgress size={20}/> Saving...</>:"Save"}
+            </button>
         </Box>
     );
 }

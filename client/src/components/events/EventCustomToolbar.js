@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-has-content */
-import React from "react";
+import React, { useEffect } from "react";
 import ViewEventModal from "./modals/ViewEventModal";
 import EditEventModal from "./modals/EditEventModal";
 import DeleteEventModal from "./modals/DeleteEventModal";
@@ -21,6 +21,14 @@ const EventCustomToolbar = ({selectedRows,displayData}) => {
       }
     const handleCloseDeleteModal = () => setDeleteModal(false);
     const handleCloseEditModal = () => setEditModal(false);
+    useEffect(() => {
+      return () => {
+        setOpenModal(false);
+        setEditModal(false);
+        setDeleteModal(false);
+      }
+    }, [])
+    
     return (
           <div>
               <button onClick={handleOpenModal} className="btn btn-primary mx-2 "><i className="fa fa-info-circle" aria-hidden="true"></i></button>

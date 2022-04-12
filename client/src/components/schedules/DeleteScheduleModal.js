@@ -90,7 +90,7 @@ export default function DeleteScheduleModal(props) {
     >
       <BootstrapDialogTitle
         id="customized-dialog-title"
-        onClose={props.handleCloseDeleteModal}
+        onClose={()=>props.setOpenDeleteModal(false)}
       >
         Delete this Schedule?
       </BootstrapDialogTitle>

@@ -116,7 +116,7 @@ export default function ResolveConcernMOdal(props) {
         </Box>
       </DialogContent>
       <DialogActions>
-        <button className='btn btn-success' disabled={!isValid} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Resolving...</>:"Resolve Concern"}</button>
+        <button className='btn btn-success' disabled={!isValid||loading} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Resolving...</>:"Resolve"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

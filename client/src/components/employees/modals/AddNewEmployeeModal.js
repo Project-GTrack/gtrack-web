@@ -253,7 +253,7 @@ export default function AddNewEmployeeModal(props) {
         onChange={handleChange('contact')}
         onBlur={handleBlur('contact')}
         margin="dense"
-        label="Contact"
+        label="Contact Number"
         type="text"
         fullWidth
         variant="standard"
@@ -308,7 +308,7 @@ export default function AddNewEmployeeModal(props) {
       </Box>
     </DialogContent>
     <DialogActions>
-      <button type="submit"  className='btn btn-success' disabled={!isValid} onClick={handleSubmit}>
+      <button type="submit"  className='btn btn-success' disabled={!isValid||loading} onClick={handleSubmit}>
       {loading?<><CircularProgress size={20}/> Adding...</>:"Add Employee"}
       </button>
     </DialogActions>

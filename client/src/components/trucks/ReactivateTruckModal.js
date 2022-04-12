@@ -114,7 +114,7 @@ export default function ReactivateTruckModal(props) {
         </Box>
       </DialogContent>
       <DialogActions>
-        <button className='btn btn-success' disabled={!isValid} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Enabling...</>:"Reactivate Truck"}</button>
+        <button className='btn btn-success' disabled={!isValid||loading} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Enabling...</>:"Enable"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

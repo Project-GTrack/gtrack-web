@@ -165,7 +165,7 @@ const EditAssignment = (props) => {
         </Box>
       </DialogContent>
       <DialogActions>
-      <button className='btn btn-success' type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Updating...</>:"Update Truck Assignment"}</button>
+      <button className='btn btn-success' disabled={loading} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Updating...</>:"Update"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

@@ -115,7 +115,7 @@ export default function DisableTruckModal(props) {
         </Box>
       </DialogContent>
       <DialogActions>
-        <button className='btn btn-danger' disabled={!isValid} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Disabling...</>:"Disable Truck"}</button>
+        <button className='btn btn-danger' disabled={!isValid||loading} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Disabling...</>:"Disable"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

@@ -226,7 +226,7 @@ const AddNewDumpsterModal = (props) => {
         </Box>
       </DialogContent>
       <DialogActions>
-        <button className='btn btn-success' type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Adding...</>:"Add Dumpster Location"}</button>
+        <button className='btn btn-success' disabled={loading} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Adding...</>:"Add"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

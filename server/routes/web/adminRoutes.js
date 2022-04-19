@@ -17,6 +17,7 @@ router.post('/register',userController.register);
 router.post('/reset_password',userController.resetPassword);
 router.post('/verify_email',userController.verifyEmail);
 router.post('/forgot_password',userController.forgotPassword);
+router.post('/reset_email',userController.resetEmail);
 // router.post('/deleteUser/:id',userController.deleteUser);
 // router.post('/updateUser/:id',userController.updateUser);
 

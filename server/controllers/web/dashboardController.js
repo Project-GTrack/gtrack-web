@@ -83,15 +83,12 @@ exports.viewDashboard= async(req, res)=>{
             });
          
             let chartDataCount = await sequelize.query("SELECT SUM(collection_weight_volume) AS weight,"+ 
-            "CONCAT"+
-            "("+
-              "STR_TO_DATE(CONCAT(YEARWEEK(collection_date, 2), ' Sunday'), '%X%V %W'),"+
-              "'&',"+
-              "STR_TO_DATE(CONCAT(YEARWEEK(collection_date, 2), ' Sunday'), '%X%V %W') + INTERVAL 6 DAY"+
-            ") AS week "+
+            "CONCAT(STR_TO_DATE(CONCAT(YEARWEEK(collection_date, 2), ' Sunday'), '%X%V %W'),'&',STR_TO_DATE(CONCAT(YEARWEEK(collection_date, 2), ' Sunday'), '%X%V %W') + INTERVAL 6 DAY) AS week "+
           "FROM waste_collections "+
+          "WHERE MONTH(collection_date) = MONTH(CURRENT_DATE())" +
           "GROUP BY YEARWEEK(collection_date, 2) "+
           "ORDER BY YEARWEEK(collection_date, 2) ");
+          console.log(chartDataCount[0]);
 
             // let chartDataCount = await collection.model.findAll({
             //     attributes:{

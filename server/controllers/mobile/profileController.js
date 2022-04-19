@@ -6,19 +6,38 @@ var moment = require('moment');
 exports.updateGeneralInfo=async (req,res)=>{
     let account=await user.model.findOne({ where: { email: req.body.email } });
     if(account){
-        let acc=await user.model.update({fname:req.body.fname,lname:req.body.lname,contact_no:req.body.contact_no,gender:req.body.gender,birthday:req.body.birthday},{
-            where:{
-                email:req.body.email
+        if(req.body.email==req.body.newEmail){
+            let acc=await user.model.update({fname:req.body.fname,lname:req.body.lname,contact_no:req.body.contact_no,gender:req.body.gender,birthday:req.body.birthday},{
+                where:{
+                    email:req.body.email
+                }
+            });
+            if(acc){
+                acc=await user.model.findOne({ where: { email: req.body.email } });
+                res.send({success:true,message:"Profile updated successfully.",data:acc});
+            }else{
+                res.send({success:false,message:"Error updating profile",data:null});
             }
-        });
-        if(acc){
-            acc=await user.model.findOne({ where: { email: req.body.email } });
-            res.send({success:true,message:"Profile updated successfully.",data:acc});
         }else{
-            res.send({success:false,message:"Error updating profile",data:null});
+            let checkEmail=await user.model.findOne({ where: { email: req.body.newEmail } });
+            if(!checkEmail){
+                let acc=await user.model.update({email:req.body.newEmail,fname:req.body.fname,lname:req.body.lname,contact_no:req.body.contact_no,gender:req.body.gender,birthday:req.body.birthday},{
+                    where:{
+                        email:req.body.email
+                    }
+                });
+                if(acc){
+                    acc=await user.model.findOne({ where: { email: req.body.newEmail } });
+                    res.send({success:true,message:"Profile updated successfully.",data:acc});
+                }else{
+                    res.send({success:false,message:"Error updating profile",data:null});
+                }
+            }else{
+                res.send({success:false,message:"Email already taken",data:null});
+            }
         }
     }else{
-        res.send({success:false,data:null});
+        res.send({success:false,message:"Account does not exist",data:null});
     }
 }
 

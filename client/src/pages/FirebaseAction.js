@@ -2,6 +2,7 @@ import React from 'react';
 import ResetPassword from '../components/firebase/ResetPassword';
 import VerifyEmail from '../components/firebase/VerifyEmail';
 import { useSearchParams } from "react-router-dom";
+import RecoverEmail from '../components/firebase/RecoverEmail';
 // import RecoverEmail from './RecoverEmail';
 
 // http://localhost:3000/action?mode=resetPassword&oobCode=ABC123&apiKey=AIzaSy
@@ -23,9 +24,9 @@ const FirebaseAction = (props) => {
 
   // Handle the user management action.
   switch (mode) {
-    // case 'recoverEmail':
+    case 'recoverEmail':
        // Display reset password handler and UI.
-    //   return <RecoverEmail actionCode={actionCode} />;
+      return <RecoverEmail actionCode={actionCode} />;
     case 'resetPassword':
       // Display email recovery handler and UI.
       return <ResetPassword actionCode={actionCode} />;

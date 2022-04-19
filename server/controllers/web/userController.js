@@ -239,3 +239,22 @@ exports.forgotPassword=async (req,res)=>{
         res.send({success:false,message:"Cannot find email address.",data:null});
     }
 }
+
+exports.resetEmail=async (req,res)=>{
+    let account=await user.model.findOne({ 
+        where: { 
+            email: req.body.currentEmail,
+            status:true
+        } 
+    });
+    if(account){
+        let acc=await user.model.update({email:req.body.revertEmail},{
+            where:{
+                email:req.body.currentEmail
+            }
+        });
+        res.send({success:true,message:"Email retrieved.",data:acc});
+    }else{
+        res.send({success:false,message:"Cannot find email address.",data:null});
+    }
+}

@@ -30,6 +30,8 @@ import Firebase from "../components/helpers/Firebase";
 import Cookies from 'js-cookie';
 import { useNavigate } from "react-router-dom";
 import { decodeToken } from "react-jwt";
+import Autocomplete from '@mui/material/Autocomplete';
+import { TextField } from "@mui/material";
 
 const database=Firebase.database();
 const auth=Firebase.auth();
@@ -164,6 +166,7 @@ const PageLayout = ({headerTitle,children}) => {
   const handleNotificationClose = () => {
     setAnchorNotificationEl(null);
   };
+  const [placeholder, setPlaceholder] = useState(true);
   const [open, setOpen] = useState(true);
   const [anchorEl, setAnchorEl] = useState(null);
   const openDropDown = Boolean(anchorEl);
@@ -185,7 +188,45 @@ const PageLayout = ({headerTitle,children}) => {
     Cookies.remove('user_id');
     navigate("/login");
   };
-
+  const settings = [
+    { setting: 'Dashboard', route: '/dashboard' },
+    { setting: 'Generate Report', route: '/dashboard' },
+    { setting: 'Garbage Chart', route: '/dashboard' },
+    { setting: 'Colection', route: '/dashboard' },
+    { setting: 'Track Collection', route: '/track' },
+    { setting: 'Announcements', route: '/announcements' },
+    { setting: 'Events', route: '/events' },
+    { setting: 'Schedules', route: '/schedules' },
+    { setting: 'Truck Assignment', route: '/schedules' },
+    { setting: 'Calendar', route: '/schedules' },
+    { setting: 'Employees', route: '/employees' },
+    { setting: 'Drivers', route: '/employees' },
+    { setting: 'Admins', route: '/employees' },
+    { setting: 'Inactive Account', route: '/employees' },
+    { setting: 'Garbage Trucks', route: '/trucks' },
+    { setting: 'Dumpsters', route: '/dumpsters' },
+    { setting: 'Reports', route: '/reports' },
+    { setting: 'Concerns', route: '/reports' },
+    { setting: 'Resolved Reports', route: '/reports' },
+    { setting: 'Resolved Concerns', route: '/reports' },
+    { setting: 'Account Settings', route: '/settings' },
+    { setting: 'General Information', route: '/settings' },
+    { setting: 'Change Address', route: '/settings' },
+    { setting: 'Change Password', route: '/settings' },
+    { setting: 'Update Name', route: '/settings' },
+    { setting: 'Update Info', route: '/settings' },
+  ]
+  const handleChange=(event,value)=>{
+    setPlaceholder(false);
+    navigate(value.route);
+  }
+  const handleInputChange=(event)=>{
+    if(event.target.value===""){
+      setPlaceholder(true);
+    }else{
+      setPlaceholder(false);
+    }
+  }
   return (
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: "flex" }}>
@@ -208,6 +249,34 @@ const PageLayout = ({headerTitle,children}) => {
             >
               <MenuIcon />
             </IconButton>
+            <Autocomplete
+              id="free-solo-demo"
+              freeSolo
+              disableClearable
+              options={settings}
+              getOptionLabel={settings => settings.setting}
+              onChange={handleChange}
+              onInputChange={handleInputChange}
+              renderInput={(params) => <TextField {...params} 
+              size="small"
+              sx={{
+                borderRadius:1,
+                backgroundColor: "white",
+                display: { xs: 'none', sm: 'none', md: 'block' }
+              }}
+              InputLabelProps={{
+                shrink:false
+              }}
+              InputProps={{
+                ...params.InputProps,
+                type: 'search',
+                style:{
+                  width:200
+                }
+              }}
+              label={placeholder?"Search":""}
+              />}
+            />
             <Typography
               component="h1"
               variant="h6"

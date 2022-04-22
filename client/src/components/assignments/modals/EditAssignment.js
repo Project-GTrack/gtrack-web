@@ -94,7 +94,7 @@ const EditAssignment = (props) => {
           }
         });
   };
-  const { handleChange, handleSubmit, values, errors, touched } =
+  const { handleChange, handleSubmit, values, errors, touched, isValid } =
     useFormik({
       initialValues: {
         driver: props.data[1],
@@ -165,7 +165,7 @@ const EditAssignment = (props) => {
         </Box>
       </DialogContent>
       <DialogActions>
-      <button className='btn btn-success' disabled={loading} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Updating...</>:"Update"}</button>
+      <button className='btn btn-success' disabled={!isValid || loading} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Updating...</>:"Update"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

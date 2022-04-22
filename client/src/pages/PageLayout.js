@@ -217,8 +217,12 @@ const PageLayout = ({headerTitle,children}) => {
     { setting: 'Update Info', route: '/settings' },
   ]
   const handleChange=(event,value)=>{
-    setPlaceholder(false);
-    navigate(value.route);
+    if(typeof value === 'object'){
+      setPlaceholder(false);
+      navigate(value.route);
+    }else{
+      setPlaceholder(true);
+    }
   }
   const handleInputChange=(event)=>{
     if(event.target.value===""){
@@ -254,7 +258,7 @@ const PageLayout = ({headerTitle,children}) => {
               freeSolo
               disableClearable
               options={settings}
-              getOptionLabel={settings => settings.setting}
+              getOptionLabel={settings => settings.setting||""}
               onChange={handleChange}
               onInputChange={handleInputChange}
               renderInput={(params) => <TextField {...params} 

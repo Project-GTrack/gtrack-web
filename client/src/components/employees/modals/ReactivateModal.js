@@ -83,7 +83,7 @@ export default function ReactivateModal(props) {
   });
   return (
     <BootstrapDialog
-      onClick={()=>props.setDeleteModal(false)}
+      onClose={()=>props.setDeleteModal(false)}
       aria-labelledby="customized-dialog-title"
       open={props.openDeleteModal}
     >

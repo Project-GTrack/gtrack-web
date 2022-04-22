@@ -76,8 +76,8 @@ const AddNewDumpsterModal = (props) => {
     barangay: yup.string().required("Barangay is required"),
   });
   const handleFormSubmit = async (values, { resetForm }) => {
-    setLoading(true);
     if (coordinate.latitude !== 0 && coordinate.longitude !== 0) {
+      setLoading(true);
       axios
         .post(`${process.env.REACT_APP_BACKEND_URL}/admin/dumpster/add-dumpster`, {
           street: capitalizeWords(values.street),
@@ -103,6 +103,7 @@ const AddNewDumpsterModal = (props) => {
           }
         });
     } else {
+      setLoading(false);
       setError("Please select a designated location for the dumpster");
     }
   };

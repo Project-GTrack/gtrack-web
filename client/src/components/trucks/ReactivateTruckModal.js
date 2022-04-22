@@ -81,7 +81,7 @@ export default function ReactivateTruckModal(props) {
   });
   return (
     <BootstrapDialog
-      onClick={()=>props.setOpenReactivateModal(false)}
+      onClose={()=>props.setOpenReactivateModal(false)}
       aria-labelledby="customized-dialog-title"
       open={props.openReactivateModal}
     >

@@ -81,7 +81,7 @@ export default function DeleteReportModal(props) {
   });
   return (
     <BootstrapDialog
-      onClick={()=>props.setOpenDeleteModal(false)}
+      onClose={()=>props.setOpenDeleteModal(false)}
       aria-labelledby="customized-dialog-title"
       open={props.openDeleteModal}
     >

@@ -106,7 +106,7 @@ const AddNewDumpsterModal = (props) => {
       setError("Please select a designated location for the dumpster");
     }
   };
-  const { handleChange, handleSubmit, handleBlur, values, errors, touched } =
+  const { handleChange, handleSubmit, handleBlur, values, errors, touched, isValid } =
     useFormik({
       initialValues: {
         street: "",
@@ -223,7 +223,7 @@ const AddNewDumpsterModal = (props) => {
         </Box>
       </DialogContent>
       <DialogActions>
-        <button className='btn btn-success' disabled={loading} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Adding...</>:"Add"}</button>
+        <button className='btn btn-success' disabled={!isValid || loading} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Adding...</>:"Add"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

@@ -81,7 +81,7 @@ export default function ResolveConcernMOdal(props) {
   });
   return (
     <BootstrapDialog
-      onClick={()=>props.setOpenResolveModal(false)}
+      onClose={()=>props.setOpenResolveModal(false)}
       aria-labelledby="customized-dialog-title"
       open={props.openResolveModal}
     >

@@ -32,6 +32,7 @@ const BootstrapDialogTitle = (props) => {
   return (
     <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
       {children}
+      {onClose ? (
         <IconButton
           aria-label="close"
           onClick={onClose}
@@ -44,6 +45,7 @@ const BootstrapDialogTitle = (props) => {
         >
           <CloseIcon />
         </IconButton>
+      ) : null}
     </DialogTitle>
   );
 };

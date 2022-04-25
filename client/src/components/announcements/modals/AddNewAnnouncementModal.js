@@ -103,7 +103,6 @@ export default function AddNewAnnouncementModal(props) {
   const handleFormSubmit = async(values, {resetForm}) => {
     setLoading(true);
     if(Cookies.get('user_id')){
-      console.log(values.isNotified)
       Axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/announcement/create`,{
         title:values.title,
         content: values.content,

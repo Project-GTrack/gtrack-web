@@ -39,8 +39,6 @@ exports.login = async(req, res) => {
         var originalText = bytes.toString(C.enc.Utf8);
         if(originalText === req.body.password && data.password != ""){
             const accessToken = generateAccessToken(data);
-            // res.cookie("user_id",accessToken,{maxAge:100000000,httpOnly:true,path:"/"});
-            // console.log(req.cookies.user_id);
             res.send({success:true,message:"Login Successful!",data:data, accessToken})
         }else{
             res.send({success:false,message:"The credentials provided does not match."});

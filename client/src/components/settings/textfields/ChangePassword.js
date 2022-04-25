@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import { TextField,Box} from "@mui/material";
 import * as yup from 'yup'
 import Axios from 'axios';
@@ -9,10 +9,14 @@ import Grid from "@mui/material/Grid";
 import { useSnackbar } from 'notistack';
 import Firebase from '../../helpers/Firebase';
 import { CircularProgress } from '@mui/material';
+import { decodeToken } from "react-jwt";
+import "firebase/auth"
+
 const auth = Firebase.auth();
 const ChangePassword = (props) => {
   const { enqueueSnackbar} = useSnackbar();
   const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState(null);
     const navigate = useNavigate();
     const profilePasswordValidationSchema = yup.object().shape({
         password: yup
@@ -29,29 +33,43 @@ const ChangePassword = (props) => {
                 ],'Password must match!')
             .required('New Password is required'),
     })
+    const getCookiesJWT=()=>{
+      const cookie=Cookies.get("user_id");
+      if(cookie){
+          const decodedToken = decodeToken(cookie);
+          setUser(JSON.parse(decodedToken.user_id));
+      }
+  }
+  useEffect(() => {
+    if(Cookies.get('user_id')){
+      getCookiesJWT()
+    }else{
+      navigate("/login");
+    }
+  }, [navigate])
+  
     const handleFirebase =async (values,resetForm,data) =>{
-      if(auth.currentUser){
         await auth.currentUser.updatePassword(values.newPassword);
         resetForm();
+        setLoading(false);
         enqueueSnackbar(data.message, { variant:'success' });
-      }else{
-        console.log("NO CURRENT USER");
-      }
     }
 
     const handleFormSubmit = async(values, {resetForm}) => {
       setLoading(true);
         if(Cookies.get('user_id')){
+          var credential=await Firebase.auth.EmailAuthProvider.credential(user.email, values.password);
+          await auth.currentUser.reauthenticateWithCredential(credential)
           Axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/profile/change_password`,{
             password:values.password,
             newPassword: values.newPassword,
             confirmPassword:values.confirmPassword,
             accessToken: Cookies.get('user_id')
           }).then(res=>{
-            setLoading(false);
             if(res.data.success){
               handleFirebase(values, resetForm, res.data);
             }else{
+              setLoading(false);
               enqueueSnackbar(res.data.message, { variant:'error' });
             }
           })

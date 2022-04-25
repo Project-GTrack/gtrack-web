@@ -125,7 +125,6 @@ const EditDumpsterModal = (props) => {
     });
   const handleClick = (map, event) => {
     setCoordinate({ latitude: event.lngLat.lat, longitude: event.lngLat.lng });
-    console.log(event.lngLat);
   };
   return (
     <Dialog

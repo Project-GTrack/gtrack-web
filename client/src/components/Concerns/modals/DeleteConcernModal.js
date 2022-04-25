@@ -87,6 +87,7 @@ export default function DeleteConcernModal(props) {
     >
       <BootstrapDialogTitle
         id="customized-dialog-title"
+        onClose={()=>props.setOpenDeleteModal(false)}
       >
         Delete this Concern?
       </BootstrapDialogTitle>

@@ -8,10 +8,6 @@ const attachment=require("../../models/attachment");
 
 exports.submitReport = async (req, res) => {
     let attLine = await attachment_line.model.create();
-    // let latest = attachment_line.model.findOne({
-    //     order: [['attachment_line_id', 'DESC']]
-    // })
-    // console.log("GOOOOD",JSON.stringify(latest));
     if(attLine){
         for(var x = 0; x < req.body.image.length; x++){
             let img = await attachment.model.create({

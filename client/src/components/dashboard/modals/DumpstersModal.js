@@ -72,7 +72,7 @@ export default function DumpsterModal(props) {
     open={props.openModal}
     >
     <MUIDataTable
-      title={"Driver List"}
+      title={"Dumpster List"}
       data={data}
       columns={columns}
       options={options}

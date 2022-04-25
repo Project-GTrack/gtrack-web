@@ -87,6 +87,7 @@ export default function ReactivateTruckModal(props) {
     >
       <BootstrapDialogTitle
         id="customized-dialog-title"
+        onClose={()=>props.setOpenReactivateModal(false)}
       >
        Reactivate this Truck?
       </BootstrapDialogTitle>

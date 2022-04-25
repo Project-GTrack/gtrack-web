@@ -56,7 +56,6 @@ const ViewReportModal = (props) => {
     const handleOnLoad = map => {
         map.controls[window.google.maps.ControlPosition.TOP_RIGHT].push(controlButtonDiv);
     };
-    console.log(props.data);
   return (
     <Dialog
      fullWidth={true}

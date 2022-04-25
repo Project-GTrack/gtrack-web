@@ -87,7 +87,7 @@ export default function DeleteReportModal(props) {
     >
       <BootstrapDialogTitle
         id="customized-dialog-title"
-        onClose={props.handleCloseDeleteModal}
+        onClose={()=>props.setOpenDeleteModal(false)}
       >
         Delete this Report?
       </BootstrapDialogTitle>

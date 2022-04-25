@@ -5,7 +5,6 @@ import ResolveReportModal from "./Reports/ResolveReportModal";
 import ViewReportModal from "./Reports/ViewReportModal";
 
 const ReportsandConcernsToolbar = (props) => {
-    console.log(props.data)
 
     return (
         <div>

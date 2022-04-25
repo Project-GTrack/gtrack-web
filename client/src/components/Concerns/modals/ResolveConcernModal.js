@@ -87,6 +87,7 @@ export default function ResolveConcernMOdal(props) {
     >
       <BootstrapDialogTitle
         id="customized-dialog-title"
+        onClose={()=>props.setOpenResolveModal(false)}
       >
        Resolve this Concern?
       </BootstrapDialogTitle>

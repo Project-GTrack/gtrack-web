@@ -87,6 +87,7 @@ export default function ResolveReportModal(props) {
     >
       <BootstrapDialogTitle
         id="customized-dialog-title"
+        onClose={()=>props.setOpenResolveModal(false)}
       >
         Do you wish to Resolve this Report?
       </BootstrapDialogTitle>

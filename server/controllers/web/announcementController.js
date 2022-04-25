@@ -45,7 +45,6 @@ const handleFirebase=async (title)=>{
 }
 const handlePushNotifications=(expoTokens,title)=>{
     let messages = [];
-    console.log(expoTokens);
     for (let pushToken of expoTokens) {
       if (!Expo.isExpoPushToken(pushToken.push_token)) {
         console.error(`Push token ${pushToken.push_token} is not a valid Expo push token`);
@@ -65,7 +64,6 @@ const handlePushNotifications=(expoTokens,title)=>{
       for (let chunk of chunks) {
         try {
           let ticketChunk = await expo.sendPushNotificationsAsync(chunk);
-          console.log(ticketChunk);
           tickets.push(...ticketChunk);
         } catch (error) {
           console.error(error);

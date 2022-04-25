@@ -87,6 +87,7 @@ export default function DeleteEmployeeModal(props) {
     >
       <BootstrapDialogTitle
         id="customized-dialog-title"
+        onClose={()=>props.setDeleteModal(false)}
       >
         Deactivate this Employee?
       </BootstrapDialogTitle>

@@ -87,6 +87,7 @@ export default function DisableTruckModal(props) {
     >
       <BootstrapDialogTitle
         id="customized-dialog-title"
+        onClose={()=>props.setOpenDeleteModal(false)}
       >
         Disable this Truck?
       </BootstrapDialogTitle>

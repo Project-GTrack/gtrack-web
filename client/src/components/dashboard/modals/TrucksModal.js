@@ -72,7 +72,7 @@ export default function TrucksModal(props) {
     open={props.openModal}
     >
    <MUIDataTable
-      title={"Driver List"}
+      title={"Truck List"}
       data={data}
       columns={columns}
       options={options}

@@ -104,6 +104,8 @@ const TrackCollectorPage = () => {
                 var snap=snapshot.val();
                 var temp=Object.keys(snap).map((key) => snap[key]);
                 setDumpsters([...temp]);
+            }else{
+                setDumpsters([]);
             }
         });
      }

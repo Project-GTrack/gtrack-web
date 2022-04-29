@@ -141,13 +141,13 @@ const EditScheduleModal = (props) => {
             setUser(JSON.parse(decodedToken.user_id));
         }
     }
-    const initializeSchedule=()=>{
+    const initializeSchedule=async()=>{
         let temp=[];
         // eslint-disable-next-line array-callback-return
         JSON.parse(props.data.schedule).when.map((item)=>{
             temp.push({schedule:item.schedule,time_start:item.time_start,time_end:item.time_end});
         })
-        setSchedule([...temp]);
+        await setSchedule([...temp]);
         setFieldValue('schedule',[...temp]);
     }
     useEffect(() => {

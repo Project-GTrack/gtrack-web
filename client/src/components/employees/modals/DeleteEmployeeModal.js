@@ -81,12 +81,13 @@ export default function DeleteEmployeeModal(props) {
   });
   return (
     <BootstrapDialog
-      onClick={()=>props.setDeleteModal(false)}
+      onClose={()=>props.setDeleteModal(false)}
       aria-labelledby="customized-dialog-title"
       open={props.openDeleteModal}
     >
       <BootstrapDialogTitle
         id="customized-dialog-title"
+        onClose={()=>props.setDeleteModal(false)}
       >
         Deactivate this Employee?
       </BootstrapDialogTitle>

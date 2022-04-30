@@ -25,7 +25,6 @@ exports.updateDumpsters=async (req,res)=>{
             dumpster_id:req.params.id
         }
     });
-    console.log(dumpData.complete);
     if(dumpData.complete === 0){
         status = 1;
     }

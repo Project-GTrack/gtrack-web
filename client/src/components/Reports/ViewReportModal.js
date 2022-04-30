@@ -56,7 +56,6 @@ const ViewReportModal = (props) => {
     const handleOnLoad = map => {
         map.controls[window.google.maps.ControlPosition.TOP_RIGHT].push(controlButtonDiv);
     };
-    console.log(props.data);
   return (
     <Dialog
      fullWidth={true}
@@ -73,43 +72,25 @@ const ViewReportModal = (props) => {
       </BootstrapDialogTitle>
       <DialogContent dividers>
       <Box sx={{ width: "100%" }} paddingTop={2} paddingBottom={2}>
-      <Typography variant="body2" color="text.secondary">
-           <b style={{fontSize: 20}}>{props.data[1]} </b> 
-          </Typography>
-          </Box>
-      <div style={{ height: '40vh', width: '100%' }}>
-      <Map
-            style="mapbox://styles/mapbox/streets-v9"
-            containerStyle={{
-              height: "36vh",
-              width: "100%",
-            }}
-            center={
-              props.data.longitude != 0 && props.data.latitude != 0
-                ? [props.data.longitude, props.data.latitude]
-                : [123.94964154058066, 10.482913243053028]
-            }
-            zoom={
-              props.data.longitude  != 0 && props.data.latitude != 0
-                ? [15]
-                : [11]
-            }
-          >
-            {props.data.longitude != 0 && props.data.latitude != 0 ? (
-              <Marker
-                coordinates={
-                  props.data.longitude != 0 && props.data.latitude != 0
-                    ? [props.data.longitude, props.data.latitude]
-                    : [123.94964154058066, 10.482913243053028]
-                }
-                anchor="bottom"
-              >
-                <img style={mystyle} src="/dumpster_marker_icon.png" />
-              </Marker>
-            ) : (
-              <></>
+        <Carousel sx={{height: 200,width:'100%',alignContent:'center',alignItems:'center',justifyContent:'center',margin:'auto'}}>
+            {props.data.reportAttachmentLine.lineAttachment.length!==0?(props.data.reportAttachmentLine.lineAttachment.map((image,i)=>{
+                return (
+                  <div key = {i} className="text-center mx-auto ml-auto mr-auto">
+                    <img 
+                      src={image.filename}
+                      style={{height: 200, margin:"auto",alignSelf:"center",alignContent:"center",justifyContent:"center"}}
+                      alt={image.filename}
+                    />
+                  </div>
+                )
+              })
+            ):(
+              <div className="text-white mx-auto bg-secondary" style={{width:"100%",height:200,justifyContent:"center",display:"flex"}}>
+                <p className="text-center mt-auto mb-auto">No photos uploaded</p>
+              </div>
             )}
-          </Map>
+          </Carousel>
+      </Box>
           <Typography variant="body2" mt={2} color="text.dark">
             <b>Subject:</b> {props.data.subject}
           </Typography>
@@ -176,7 +157,7 @@ const ViewReportModal = (props) => {
                 <></>
               )}
             </Map>
-          </div>\</div>
+          </div>
       </DialogContent>
     </Dialog>
   );

@@ -112,7 +112,7 @@ const EditDumpsterModal = (props) => {
       }
     }
   };
-  const { handleChange, handleSubmit, handleBlur, values, errors, touched } =
+  const { handleChange, handleSubmit, handleBlur, values, errors, touched, isValid } =
     useFormik({
       initialValues: {
         street: props.data[1].split(", ")[0],
@@ -125,7 +125,6 @@ const EditDumpsterModal = (props) => {
     });
   const handleClick = (map, event) => {
     setCoordinate({ latitude: event.lngLat.lat, longitude: event.lngLat.lng });
-    console.log(event.lngLat);
   };
   return (
     <Dialog
@@ -230,7 +229,7 @@ const EditDumpsterModal = (props) => {
         </Box>
       </DialogContent>
       <DialogActions>
-        <button className='btn btn-success' disabled={loading} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Updating...</>:"Update"}</button>
+        <button className='btn btn-success' disabled={!isValid || loading} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Updating...</>:"Update"}</button>
       </DialogActions>
     </Dialog>
   );

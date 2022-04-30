@@ -31,6 +31,7 @@ const BootstrapDialogTitle = (props) => {
   return (
     <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
       {children}
+      {onClose ? (
         <IconButton
           aria-label="close"
           onClick={onClose}
@@ -43,7 +44,7 @@ const BootstrapDialogTitle = (props) => {
         >
           <CloseIcon />
         </IconButton>
-
+      ) : null}
     </DialogTitle>
   );
 };
@@ -80,12 +81,13 @@ export default function DisableTruckModal(props) {
   });
   return (
     <BootstrapDialog
-      onClick={()=>props.setOpenDeleteModal(false)}
+      onClose={()=>props.setOpenDeleteModal(false)}
       aria-labelledby="customized-dialog-title"
       open={props.openDeleteModal}
     >
       <BootstrapDialogTitle
         id="customized-dialog-title"
+        onClose={()=>props.setOpenDeleteModal(false)}
       >
         Disable this Truck?
       </BootstrapDialogTitle>

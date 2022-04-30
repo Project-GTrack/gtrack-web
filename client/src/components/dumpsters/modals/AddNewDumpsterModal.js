@@ -76,8 +76,8 @@ const AddNewDumpsterModal = (props) => {
     barangay: yup.string().required("Barangay is required"),
   });
   const handleFormSubmit = async (values, { resetForm }) => {
-    setLoading(true);
     if (coordinate.latitude !== 0 && coordinate.longitude !== 0) {
+      setLoading(true);
       axios
         .post(`${process.env.REACT_APP_BACKEND_URL}/admin/dumpster/add-dumpster`, {
           street: capitalizeWords(values.street),
@@ -103,10 +103,11 @@ const AddNewDumpsterModal = (props) => {
           }
         });
     } else {
+      setLoading(false);
       setError("Please select a designated location for the dumpster");
     }
   };
-  const { handleChange, handleSubmit, handleBlur, values, errors, touched } =
+  const { handleChange, handleSubmit, handleBlur, values, errors, touched, isValid } =
     useFormik({
       initialValues: {
         street: "",
@@ -119,7 +120,6 @@ const AddNewDumpsterModal = (props) => {
     });
   const handleClick = (map, event) => {
     setCoordinate({ latitude: event.lngLat.lat, longitude: event.lngLat.lng });
-    console.log(event.lngLat);
   };
   return (
     <BootstrapDialog
@@ -223,7 +223,7 @@ const AddNewDumpsterModal = (props) => {
         </Box>
       </DialogContent>
       <DialogActions>
-        <button className='btn btn-success' disabled={loading} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Adding...</>:"Add"}</button>
+        <button className='btn btn-success' disabled={!isValid || loading} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Adding...</>:"Add"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

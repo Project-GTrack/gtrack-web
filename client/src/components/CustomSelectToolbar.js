@@ -2,7 +2,6 @@
 import React from "react";
 const CustomSelectToolbar = ({selectedRows,displayData}) => {
     const handleClick = () => {
-        console.log("click!", displayData[selectedRows.data[0].dataIndex]); // a user can do something with these selectedRow values
       }
     return (
           <div>

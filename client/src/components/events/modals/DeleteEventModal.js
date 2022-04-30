@@ -84,7 +84,7 @@ export default function DeleteEventModal(props) {
       navigate("/login");
     }
   }
-  const { handleChange, handleSubmit, handleBlur, values, errors, touched } =
+  const { handleChange, handleSubmit, handleBlur, values, errors, touched, isValid } =
     useFormik({
       initialValues: { password: "" },
       enableReinitialize: true,
@@ -130,7 +130,7 @@ export default function DeleteEventModal(props) {
         </Box>
       </DialogContent>
       <DialogActions>
-      <button className='btn btn-danger' disabled={loading} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Deleting...</>:"Delete"}</button>
+      <button className='btn btn-danger' disabled={!isValid || loading} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Deleting...</>:"Delete"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

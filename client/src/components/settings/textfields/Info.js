@@ -36,7 +36,6 @@ const Info = (props) => {
     const handleFormSubmit = () =>{
       setLoading(true);
         if(Cookies.get('user_id')){
-            console.log(Cookies.get('user_id'));
             Axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/profile/info`,{
               gender:values.gender,
               contact_no: values.contact_no,
@@ -45,7 +44,6 @@ const Info = (props) => {
             }).then(res=>{
               setLoading(false);
               if(res.data.success){
-                console.log(res.data.data.acc);
                 props.setUser(res.data.data.acc);
                 Cookies.set('user_id',res.data.data.accessToken, {expires: 1});
                 enqueueSnackbar(res.data.message, { variant:'success' });

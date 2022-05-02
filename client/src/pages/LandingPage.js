@@ -24,7 +24,7 @@ const LandingPage = () => {
     return (
     <ThemeProvider theme={theme}>
       <Helmet>
-        <title>GTrack APP Compostela</title>
+        <title>GTrack Compostela</title>
       </Helmet>
       <CssBaseline />
       <AppBar

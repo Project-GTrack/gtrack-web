@@ -59,11 +59,11 @@ export default function DriversModal(props) {
     var temp=[];
     // eslint-disable-next-line array-callback-return
     props.data && props.data.map((driver)=>{
-      temp.push([driver&&driver.fname+" "+driver&&driver.lname, 
+      temp.push([`${driver&&driver.fname} ${driver&&driver.lname}`, 
                   driver&&driver.email,
                   driver&&driver.contact_no,
                   // eslint-disable-next-line no-useless-concat
-                  driver&&driver.street?driver.street:' '+" "+driver.purok?driver.purok:' '+" "+driver.barangay?driver.barangay:' '+", "+driver.town?driver.town:' ',
+                  `${driver&&driver.street?driver.street:' '} ${driver.purok?driver.purok:' '} ${driver.barangay?driver.barangay:' '}`,
                   moment(driver.createdAt).format("LL")]);
     })
     setData(temp);

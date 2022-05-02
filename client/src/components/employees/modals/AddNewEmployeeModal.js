@@ -93,7 +93,9 @@ export default function AddNewEmployeeModal(props) {
     contact: yup
       .string()
       .required('Contact is required')
-      .test('Digits only', 'The field should be digits only', digitsOnly),
+      .test('Digits only', 'The field should be digits only', digitsOnly)
+      .min(11,`Must be 11 digits starting with 09`)
+      .max(11,`Must be 11 digits starting with 09`),
     user_type: yup
       .string()
       .required('Employee type is required'),

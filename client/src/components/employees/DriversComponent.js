@@ -19,7 +19,7 @@ const DriversComponent = () => {
     setData(temp);
   }, [drivers])
   
-  const columns = ["Last Name", "First Name", "Email", "Contact Number","Address","Age","Gender","Date Added","Status"];
+  const columns = ["First Name", "Last Name", "Email", "Contact Number","Address","Age","Gender","Date Added","Status"];
 
   const [openModal, setOpenModal] = React.useState(false);
   useEffect(() => {

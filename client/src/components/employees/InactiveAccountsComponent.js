@@ -16,7 +16,7 @@ const InactiveAccountsComponent = ({statusToast,setStatusToast}) => {
         })
         setData(temp);
     }, [inactives])
-    const columns = ["Last Name", "First Name", "Email", "Contact Number","Address","Age","Gender","Date Added","Status"];
+    const columns = ["First Name", "Last Name", "Email", "Contact Number","Address","Age","Gender","Date Added","Status"];
 
     const options = {
         selectableRowsHeader: false,

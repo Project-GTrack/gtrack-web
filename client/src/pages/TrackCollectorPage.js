@@ -131,7 +131,7 @@ const TrackCollectorPage = () => {
         setDumpsterPopup({isOpen: true,data:data });
     }
     return (
-        <PageLayout headerTitle={"Track Collector"}>
+        <PageLayout headerTitle={"Track Collection"}>
             <Helmet>
                 <title>GTrack | Track Collection</title>
             </Helmet>

@@ -89,6 +89,7 @@ export default function ReactivateModal(props) {
     >
       <BootstrapDialogTitle
         id="customized-dialog-title"
+        onClose={()=>props.setDeleteModal(false)}
       >
         Reactivate this Employee?
       </BootstrapDialogTitle>

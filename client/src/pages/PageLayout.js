@@ -192,7 +192,7 @@ const PageLayout = ({headerTitle,children}) => {
     { setting: 'Dashboard', route: '/dashboard' },
     { setting: 'Generate Report', route: '/dashboard' },
     { setting: 'Garbage Chart', route: '/dashboard' },
-    { setting: 'Colection', route: '/dashboard' },
+    { setting: 'Collection', route: '/dashboard' },
     { setting: 'Track Collection', route: '/track' },
     { setting: 'Announcements', route: '/announcements' },
     { setting: 'Events', route: '/events' },

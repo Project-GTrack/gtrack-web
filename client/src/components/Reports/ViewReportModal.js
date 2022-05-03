@@ -111,7 +111,7 @@ const ViewReportModal = (props) => {
             <b>Name:</b> {props.data.reportDriver.fname+" "+props.data.reportDriver.lname}
           </Typography>
           <Typography align='justify' variant="body2" color="text.dark">
-            <b>Address:</b> {props.data.reportDriver.purok?props.data.reportDriver.purok:''+" "+props.data.reportDriver.street?props.data.reportDriver.street:''+" "+props.data.reportDriver.barangay?props.data.reportDriver.barangay:''}
+            <b>Address:</b> {`${props.data.reportDriver.purok?props.data.reportDriver.purok:''} ${props.data.reportDriver.street?props.data.reportDriver.street:''} ${props.data.reportDriver.barangay?props.data.reportDriver.barangay:''}`}
           </Typography>
           <Typography align='justify' variant="body2" color="text.dark">
             <b>Contact Number:</b> {props.data.reportDriver.contact_no?props.data.reportDriver.contact_no:''}

@@ -1,13 +1,18 @@
 import React, {useState, useEffect} from 'react'
 import MUIDataTable from "mui-datatables";
-import EventCustomToolbar from './EventCustomToolbar';
+// import EventCustomToolbar from './EventCustomToolbar';
 import AddNewEventModal from './modals/AddNewEventModal';
 import moment from 'moment';
 import {useEventPageContext} from '../../pages/EventsPage';  
+import ViewEventModal from "./modals/ViewEventModal";
+import EditEventModal from "./modals/EditEventModal";
+import DeleteEventModal from "./modals/DeleteEventModal";
 const EventsComponent = () => {
     const {queryResult}=useEventPageContext();
     const events = queryResult.data.data;
     const[data,  setData] = useState([]);
+    const[index,setIndex] = useState(0);
+    
     useEffect(()=>{
        
         var temp = [];
@@ -26,12 +31,12 @@ const EventsComponent = () => {
                 moment(event.createdAt).format("MMMM DD, YYYY"),
                 event.eventLine.lineAttachment,
                 event.postal_code,
-                event.registration_form_url
+                event.registration_form_url,
             ]);
         })
-        setData(temp);  
-
-    },[events]);
+        setData([...temp]);  
+       
+    },[]);
     const columns = [
         {
             name:"ID",
@@ -118,6 +123,21 @@ const EventsComponent = () => {
             }
         },
         {
+            name: "Actions",
+            options: {
+              filter: false,
+              customBodyRenderLite: (dataIndex) => (
+               <div style={{textAlign:'center'}}>
+                   <button style={{display:'inline-block'}} onClick={()=>handleOpenViewModal(dataIndex)} className="btn btn-primary mx-2 "><i className="fa fa-info-circle" aria-hidden="true"></i></button>
+                    <button style={{display:'inline-block'}} onClick={()=>handleOpenEditModal(dataIndex)} className="btn btn-warning "><i className="fa fa-pencil" aria-hidden="true"></i></button>
+                    <button style={{display:'inline-block'}} onClick={()=>handleOpenDeleteModal(dataIndex)} className="btn btn-danger mx-2"><i className="fa fa-trash" aria-hidden="true"></i></button>
+                
+               </div>
+                
+              )
+            }
+        },
+        {
             name:"Image",
             label:"Image",
             options: {
@@ -146,8 +166,9 @@ const EventsComponent = () => {
                 display:false,
                 viewColumns:false,
             }
-        }
-    
+        },
+
+        
       ];
 
 
@@ -156,29 +177,76 @@ const EventsComponent = () => {
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
 
+  const [openViewModal, setOpenViewModal] = React.useState(false);
+  const handleOpenViewModal = (dataIndex) =>{
+    setIndex(dataIndex);
+
+    setOpenViewModal(true);
+  }
+
+  const handleCloseViewModal = () => setOpenViewModal(false);
+  
+  
+  const [openEditModal, setOpenEditModal] = React.useState(false);
+  const handleOpenEditModal = (dataIndex) =>{
+    setIndex(dataIndex)
+    setOpenEditModal(true);
+  }
+ 
+  const handleCloseEditModal = () => setOpenEditModal(false);
+
+  const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
+  const handleOpenDeleteModal = () => setOpenDeleteModal(true);
+  const handleCloseDeleteModal = (dataIndex) => {
+    setIndex(dataIndex)
+    setOpenDeleteModal(false);
+  }
+ 
+
     const options = {
     selectableRowsHeader: false,
-    selectableRows:'single',
+    selectableRows: false,
     filter: true,
     filterType: 'dropdown',
-    customToolbarSelect:(selectedRows,displayData)=>(
-        <EventCustomToolbar  
-            selectedRows={selectedRows} 
-            displayData={displayData}
-        />
-    )
+    // customToolbarSelect:(selectedRows,displayData)=>(
+    //     <EventCustomToolbar  
+    //         selectedRows={selectedRows} 
+    //         displayData={displayData}
+    //     />
+    // )
+      
     };
     return (
         <div>
             <div className='mb-3'>
                 <button className='btn btn-success' onClick={handleOpenModal}><i className="fa fa-plus" aria-hidden="true"></i> Add New Event</button>     
             </div>
-                <AddNewEventModal
-            openModal={openModal}
-            setOpenModal={setOpenModal}
-            handleCloseModal={handleCloseModal}
-            handleOpenModal={handleOpenModal}
-          />
+            <AddNewEventModal
+                openModal={openModal}
+                setOpenModal={setOpenModal}
+                handleCloseModal={handleCloseModal}
+                handleOpenModal={handleOpenModal}
+            />
+       
+    
+            <ViewEventModal 
+                data={events[index]} 
+                openModal={openViewModal} 
+                setOpenModal={setOpenViewModal} 
+                handleCloseModal={handleCloseViewModal}
+            />   
+            <EditEventModal 
+                data={events[index]}  
+                openModal={openEditModal} 
+                setOpenModal={setOpenEditModal} 
+                handleCloseModal={handleCloseEditModal}
+            />
+            <DeleteEventModal 
+                data={events[index]} 
+                openDeleteModal={openDeleteModal} 
+                setDeleteModal={setOpenDeleteModal} 
+                handleCloseDeleteModal={handleCloseDeleteModal}
+            />  
             <MUIDataTable
                 title={"Event List"}
                 data={data}

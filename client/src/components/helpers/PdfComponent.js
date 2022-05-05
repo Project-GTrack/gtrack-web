@@ -90,7 +90,7 @@ const PdfComponent = forwardRef(({ dashcards, chartData, monthData, yearData }, 
                 </div>
                 <div xs={12} style={{ marginTop: "5vh", marginBottom: "4vh" }}>
                     <p><strong>Total Garbage Weight Collected Per Year </strong></p>
-                    <p style={{ textIndent: "50px" }}>The total garbage weight collected for the year of {moment().format("YYYY")} is <b>{yearData.reduce((total, currentValue) => total = total + currentValue.weight, 0)} </b> Tons</p>
+                    <p style={{ textIndent: "50px" }}>The total garbage weight collected per year is <b>{yearData.reduce((total, currentValue) => total = total + currentValue.weight, 0)} </b> Tons</p>
                     <p style={{ textIndent: "50px" }}>The figure below shows the total garbage weight collected yearly</p>
                     <center>
                         <table style={{ border: "1px solid black" }}>

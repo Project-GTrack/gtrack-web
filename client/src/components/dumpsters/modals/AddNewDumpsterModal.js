@@ -65,26 +65,42 @@ const AddNewDumpsterModal = (props) => {
   const {enqueueSnackbar} = useSnackbar();
   const [loading, setLoading] = React.useState(false);
   const {refetch}=useDumpstersPageContext();
+  const [userLocation, setUserLocation] = React.useState({
+    latitude: 0,
+    longitude: 0,
+  })
   const [coordinate, setCoordinate] = React.useState({
     latitude: 0,
     longitude: 0,
   });
   const [error, setError] = React.useState(null);
   const dumpsterErrorHandling = yup.object().shape({
+    landmark: yup.string().required("Landmark is required"),
     street: yup.string().required("Street is required"),
     purok: yup.string().required("Purok is required"),
     barangay: yup.string().required("Barangay is required"),
+    town: yup.string().required("Town is required"),
+    postal_code: yup.string().required("Postal Code is required"),
   });
+  React.useEffect(() => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      setUserLocation({
+        latitude:position.coords.latitude,
+        longitude:position.coords.longitude
+      })
+    });
+  }, [])
   const handleFormSubmit = async (values, { resetForm }) => {
     if (coordinate.latitude !== 0 && coordinate.longitude !== 0) {
       setLoading(true);
       axios
         .post(`${process.env.REACT_APP_BACKEND_URL}/admin/dumpster/add-dumpster`, {
+          landmark: capitalizeWords(values.landmark), 
           street: capitalizeWords(values.street),
           purok: capitalizeWords(values.purok),
           barangay: capitalizeWords(values.barangay),
-          town: "Compostela",
-          postal_code: "6003",
+          town: capitalizeWords(values.town),
+          postal_code: capitalizeWords(values.postal_code),
           latitude: coordinate.latitude,
           longitude: coordinate.longitude,
           accessToken: Cookies.get("user_id"),
@@ -110,9 +126,12 @@ const AddNewDumpsterModal = (props) => {
   const { handleChange, handleSubmit, handleBlur, values, errors, touched, isValid } =
     useFormik({
       initialValues: {
+        landmark:"",
         street: "",
         purok: "",
         barangay: "",
+        town:"",
+        postal_code:"",
       },
       enableReinitialize: true,
       validationSchema: dumpsterErrorHandling,
@@ -135,6 +154,20 @@ const AddNewDumpsterModal = (props) => {
       </BootstrapDialogTitle>
       <DialogContent dividers>
         <Box sx={{ width: "100%" }}>
+        <TextField
+            margin="dense"
+            id="landmark"
+            label="Landmark"
+            type="text"
+            fullWidth
+            value={values.landmark}
+            onChange={handleChange("landmark")}
+            onBlur={handleBlur("landmark")}
+            inputProps={{ style: { textTransform: "capitalize" } }}
+          />
+          {errors.landmark && touched.landmark && (
+            <p className="text-danger small ">{errors.landmark}</p>
+          )}
           <TextField
             margin="dense"
             id="street"
@@ -177,6 +210,34 @@ const AddNewDumpsterModal = (props) => {
           {errors.barangay && touched.barangay && (
             <p className="text-danger small ">{errors.barangay}</p>
           )}
+          <TextField
+            margin="dense"
+            id="town"
+            label="Town"
+            type="text"
+            fullWidth
+            value={values.town}
+            onChange={handleChange("town")}
+            onBlur={handleBlur("town")}
+            inputProps={{ style: { textTransform: "capitalize" } }}
+          />
+          {errors.town && touched.town && (
+            <p className="text-danger small ">{errors.town}</p>
+          )}
+          <TextField
+            margin="dense"
+            id="postal_code"
+            label="Postal Code"
+            type="text"
+            fullWidth
+            value={values.postal_code}
+            onChange={handleChange("postal_code")}
+            onBlur={handleBlur("postal_code")}
+            inputProps={{ style: { textTransform: "capitalize" } }}
+          />
+          {errors.postal_code && touched.postal_code && (
+            <p className="text-danger small ">{errors.postal_code}</p>
+          )}
           <div style={{ marginTop: "20px", marginBottom: "-18px" }}>
             <p>
               <i>
@@ -195,7 +256,7 @@ const AddNewDumpsterModal = (props) => {
             center={
               coordinate.latitude !== 0 && coordinate.longitude !== 0
                 ? [coordinate.longitude, coordinate.latitude]
-                : [123.94964154058066, 10.482913243053028]
+                : [userLocation.longitude, userLocation.latitude]
             }
             onClick={handleClick}
             zoom={
@@ -209,7 +270,7 @@ const AddNewDumpsterModal = (props) => {
                 coordinates={
                   coordinate.latitude !== 0 && coordinate.longitude !== 0
                     ? [coordinate.longitude, coordinate.latitude]
-                    : [123.94964154058066, 10.482913243053028]
+                    : [userLocation.longitude, userLocation.latitude]
                 }
                 anchor="bottom"
               >

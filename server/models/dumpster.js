@@ -13,6 +13,10 @@ const dumpster = instance.sequelize.define("dumpsters",{
         type:DataTypes.BIGINT,
         allowNull: false
     },
+    landmark:{
+        type:DataTypes.STRING,
+        allowNull:false,
+      },
     street:{
         type:DataTypes.STRING,
         allowNull: false

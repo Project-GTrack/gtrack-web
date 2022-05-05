@@ -24,9 +24,6 @@ exports.viewDashboard= async(req, res)=>{
                 }
             })
              
-            // let driversCount = await sequelize.query("SELECT user_id,fname,lname,email,contact_no,street,purok,barangay,town,createdAt FROM users"+ 
-            // " WHERE createdAt >= LAST_DAY(NOW()) + INTERVAL 1 DAY - INTERVAL 1 MONTH AND createdAt < LAST_DAY(NOW())"+ 
-            // " AND user_type = 'Driver' ");
             let driversCount = await user.model.findAll({
                 attributes :{
                     exclude:['image','birthday','gender','postal_code','email_verified_at','password','remember_token','google_auth','updatedAt','deletedAt']
@@ -37,8 +34,6 @@ exports.viewDashboard= async(req, res)=>{
                 }
             });
 
-            // let trucksCount = await sequelize.query("SELECT truck_id,plate_no,model,createdAt FROM trucks"+
-            // " WHERE createdAt >= LAST_DAY(NOW()) + INTERVAL 1 DAY - INTERVAL 1 MONTH AND createdAt < LAST_DAY(NOW()) AND active = 1");
             let trucksCount = await truck.model.findAll({
                 attributes:{
                     exclude:['user_id','updatedAt','active','deletedAt']
@@ -49,8 +44,6 @@ exports.viewDashboard= async(req, res)=>{
 
             })
 
-            // let dumpstersCount = await sequelize.query("SELECT dumpster_id,purok,street,barangay,createdAt FROM dumpsters"+
-            // " WHERE createdAt >= LAST_DAY(NOW()) + INTERVAL 1 DAY - INTERVAL 1 MONTH AND createdAt < LAST_DAY(NOW())");
             let dumpstersCount = await dumpster.model.findAll({
                 attributes:{
                     exclude:['admin_id','town','postal_code','latitude','longitude','complete','updatedAt','deletedAt']
@@ -60,10 +53,6 @@ exports.viewDashboard= async(req, res)=>{
                 },
             })
 
-
-            // let collectionsCount = await sequelize.query("SELECT w.weight_id,w.collection_date,w.collection_route,w.collection_weight_volume,u.fname,u.lname,w.createdAt FROM waste_collections w"+
-            // " INNER JOIN users u ON w.driver_id = u.user_id"+
-            // " WHERE w.collection_date >= LAST_DAY(NOW()) + INTERVAL 1 DAY - INTERVAL 1 MONTH AND w.collection_date < LAST_DAY(NOW())");
             let collectionsCount = await collection.model.findAll({
                 attributes:{
                     exclude:['updatedAt','deletedAt']
@@ -88,10 +77,8 @@ exports.viewDashboard= async(req, res)=>{
             let chartDataCount = await sequelize.query(queryString1,{type: sequelize.QueryTypes.SELECT});
             let monthlyData = await sequelize.query(queryString2,{type: sequelize.QueryTypes.SELECT});
             let yearlyData = await sequelize.query(queryString3,{type: sequelize.QueryTypes.SELECT});
-            // chartDataCount.push(monthlyData);
-            // chartDataCount.push(yearlyData);
-            
          
+            
             res.send({data:admin, drivers:driversCount, trucks:trucksCount, dumpsters:dumpstersCount,
                         collections:collectionsCount,chartData:chartDataCount,monthData:monthlyData,yearData:yearlyData});
             

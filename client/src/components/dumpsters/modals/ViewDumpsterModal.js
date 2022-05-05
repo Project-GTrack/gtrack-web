@@ -89,7 +89,7 @@ const ViewDumpsterModal = (props) => {
       <DialogContent dividers>
       <Box sx={{ width: "100%" }} paddingTop={2} paddingBottom={2}>
       <Typography variant="body2" color="text.secondary">
-           <b style={{fontSize: 20}}>{props.data[1]} </b> 
+           <b style={{fontSize: 20}}>{props.data[3]} - {props.data[1]} </b> 
           </Typography>
           </Box>
       <div style={{ height: '40vh', width: '100%' }}>
@@ -100,21 +100,21 @@ const ViewDumpsterModal = (props) => {
               width: "100%",
             }}
             center={
-              props.data[3] != 0 && props.data[4] != 0
-                ? [props.data[4], props.data[3]]
+              props.data[4] != 0 && props.data[5] != 0
+                ? [props.data[5], props.data[4]]
                 : [123.94964154058066, 10.482913243053028]
             }
             zoom={
-              props.data[3]  != 0 && props.data[4] != 0
+              props.data[4]  != 0 && props.data[5] != 0
                 ? [15]
                 : [11]
             }
           >
-            {props.data[3] != 0 && props.data[4] != 0 ? (
+            {props.data[4] != 0 && props.data[5] != 0 ? (
               <Marker
                 coordinates={
-                  props.data[3] != 0 && props.data[4] != 0
-                    ? [props.data[4], props.data[3]]
+                  props.data[4] != 0 && props.data[5] != 0
+                    ? [props.data[5], props.data[4]]
                     : [123.94964154058066, 10.482913243053028]
                 }
                 anchor="bottom"

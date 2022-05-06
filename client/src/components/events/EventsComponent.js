@@ -4,12 +4,15 @@ import EventCustomToolbar from './EventCustomToolbar';
 import AddNewEventModal from './modals/AddNewEventModal';
 import moment from 'moment';
 import {useEventPageContext} from '../../pages/EventsPage';  
+import ViewEventModal from './modals/ViewEventModal';
+import EditEventModal from './modals/EditEventModal';
+import DeleteEventModal from './modals/DeleteEventModal';
 const EventsComponent = () => {
     const {queryResult}=useEventPageContext();
     const events = queryResult.data.data;
     const[data,  setData] = useState([]);
+    const[rowData,  setRowData] = useState([]);
     useEffect(()=>{
-       
         var temp = [];
         // eslint-disable-next-line array-callback-return
         events && events.map((event)=>{
@@ -32,6 +35,33 @@ const EventsComponent = () => {
         setData(temp);  
 
     },[events]);
+    const [viewModal, setViewModal] = React.useState(false);
+    const [openDeleteModal, setDeleteModal] = React.useState(false);
+    const[openEditModal, setEditModal] = React.useState(false);
+
+    const handleViewModal = (rowData) => {
+        setViewModal(true);
+        setRowData(rowData);
+      }
+
+    const handleOpenEditModal = (rowData) => {
+        setEditModal(true);
+        setRowData(rowData);
+    }  
+    const handleCloseViewModal = () => setViewModal(false);
+    const handleDeleteModal = (rowData) => {
+        setDeleteModal(true);
+        setRowData(rowData);
+      }
+    const handleCloseDeleteModal = () => setDeleteModal(false);
+    const handleCloseEditModal = () => setEditModal(false);
+    useEffect(() => {
+      return () => {
+        setOpenModal(false);
+        setEditModal(false);
+        setDeleteModal(false);
+      }
+    }, [])
     const columns = [
         {
             name:"ID",
@@ -146,6 +176,20 @@ const EventsComponent = () => {
                 display:false,
                 viewColumns:false,
             }
+        },{
+            name:"Actions",
+            label:"Actions",
+            options:{
+                customBodyRender: (value,tableMeta,updateValue)=>{
+                    return (
+                        <>
+                            <button onClick={()=>handleViewModal(tableMeta.rowData)} className="btn btn-primary "><i className="fa fa-info-circle" aria-hidden="true"></i></button>
+                            <button onClick={()=>handleOpenEditModal(tableMeta.rowData)} className="btn btn-warning "><i className="fa fa-pencil" aria-hidden="true"></i></button>
+                            <button onClick={()=>handleDeleteModal(tableMeta.rowData)} className="btn btn-danger "><i className="fa fa-trash" aria-hidden="true"></i></button>
+                        </>
+                    )
+                }
+            }
         }
     
       ];
@@ -158,7 +202,7 @@ const EventsComponent = () => {
 
     const options = {
     selectableRowsHeader: false,
-    selectableRows:'single',
+    selectableRows:false,
     filter: true,
     filterType: 'dropdown',
     customToolbarSelect:(selectedRows,displayData)=>(
@@ -179,6 +223,9 @@ const EventsComponent = () => {
             handleCloseModal={handleCloseModal}
             handleOpenModal={handleOpenModal}
           />
+          <ViewEventModal data={rowData} openModal={viewModal} setOpenModal={setViewModal} handleCloseModal={handleCloseViewModal}/>
+          <EditEventModal data={rowData}  openModal={openEditModal} setOpenModal={setEditModal} handleCloseModal={handleCloseEditModal}/>
+          <DeleteEventModal data={rowData} openDeleteModal={openDeleteModal} setDeleteModal={setDeleteModal} handleCloseDeleteModal={handleCloseDeleteModal}/>
             <MUIDataTable
                 title={"Event List"}
                 data={data}

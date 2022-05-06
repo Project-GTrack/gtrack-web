@@ -71,16 +71,16 @@ const EditDumpsterModal = (props) => {
       latitude: props.data[3],
       longitude: props.data[4],
     });
-    values.street = props.data[1].split(", ")[0];
-    values.purok = props.data[1].split(", ")[1];
-    values.barangay = props.data[1].split(", ")[2];
-    values.town = props.data[1].split(", ")[3];
+    values.street = props.data[1]&&props.data[1].split(", ")[0];
+    values.purok = props.data[1]&&props.data[1].split(", ")[1];
+    values.barangay = props.data[1]&&props.data[1].split(", ")[2];
+    values.town = props.data[1]&&props.data[1].split(", ")[3];
     values.postal_code = props.data[2];
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.openModal]);
   const handleFormSubmit = (values, { resetForm }) => {
     setLoading(true);
-    if (values.street === props.data[1].split(", ")[0] && values.purok === props.data[1].split(", ")[1] && values.barangay === props.data[1].split(", ")[2] && values.town === props.data[1].split(", ")[3] && values.postal_code === props.data[2] && coordinate.latitude === props.data[3] && coordinate.longitude === props.data[4]) {
+    if (values.street === props.data[1]&&props.data[1].split(", ")[0] && values.purok === props.data[1]&&props.data[1].split(", ")[1] && values.barangay === props.data[1]&&props.data[1].split(", ")[2] && values.town === props.data[1].split(", ")[3] && values.postal_code === props.data[2] && coordinate.latitude === props.data[3] && coordinate.longitude === props.data[4]) {
       props.setOpenModal(false);
     } else {
       if (coordinate.latitude !== 0 && coordinate.longitude !== 0) {
@@ -115,9 +115,9 @@ const EditDumpsterModal = (props) => {
   const { handleChange, handleSubmit, handleBlur, values, errors, touched, isValid } =
     useFormik({
       initialValues: {
-        street: props.data[1].split(", ")[0],
-        purok: props.data[1].split(", ")[1],
-        barangay: props.data[1].split(", ")[2],
+        street: props.data[1]&&props.data[1].split(", ")[0],
+        purok: props.data[1]&&props.data[1].split(", ")[1],
+        barangay: props.data[1]&&props.data[1].split(", ")[2],
       },
       enableReinitialize: true,
       validationSchema: dumpsterErrorHandling,

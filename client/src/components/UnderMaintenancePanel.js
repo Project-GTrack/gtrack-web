@@ -4,15 +4,17 @@ import GarbageTrucksToolbar from './GarbageTrucksToolbar';
 import { useEffect } from 'react';
 import moment from 'moment';
 import { useTrucksPageContext } from '../pages/TrucksPage';
+import ReactivateTruckModal from './trucks/ReactivateTruckModal';
 const UnderMaintenancePanel = () => {
     const {queryResult}= useTrucksPageContext();
-    const inactives = queryResult.data.data.inactives
-    const columns = ["Plate Number", "Model","Added by","Date Added", "Status"];
+    const inactives = queryResult.data.data.inactives;
     const [data, setData] = useState([]);
     const [openReactivateModal, setOpenReactivateModal] = useState(false);
-    // const data = [
-    // ["AB123", "Suzuki", "01/01/22", "Active",],
-    // ];
+    const [rowData, setRowData] = useState(0);
+    const handleOpenReactivateModal=(rowData)=>{
+        setOpenReactivateModal(true);
+        setRowData(rowData);
+    }
     useEffect(() => {
         var temp=[];
         // eslint-disable-next-line array-callback-return
@@ -21,10 +23,23 @@ const UnderMaintenancePanel = () => {
         })
         setData(temp);
     }, [inactives])
-
+    
+    const columns = ["Plate Number", "Model","Added by","Date Added", "Status",{
+        label:"Actions",
+        options:{
+            customBodyRenderLite: (dataIndex, rowIndex)=>{
+                // console.log(tableMeta.tableData);
+                return (
+                    <>
+                        <button onClick={()=>handleOpenReactivateModal(dataIndex)} className="btn btn-success mx-2"><i className="fa fa-check" aria-hidden="true"></i></button>
+                    </>
+                )
+            }
+        }
+    }];
     const options = {
         selectableRowsHeader: false,
-        selectableRows:'single',
+        selectableRows:false,
         filter: true,
         filterType: 'dropdown',
         customToolbarSelect:(selectedRows,displayData)=>(
@@ -45,6 +60,7 @@ const UnderMaintenancePanel = () => {
                     columns={columns}
                     options={options}
             />
+            <ReactivateTruckModal data={inactives[rowData]} openReactivateModal={openReactivateModal} setOpenReactivateModal={setOpenReactivateModal}/>
         </div>
     )
 }

@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import Grid from "@mui/material/Grid";
 import { styled } from '@mui/material/styles';
 import Box from "@mui/material/Box";
@@ -130,7 +130,14 @@ export default function EditEventModal(props) {
         .test("FILE_FORMAT", "Uploaded file has unsupported format.", 
             value => !value || (value && SUPPORTED_FORMATS.includes(value.type)))
   })
-
+  useEffect(() => {
+    let temp=[];
+    // eslint-disable-next-line array-callback-return
+    props.data[10]&&props.data[10].map((image)=>{
+      temp.push(image.filename);
+    })
+    setUrls([...temp]);
+  }, [props])
   const handleFormSubmit = async(values) => {
     setLoading(true);
     if(Cookies.get('user_id')){
@@ -167,12 +174,12 @@ export default function EditEventModal(props) {
     initialValues:{ 
       event_name: props.data[1],
       description:props.data[2],
-      startDate:moment(props.data[6].split(" - ")[0]).format("YYYY-MM-DDTkk:mm"),
-      endDate:moment(props.data[6].split(" - ")[1]).format("YYYY-MM-DDTkk:mm"),
-      street:props.data[7].split(" ")[0],
-      purok:props.data[7].split(" ")[1],
-      barangay:props.data[7].split(" ")[2],
-      town:props.data[7].split(" ")[3],
+      startDate:props.data[6]&&moment(props.data[6].split(" - ")[0]).format("YYYY-MM-DDTkk:mm"),
+      endDate:props.data[6]&&moment(props.data[6].split(" - ")[1]).format("YYYY-MM-DDTkk:mm"),
+      street:props.data[7]&&props.data[7].split(" ")[0],
+      purok:props.data[7]&&props.data[7].split(" ")[1],
+      barangay:props.data[7]&&props.data[7].split(" ")[2],
+      town:props.data[7]&&props.data[7].split(" ")[3],
       postal_code: props.data[11],
       target_participants:props.data[3],
       status:props.data[8],

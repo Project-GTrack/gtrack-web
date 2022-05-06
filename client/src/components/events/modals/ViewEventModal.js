@@ -1,7 +1,6 @@
 import * as React from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
@@ -67,7 +66,7 @@ export default function ViewEventModal(props) {
       <DialogContent dividers>
         <Box sx={{ width: "100%" }}>
         <Carousel sx={{height: 200,width:'100%',alignContent:'center',alignItems:'center',justifyContent:'center',margin:'auto'}}>
-          {props.data[10].length!==0?(props.data[10].map((image,i)=>{
+          {props.data[10]&&props.data[10].length!==0?(props.data[10].map((image,i)=>{
               return (
                 <div key = {i} className="text-center mx-auto ml-auto mr-auto">
                   <img 

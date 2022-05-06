@@ -75,17 +75,17 @@ const EditDumpsterModal = (props) => {
       latitude: props.data[4],
       longitude: props.data[5],
     });
-    values.landmark = props.data[3];
-    values.street = props.data[1].split(", ")[0];
-    values.purok = props.data[1].split(", ")[1];
-    values.barangay = props.data[1].split(", ")[2];
-    values.town = props.data[1].split(", ")[3];
-    values.postal_code = props.data[2];
+    values.landmark = props.data[3]&&props.data[3];
+    values.street = props.data[1]&&props.data[1].split(", ")[0];
+    values.purok = props.data[1]&&props.data[1].split(", ")[1];
+    values.barangay = props.data[1]&&props.data[1].split(", ")[2];
+    values.town = props.data[1]&&props.data[1].split(", ")[3];
+    values.postal_code = props.data[2]&&props.data[2];
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.openModal]);
   const handleFormSubmit = (values, { resetForm }) => {
     setLoading(true);
-    if (values.landmark === props.data[3] && values.street === props.data[1].split(", ")[0] && values.purok === props.data[1].split(", ")[1] && values.barangay === props.data[1].split(", ")[2] && values.town === props.data[1].split(", ")[3] && values.postal_code === props.data[2] && coordinate.latitude === props.data[4] && coordinate.longitude === props.data[5]) {
+    if (values.landmark === props.data[3]&&props.data[3] && values.street === props.data[1]&&props.data[1].split(", ")[0] && values.purok === props.data[1]&&props.data[1].split(", ")[1] && values.barangay === props.data[1]&&props.data[1].split(", ")[2] && values.town === props.data[1]&&props.data[1].split(", ")[3] && values.postal_code === props.data[2]&&props.data[2] && coordinate.latitude === props.data[4]&&props.data[4] && coordinate.longitude === props.data[5]&&props.data[5]) {
       props.setOpenModal(false);
     } else {
       if (coordinate.latitude !== 0 && coordinate.longitude !== 0) {
@@ -124,12 +124,12 @@ const EditDumpsterModal = (props) => {
   const { handleChange, handleSubmit, handleBlur, values, errors, touched, isValid } =
     useFormik({
       initialValues: {
-        landmark:props.data[3],
-        street: props.data[1].split(", ")[0],
-        purok: props.data[1].split(", ")[1],
-        barangay: props.data[1].split(", ")[2],
-        town: props.data[1].split(", ")[3],
-        postal_code: props.data[2]
+        landmark:props.data[3]&&props.data[3],
+        street: props.data[1]&&props.data[1].split(", ")[0],
+        purok: props.data[1]&&props.data[1].split(", ")[1],
+        barangay: props.data[1]&&props.data[1].split(", ")[2],
+        town: props.data[1]&&props.data[1].split(", ")[3],
+        postal_code: props.data[2]&&props.data[2]
       },
       enableReinitialize: true,
       validationSchema: dumpsterErrorHandling,

@@ -44,7 +44,7 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-const ViewReportModal = (props) => {
+const ViewConcernModal = (props) => {
   return (
     <Dialog
      fullWidth={true}
@@ -61,7 +61,7 @@ const ViewReportModal = (props) => {
       <DialogContent dividers>
       <Box sx={{ width: "100%" }} paddingTop={2} paddingBottom={2}>
         <Carousel sx={{height: 200,width:'100%',alignContent:'center',alignItems:'center',justifyContent:'center',margin:'auto'}}>
-            {props.data.concernAttachmentLine.lineAttachment.length!==0?(props.data.concernAttachmentLine.lineAttachment.map((image,i)=>{
+            {props.data&&props.data.concernAttachmentLine.lineAttachment.length!==0?(props.data.concernAttachmentLine.lineAttachment.map((image,i)=>{
                 return (
                   <div key = {i} className="text-center mx-auto ml-auto mr-auto">
                     <img 
@@ -79,32 +79,32 @@ const ViewReportModal = (props) => {
             )}
           </Carousel>
           <Typography variant="body2" mt={2} color="text.dark">
-            <b>Subject:</b> {props.data.subject}
+            <b>Subject:</b> {props.data&&props.data.subject}
           </Typography>
           <Typography align='justify' variant="body2" color="text.dark">
-            <b>Message:</b> {props.data.message}
+            <b>Message:</b> {props.data&&props.data.message}
           </Typography>
           <Typography align='justify' variant="body2" color="text.dark">
-            <b>Classification:</b> {props.data.classification}
+            <b>Classification:</b> {props.data&&props.data.classification}
           </Typography>
           <Typography variant="body2" color="text.dark">
-            <b>Date Sent:</b> {moment(props.data.createdAt).format("MMMM DD, YYYY")}
+            <b>Date Sent:</b> {props.data&&moment(props.data.createdAt).format("MMMM DD, YYYY")}
           </Typography>
           <hr/>
           <Typography variant="body2" color="text.dark">
             Sender Details
           </Typography>
           <Typography variant="body2" mt={2} color="text.dark">
-            <b>Name:</b> {props.data.concernResident.fname+" "+props.data.concernResident.lname}
+            <b>Name:</b> {props.data&&props.data.concernResident.fname+" "+props.data&&props.data.concernResident.lname}
           </Typography>
           <Typography align='justify' variant="body2" color="text.dark">
-            <b>Address:</b> {`${props.data.concernResident.purok?props.data.concernResident.purok:''}  ${props.data.concernResident.street?props.data.concernResident.street:''} ${props.data.concernResident.barangay?props.data.concernResident.barangay:''}`}
+            <b>Address:</b> {`${props.data&&props.data.concernResident.purok?props.data.concernResident.purok:''}  ${props.data&&props.data.concernResident.street?props.data.concernResident.street:''} ${props.data&&props.data.concernResident.barangay?props.data.concernResident.barangay:''}`}
           </Typography>
           <Typography align='justify' variant="body2" color="text.dark">
-            <b>Contact Number:</b> {props.data.concernResident.contact_no?props.data.concernResident.contact_no:''}
+            <b>Contact Number:</b> {props.data&&props.data.concernResident.contact_no?props.data.concernResident.contact_no:''}
           </Typography>
           <Typography variant="body2" color="text.dark">
-            <b>Email:</b> {props.data.concernResident.email}
+            <b>Email:</b> {props.data&&props.data.concernResident.email}
           </Typography>
       </Box>
       </DialogContent>
@@ -113,4 +113,4 @@ const ViewReportModal = (props) => {
     </Dialog>
   );
 }
-export default ViewReportModal;
+export default ViewConcernModal;

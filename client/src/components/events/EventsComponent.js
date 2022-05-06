@@ -14,7 +14,6 @@ const EventsComponent = () => {
     const[index,setIndex] = useState(0);
     
     useEffect(()=>{
-       
         var temp = [];
         // eslint-disable-next-line array-callback-return
         events && events.map((event)=>{

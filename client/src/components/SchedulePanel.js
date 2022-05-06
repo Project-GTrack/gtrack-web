@@ -8,6 +8,8 @@ import ScheduleDialogBox from './ScheduleDialogBox';
 import AddScheduleModal from './schedules/AddScheduleModal';
 import ScheduleCustomToolbar from './schedules/ScheduleCustomToolbar';
 import { useSchedulesPageContext } from '../pages/SchedulesPage';
+import EditScheduleModal from './schedules/EditScheduleModal';
+import DeleteScheduleModal from './schedules/DeleteScheduleModal';
 const SchedulePanel = (props) => {
     const {queryResult}=useSchedulesPageContext();
     const schedules=queryResult.data.data.schedule;
@@ -15,19 +17,42 @@ const SchedulePanel = (props) => {
     const [calendar,setCalendar]=useState(false);
     const [data, setData] = useState([]);
     const [openAddModal,setOpenAddModal]=useState(false);
+    const [dataInd,setDataInd]=useState(0);
     const [openEditModal,setOpenEditModal]=useState(false);
     const [openDeleteModal,setOpenDeleteModal]=useState(false);
     const [open,setOpen]=useState({
         isOpen:false,
         data:null
     });
+    const handleModalOpen=(ind)=>{
+        setOpenEditModal(true);
+        setDataInd(ind);
+    }
+    const handleModalDeleteOpen=(ind)=>{
+        setOpenDeleteModal(true);
+        setDataInd(ind);
+    }
     const [event,setEvent]=useState([]);
     const [localizer] = useState(momentLocalizer(moment));
-    const columns = ["Type","Schedule","Garbage Type","Driver","Landmark","Address","Date Created"];
+    const columns = ["Type","Schedule","Garbage Type","Driver","Landmark","Address","Date Created",{
+        name:"Actions",
+        label:"Actions",
+        options:{
+            filter:false,
+            customBodyRenderLite: (dataIndex, rowIndex)=>{
+                return (
+                    <div>
+                       <button onClick={()=>handleModalOpen(dataIndex)} className="btn btn-warning "><i className="fa fa-pencil" aria-hidden="true"></i></button>
+                       <button onClick={()=>handleModalDeleteOpen(dataIndex)} className="btn btn-danger "><i className="fa fa-trash" aria-hidden="true"></i></button>
+                    </div>
+                )
+            }
+        }
+    }];
 
     const options = {
     selectableRowsHeader: false,
-    selectableRows:'single',
+    selectableRows:false,
     filter: true,
     filterType: 'dropdown',
         customToolbarSelect:(selectedRows,displayData)=>(
@@ -142,6 +167,8 @@ const SchedulePanel = (props) => {
                 openAddModal={openAddModal}
                 setOpenAddModal={setOpenAddModal}
             />
+            <EditScheduleModal data={schedules[dataInd]} openEditModal={openEditModal} setOpenEditModal={setOpenEditModal}/>
+            <DeleteScheduleModal data={schedules[dataInd]} openDeleteModal={openDeleteModal} setOpenDeleteModal={setOpenDeleteModal}/>
             {(!calendar)?(
                 <MUIDataTable
                     title={"Schedule List"}

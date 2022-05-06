@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import Grid from "@mui/material/Grid";
 import { styled } from '@mui/material/styles';
 import Box from "@mui/material/Box";
@@ -130,7 +130,14 @@ export default function EditEventModal(props) {
         .test("FILE_FORMAT", "Uploaded file has unsupported format.", 
             value => !value || (value && SUPPORTED_FORMATS.includes(value.type)))
   })
-
+  useEffect(() => {
+    let temp=[];
+    // eslint-disable-next-line array-callback-return
+    props.data.eventLine.lineAttachment.map((image)=>{
+      temp.push(image.filename);
+    })
+    setUrls([...temp]);
+  }, [props])
   const handleFormSubmit = async(values) => {
     setLoading(true);
     if(Cookies.get('user_id')){

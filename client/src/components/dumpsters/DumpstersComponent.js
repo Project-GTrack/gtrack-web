@@ -3,6 +3,9 @@ import MUIDataTable from "mui-datatables";
 import DumpsterCustomToolbar from './DumpsterCustomToolbar';
 import AddNewDumpsterModal from './modals/AddNewDumpsterModal';
 import { useDumpstersPageContext } from '../../pages/DumpstersPage';
+import ViewDumpsterModal from './modals/ViewDumpsterModal';
+import EditDumpsterModal from './modals/EditDumpsterModal';
+import DeleteDumpsterModal from './modals/DeleteDumpsterModal';
 
 const DumpstersComponent = ({statusToast, setStatusToast}) => {
   const [openModal, setOpenModal] = useState(false);
@@ -31,6 +34,29 @@ const DumpstersComponent = ({statusToast, setStatusToast}) => {
       }     
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
+    const [openViewModal, setOpenViewModal] = useState(false);
+    const [openDeleteModal, setDeleteModal] = useState(false);
+    const [openEditModal, setEditModal] = useState(false);
+    const[rowData,  setRowData] = useState([]);
+    const handleOpenViewModal = (rowData) => {
+        setOpenViewModal(true);
+        setRowData(rowData);
+    }
+    const handleOpenEditModal = (rowData) => {
+        setEditModal(true);
+        setRowData(rowData);
+    }
+    const handleDeleteModal = (rowData) => {
+        setDeleteModal(true);
+        setRowData(rowData);
+    }
+    useEffect(() => {
+      return () => {
+        setOpenViewModal(false);
+        setDeleteModal(false);
+        setEditModal(false);
+      }
+    }, [])
     const columns = [
         {
         name:"ID",
@@ -85,11 +111,26 @@ const DumpstersComponent = ({statusToast, setStatusToast}) => {
                     display:false,
                     viewColumns:false,
                 }
+            },
+            {
+                name:"Actions",
+                label:"Actions",
+                options:{
+                    customBodyRender: (value,tableMeta,updateValue)=>{
+                        return (
+                            <>
+                                <button onClick={()=>handleOpenViewModal(tableMeta.rowData)} className="btn btn-primary mx-2"><i className="fa fa-info-circle" aria-hidden="true"></i></button>
+                                <button onClick={()=>handleOpenEditModal(tableMeta.rowData)} className="btn btn-warning "><i className="fa fa-pencil" aria-hidden="true"></i></button>
+                                <button onClick={()=>handleDeleteModal(tableMeta.rowData)} className="btn btn-danger mx-2"><i className="fa fa-trash" aria-hidden="true"></i></button>
+                            </>
+                        )
+                    }
                 }
+            }
 ]
     const options = {
     selectableRowsHeader: false,
-    selectableRows:'single',
+    selectableRows:false,
     filter: true,
     filterType: 'dropdown',
     customToolbarSelect:(selectedRows,displayData)=>(
@@ -106,6 +147,9 @@ const DumpstersComponent = ({statusToast, setStatusToast}) => {
                 handleCloseModal={handleCloseModal}
                 handleOpenModal={handleOpenModal}
             />
+            <ViewDumpsterModal data={rowData} openModal={openViewModal} setOpenModal={setOpenViewModal} handleCloseModal={()=>setOpenViewModal(false)}/>
+            <EditDumpsterModal data={rowData} openModal={openEditModal} setOpenModal={setEditModal} handleCloseModal={()=>setEditModal(false)}/>
+            <DeleteDumpsterModal data={rowData} openDeleteModal={openDeleteModal} setDeleteModal={setDeleteModal} handleCloseDeleteModal={()=>setDeleteModal(false)}/>
             <MUIDataTable
                 title={"Dumpsters List"}
                 data={data}

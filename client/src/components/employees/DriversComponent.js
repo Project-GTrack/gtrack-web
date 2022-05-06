@@ -4,11 +4,16 @@ import EmployeeCustomToolbar from './EmployeeCustomToolbar';
 import AddNewEmployeeModal from './modals/AddNewEmployeeModal';
 import moment from 'moment';
 import { useEmployeePageContext } from '../../pages/EmployeesPage';
+import ViewEmployeeModal from './modals/ViewEmployeeModal';
+import DeleteEmployeeModal from './modals/DeleteEmployeeModal';
 const DriversComponent = () => {
   // const [, setDriverList] = useState([]);
   const {queryResult}=useEmployeePageContext();
   const drivers=queryResult.data.data.drivers;
   const [data, setData] = useState([]);
+  const [openViewModal, setOpenViewModal] = useState(false);
+  const [openDeleteModal, setDeleteModal] = useState(false);
+  const [rowData, setRowData] = useState([]);
   useEffect(() => {
     // setDriverList(drivers);
     var temp=[];
@@ -18,8 +23,28 @@ const DriversComponent = () => {
     })
     setData(temp);
   }, [drivers])
-  
-  const columns = ["First Name", "Last Name", "Email", "Contact Number","Address","Age","Gender","Date Added","Status"];
+  const handleOpenViewModal=(rowData)=>{
+    setOpenViewModal(true);
+    setRowData(rowData);
+  }
+  const handleDeleteModal=(rowData)=>{
+    setDeleteModal(true)
+    setRowData(rowData);
+  }
+  const columns = ["First Name", "Last Name", "Email", "Contact Number","Address","Age","Gender","Date Added","Status",{
+    name:"Actions",
+        label:"Actions",
+        options:{
+            customBodyRender: (value,tableMeta,updateValue)=>{
+                return (
+                    <>
+                        <button onClick={()=>handleOpenViewModal(tableMeta.rowData)} className="btn btn-primary "><i className="fa fa-info-circle" aria-hidden="true"></i></button>
+                        <button onClick={()=>handleDeleteModal(tableMeta.rowData)} className={(tableMeta.rowData[8] === "Active")?"btn btn-danger":"btn btn-success"}><i className={(tableMeta.rowData[8] === "Active")?"fa fa-minus-circle":"fa fa-check"} aria-hidden="true"></i></button>
+                    </>
+                )
+            }
+        }
+  }];
 
   const [openModal, setOpenModal] = React.useState(false);
   useEffect(() => {
@@ -29,7 +54,7 @@ const DriversComponent = () => {
   }, [])
     const options = {
       selectableRowsHeader: false,
-      selectableRows:'single',
+      selectableRows:false,
       filter: true,
       filterType: 'dropdown',
       customToolbarSelect:(selectedRows,displayData)=>(
@@ -49,6 +74,8 @@ const DriversComponent = () => {
               openModal={openModal}
               setOpenModal={setOpenModal}
             />
+            <ViewEmployeeModal data={rowData} openModal={openViewModal} setOpenModal={setOpenViewModal} handleCloseModal={()=>setOpenViewModal(false)}/>
+            <DeleteEmployeeModal data={rowData} openDeleteModal={openDeleteModal} setDeleteModal={setDeleteModal}/>
             <MUIDataTable
               title={"Drivers List"}
               data={data}

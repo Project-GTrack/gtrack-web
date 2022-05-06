@@ -89,7 +89,7 @@ const ViewDumpsterModal = (props) => {
       <DialogContent dividers>
       <Box sx={{ width: "100%" }} paddingTop={2} paddingBottom={2}>
       <Typography variant="body2" color="text.secondary">
-           <b style={{fontSize: 20}}>{props.data[3]} - {props.data[1]} </b> 
+           <b style={{fontSize: 20}}>{props.data[3]&&props.data[3]} - {props.data[1]&&props.data[1]} </b> 
           </Typography>
           </Box>
       <div style={{ height: '40vh', width: '100%' }}>

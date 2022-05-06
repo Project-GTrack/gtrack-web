@@ -45,6 +45,7 @@ const ConcernComponent = () => {
         label:"Actions",
         options:{
             filter:false,
+            sort:false,
             customBodyRenderLite: (dataIndex, rowIndex)=>{
                 return (
                     <>

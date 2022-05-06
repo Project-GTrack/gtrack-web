@@ -39,6 +39,7 @@ const SchedulePanel = (props) => {
         label:"Actions",
         options:{
             filter:false,
+            sort:false,
             customBodyRenderLite: (dataIndex, rowIndex)=>{
                 return (
                     <div>

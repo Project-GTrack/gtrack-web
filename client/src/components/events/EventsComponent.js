@@ -124,7 +124,8 @@ const EventsComponent = () => {
         {
             name: "Actions",
             options: {
-              filter: false,
+                filter:false,
+                sort:false,
               customBodyRenderLite: (dataIndex) => (
                <div style={{textAlign:'center'}}>
                    <button style={{display:'inline-block'}} onClick={()=>handleOpenViewModal(dataIndex)} className="btn btn-primary mx-2 "><i className="fa fa-info-circle" aria-hidden="true"></i></button>

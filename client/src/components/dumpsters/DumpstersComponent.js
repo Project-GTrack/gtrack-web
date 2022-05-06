@@ -116,6 +116,8 @@ const DumpstersComponent = ({statusToast, setStatusToast}) => {
                 name:"Actions",
                 label:"Actions",
                 options:{
+                    filter:false,
+                    sort:false,
                     customBodyRender: (value,tableMeta,updateValue)=>{
                         return (
                             <>

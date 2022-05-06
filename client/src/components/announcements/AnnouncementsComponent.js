@@ -120,6 +120,8 @@ const AnnouncementsComponent = () => {
         name:"Actions",
         label:"Actions",
         options:{
+            filter:false,
+            sort:false,
             customBodyRender: (value,tableMeta,updateValue)=>{
                 return (
                     <>

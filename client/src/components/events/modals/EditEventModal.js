@@ -133,7 +133,7 @@ export default function EditEventModal(props) {
   useEffect(() => {
     let temp=[];
     // eslint-disable-next-line array-callback-return
-    props.data[10]&&props.data[10].map((image)=>{
+    props.data.eventLine.lineAttachment.map((image)=>{
       temp.push(image.filename);
     })
     setUrls([...temp]);
@@ -172,18 +172,18 @@ export default function EditEventModal(props) {
 
   const { handleChange, handleSubmit, handleBlur, values, errors,isValid,touched } = useFormik({
     initialValues:{ 
-      event_name: props.data[1],
-      description:props.data[2],
-      startDate:props.data[6]&&moment(props.data[6].split(" - ")[0]).format("YYYY-MM-DDTkk:mm"),
-      endDate:props.data[6]&&moment(props.data[6].split(" - ")[1]).format("YYYY-MM-DDTkk:mm"),
-      street:props.data[7]&&props.data[7].split(" ")[0],
-      purok:props.data[7]&&props.data[7].split(" ")[1],
-      barangay:props.data[7]&&props.data[7].split(" ")[2],
-      town:props.data[7]&&props.data[7].split(" ")[3],
-      postal_code: props.data[11],
-      target_participants:props.data[3],
-      status:props.data[8],
-      registration_form_url:props.data[12]
+      event_name: props.data.event_name,
+      description:props.data.description,
+      startDate:moment(props.data.startDate).format("YYYY-MM-DDTkk:mm"),
+      endDate:moment(props.data.endDate).format("YYYY-MM-DDTkk:mm"),
+      street:props.data.street,
+      purok:props.data.purok,
+      barangay:props.data.barangay,
+      town:props.data.town,
+      postal_code: props.postal_code,
+      target_participants:props.data.target_participants,
+      status:props.data.status,
+      registration_form_url:props.data.registration_form_url
     },
     enableReinitialize:true,
     validationSchema:eventValidationSchema,

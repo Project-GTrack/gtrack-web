@@ -41,8 +41,10 @@ const ReportComponent = () => {
     }, [reports])
 
     const columns = ["Subject", "Message","Driver","Degree",{
+        name:"Actions",
         label:"Actions",
         options:{
+            filter:false,
             customBodyRenderLite: (dataIndex, rowIndex)=>{
                 return (
                     <>

@@ -4,14 +4,15 @@ import MUIDataTable from "mui-datatables";
 import AddNewEventModal from './modals/AddNewEventModal';
 import moment from 'moment';
 import {useEventPageContext} from '../../pages/EventsPage';  
-import ViewEventModal from './modals/ViewEventModal';
-import EditEventModal from './modals/EditEventModal';
-import DeleteEventModal from './modals/DeleteEventModal';
+import ViewEventModal from "./modals/ViewEventModal";
+import EditEventModal from "./modals/EditEventModal";
+import DeleteEventModal from "./modals/DeleteEventModal";
 const EventsComponent = () => {
     const {queryResult}=useEventPageContext();
     const events = queryResult.data.data;
     const[data,  setData] = useState([]);
-    const[rowData,  setRowData] = useState([]);
+    const[index,setIndex] = useState(0);
+    
     useEffect(()=>{
         var temp = [];
         // eslint-disable-next-line array-callback-return
@@ -32,36 +33,9 @@ const EventsComponent = () => {
                 event.registration_form_url,
             ]);
         })
-        setData(temp);  
-
-    },[events]);
-    const [viewModal, setViewModal] = React.useState(false);
-    const [openDeleteModal, setDeleteModal] = React.useState(false);
-    const[openEditModal, setEditModal] = React.useState(false);
-
-    const handleViewModal = (rowData) => {
-        setViewModal(true);
-        setRowData(rowData);
-      }
-
-    const handleOpenEditModal = (rowData) => {
-        setEditModal(true);
-        setRowData(rowData);
-    }  
-    const handleCloseViewModal = () => setViewModal(false);
-    const handleDeleteModal = (rowData) => {
-        setDeleteModal(true);
-        setRowData(rowData);
-      }
-    const handleCloseDeleteModal = () => setDeleteModal(false);
-    const handleCloseEditModal = () => setEditModal(false);
-    useEffect(() => {
-      return () => {
-        setOpenModal(false);
-        setEditModal(false);
-        setDeleteModal(false);
-      }
-    }, [])
+        setData([...temp]);  
+       
+    },[]);
     const columns = [
         {
             name:"ID",
@@ -148,6 +122,21 @@ const EventsComponent = () => {
             }
         },
         {
+            name: "Actions",
+            options: {
+              filter: false,
+              customBodyRenderLite: (dataIndex) => (
+               <div style={{textAlign:'center'}}>
+                   <button style={{display:'inline-block'}} onClick={()=>handleOpenViewModal(dataIndex)} className="btn btn-primary mx-2 "><i className="fa fa-info-circle" aria-hidden="true"></i></button>
+                    <button style={{display:'inline-block'}} onClick={()=>handleOpenEditModal(dataIndex)} className="btn btn-warning "><i className="fa fa-pencil" aria-hidden="true"></i></button>
+                    <button style={{display:'inline-block'}} onClick={()=>handleOpenDeleteModal(dataIndex)} className="btn btn-danger mx-2"><i className="fa fa-trash" aria-hidden="true"></i></button>
+                
+               </div>
+                
+              )
+            }
+        },
+        {
             name:"Image",
             label:"Image",
             options: {
@@ -176,22 +165,9 @@ const EventsComponent = () => {
                 display:false,
                 viewColumns:false,
             }
-        },{
-            name:"Actions",
-            label:"Actions",
-            options:{
-                customBodyRender: (value,tableMeta,updateValue)=>{
-                    return (
-                        <>
-                            <button onClick={()=>handleViewModal(tableMeta.rowData)} className="btn btn-primary "><i className="fa fa-info-circle" aria-hidden="true"></i></button>
-                            <button onClick={()=>handleOpenEditModal(tableMeta.rowData)} className="btn btn-warning "><i className="fa fa-pencil" aria-hidden="true"></i></button>
-                            <button onClick={()=>handleDeleteModal(tableMeta.rowData)} className="btn btn-danger "><i className="fa fa-trash" aria-hidden="true"></i></button>
-                        </>
-                    )
-                }
-            }
-        }
-    
+        },
+
+        
       ];
 
 
@@ -200,9 +176,35 @@ const EventsComponent = () => {
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
 
+  const [openViewModal, setOpenViewModal] = React.useState(false);
+  const handleOpenViewModal = (dataIndex) =>{
+    setIndex(dataIndex);
+
+    setOpenViewModal(true);
+  }
+
+  const handleCloseViewModal = () => setOpenViewModal(false);
+  
+  
+  const [openEditModal, setOpenEditModal] = React.useState(false);
+  const handleOpenEditModal = (dataIndex) =>{
+    setIndex(dataIndex)
+    setOpenEditModal(true);
+  }
+ 
+  const handleCloseEditModal = () => setOpenEditModal(false);
+
+  const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
+  const handleOpenDeleteModal = () => setOpenDeleteModal(true);
+  const handleCloseDeleteModal = (dataIndex) => {
+    setIndex(dataIndex)
+    setOpenDeleteModal(false);
+  }
+ 
+
     const options = {
     selectableRowsHeader: false,
-    selectableRows:false,
+    selectableRows: false,
     filter: true,
     filterType: 'dropdown',
     // customToolbarSelect:(selectedRows,displayData)=>(
@@ -218,15 +220,32 @@ const EventsComponent = () => {
             <div className='mb-3'>
                 <button className='btn btn-success' onClick={handleOpenModal}><i className="fa fa-plus" aria-hidden="true"></i> Add New Event</button>     
             </div>
-                <AddNewEventModal
-            openModal={openModal}
-            setOpenModal={setOpenModal}
-            handleCloseModal={handleCloseModal}
-            handleOpenModal={handleOpenModal}
-          />
-          <ViewEventModal data={rowData} openModal={viewModal} setOpenModal={setViewModal} handleCloseModal={handleCloseViewModal}/>
-          <EditEventModal data={rowData}  openModal={openEditModal} setOpenModal={setEditModal} handleCloseModal={handleCloseEditModal}/>
-          <DeleteEventModal data={rowData} openDeleteModal={openDeleteModal} setDeleteModal={setDeleteModal} handleCloseDeleteModal={handleCloseDeleteModal}/>
+            <AddNewEventModal
+                openModal={openModal}
+                setOpenModal={setOpenModal}
+                handleCloseModal={handleCloseModal}
+                handleOpenModal={handleOpenModal}
+            />
+       
+    
+            <ViewEventModal 
+                data={events[index]} 
+                openModal={openViewModal} 
+                setOpenModal={setOpenViewModal} 
+                handleCloseModal={handleCloseViewModal}
+            />   
+            <EditEventModal 
+                data={events[index]}  
+                openModal={openEditModal} 
+                setOpenModal={setOpenEditModal} 
+                handleCloseModal={handleCloseEditModal}
+            />
+            <DeleteEventModal 
+                data={events[index]} 
+                openDeleteModal={openDeleteModal} 
+                setDeleteModal={setOpenDeleteModal} 
+                handleCloseDeleteModal={handleCloseDeleteModal}
+            />  
             <MUIDataTable
                 title={"Event List"}
                 data={data}

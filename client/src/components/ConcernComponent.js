@@ -41,8 +41,10 @@ const ConcernComponent = () => {
     }, [concerns])
 
     const columns = ["Subject", "Message","Resident", "Classification",{
+        name:"Actions",
         label:"Actions",
         options:{
+            filter:false,
             customBodyRenderLite: (dataIndex, rowIndex)=>{
                 return (
                     <>

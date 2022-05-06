@@ -68,7 +68,7 @@ export default function ViewEventModal(props) {
       <DialogContent dividers>
         <Box sx={{ width: "100%" }}>
         <Carousel sx={{height: 200,width:'100%',alignContent:'center',alignItems:'center',justifyContent:'center',margin:'auto'}}>
-          {props.data[10]&&props.data[10].length!==0?(props.data[10].map((image,i)=>{
+          {props.data.eventLine.lineAttachment.length!==0?(props.data.eventLine.lineAttachment.map((image,i)=>{
               return (
                 <div key = {i} className="text-center mx-auto ml-auto mr-auto">
                   <img 

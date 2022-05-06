@@ -25,8 +25,10 @@ const UnderMaintenancePanel = () => {
     }, [inactives])
     
     const columns = ["Plate Number", "Model","Added by","Date Added", "Status",{
+        name:"Actions",
         label:"Actions",
         options:{
+            filter:false,
             customBodyRenderLite: (dataIndex, rowIndex)=>{
                 // console.log(tableMeta.tableData);
                 return (

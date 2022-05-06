@@ -35,16 +35,16 @@ const SchedulePanel = (props) => {
     const [event,setEvent]=useState([]);
     const [localizer] = useState(momentLocalizer(moment));
     const columns = ["Type","Schedule","Garbage Type","Driver","Landmark","Address","Date Created",{
+        name:"Actions",
         label:"Actions",
         options:{
+            filter:false,
             customBodyRenderLite: (dataIndex, rowIndex)=>{
                 return (
-                    <>
+                    <div>
                        <button onClick={()=>handleModalOpen(dataIndex)} className="btn btn-warning "><i className="fa fa-pencil" aria-hidden="true"></i></button>
                        <button onClick={()=>handleModalDeleteOpen(dataIndex)} className="btn btn-danger "><i className="fa fa-trash" aria-hidden="true"></i></button>
-                        
-                    </>
-                    
+                    </div>
                 )
             }
         }

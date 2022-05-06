@@ -15,11 +15,11 @@ const DumpsterPopup = ({data,setData}) => {
             <span>PICK-UP POINTS:</span>
             <Stack direction="row" spacing={2}>
                 <span className='text-success'><i className="fa fa-map-signs" aria-hidden="true"></i></span>
-                <span>{data.data.purok}</span>
+                <span>{data.data.landmark}</span>
             </Stack>
             <Stack direction="row" spacing={2}>
                 <span className='text-success'><i className="fa fa-info-circle" aria-hidden="true"></i></span>
-                <span>{data.data.street + " " + data.data.barangay}</span>
+                <span>{data.data.purok+" "+data.data.street + " " + data.data.barangay}</span>
             </Stack>
         </Popup>
     );

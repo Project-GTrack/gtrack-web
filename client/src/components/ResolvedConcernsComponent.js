@@ -3,15 +3,25 @@ import MUIDataTable from "mui-datatables";
 import { useEffect } from 'react';
 import { useReportsandConcernsPageContext } from '../pages/ReportsPage';
 import ConcernToolbar from './ConcernToolbar';
+import ViewConcernModal from './Concerns/modals/ViewConcernModal';
+import DeleteConcernModal from './Concerns/modals/DeleteConcernModal';
 
 const ResolvedConcernsComponent = () => {
     const {queryResult}= useReportsandConcernsPageContext();
     const concernsResolved = queryResult.data.data.concernsResolved
-    const columns = ["Subject", "Message","Resident","Classification"];
     const [data, setData] = useState([]);
     const [openResolveModal, setOpenResolveModal] = useState(false);
     const [openViewModal, setOpenViewModal]=useState(false);
     const [openDeleteModal, setOpenDeleteModal]=useState(false); 
+    const [rowData, setRowData] = useState(0);
+    const handleModalViewOpen=(rowData)=>{
+        setOpenViewModal(true);
+        setRowData(rowData);
+    }
+    const handleModalDeleteOpen=(rowData)=>{
+        setOpenDeleteModal(true);
+        setRowData(rowData);
+    }
 
     useEffect(() => {
         var temp=[];
@@ -25,9 +35,26 @@ const ResolvedConcernsComponent = () => {
         }
     }, [concernsResolved])
 
+    
+    const columns = ["Subject", "Message","Resident","Classification",{
+        name:"Actions",
+        label:"Actions",
+        options:{
+            filter:false,
+            customBodyRenderLite: (dataIndex, rowIndex)=>{
+                return (
+                    <>
+                        <button onClick={()=>handleModalViewOpen(dataIndex)} className="btn btn-primary"><i className="fa fa-info-circle" aria-hidden="true"></i></button>
+                        <button onClick={()=>handleModalDeleteOpen(dataIndex)} className="btn btn-danger mx-2"><i className="fa fa-trash" aria-hidden="true"></i></button>
+                    </>
+                )
+            }
+        }
+    }];
+
     const options = {
         selectableRowsHeader: false,
-        selectableRows:'single',
+        selectableRows:false,
         filter: true,
         filterType: 'dropdown',
         customToolbarSelect:(selectedRows,displayData)=>(
@@ -52,6 +79,8 @@ const ResolvedConcernsComponent = () => {
                     columns={columns}
                     options={options}
             />
+            <ViewConcernModal data={concernsResolved[rowData]} openViewModal={openViewModal} setOpenViewModal={setOpenViewModal}/>
+            <DeleteConcernModal data={concernsResolved[rowData]} openDeleteModal={openDeleteModal} setOpenDeleteModal={setOpenDeleteModal}/>
         </div>
     )
 }

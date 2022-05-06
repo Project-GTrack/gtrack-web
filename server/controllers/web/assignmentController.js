@@ -44,15 +44,6 @@ exports.editAssignment = async (req,res) => {
                     checkAssign = await assignment.model.update(req.body,{
                         where:{
                             assignment_id:req.params.id,
-                            [Op.or]:[{
-                                driver_id: {
-                                    [Op.ne]: req.body.driver_id
-                                },
-                            },{
-                                truck_id: {
-                                    [Op.ne]: req.body.truck_id
-                                } 
-                            }]
                         }
                     })
                     res.send({success:true,message:"Truck Assignment successfully Updated"});

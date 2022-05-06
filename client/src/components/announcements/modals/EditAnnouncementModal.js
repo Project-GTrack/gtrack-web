@@ -93,7 +93,7 @@ export default function EditAnnouncementModal(props) {
   useEffect(() => {
     let temp=[];
     // eslint-disable-next-line array-callback-return
-    props.data[5].map((image)=>{
+    props.data[5]&&props.data[5].map((image)=>{
       temp.push(image.filename);
     })
     setUrls([...temp]);

@@ -20,6 +20,7 @@ exports.addDumpster = async (req,res) => {
         jwt.verify(req.body.accessToken,process.env.ACCESS_TOKEN_SECRET, async(err, decoded)=>{
             let dumps = await dumpster.model.create({
                 admin_id:JSON.parse(decoded.user_id).user_id,
+                landmark:req.body.landmark,
                 street:req.body.street,
                 purok:req.body.purok,
                 barangay:req.body.barangay,
@@ -36,6 +37,7 @@ exports.addDumpster = async (req,res) => {
                 });
                 database.ref("Dumpsters/" + dumps.dumpster_id).set({
                     dumpster_id: dumps.dumpster_id,
+                    landmark:dumps.landmark,
                     street: dumps.street,
                     purok: dumps.purok,
                     barangay: dumps.barangay,
@@ -67,6 +69,7 @@ exports.editDumpster = async (req,res) => {
     if(req.body.accessToken!= undefined){
         jwt.verify(req.body.accessToken,process.env.ACCESS_TOKEN_SECRET, async(err, decoded)=>{
             let dumps = await dumpster.model.update({
+                landmark:req.body.landmark,
                 street:req.body.street,
                 purok:req.body.purok,
                 barangay:req.body.barangay,
@@ -77,6 +80,10 @@ exports.editDumpster = async (req,res) => {
             },{where:{
                 dumpster_id:req.params.id,
                 [Op.or]:[{
+                    landmark: {
+                        [Op.ne]: req.body.landmark
+                    }
+                },{
                     street: {
                         [Op.ne]: req.body.street
                     },
@@ -108,11 +115,14 @@ exports.editDumpster = async (req,res) => {
             }})
             if(dumps != 0){
                 database.ref("Dumpsters/" + req.params.id).update({
+                    landmark:req.body.landmark,
                     street:req.body.street,
                     purok:req.body.purok,
                     barangay:req.body.barangay,
                     latitude:req.body.latitude,
                     longitude:req.body.longitude,
+                    town:req.body.town,
+                    postal_code:req.body.postal_code,
                   });
                 res.send({success:true,message:"Dumpster Location successfully Updated"});
             }else{

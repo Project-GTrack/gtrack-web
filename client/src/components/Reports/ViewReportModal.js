@@ -73,7 +73,7 @@ const ViewReportModal = (props) => {
       <DialogContent dividers>
       <Box sx={{ width: "100%" }} paddingTop={2} paddingBottom={2}>
         <Carousel sx={{height: 200,width:'100%',alignContent:'center',alignItems:'center',justifyContent:'center',margin:'auto'}}>
-            {props.data.reportAttachmentLine.lineAttachment.length!==0?(props.data.reportAttachmentLine.lineAttachment.map((image,i)=>{
+            {props.data&&props.data.reportAttachmentLine.lineAttachment.length!==0?(props.data.reportAttachmentLine.lineAttachment.map((image,i)=>{
                 return (
                   <div key = {i} className="text-center mx-auto ml-auto mr-auto">
                     <img 
@@ -92,32 +92,32 @@ const ViewReportModal = (props) => {
           </Carousel>
       </Box>
           <Typography variant="body2" mt={2} color="text.dark">
-            <b>Subject:</b> {props.data.subject}
+            <b>Subject:</b> {props.data&&props.data.subject}
           </Typography>
           <Typography align='justify' variant="body2" color="text.dark">
-            <b>Message:</b> {props.data.message}
+            <b>Message:</b> {props.data&&props.data.message}
           </Typography>
           <Typography align='justify' variant="body2" color="text.dark">
-            <b>Degree:</b> {props.data.degree}
+            <b>Degree:</b> {props.data&&props.data.degree}
           </Typography>
           <Typography variant="body2" color="text.dark">
-            <b>Date Sent:</b> {moment(props.data.createdAt).format("MMMM DD, YYYY")}
+            <b>Date Sent:</b> {props.data&&moment(props.data.createdAt).format("MMMM DD, YYYY")}
           </Typography>
           <hr/>
           <Typography variant="body2" color="text.dark">
             <b style={{fontSize: 15}}>Sender Details: </b> 
           </Typography>
           <Typography variant="body2" mt={2} color="text.dark">
-            <b>Name:</b> {props.data.reportDriver.fname+" "+props.data.reportDriver.lname}
+            <b>Name:</b> {props.data&&props.data.reportDriver.fname+" "+props.data&&props.data.reportDriver.lname}
           </Typography>
           <Typography align='justify' variant="body2" color="text.dark">
-            <b>Address:</b> {`${props.data.reportDriver.purok?props.data.reportDriver.purok:''} ${props.data.reportDriver.street?props.data.reportDriver.street:''} ${props.data.reportDriver.barangay?props.data.reportDriver.barangay:''}`}
+            <b>Address:</b> {`${props.data&&props.data.reportDriver.purok?props.data.reportDriver.purok:''} ${props.data&&props.data.reportDriver.street?props.data.reportDriver.street:''} ${props.data&&props.data.reportDriver.barangay?props.data.reportDriver.barangay:''}`}
           </Typography>
           <Typography align='justify' variant="body2" color="text.dark">
-            <b>Contact Number:</b> {props.data.reportDriver.contact_no?props.data.reportDriver.contact_no:''}
+            <b>Contact Number:</b> {props.data&&props.data.reportDriver.contact_no?props.data.reportDriver.contact_no:''}
           </Typography>
           <Typography variant="body2" color="text.dark">
-            <b>Email:</b> {props.data.reportDriver.email}
+            <b>Email:</b> {props.data&&props.data.reportDriver.email}
           </Typography>
         <Box sx={{ width: "100%" }} paddingTop={1} paddingBottom={1}>
           <Typography variant="body2" color="text.dark">
@@ -132,20 +132,20 @@ const ViewReportModal = (props) => {
                 width: "100%",
               }}
               center={
-                props.data.longitude != 0 && props.data.latitude != 0
+                props.data&&props.data.longitude != 0 && props.data&&props.data.latitude != 0
                   ? [props.data.longitude, props.data.latitude]
                   : [123.94964154058066, 10.482913243053028]
               }
               zoom={
-                props.data.longitude != 0 && props.data.latitude != 0
+                props.data&&props.data.longitude != 0 && props.data&&props.data.latitude != 0
                   ? [15]
                   : [11]
               }
             >
-              {props.data.longitude != 0 && props.data.latitude != 0 ? (
+              {props.data&&props.data.longitude != 0 && props.data&&props.data.latitude != 0 ? (
                 <Marker
                   coordinates={
-                    props.data.longitude != 0 && props.data.latitude != 0
+                    props.data&&props.data.longitude != 0 && props.data&&props.data.latitude != 0
                       ? [props.data.longitude, props.data.latitude]
                       : [123.94964154058066, 10.482913243053028]
                   }

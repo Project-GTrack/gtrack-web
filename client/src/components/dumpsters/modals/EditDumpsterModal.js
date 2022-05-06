@@ -62,25 +62,30 @@ const EditDumpsterModal = (props) => {
   });
   const [error, setError] = React.useState(null);
   const dumpsterErrorHandling = yup.object().shape({
+    landmark: yup.string().required("Landmark is required"),
     street: yup.string().required("Street is required"),
     purok: yup.string().required("Purok is required"),
     barangay: yup.string().required("Barangay is required"),
+    town: yup.string().required("Town is required"),
+    postal_code: yup.string().required("Postal Code is required"),
   });
   React.useEffect(() => {
+    console.log(props.data);
     setCoordinate({
-      latitude: props.data[3],
-      longitude: props.data[4],
+      latitude: props.data[4],
+      longitude: props.data[5],
     });
-    values.street = props.data[1].split(", ")[0];
-    values.purok = props.data[1].split(", ")[1];
-    values.barangay = props.data[1].split(", ")[2];
-    values.town = props.data[1].split(", ")[3];
-    values.postal_code = props.data[2];
+    values.landmark = props.data[3]&&props.data[3];
+    values.street = props.data[1]&&props.data[1].split(", ")[0];
+    values.purok = props.data[1]&&props.data[1].split(", ")[1];
+    values.barangay = props.data[1]&&props.data[1].split(", ")[2];
+    values.town = props.data[1]&&props.data[1].split(", ")[3];
+    values.postal_code = props.data[2]&&props.data[2];
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.openModal]);
   const handleFormSubmit = (values, { resetForm }) => {
     setLoading(true);
-    if (values.street === props.data[1].split(", ")[0] && values.purok === props.data[1].split(", ")[1] && values.barangay === props.data[1].split(", ")[2] && values.town === props.data[1].split(", ")[3] && values.postal_code === props.data[2] && coordinate.latitude === props.data[3] && coordinate.longitude === props.data[4]) {
+    if (values.landmark === props.data[3]&&props.data[3] && values.street === props.data[1]&&props.data[1].split(", ")[0] && values.purok === props.data[1]&&props.data[1].split(", ")[1] && values.barangay === props.data[1]&&props.data[1].split(", ")[2] && values.town === props.data[1]&&props.data[1].split(", ")[3] && values.postal_code === props.data[2]&&props.data[2] && coordinate.latitude === props.data[4]&&props.data[4] && coordinate.longitude === props.data[5]&&props.data[5]) {
       props.setOpenModal(false);
     } else {
       if (coordinate.latitude !== 0 && coordinate.longitude !== 0) {
@@ -88,16 +93,19 @@ const EditDumpsterModal = (props) => {
           .put(
             `${process.env.REACT_APP_BACKEND_URL}/admin/dumpster/edit-dumpster/${props.data[0]}`,
             {
+              landmark: capitalizeWords(values.landmark),
               street: capitalizeWords(values.street),
               purok: capitalizeWords(values.purok),
               barangay: capitalizeWords(values.barangay),
+              town: capitalizeWords(values.town),
+              postal_code: capitalizeWords(values.postal_code),
               latitude: coordinate.latitude,
               longitude: coordinate.longitude,
               accessToken: Cookies.get("user_id"),
             }
           )
           .then((res) => {
-            setLoading(false);
+            
               resetForm();
               if(res.data.success){
                 refetch();
@@ -111,13 +119,17 @@ const EditDumpsterModal = (props) => {
         setError("Please select a designated location for the dumpster");
       }
     }
+    setLoading(false);
   };
   const { handleChange, handleSubmit, handleBlur, values, errors, touched, isValid } =
     useFormik({
       initialValues: {
-        street: props.data[1].split(", ")[0],
-        purok: props.data[1].split(", ")[1],
-        barangay: props.data[1].split(", ")[2],
+        landmark:props.data[3]&&props.data[3],
+        street: props.data[1]&&props.data[1].split(", ")[0],
+        purok: props.data[1]&&props.data[1].split(", ")[1],
+        barangay: props.data[1]&&props.data[1].split(", ")[2],
+        town: props.data[1]&&props.data[1].split(", ")[3],
+        postal_code: props.data[2]&&props.data[2]
       },
       enableReinitialize: true,
       validationSchema: dumpsterErrorHandling,
@@ -150,23 +162,23 @@ const EditDumpsterModal = (props) => {
             }}
             center={
               coordinate.latitude === 0 && coordinate.longitude === 0
-                ? [props.data[4], props.data[3]]
+                ? [props.data[5], props.data[4]]
                 : [coordinate.longitude, coordinate.latitude]
             }
             zoom={
-              (props.data[3] !== 0 && props.data[4] !== 0) ||
+              (props.data[4] !== 0 && props.data[5] !== 0) ||
               (coordinate.latitude !== 0 && coordinate.longitude !== 0)
                 ? [15]
                 : [11]
             }
             onClick={handleClick}
           >
-            {(props.data[3] !== 0 && props.data[4] !== 0) ||
+            {(props.data[4] !== 0 && props.data[5] !== 0) ||
             (coordinate.latitude !== 0 && coordinate.longitude !== 0) ? (
               <Marker
                 coordinates={
                   coordinate.latitude === 0 && coordinate.longitude === 0
-                    ? [props.data[4], props.data[3]]
+                    ? [props.data[5], props.data[4]]
                     : [coordinate.longitude, coordinate.latitude]
                 }
                 anchor="bottom"
@@ -181,6 +193,21 @@ const EditDumpsterModal = (props) => {
           {error && <p className="text-danger small text-center">{error}</p>}
         </div>
         <Box sx={{ width: "100%" }}>
+        <TextField
+            autoFocus
+            margin="dense"
+            id="landmark"
+            label="Landmark"
+            type="text"
+            fullWidth
+            value={values.landmark}
+            onChange={handleChange("landmark")}
+            onBlur={handleBlur("landmark")}
+            inputProps={{ style: { textTransform: "capitalize" } }}
+          />
+          {errors.landmark && touched.landmark && (
+            <p className="text-danger small ">{errors.landmark}</p>
+          )}
           <TextField
             autoFocus
             margin="dense"
@@ -225,6 +252,36 @@ const EditDumpsterModal = (props) => {
           />
           {errors.barangay && touched.barangay && (
             <p className="text-danger small ">{errors.barangay}</p>
+          )}
+          <TextField
+            autoFocus
+            margin="dense"
+            id="town"
+            label="Town"
+            type="text"
+            fullWidth
+            value={values.town}
+            onChange={handleChange("town")}
+            onBlur={handleBlur("town")}
+            inputProps={{ style: { textTransform: "capitalize" } }}
+          />
+          {errors.town && touched.town && (
+            <p className="text-danger small ">{errors.town}</p>
+          )}
+          <TextField
+            autoFocus
+            margin="dense"
+            id="postal_code"
+            label="Postal Code"
+            type="text"
+            fullWidth
+            value={values.postal_code}
+            onChange={handleChange("postal_code")}
+            onBlur={handleBlur("postal_code")}
+            inputProps={{ style: { textTransform: "capitalize" } }}
+          />
+          {errors.postal_code && touched.postal_code && (
+            <p className="text-danger small ">{errors.postal_code}</p>
           )}
         </Box>
       </DialogContent>

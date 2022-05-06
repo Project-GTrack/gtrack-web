@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import Grid from "@mui/material/Grid";
 import { styled } from '@mui/material/styles';
 import Box from "@mui/material/Box";
@@ -130,11 +130,18 @@ export default function EditEventModal(props) {
         .test("FILE_FORMAT", "Uploaded file has unsupported format.", 
             value => !value || (value && SUPPORTED_FORMATS.includes(value.type)))
   })
-
+  useEffect(() => {
+    let temp=[];
+    // eslint-disable-next-line array-callback-return
+    props.data.eventLine.lineAttachment.map((image)=>{
+      temp.push(image.filename);
+    })
+    setUrls([...temp]);
+  }, [props])
   const handleFormSubmit = async(values) => {
     setLoading(true);
     if(Cookies.get('user_id')){
-      await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/admin/event/edit/${props.data[0]}`,{
+      await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/admin/event/edit/${props.data&&props.data.event_id}`,{
         event_name:values.event_name,
         description:values.description,
         startDate:values.startDate,
@@ -165,18 +172,18 @@ export default function EditEventModal(props) {
 
   const { handleChange, handleSubmit, handleBlur, values, errors,isValid,touched } = useFormik({
     initialValues:{ 
-      event_name: props.data[1],
-      description:props.data[2],
-      startDate:moment(props.data[6].split(" - ")[0]).format("YYYY-MM-DDTkk:mm"),
-      endDate:moment(props.data[6].split(" - ")[1]).format("YYYY-MM-DDTkk:mm"),
-      street:props.data[7].split(" ")[0],
-      purok:props.data[7].split(" ")[1],
-      barangay:props.data[7].split(" ")[2],
-      town:props.data[7].split(" ")[3],
-      postal_code: props.data[11],
-      target_participants:props.data[3],
-      status:props.data[8],
-      registration_form_url:props.data[12]
+      event_name: props.data.event_name,
+      description:props.data.description,
+      startDate:moment(props.data.startDate).format("YYYY-MM-DDTkk:mm"),
+      endDate:moment(props.data.endDate).format("YYYY-MM-DDTkk:mm"),
+      street:props.data.street,
+      purok:props.data.purok,
+      barangay:props.data.barangay,
+      town:props.data.town,
+      postal_code: props.postal_code,
+      target_participants:props.data.target_participants,
+      status:props.data.status,
+      registration_form_url:props.data.registration_form_url
     },
     enableReinitialize:true,
     validationSchema:eventValidationSchema,

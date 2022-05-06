@@ -4,10 +4,14 @@ import AnnouncementCustomToolbar from './AnnouncementCustomToolbar';
 import AddNewAnnouncementModal from './modals/AddNewAnnouncementModal';
 import moment from 'moment';
 import {useAnnouncementPageContext} from '../../pages/AnnouncementsPage';   
+import ViewAnnouncementModal from './modals/ViewAnnouncementModal';
+import EditAnnouncementModal from './modals/EditAnnouncementModal';
+import DeleteAnnouncementModal from './modals/DeleteAnnouncementModal';
 const AnnouncementsComponent = () => {
     const {queryResult}=useAnnouncementPageContext();
     const announcements = queryResult.data.posts;
     const[data,  setData] = useState([]);
+    const[rowData,  setRowData] = useState([]);
     useEffect(()=>{
        
         var temp = [];
@@ -28,12 +32,38 @@ const AnnouncementsComponent = () => {
 
 
 
-  const [openModal, setOpenModal] = React.useState(false);
-  useEffect(() => {
-    return () => {
-      setOpenModal(false);
+    const [openModal, setOpenModal] = React.useState(false);
+    const [viewModal, setViewModal] = useState(false);
+    const [openDeleteModal, setDeleteModal] = useState(false);
+    const[openEditModal, setEditModal] = useState(false);
+    useEffect(() => {
+        return () => {
+        setViewModal(false);
+        setDeleteModal(false);
+        setEditModal(false);
+        }
+    }, [])
+    useEffect(() => {
+        return () => {
+        setOpenModal(false);
+        }
+    }, [])
+    const handleOpenModal = (rowData) => {
+        setViewModal(true);
+        setRowData(rowData);
     }
-  }, [])
+
+    const handleOpenEditModal = (rowData) => {
+        setEditModal(true);
+        setRowData(rowData);
+    }  
+    const handleCloseModal = () => setViewModal(false);
+    const handleDeleteModal = (rowData) => {
+        setDeleteModal(true);
+        setRowData(rowData);
+    }
+    const handleCloseDeleteModal = () => setDeleteModal(false);
+    const handleCloseEditModal = () => setEditModal(false);
   const columns = [
     {
         name:"ID",
@@ -86,13 +116,27 @@ const AnnouncementsComponent = () => {
             display:false,
             viewColumns:false,
         }
-    },
+    },{
+        name:"Actions",
+        label:"Actions",
+        options:{
+            customBodyRender: (value,tableMeta,updateValue)=>{
+                return (
+                    <>
+                        <button onClick={()=>handleOpenModal(tableMeta.rowData)} className="btn btn-primary"><i className="fa fa-info-circle" aria-hidden="true"></i></button>
+                        <button onClick={()=>handleOpenEditModal(tableMeta.rowData)} className="btn btn-warning "><i className="fa fa-pencil" aria-hidden="true"></i></button>
+                        <button onClick={()=>handleDeleteModal(tableMeta.rowData)} className="btn btn-danger"><i className="fa fa-trash" aria-hidden="true"></i></button>
+                    </>
+                )
+            }
+        }
+    }
 
   ];
 
     const options = {
     selectableRowsHeader: false,
-    selectableRows:'single',
+    selectableRows:false,
     filter: true,
     filterType: 'dropdown',
     customToolbarSelect:(selectedRows,displayData)=>(
@@ -102,6 +146,8 @@ const AnnouncementsComponent = () => {
         />
     )
     };
+    
+    
     return (
         <div>
             <div className='mb-3'>
@@ -111,6 +157,9 @@ const AnnouncementsComponent = () => {
                 openModal={openModal}
                 setOpenModal={setOpenModal} 
             />
+                <ViewAnnouncementModal data={rowData}  openModal={viewModal} setOpenModal={setViewModal} handleCloseModal={handleCloseModal}/>
+                <EditAnnouncementModal data={rowData} openModal={openEditModal} setOpenModal={setEditModal} handleCloseModal={handleCloseEditModal}/>
+                <DeleteAnnouncementModal data={rowData} openDeleteModal={openDeleteModal} setDeleteModal={setDeleteModal} handleCloseDeleteModal={handleCloseDeleteModal}/>
             <MUIDataTable
                 title={"Announcement List"}
                 data={data}

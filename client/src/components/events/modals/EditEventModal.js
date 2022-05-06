@@ -141,7 +141,7 @@ export default function EditEventModal(props) {
   const handleFormSubmit = async(values) => {
     setLoading(true);
     if(Cookies.get('user_id')){
-      await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/admin/event/edit/${props.data[0]}`,{
+      await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/admin/event/edit/${props.data&&props.data.event_id}`,{
         event_name:values.event_name,
         description:values.description,
         startDate:values.startDate,

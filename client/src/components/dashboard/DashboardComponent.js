@@ -5,6 +5,7 @@ import DashboardCard from './DashboardCard'
 import Chart from '../ChartComponent';
 
 const DashboardComponent = ({dashcards,data,chartData}) => {
+
   return (
        <div>
         <Grid container spacing={3}>

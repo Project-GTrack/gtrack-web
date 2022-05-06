@@ -19,6 +19,10 @@ module.exports = {
           type:Sequelize.BIGINT,
           allowNull:false
       },
+      landmark:{
+        type:Sequelize.STRING,
+        allowNull:false,
+      },
       street:{
           type:Sequelize.STRING,
           allowNull:false

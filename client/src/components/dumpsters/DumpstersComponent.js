@@ -22,6 +22,7 @@ const DumpstersComponent = ({statusToast, setStatusToast}) => {
               dumpsters[x].dumpster_id,
               address,
               dumpsters[x].postal_code,
+              dumpsters[x].landmark,
               dumpsters[x].latitude,
               dumpsters[x].longitude
           ]
@@ -84,19 +85,31 @@ const DumpstersComponent = ({statusToast, setStatusToast}) => {
             }
         },
         {
-            name:"Latitude",
-            label:"Latitude",
+            name:"Landmark",
+            label:"Landmark",
             options: {
                 filter:true,
                 sort:true,
+            }
+        },
+        {
+            name:"Latitude",
+            label:"Latitude",
+            options: {
+                filter:false,
+                sort:false,
+                display:false,
+                viewColumns:false,
             }
             },
             {
                 name:"Longitude",
                 label:"Longitude",
                 options: {
-                    filter:true,
-                    sort:true,
+                    filter:false,
+                    sort:false,
+                    display:false,
+                    viewColumns:false,
                 }
             },
             {

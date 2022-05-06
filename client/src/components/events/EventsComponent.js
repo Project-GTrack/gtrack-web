@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import MUIDataTable from "mui-datatables";
-import EventCustomToolbar from './EventCustomToolbar';
+// import EventCustomToolbar from './EventCustomToolbar';
 import AddNewEventModal from './modals/AddNewEventModal';
 import moment from 'moment';
 import {useEventPageContext} from '../../pages/EventsPage';  
@@ -29,7 +29,7 @@ const EventsComponent = () => {
                 moment(event.createdAt).format("MMMM DD, YYYY"),
                 event.eventLine.lineAttachment,
                 event.postal_code,
-                event.registration_form_url
+                event.registration_form_url,
             ]);
         })
         setData(temp);  
@@ -205,12 +205,13 @@ const EventsComponent = () => {
     selectableRows:false,
     filter: true,
     filterType: 'dropdown',
-    customToolbarSelect:(selectedRows,displayData)=>(
-        <EventCustomToolbar  
-            selectedRows={selectedRows} 
-            displayData={displayData}
-        />
-    )
+    // customToolbarSelect:(selectedRows,displayData)=>(
+    //     <EventCustomToolbar  
+    //         selectedRows={selectedRows} 
+    //         displayData={displayData}
+    //     />
+    // )
+      
     };
     return (
         <div>

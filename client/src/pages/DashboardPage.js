@@ -33,7 +33,7 @@ const DashboardPage = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
   
-  const {drivers,trucks,dumpsters,chartData,collections} = data;
+  const {drivers,trucks,dumpsters,chartData,collections,monthData,yearData} = data;
  
   const dashcards = [
     {id:1, title: "Available Drivers", count: drivers && drivers.length, icon:<PersonIcon style={{float:'right'}} fontSize="large"/>},
@@ -51,11 +51,12 @@ const DashboardPage = () => {
         <ReactToPrint 
           trigger={() => <Button variant="contained" style={{float: 'right'}} startIcon={<ArticleIcon/>} color="success" disabled={drivers || trucks || dumpsters || chartData || collections ? false:true}>Generate Report</Button>}
           content={() => componentRef.current}
+          pageStyle = ' @media all {.pagebreak {display: none;}}@media print {.pagebreak {page-break-after: always;}}'
           documentTitle="GTrack"
         />
         <DashboardComponent dashcards={dashcards} data={data} chartData={chartData}/>
         <div style={{display: "none"}}>
-          {chartData ? <PdfComponent dashcards={dashcards} chartData={chartData} ref={componentRef}/>:<></>}
+          {chartData ? <PdfComponent dashcards={dashcards} chartData={chartData} monthData={monthData} yearData={yearData} ref={componentRef}/>:<></>}
         </div>
       </div>
     </PageLayout>

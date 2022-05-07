@@ -1,31 +1,32 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import MUIDataTable from "mui-datatables";
-// import EventCustomToolbar from './EventCustomToolbar';
+import EventCustomToolbar from './EventCustomToolbar';
 import AddNewEventModal from './modals/AddNewEventModal';
 import moment from 'moment';
-import {useEventPageContext} from '../../pages/EventsPage';  
+import { useEventPageContext } from '../../pages/EventsPage';
 import ViewEventModal from "./modals/ViewEventModal";
 import EditEventModal from "./modals/EditEventModal";
 import DeleteEventModal from "./modals/DeleteEventModal";
+import { ButtonGroup } from '@mui/material';
 const EventsComponent = () => {
-    const {queryResult}=useEventPageContext();
+    const { queryResult } = useEventPageContext();
     const events = queryResult.data.data;
-    const[data,  setData] = useState([]);
-    const[index,setIndex] = useState(0);
-    
-    useEffect(()=>{
+    const [data, setData] = useState([]);
+    const [index, setIndex] = useState(0);
+
+    useEffect(() => {
         var temp = [];
         // eslint-disable-next-line array-callback-return
-        events && events.map((event)=>{
+        events && events.map((event) => {
             temp.push([
                 event.event_id,
-                event.event_name, 
+                event.event_name,
                 event.description,
                 event.target_participants,
-                event.eventAdmin.fname+" "+event.eventAdmin.lname,
+                event.eventAdmin.fname + " " + event.eventAdmin.lname,
                 event.eventAdmin.contact_no,
-                moment(event.startDate).format("lll")+" - "+moment(event.endDate).format("lll"),
-                event.street+" "+event.purok+" "+event.barangay+" "+event.town,
+                moment(event.startDate).format("lll") + " - " + moment(event.endDate).format("lll"),
+                event.street + " " + event.purok + " " + event.barangay + " " + event.town,
                 event.status,
                 moment(event.createdAt).format("MMMM DD, YYYY"),
                 event.eventLine.lineAttachment,
@@ -33,193 +34,192 @@ const EventsComponent = () => {
                 event.registration_form_url,
             ]);
         })
-        setData([...temp]);  
-       
-    },[]);
+        setData([...temp]);
+
+    }, []);
     const columns = [
         {
-            name:"ID",
-            label:"ID",
+            name: "ID",
+            label: "ID",
             options: {
-                filter:false,
-                sort:false,
-                display:false,
-                viewColumns:false,
+                filter: false,
+                sort: false,
+                display: false,
+                viewColumns: false,
             }
         },
         {
-            name:"Event Name",
-            label:"Event Name",
+            name: "Event Name",
+            label: "Event Name",
             options: {
-                filter:true,
-                sort:true,
+                filter: true,
+                sort: true,
             }
         },
         {
-            name:"Description",
-            label:"Description",
+            name: "Description",
+            label: "Description",
             options: {
-                filter:true,
-                sort:true,
+                filter: true,
+                sort: true,
             }
         },
         {
-            name:"Participants",
-            label:"Participants",
+            name: "Participants",
+            label: "Participants",
             options: {
-                filter:true,
-                sort:true,
+                filter: true,
+                sort: true,
             }
         },
         {
-            name:"Added by",
-            label:"Added by",
+            name: "Added by",
+            label: "Added by",
             options: {
-                filter:true,
-                sort:true,
+                filter: true,
+                sort: true,
             }
         },
         {
-            name:"Contact",
-            label:"Contact",
+            name: "Contact",
+            label: "Contact",
             options: {
-                filter:false,
-                sort:false,
-                display:false,
-                viewColumns:false,
+                filter: false,
+                sort: false,
+                display: false,
+                viewColumns: false,
             }
         },
         {
-            name:"Event Date",
-            label:"Event Date",
+            name: "Event Date",
+            label: "Event Date",
             options: {
-                filter:true,
-                sort:true,
+                filter: true,
+                sort: true,
             }
         },
         {
-            name:"Address",
-            label:"Address",
+            name: "Address",
+            label: "Address",
             options: {
-                filter:true,
-                sort:true,
+                filter: true,
+                sort: true,
             }
         },
         {
-            name:"Status",
-            label:"Status",
+            name: "Status",
+            label: "Status",
             options: {
-                filter:true,
-                sort:true,
+                filter: true,
+                sort: true,
             }
         },
         {
-            name:"Date Added",
-            label:"Date Added",
+            name: "Date Added",
+            label: "Date Added",
             options: {
-                filter:true,
-                sort:true,
+                filter: true,
+                sort: true,
             }
         },
         {
             name: "Actions",
             options: {
-                filter:false,
-                sort:false,
-              customBodyRenderLite: (dataIndex) => (
-               <div style={{textAlign:'center'}}>
-                   <button style={{display:'inline-block'}} onClick={()=>handleOpenViewModal(dataIndex)} className="btn btn-primary mx-2 "><i className="fa fa-info-circle" aria-hidden="true"></i></button>
-                    <button style={{display:'inline-block'}} onClick={()=>handleOpenEditModal(dataIndex)} className="btn btn-warning "><i className="fa fa-pencil" aria-hidden="true"></i></button>
-                    <button style={{display:'inline-block'}} onClick={()=>handleOpenDeleteModal(dataIndex)} className="btn btn-danger mx-2"><i className="fa fa-trash" aria-hidden="true"></i></button>
-                
-               </div>
-                
-              )
+                filter: false,
+                sort: false,
+                customBodyRenderLite: (dataIndex) => (
+                    <ButtonGroup>
+                        <button onClick={() => handleOpenViewModal(dataIndex)} className="btn btn-primary mx-2 "><i className="fa fa-info-circle" aria-hidden="true"></i></button>
+                        <button onClick={() => handleOpenEditModal(dataIndex)} className="btn btn-warning "><i className="fa fa-pencil" aria-hidden="true"></i></button>
+                        <button onClick={() => handleOpenDeleteModal(dataIndex)} className="btn btn-danger mx-2"><i className="fa fa-trash" aria-hidden="true"></i></button>
+                    </ButtonGroup>
+
+                )
             }
         },
         {
-            name:"Image",
-            label:"Image",
+            name: "Image",
+            label: "Image",
             options: {
-                filter:false,
-                sort:false,
-                display:false,
-                viewColumns:false,
+                filter: false,
+                sort: false,
+                display: false,
+                viewColumns: false,
             }
         },
         {
-            name:"Postal Code",
-            label:"Postal Code",
+            name: "Postal Code",
+            label: "Postal Code",
             options: {
-                filter:false,
-                sort:false,
-                display:false,
-                viewColumns:false,
+                filter: false,
+                sort: false,
+                display: false,
+                viewColumns: false,
             }
         },
         {
-            name:"Registration Form URL",
-            label:"Registration Form URL",
+            name: "Registration Form URL",
+            label: "Registration Form URL",
             options: {
-                filter:false,
-                sort:false,
-                display:false,
-                viewColumns:false,
+                filter: false,
+                sort: false,
+                display: false,
+                viewColumns: false,
             }
         },
 
-        
-      ];
+
+    ];
 
 
 
-  const [openModal, setOpenModal] = React.useState(false);
-  const handleOpenModal = () => setOpenModal(true);
-  const handleCloseModal = () => setOpenModal(false);
+    const [openModal, setOpenModal] = React.useState(false);
+    const handleOpenModal = () => setOpenModal(true);
+    const handleCloseModal = () => setOpenModal(false);
 
-  const [openViewModal, setOpenViewModal] = React.useState(false);
-  const handleOpenViewModal = (dataIndex) =>{
-    setIndex(dataIndex);
+    const [openViewModal, setOpenViewModal] = React.useState(false);
+    const handleOpenViewModal = (dataIndex) => {
+        setIndex(dataIndex);
 
-    setOpenViewModal(true);
-  }
+        setOpenViewModal(true);
+    }
 
-  const handleCloseViewModal = () => setOpenViewModal(false);
-  
-  
-  const [openEditModal, setOpenEditModal] = React.useState(false);
-  const handleOpenEditModal = (dataIndex) =>{
-    setIndex(dataIndex)
-    setOpenEditModal(true);
-  }
- 
-  const handleCloseEditModal = () => setOpenEditModal(false);
+    const handleCloseViewModal = () => setOpenViewModal(false);
 
-  const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
-  const handleOpenDeleteModal = () => setOpenDeleteModal(true);
-  const handleCloseDeleteModal = (dataIndex) => {
-    setIndex(dataIndex)
-    setOpenDeleteModal(false);
-  }
- 
+
+    const [openEditModal, setOpenEditModal] = React.useState(false);
+    const handleOpenEditModal = (dataIndex) => {
+        setIndex(dataIndex)
+        setOpenEditModal(true);
+    }
+
+    const handleCloseEditModal = () => setOpenEditModal(false);
+
+    const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
+    const handleOpenDeleteModal = () => setOpenDeleteModal(true);
+    const handleCloseDeleteModal = (dataIndex) => {
+        setIndex(dataIndex)
+        setOpenDeleteModal(false);
+    }
+
 
     const options = {
-    selectableRowsHeader: false,
-    selectableRows: false,
-    filter: true,
-    filterType: 'dropdown',
-    // customToolbarSelect:(selectedRows,displayData)=>(
-    //     <EventCustomToolbar  
-    //         selectedRows={selectedRows} 
-    //         displayData={displayData}
-    //     />
-    // )
-      
+        selectableRowsHeader: false,
+        selectableRows: false,
+        filter: true,
+        filterType: 'dropdown',
+        customToolbarSelect: (selectedRows, displayData) => (
+            <EventCustomToolbar
+                selectedRows={selectedRows}
+                displayData={displayData}
+            />
+        )
+
     };
     return (
         <div>
             <div className='mb-3'>
-                <button className='btn btn-success' onClick={handleOpenModal}><i className="fa fa-plus" aria-hidden="true"></i> Add New Event</button>     
+                <button className='btn btn-success' onClick={handleOpenModal}><i className="fa fa-plus" aria-hidden="true"></i> Add New Event</button>
             </div>
             <AddNewEventModal
                 openModal={openModal}
@@ -227,26 +227,26 @@ const EventsComponent = () => {
                 handleCloseModal={handleCloseModal}
                 handleOpenModal={handleOpenModal}
             />
-       
-    
-            <ViewEventModal 
-                data={events[index]} 
-                openModal={openViewModal} 
-                setOpenModal={setOpenViewModal} 
+
+
+            <ViewEventModal
+                data={events[index]}
+                openModal={openViewModal}
+                setOpenModal={setOpenViewModal}
                 handleCloseModal={handleCloseViewModal}
-            />   
-            <EditEventModal 
-                data={events[index]}  
-                openModal={openEditModal} 
-                setOpenModal={setOpenEditModal} 
+            />
+            <EditEventModal
+                data={events[index]}
+                openModal={openEditModal}
+                setOpenModal={setOpenEditModal}
                 handleCloseModal={handleCloseEditModal}
             />
-            <DeleteEventModal 
-                data={events[index]} 
-                openDeleteModal={openDeleteModal} 
-                setDeleteModal={setOpenDeleteModal} 
+            <DeleteEventModal
+                data={events[index]}
+                openDeleteModal={openDeleteModal}
+                setDeleteModal={setOpenDeleteModal}
                 handleCloseDeleteModal={handleCloseDeleteModal}
-            />  
+            />
             <MUIDataTable
                 title={"Event List"}
                 data={data}

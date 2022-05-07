@@ -7,5 +7,5 @@ router.get("/get-dumpsters",dumpsterController.getDumpsters);
 router.get("/get-dumpster/:id",dumpsterController.getDumpster);
 router.post("/add-dumpster",dumpsterController.addDumpster);
 router.put("/edit-dumpster/:id",dumpsterController.editDumpster);
-router.post("/delete-dumpster/:id",dumpsterController.deleteDumpster);
+router.post("/delete-dumpster/:id",dumpsterController.deleteDumpsterNew);
 module.exports = router;

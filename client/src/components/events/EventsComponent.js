@@ -196,11 +196,13 @@ const EventsComponent = () => {
     const handleCloseEditModal = () => setOpenEditModal(false);
 
     const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
-    const handleOpenDeleteModal = () => setOpenDeleteModal(true);
-    const handleCloseDeleteModal = (dataIndex) => {
+ 
+    const handleOpenDeleteModal = (dataIndex) => {
         setIndex(dataIndex)
-        setOpenDeleteModal(false);
+        setOpenDeleteModal(true);
     }
+
+    const handleCloseDeleteModal = () => setOpenDeleteModal(false);
 
 
     const options = {

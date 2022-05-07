@@ -93,7 +93,7 @@ export default function EditAnnouncementModal(props) {
   useEffect(() => {
     let temp=[];
     // eslint-disable-next-line array-callback-return
-    props.data[5]&&props.data[5].map((image)=>{
+    props.data.announcementLine.lineAttachment.map((image)=>{
       temp.push(image.filename);
     })
     setUrls([...temp]);
@@ -122,8 +122,8 @@ export default function EditAnnouncementModal(props) {
   }
   const { handleChange, handleSubmit, handleBlur, values, errors,isValid,touched } = useFormik({
     initialValues:{ 
-      title: props.data[1],
-      content:props.data[2]
+      title: props.data.title,
+      content:props.data.content
     },
     enableReinitialize:true,
     validationSchema:announcementValidationSchema,

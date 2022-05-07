@@ -180,3 +180,21 @@ exports.deleteAnnouncement = async(req, res) => {
         
     }
 }
+
+
+exports.deleteAnnouncementNew = async(req, res) => {
+    if(req.body.accessToken){
+
+        let announce = await announcement.model.destroy({
+            where:{
+                announcement_id:req.params.id
+            }
+        })
+        if(announce){
+            res.send({success:true,message:"Announcement successfully Deleted"});
+        }else{
+            res.send({success:false,message:"Failed to delete Announcement"});
+        }
+        
+    }
+}

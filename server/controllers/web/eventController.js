@@ -170,3 +170,19 @@ exports.deleteEvent = async(req, res) => {
    
 
 }
+
+
+exports.deleteEventNew = async(req, res) => {
+    if(req.body.accessToken){
+        let events = await event.model.destroy({
+            where:{
+                event_id:req.params.id
+            }
+        })
+        if(events){
+            res.send({success:true,message:"Event successfully Deleted"});
+        }else{
+            res.send({success:false,message:"failed to delete Event"});
+        }
+    }  
+}

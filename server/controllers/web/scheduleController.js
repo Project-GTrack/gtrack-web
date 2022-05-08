@@ -8,6 +8,7 @@ const user=require("../../models/user");
 const schedule=require("../../models/schedule");
 const truck=require("../../models/truck");
 const truck_assignment=require("../../models/truck_assignment");
+const req = require("express/lib/request");
 
 // schedule.model.belongsTo(user.model,{foreignKey: 'admin_id', as: 'scheduleAdmin'});
 // schedule.model.belongsTo(user.model,{foreignKey: 'driver_id', as: 'scheduleDriver'});
@@ -213,4 +214,20 @@ exports.deleteSchedule=async (req,res)=>{
             res.send({success:false,message:"Password did not match",data:null});
         }
     })
+}
+
+exports.deleteScheduleNew = async (req,res) => {
+    if (req.body.accessToken) {
+        let schedules = await schedule.model.destroy({
+            where:{
+                schedule_id:req.params.id
+            }
+        });
+
+        if (schedules) {
+            res.send({success:true,message:"Schedule successfully Deleted."});
+        } else {
+            res.send({success:false,message:"Something went wrong",data:null});
+        }
+    }
 }

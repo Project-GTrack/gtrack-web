@@ -123,9 +123,9 @@ const AnnouncementsComponent = () => {
                 sort:false,
               customBodyRenderLite: (dataIndex) => (
                 <ButtonGroup>
-                    <button  onClick={()=>handleOpenViewModal(dataIndex)} className="btn btn-primary mx-2 "><i className="fa fa-info-circle" aria-hidden="true"></i></button>
+                    <button  onClick={()=>handleOpenViewModal(dataIndex)} className="btn btn-primary mx-1 "><i className="fa fa-info-circle" aria-hidden="true"></i></button>
                     <button onClick={()=>handleOpenEditModal(dataIndex)} className="btn btn-warning "><i className="fa fa-pencil" aria-hidden="true"></i></button>
-                    <button  onClick={()=>handleOpenDeleteModal(dataIndex)} className="btn btn-danger mx-2"><i className="fa fa-trash" aria-hidden="true"></i></button>
+                    <button  onClick={()=>handleOpenDeleteModal(dataIndex)} className="btn btn-danger mx-1"><i className="fa fa-trash" aria-hidden="true"></i></button>
                 </ButtonGroup>
                
                 

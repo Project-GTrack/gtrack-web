@@ -6,6 +6,7 @@ import TruckAssignmentCustomToolbar from "./assignments/TruckAssignmentCustomToo
 import { useSchedulesPageContext } from "../pages/SchedulesPage";
 import EditAssignment from "./assignments/modals/EditAssignment";
 import DeleteAssignment from "./assignments/modals/DeleteAssignment";
+import { ButtonGroup } from "@mui/material";
 
 const TruckAssignmentPanel = () => {
   const {queryResult}=useSchedulesPageContext();
@@ -218,10 +219,10 @@ const TruckAssignmentPanel = () => {
           sort:false,
           customBodyRender: (value,tableMeta,updateValue)=>{
               return (
-                <div>
-                    <button onClick={()=>handleOpenEditModal(tableMeta.rowData)} className="btn btn-warning "><i className="fa fa-pencil" aria-hidden="true"></i></button>
+                <ButtonGroup>
+                    <button onClick={()=>handleOpenEditModal(tableMeta.rowData)} className="btn btn-warning mx-1"><i className="fa fa-pencil" aria-hidden="true"></i></button>
                     <button onClick={()=>handleOpenDeleteModal(tableMeta.rowData)} className="btn btn-danger"><i className="fa fa-trash" aria-hidden="true"></i></button>
-                </div>
+                </ButtonGroup>
               )
           }
       }

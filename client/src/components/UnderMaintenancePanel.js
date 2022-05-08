@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import moment from 'moment';
 import { useTrucksPageContext } from '../pages/TrucksPage';
 import ReactivateTruckModal from './trucks/ReactivateTruckModal';
+import { ButtonGroup } from '@mui/material';
 const UnderMaintenancePanel = () => {
     const {queryResult}= useTrucksPageContext();
     const inactives = queryResult.data.data.inactives;
@@ -33,9 +34,9 @@ const UnderMaintenancePanel = () => {
             customBodyRenderLite: (dataIndex, rowIndex)=>{
                 // console.log(tableMeta.tableData);
                 return (
-                    <>
-                        <button onClick={()=>handleOpenReactivateModal(dataIndex)} className="btn btn-success mx-2"><i className="fa fa-check" aria-hidden="true"></i></button>
-                    </>
+                    <ButtonGroup>
+                        <button onClick={()=>handleOpenReactivateModal(dataIndex)} className="btn btn-success mx-1"><i className="fa fa-eye" aria-hidden="true"></i></button>
+                    </ButtonGroup>
                 )
             }
         }

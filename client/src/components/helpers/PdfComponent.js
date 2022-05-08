@@ -65,7 +65,7 @@ const PdfComponent = forwardRef(({ isFilter,type, dashcards, chartData, monthDat
                             <p><i>Figure 2. Total Garbage Weight (in Tons) per week within the month of {moment().format("MMMM")}</i></p>
                         </center>
                     </div>
-                    <div xs={12} style={{ marginTop: "20vh", marginBottom: "4vh" }}>
+                    <div xs={12} style={{ marginTop: "2vh", marginBottom: "4vh" }}>
                         <p><strong>Total Garbage Weight Collected Per Month </strong></p>
                         <p style={{ textIndent: "50px" }}>The total garbage weight collected for the year of {moment().format("YYYY")} is <b>{monthData.reduce((total, currentValue) => total = total + currentValue.weight, 0)} </b> Tons</p>
                         <p style={{ textIndent: "50px" }}>The figure below shows the total garbage weight collected monthly within the year of {moment().format("YYYY")}</p>
@@ -198,7 +198,7 @@ const PdfComponent = forwardRef(({ isFilter,type, dashcards, chartData, monthDat
                                     ))}
                                 </tbody>
                             </table>
-                            <p><i>Figure 4. Total Garbage Weight (in Tons) per year</i></p>
+                            <p><i>Figure 2. Total Garbage Weight (in Tons) per year</i></p>
                         </center>
                     </div>
                             </>

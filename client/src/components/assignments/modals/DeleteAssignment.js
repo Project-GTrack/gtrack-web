@@ -119,8 +119,8 @@ const DeleteAssignment = (props) => {
         </Box>
       </DialogContent>
       <DialogActions>
-        <button className='btn btn-success'  type="submit" onClick={handleFormSubmit}>{loading?<><CircularProgress size={20}/> Deleting...</>:"Yes"}</button>
-        <button className='btn btn-danger'  type="submit" onClick={handleCancelDelete}>{loading?<><CircularProgress size={20}/> Deleting...</>:"No"}</button>
+        <button className='btn btn-success' disabled={loading} type="submit" onClick={handleFormSubmit}>{loading?<><CircularProgress size={20}/> Yes</>:"Yes"}</button>
+        <button className='btn btn-danger' disabled={loading} type="submit" onClick={handleCancelDelete}>{loading?<><CircularProgress size={20}/> No </>:"No"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

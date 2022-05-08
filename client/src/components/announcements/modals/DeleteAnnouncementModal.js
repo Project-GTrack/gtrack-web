@@ -71,7 +71,7 @@ export default function DeleteAnnouncementModal(props) {
 
   const handleFormSubmit = async(values) => {
     setLoading(true);
-      Axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/announcement/delete/${props.data[0]}`,
+      Axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/announcement/delete/${props.data.announcement_id}`,
       {accessToken: Cookies.get('user_id')})
       .then(res=>{
         setLoading(false);
@@ -117,8 +117,8 @@ export default function DeleteAnnouncementModal(props) {
         </Box>
       </DialogContent>
       <DialogActions>
-      <button className='btn btn-success' type="submit" onClick={handleFormSubmit}>{loading?<><CircularProgress size={20}/> Deleting...</>:"Yes"}</button>
-      <button className='btn btn-danger' type="submit" onClick={handleCancelDelete}>{loading?<><CircularProgress size={20}/> Deleting...</>:"No"}</button>
+      <button className='btn btn-success' disabled={loading} type="submit" onClick={handleFormSubmit}>{loading?<><CircularProgress size={20}/>Yes</>:"Yes"}</button>
+      <button className='btn btn-danger' disabled={loading} type="submit" onClick={handleCancelDelete}>{loading?<><CircularProgress size={20}/> No</>:"No"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

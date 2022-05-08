@@ -6,6 +6,7 @@ import { useReportsandConcernsPageContext } from '../pages/ReportsPage';
 import ResolveReportModal from './Reports/ResolveReportModal';
 import ViewReportModal from './Reports/ViewReportModal';
 import DeleteReportModal from './Reports/DeleteReportModal';
+import { ButtonGroup } from '@mui/material';
 
 const ReportComponent = () => {
     const {queryResult}= useReportsandConcernsPageContext();
@@ -48,11 +49,11 @@ const ReportComponent = () => {
             sort:false,
             customBodyRenderLite: (dataIndex, rowIndex)=>{
                 return (
-                    <>
-                        <button onClick={()=>handleModalResolveOpen(dataIndex)} className="btn btn-success mx-2"><i className="fa fa-check" aria-hidden="true"></i></button>
+                    <ButtonGroup>
+                        <button onClick={()=>handleModalResolveOpen(dataIndex)} className="btn btn-success mx-1"><i className="fa fa-check" aria-hidden="true"></i></button>
                         <button onClick={()=>handleModalViewOpen(dataIndex)} className="btn btn-primary"><i className="fa fa-info-circle" aria-hidden="true"></i></button>
-                        <button onClick={()=>handleModalDeleteOpen(dataIndex)} className="btn btn-danger mx-2"><i className="fa fa-trash" aria-hidden="true"></i></button>
-                    </>
+                        <button onClick={()=>handleModalDeleteOpen(dataIndex)} className="btn btn-danger mx-1"><i className="fa fa-trash" aria-hidden="true"></i></button>
+                    </ButtonGroup>
                 )
             }
         }

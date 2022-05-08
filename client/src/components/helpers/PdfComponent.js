@@ -38,7 +38,7 @@ const PdfComponent = forwardRef(({ dashcards, chartData, monthData, yearData }, 
                     </table>
                     <p><i>Figure 1. Number of Assets and Collections within the month of {moment().format("MMMM")}</i></p>
                 </center>
-                <div xs={12} style={{ marginTop: "25vh", marginBottom: "4vh" }}>
+                <div  xs={12} style={{ marginTop: "20vh", marginBottom: "4vh" }}>
                     <p><strong>Total Garbage Weight Collected Per Week </strong></p>
                     <p style={{ textIndent: "50px" }}>The total garbage weight collected for the month of {moment().format("MMMM")} is <b>{chartData.reduce((total, currentValue) => total = total + currentValue.weight, 0)} </b> Tons</p>
                     <p style={{ textIndent: "50px" }}>The figure below shows the total garbage weight collected weekly within the month of {moment().format("MMMM")}</p>
@@ -63,7 +63,7 @@ const PdfComponent = forwardRef(({ dashcards, chartData, monthData, yearData }, 
                         <p><i>Figure 2. Total Garbage Weight (in Tons) per week within the month of {moment().format("MMMM")}</i></p>
                     </center>
                 </div>
-                <div xs={12} style={{ marginTop: "5vh", marginBottom: "4vh" }}>
+                <div xs={12} style={{ marginTop: "55vh", marginBottom: "4vh" }}>
                     <p><strong>Total Garbage Weight Collected Per Month </strong></p>
                     <p style={{ textIndent: "50px" }}>The total garbage weight collected for the year of {moment().format("YYYY")} is <b>{monthData.reduce((total, currentValue) => total = total + currentValue.weight, 0)} </b> Tons</p>
                     <p style={{ textIndent: "50px" }}>The figure below shows the total garbage weight collected monthly within the year of {moment().format("YYYY")}</p>
@@ -88,7 +88,7 @@ const PdfComponent = forwardRef(({ dashcards, chartData, monthData, yearData }, 
                         <p><i>Figure 3. Total Garbage Weight (in Tons) per month within the year of {moment().format("YYYY")}</i></p>
                     </center>
                 </div>
-                <div xs={12} style={{ marginTop: "5vh", marginBottom: "4vh" }}>
+                <div xs={12} style={{ marginTop: "50vh", marginBottom: "4vh" }}>
                     <p><strong>Total Garbage Weight Collected Per Year </strong></p>
                     <p style={{ textIndent: "50px" }}>The total garbage weight collected per year is <b>{yearData.reduce((total, currentValue) => total = total + currentValue.weight, 0)} </b> Tons</p>
                     <p style={{ textIndent: "50px" }}>The figure below shows the total garbage weight collected yearly</p>

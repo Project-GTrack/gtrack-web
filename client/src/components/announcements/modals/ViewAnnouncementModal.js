@@ -10,6 +10,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Carousel from 'react-material-ui-carousel'
+import moment from 'moment';
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
@@ -50,7 +51,6 @@ BootstrapDialogTitle.propTypes = {
 
 
 export default function ViewAnnouncementModal(props) {
-
   return (
     <BootstrapDialog
       fullWidth={true}
@@ -66,7 +66,7 @@ export default function ViewAnnouncementModal(props) {
       <DialogContent dividers>
         <Box sx={{ width: "100%" }}>
           <Carousel sx={{height: 200,width:'100%',alignContent:'center',alignItems:'center',justifyContent:'center',margin:'auto'}}>
-          {props.data[5]&&props.data[5].length!==0?(props.data[5].map((image,i)=>{
+          {props.data.announcementLine.lineAttachment.length!==0?(props.data.announcementLine.lineAttachment.map((image,i)=>{
               return (
                 <div key = {i} className="text-center mx-auto ml-auto mr-auto">
                   <img 
@@ -85,16 +85,16 @@ export default function ViewAnnouncementModal(props) {
           </Carousel>
        
           <Typography variant="body2" mt={2} color="text.secondary">
-            <b>Title:</b> {props.data[1]}
+            <b>Title:</b> {props.data.title}
           </Typography>
           <Typography align='justify' variant="body2" color="text.secondary">
-            <b>Content:</b> {props.data[2]}
+            <b>Content:</b> {props.data.content}
           </Typography>
           <Typography align='justify' variant="body2" color="text.secondary">
-            <b>Added by:</b> {props.data[3]}
+            <b>Added by:</b> {props.data.announcementAdmin.fname+''+props.data.announcementAdmin.lname}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            <b>Date Added:</b> {props.data[4]}
+            <b>Date Added:</b> { moment(props.data.createdAt).format("LL")}
           </Typography>
         </Box>
       </DialogContent>

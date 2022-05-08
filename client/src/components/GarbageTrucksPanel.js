@@ -6,6 +6,7 @@ import AddTruckModal from './trucks/AddTruckModal';
 import { useTrucksPageContext } from '../pages/TrucksPage';
 import EditTruckModal from './trucks/EditTruckModal';
 import DisableTruckModal from './trucks/DisableTruckModal';
+import { ButtonGroup } from '@mui/material';
 const GarbageTrucksPanel = () => {
     const {queryResult}= useTrucksPageContext();
     const trucks = queryResult.data.data.trucks
@@ -27,13 +28,14 @@ const GarbageTrucksPanel = () => {
         label:"Actions",
         options:{
             filter:false,
+            sort:false,
             customBodyRenderLite: (dataIndex, rowIndex)=>{
                 // console.log(tableMeta.tableData);
                 return (
-                    <>
+                    <ButtonGroup>
                         <button onClick={()=>handleOpenEditModal(dataIndex)} className="btn btn-warning "><i className="fa fa-pencil" aria-hidden="true"></i></button>
-                        <button onClick={()=>handleDeleteModal(dataIndex)} className="btn btn-danger mx-2"><i className="fa fa-minus-circle" aria-hidden="true"></i></button>
-                    </>
+                        <button onClick={()=>handleDeleteModal(dataIndex)} className="btn btn-danger mx-1"><i className="fa fa-eye-slash" aria-hidden="true"></i></button>
+                    </ButtonGroup>
                 )
             }
         }

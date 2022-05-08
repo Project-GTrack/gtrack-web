@@ -91,9 +91,10 @@ export default function EditAnnouncementModal(props) {
           value => !value || (value && SUPPORTED_FORMATS.includes(value.type)))
   })
   useEffect(() => {
+    console.log(props.data);
     let temp=[];
     // eslint-disable-next-line array-callback-return
-    props.data[5]&&props.data[5].map((image)=>{
+    props.data.announcementLine.lineAttachment.map((image)=>{
       temp.push(image.filename);
     })
     setUrls([...temp]);
@@ -102,7 +103,7 @@ export default function EditAnnouncementModal(props) {
   const handleFormSubmit = async(values) => {
     setLoading(true);
     if(Cookies.get('user_id')){
-      await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/admin/announcement/edit/${props.data[0]}`,{
+      await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/admin/announcement/edit/${props.data.announcement_id}`,{
         title:values.title,
         content: values.content,
         urls:urls
@@ -122,8 +123,8 @@ export default function EditAnnouncementModal(props) {
   }
   const { handleChange, handleSubmit, handleBlur, values, errors,isValid,touched } = useFormik({
     initialValues:{ 
-      title: props.data[1],
-      content:props.data[2]
+      title: props.data.title,
+      content:props.data.content
     },
     enableReinitialize:true,
     validationSchema:announcementValidationSchema,

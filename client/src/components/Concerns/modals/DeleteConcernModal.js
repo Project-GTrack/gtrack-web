@@ -58,10 +58,11 @@ export default function DeleteConcernModal(props) {
       .string()
       .required('Password is required'),
   })
+  
   const handleFormSubmit = async() =>{
     setLoading(true);
     axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/report/deleteConcern/${props.data.concern_id}`,
-    {password:values.password,accessToken:Cookies.get("user_id")})
+    {accessToken:Cookies.get("user_id")})
     .then(res=>{
       setLoading(false);
       if(res.data.success){
@@ -73,51 +74,43 @@ export default function DeleteConcernModal(props) {
       }
     })
   }
+
+  const handleCancelDelete = async() =>{
+    enqueueSnackbar("Concern record was not deleted",   { variant:'error'});
+    props.setOpenDeleteModal(false);
+  }
+
   const { handleChange, handleSubmit,handleBlur, values, errors,isValid,touched } = useFormik({
-    initialValues:{ password:""},
-    enableReinitialize:true,
-    validationSchema:passwordValidationSchema,
     onSubmit: handleFormSubmit
   });
+
   return (
     <BootstrapDialog
       onClose={()=>props.setOpenDeleteModal(false)}
       aria-labelledby="customized-dialog-title"
       open={props.openDeleteModal}
     >
-      <BootstrapDialogTitle
-        id="customized-dialog-title"
-        onClose={()=>props.setOpenDeleteModal(false)}
-      >
-        Delete this Concern?
-      </BootstrapDialogTitle>
-      <DialogContent dividers>
-        <Box sx={{ width: "100%" }}>
-        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-    <Grid item xs={6} marginTop={2}>
-    Confirm using your password
-    </Grid>
-    <Grid item xs={6} marginTop={-2}>
-      {(errors.password && touched.password) &&
-        <p className="text-danger small mt-2">{errors.password}</p>
-      }
-      <TextField
-        onChange={handleChange('password')}
-        value={values.password}
-        onBlur={handleBlur('password')}
-        autoFocus
-        margin="dense"
-        label="Enter password here"
-        type="password"
-        fullWidth
-        variant="standard"
-      />
+
+    <BootstrapDialogTitle
+      id="customized-dialog-title"
+      onClose={()=>props.setOpenDeleteModal(false)}
+    >
+      Delete this Concern?
+    </BootstrapDialogTitle>
+
+    <DialogContent dividers>
+      <Box sx={{ width: "100%" }}>
+      <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+
+    <Grid item xs={20} marginTop={2}>
+    Do you wish to delete this Concern?
     </Grid>
   </Grid>
         </Box>
       </DialogContent>
       <DialogActions>
-        <button className='btn btn-danger' disabled={!isValid||loading} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Deleting...</>:"Delete"}</button>
+        <button className='btn btn-success' disabled={loading} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/>Yes</>:"Yes"}</button>
+        <button className='btn btn-danger' disabled={loading} type="submit" onClick={handleCancelDelete}>{loading?<><CircularProgress size={20}/>No</>:"No"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

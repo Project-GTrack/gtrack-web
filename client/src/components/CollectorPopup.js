@@ -12,7 +12,7 @@ const CollectorPopup = ({data,setData}) => {
                 'bottom-left': [12, -38],  'bottom': [0, -38], 'bottom-right': [-12, -38]
             }}
         >
-            <span>PICK-UP POINTS:</span>
+            <span>WASTE COLLECTION:</span>
             <Stack direction="row" spacing={2}>
                 <span className='text-success'><i className="fa fa-map-signs" aria-hidden="true"></i></span>
                 <span>{data.data.landmark}</span>

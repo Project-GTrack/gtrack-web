@@ -6,6 +6,7 @@ import { useDumpstersPageContext } from '../../pages/DumpstersPage';
 import ViewDumpsterModal from './modals/ViewDumpsterModal';
 import EditDumpsterModal from './modals/EditDumpsterModal';
 import DeleteDumpsterModal from './modals/DeleteDumpsterModal';
+import { ButtonGroup } from '@mui/material';
 
 const DumpstersComponent = ({statusToast, setStatusToast}) => {
   const [openModal, setOpenModal] = useState(false);
@@ -116,13 +117,15 @@ const DumpstersComponent = ({statusToast, setStatusToast}) => {
                 name:"Actions",
                 label:"Actions",
                 options:{
+                    filter:false,
+                    sort:false,
                     customBodyRender: (value,tableMeta,updateValue)=>{
                         return (
-                            <>
-                                <button onClick={()=>handleOpenViewModal(tableMeta.rowData)} className="btn btn-primary mx-2"><i className="fa fa-info-circle" aria-hidden="true"></i></button>
+                            <ButtonGroup>
+                                <button onClick={()=>handleOpenViewModal(tableMeta.rowData)} className="btn btn-primary mx-1"><i className="fa fa-info-circle" aria-hidden="true"></i></button>
                                 <button onClick={()=>handleOpenEditModal(tableMeta.rowData)} className="btn btn-warning "><i className="fa fa-pencil" aria-hidden="true"></i></button>
-                                <button onClick={()=>handleDeleteModal(tableMeta.rowData)} className="btn btn-danger mx-2"><i className="fa fa-trash" aria-hidden="true"></i></button>
-                            </>
+                                <button onClick={()=>handleDeleteModal(tableMeta.rowData)} className="btn btn-danger mx-1"><i className="fa fa-trash" aria-hidden="true"></i></button>
+                            </ButtonGroup>
                         )
                     }
                 }

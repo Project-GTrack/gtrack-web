@@ -5,6 +5,7 @@ import moment from 'moment';
 import { useEmployeePageContext } from '../../pages/EmployeesPage';
 import ViewEmployeeModal from './modals/ViewEmployeeModal';
 import ReactivateModal from './modals/ReactivateModal';
+import { ButtonGroup } from '@mui/material';
 
 const InactiveAccountsComponent = ({statusToast,setStatusToast}) => {
     const {queryResult}=useEmployeePageContext();
@@ -33,12 +34,14 @@ const InactiveAccountsComponent = ({statusToast,setStatusToast}) => {
         name:"Actions",
         label:"Actions",
         options:{
+            filter:false,
+            sort:false,
             customBodyRender: (value,tableMeta,updateValue)=>{
                 return (
-                    <>
-                        <button onClick={()=>handleOpenViewModal(tableMeta.rowData)} className="btn btn-primary "><i className="fa fa-info-circle" aria-hidden="true"></i></button>
-                        <button onClick={()=>handleDeleteModal(tableMeta.rowData)} className={(tableMeta.rowData[8] === "Active")?"btn btn-danger":"btn btn-success"}><i className={(tableMeta.rowData[8] === "Active")?"fa fa-minus-circle":"fa fa-check"} aria-hidden="true"></i></button>
-                    </>
+                    <ButtonGroup>
+                        <button onClick={()=>handleOpenViewModal(tableMeta.rowData)} className="btn btn-primary mx-1"><i className="fa fa-info-circle" aria-hidden="true"></i></button>
+                        <button onClick={()=>handleDeleteModal(tableMeta.rowData)} className={(tableMeta.rowData[8] === "Active")?"btn btn-danger":"btn btn-success"}><i className={(tableMeta.rowData[8] === "Active")?"fa fa-minus-circle":"fa fa-eye"} aria-hidden="true"></i></button>
+                    </ButtonGroup>
                 )
             }
         }

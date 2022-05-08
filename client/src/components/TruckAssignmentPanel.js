@@ -4,10 +4,14 @@ import moment from "moment";
 import AddNewAssignment from "./assignments/modals/AddNewAssignment";
 import TruckAssignmentCustomToolbar from "./assignments/TruckAssignmentCustomToolbar";
 import { useSchedulesPageContext } from "../pages/SchedulesPage";
+import EditAssignment from "./assignments/modals/EditAssignment";
+import DeleteAssignment from "./assignments/modals/DeleteAssignment";
+import { ButtonGroup } from "@mui/material";
 
 const TruckAssignmentPanel = () => {
   const {queryResult}=useSchedulesPageContext();
   const assignments=queryResult.data.data.assignments;
+  const[rowData,  setRowData] = useState([]);
   const [data,setData]=useState([]);
   const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = () => setOpenModal(true);
@@ -56,6 +60,18 @@ const TruckAssignmentPanel = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
   // const columns = ["Schedule", "Plate Number", "Driver", "Route","Date Created","Status"];
+  const [openEditModal, setEditModal] = useState(false);
+    const [openDeleteModal, setDeleteModal] = useState(false);
+    const handleOpenEditModal = async(rowData) => {
+      await setRowData(rowData);
+      setEditModal(true); 
+    }
+    const handleCloseEditModal = () => setEditModal(false);
+    const handleOpenDeleteModal = async(rowData) => {
+      await setRowData(rowData);
+      setDeleteModal(true); 
+    }
+    const handleCloseDeleteModal = () => setDeleteModal(false);
   const columns = [
     {
       name: "Assignment ID",
@@ -195,12 +211,26 @@ const TruckAssignmentPanel = () => {
         filter: true,
         sort: true,
       },
-    },
-  ];
+    },{
+      name:"Actions",
+      label:"Actions",
+      options:{
+          filter:false,
+          sort:false,
+          customBodyRender: (value,tableMeta,updateValue)=>{
+              return (
+                <ButtonGroup>
+                    <button onClick={()=>handleOpenEditModal(tableMeta.rowData)} className="btn btn-warning mx-1"><i className="fa fa-pencil" aria-hidden="true"></i></button>
+                    <button onClick={()=>handleOpenDeleteModal(tableMeta.rowData)} className="btn btn-danger"><i className="fa fa-trash" aria-hidden="true"></i></button>
+                </ButtonGroup>
+              )
+          }
+      }
+  }];
 
   const options = {
     selectableRowsHeader: false,
-    selectableRows: "single",
+    selectableRows: false,
     filter: true,
     filterType: "dropdown",
     customToolbarSelect: (selectedRows, displayData) => (
@@ -224,6 +254,8 @@ const TruckAssignmentPanel = () => {
             handleOpenModal={handleOpenModal}
           />
       </div>
+      <EditAssignment data={rowData} openModal={openEditModal} setOpenModal={setEditModal} handleCloseModal={handleCloseEditModal}/>
+      <DeleteAssignment data={rowData} openDeleteModal={openDeleteModal} setDeleteModal={setDeleteModal} handleCloseDeleteModal={handleCloseDeleteModal}/>
       <MUIDataTable
         title={"Truck Assignments List"}
         data={data}

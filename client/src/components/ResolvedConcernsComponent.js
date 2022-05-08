@@ -5,6 +5,7 @@ import { useReportsandConcernsPageContext } from '../pages/ReportsPage';
 import ConcernToolbar from './ConcernToolbar';
 import ViewConcernModal from './Concerns/modals/ViewConcernModal';
 import DeleteConcernModal from './Concerns/modals/DeleteConcernModal';
+import { ButtonGroup } from '@mui/material';
 
 const ResolvedConcernsComponent = () => {
     const {queryResult}= useReportsandConcernsPageContext();
@@ -41,12 +42,13 @@ const ResolvedConcernsComponent = () => {
         label:"Actions",
         options:{
             filter:false,
+            sort:false,
             customBodyRenderLite: (dataIndex, rowIndex)=>{
                 return (
-                    <>
+                    <ButtonGroup>
                         <button onClick={()=>handleModalViewOpen(dataIndex)} className="btn btn-primary"><i className="fa fa-info-circle" aria-hidden="true"></i></button>
-                        <button onClick={()=>handleModalDeleteOpen(dataIndex)} className="btn btn-danger mx-2"><i className="fa fa-trash" aria-hidden="true"></i></button>
-                    </>
+                        <button onClick={()=>handleModalDeleteOpen(dataIndex)} className="btn btn-danger mx-1"><i className="fa fa-trash" aria-hidden="true"></i></button>
+                    </ButtonGroup>
                 )
             }
         }

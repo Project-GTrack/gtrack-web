@@ -75,3 +75,22 @@ exports.deleteAssignment = async (req,res) => {
         
     }
 }
+
+exports.deleteAssignmentNew = async (req,res) => {
+    if(req.body.accessToken){
+        let assign = await assignment.model.destroy({
+            where:{
+                assignment_id:req.params.id
+            }
+        })
+        
+        if (assign) {
+            res.send({success:true,message:"Truck assignment successfully Deleted"});
+        }else{
+            res.send({success:false,message:"Password did not match",data:null});
+        }
+        
+    }
+}
+
+

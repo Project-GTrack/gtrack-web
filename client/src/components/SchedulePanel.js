@@ -10,6 +10,7 @@ import ScheduleCustomToolbar from './schedules/ScheduleCustomToolbar';
 import { useSchedulesPageContext } from '../pages/SchedulesPage';
 import EditScheduleModal from './schedules/EditScheduleModal';
 import DeleteScheduleModal from './schedules/DeleteScheduleModal';
+import { ButtonGroup } from '@mui/material';
 const SchedulePanel = (props) => {
     const {queryResult}=useSchedulesPageContext();
     const schedules=queryResult.data.data.schedule;
@@ -39,12 +40,13 @@ const SchedulePanel = (props) => {
         label:"Actions",
         options:{
             filter:false,
+            sort:false,
             customBodyRenderLite: (dataIndex, rowIndex)=>{
                 return (
-                    <div>
-                       <button onClick={()=>handleModalOpen(dataIndex)} className="btn btn-warning "><i className="fa fa-pencil" aria-hidden="true"></i></button>
+                    <ButtonGroup>
+                       <button onClick={()=>handleModalOpen(dataIndex)} className="btn btn-warning mx-1"><i className="fa fa-pencil" aria-hidden="true"></i></button>
                        <button onClick={()=>handleModalDeleteOpen(dataIndex)} className="btn btn-danger "><i className="fa fa-trash" aria-hidden="true"></i></button>
-                    </div>
+                    </ButtonGroup>
                 )
             }
         }

@@ -61,7 +61,7 @@ const TrucksPage = () => {
             {...other}
           >
             {value === index && (
-              <Box sx={{ p: 3 }}>
+              <Box sx={{ paddingY: 3 }}>
                 {children}
               </Box>
             )}

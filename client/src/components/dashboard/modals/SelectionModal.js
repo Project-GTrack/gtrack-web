@@ -254,6 +254,16 @@ const SelectionModal = (props) => {
             {(()=>{
                 if(type === "All"){
                     console.log("ALL");
+                    return(<>
+                    <div>
+                        <p style={{
+                                        textAlign: 'center',
+                                        color: 'black',
+                                        fontStyle: 'italic',
+                                        fontSize: 12
+                                    }}><b>Note: </b>This report type will include all the other types (Weekly (for the current month), Monthly (for the current year), and Yearly)</p>
+                                </div>
+                    </>);
                 }else if(type === "Weekly"){
                     return(
                         <>
@@ -311,7 +321,14 @@ const SelectionModal = (props) => {
                             renderInput={(params) => <TextField {...params} />}
                         />
                         </Grid>
-                    </Grid></>):(<></>)}
+                    </Grid></>):(<><div>
+                        <p style={{
+                                        textAlign: 'center',
+                                        color: 'black',
+                                        fontStyle: 'italic',
+                                        fontSize: 12
+                                    }}><b>Note:</b> If not filtered, the default data will be only within for the current month</p>
+                                </div></>)}
                     {isFilter && (weekRange.endDate < weekRange.startDate || ((weekRange.startDate !== null && weekRange.endDate !== null) && moment(weekRange.startDate).format("YYYY-MM-DD") === moment(weekRange.endDate).format("YYYY-MM-DD"))) ? (<div>
                                     <p style={{
                                         textAlign: 'center',
@@ -450,7 +467,14 @@ const SelectionModal = (props) => {
                                 </Select>
                             </FormControl>
                         </Grid>
-                    </Grid></>):(<></>)}
+                    </Grid></>):(<><div>
+                        <p style={{
+                                        textAlign: 'center',
+                                        color: 'black',
+                                        fontStyle: 'italic',
+                                        fontSize: 12
+                                    }}><b>Note:</b> If not filtered, the default data will be only within for the current year</p>
+                                </div></>)}
                     {isFilter && (moment(`${monthRange.endMonth.year}-${monthRange.endMonth.month}-01`).format("YYYY-MM-DD") < moment(`${monthRange.startMonth.year}-${monthRange.startMonth.month}-01`).format("YYYY-MM-DD") || moment(`${monthRange.endMonth.year}-${monthRange.endMonth.month}-01`).format("YYYY-MM-DD") === moment(`${monthRange.startMonth.year}-${monthRange.startMonth.month}-01`).format("YYYY-MM-DD")) ? (<div>
                                     <p style={{
                                         textAlign: 'center',

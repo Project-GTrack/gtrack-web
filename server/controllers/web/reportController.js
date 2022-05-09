@@ -175,6 +175,7 @@ exports.viewReport = async(req,res) => {
     }
 }
 
+// Old delete report
 exports.deleteReport = async(req,res) => {
     //destroy report
     if (req.body.accessToken) {
@@ -200,6 +201,24 @@ exports.deleteReport = async(req,res) => {
     }
 }
 
+
+//New delete report
+exports.deleteReportNew = async(req,res)=>{
+    if (req.body.accessToken) {
+        
+        let reports = await report.model.destroy({
+            where:{
+                report_id:req.params.id
+            }
+        })
+
+        if (reports) {
+            res.send({success:true,message:"Report record has been deleted"});
+        } else {
+            res.send({success:false,message:"Something went wrong"});
+        }
+    }
+}
 
 //concerns funciton
 
@@ -271,46 +290,22 @@ exports.deleteConcern = async(req,res) => {
 }
 
 
-
-//POSSIBLE BETTER FUNCTIONS
-
-//This one probably doesn't work
-exports.resolveReportBetter = async(req,res) => {
-    if(!checkPassword(req.body.accessToken)) return res.send({success:false, message:"Invalid Password"});
-    let data = await report.model.update(
-        {
-            active:0
-        },{
+// New Concern Function
+exports.deleteConcernNew = async(req,res) => {
+    //destroy concern
+    if (req.body.accessToken) {
+        let concerns = await concern.model.destroy({
             where:{
-                report_id: req.params.id
+                concern_id:req.params.id
             }
-        }
-    )
-    if(!data) return res.send({success:false, message:"Something went wrong"});
-    return res.send({success:true, message:"Report has been Resolved"});
-}
-//
-//Same goes for this one
-exports.resolveReportSemiBetter = async(req,res) => {
-    //change status to 0
-    jwt.verify(req.body.accessToken,process.env.ACCESS_TOKEN_SECRET, async(err,decoded) => {
-        var decodedData = JSON.parse(decoded.user_id);
-        var bytes = C.AES.decrypt(decodedData.password, process.env.SECRET_KEY);
-        if (req.body.password !==  bytes.toString(C.enc.Utf8)) return res.send({success:false, message:"Invalid Password"});
-        let data = await report.model.update(
-            {
-                active:0
-            },{
-                where:{
-                    report_id: req.params.id
-                }
-            }
-        )
-        if(!data) return res.send({success:false, message:"Something went wrong"});
-        return res.send({success:true, message:"Report has been Resolved"});
-    })        
-}
-//
+        })
 
+        if (concerns) {
+            res.send({success:true,message:"Concern record has been deleted"});
+        } else {
+            res.send({success:false,message:"Something went wrong"});
+        }
+    }
+}
 
 

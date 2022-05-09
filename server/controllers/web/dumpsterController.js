@@ -161,3 +161,22 @@ exports.deleteDumpster = async (req,res) => {
         
     }
 }
+
+
+exports.deleteDumpsterNew = async (req,res) => {
+    if(req.body.accessToken){
+        let dumps = await dumpster.model.destroy({
+            where:{
+                dumpster_id:req.params.id
+            }
+        })
+        if(dumps){
+            database.ref("Dumpsters/" + req.params.id).remove();
+            res.send({success:true,message:"Dumpster Location successfully Deleted"});
+        }else{
+            res.send({success:false,message:"Cannot delete dumpster",data:null});
+        }
+        
+    }
+}
+  

@@ -61,17 +61,19 @@ export default function DeleteAnnouncementModal(props) {
   const { enqueueSnackbar} = useSnackbar();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
   const announcementValidationSchema = yup.object().shape({
     password: yup.string().required("Password is required"),
   });
+
   const {refetch}=useAnnouncementPageContext();
+
+
   const handleFormSubmit = async(values) => {
     setLoading(true);
-    if(Cookies.get('user_id')){
-      Axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/announcement/delete/${props.data[0]}`,{
-        password: values.password,
-        accessToken: Cookies.get('user_id')
-      }).then(res=>{
+      Axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/announcement/delete/${props.data.announcement_id}`,
+      {accessToken: Cookies.get('user_id')})
+      .then(res=>{
         setLoading(false);
         if(res.data.success){
           props.setDeleteModal(false);
@@ -81,17 +83,18 @@ export default function DeleteAnnouncementModal(props) {
           enqueueSnackbar(res.data.message, { variant:'error' });
         }
       })
-    }else{
-      navigate("/login");
-    }
   }
+
+  const handleCancelDelete = async() => {
+    enqueueSnackbar("Announcement Record was not deleted", { variant:'error' });
+    props.setDeleteModal(false);
+  }
+  
   const { handleChange, handleSubmit, handleBlur, values, errors, touched,isValid } =
     useFormik({
-      initialValues: { password: "" },
-      enableReinitialize: true,
-      validationSchema: announcementValidationSchema,
       onSubmit: handleFormSubmit,
   });
+
   return (
     <BootstrapDialog
       onClose={props.handleCloseDeleteModal}
@@ -107,31 +110,15 @@ export default function DeleteAnnouncementModal(props) {
       <DialogContent dividers>
         <Box sx={{ width: "100%" }}>
         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-    <Grid item xs={6} marginTop={2}>
-    Confirm using your password
-    </Grid>
-    <Grid item xs={6} marginTop={-2}>
-    <TextField
-        autoFocus
-        margin="dense"
-        id="password"
-        label="Enter password here"
-        type="password"
-        fullWidth
-        value={values.password}
-        onChange={handleChange("password")}
-        onBlur={handleBlur("password")}
-        variant="standard"
-      />
-       {errors.password && touched.password && (
-          <p className="text-danger small ">{errors.password}</p>
-        )}
+    <Grid item xs={20} marginTop={2}>
+    Do you wish to delete this announcement?
     </Grid>
   </Grid>
         </Box>
       </DialogContent>
       <DialogActions>
-      <button className='btn btn-danger' disabled={!isValid || loading} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Deleting...</>:"Delete"}</button>
+      <button className='btn btn-success' disabled={loading} type="submit" onClick={handleFormSubmit}>{loading?<><CircularProgress size={20}/>Yes</>:"Yes"}</button>
+      <button className='btn btn-danger' disabled={loading} type="submit" onClick={handleCancelDelete}>{loading?<><CircularProgress size={20}/> No</>:"No"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

@@ -140,43 +140,49 @@ exports.editAnnouncement = async(req, res) => {
    
 }
 exports.deleteAnnouncement = async(req, res) => {
-    if(req.body.accessToken!= undefined){
-        jwt.verify(req.body.accessToken,process.env.ACCESS_TOKEN_SECRET, async(err, decoded)=>{
-            var bytes  = C.AES.decrypt(JSON.parse(decoded.user_id).password, process.env.SECRET_KEY);
-            var originalText = bytes.toString(C.enc.Utf8);
-            if(originalText === req.body.password){
-                let announce = await announcement.model.findOne({
-                    where:{
-                        announcement_id: req.params.id
-                    }
-                })
-
-                await attachment.model.destroy({
-                    where:{
-                        attachment_line_id : announce.attachment_line_id
-                    }
-                });
-                await attachment_line.model.destroy({
-                    where:{
-                        attachment_line_id : announce.attachment_line_id
-                    }
-                })
-
-                announce = await announcement.model.destroy({
-                    where:{
-                        announcement_id:req.params.id
-                    }
-                })
-                if(announce !== 0){
-                    res.send({success:true,message:"Announcement successfully Deleted"});
-                }else{
-                    res.send({success:false,message:"Failed to delete Announcement"});
-                }
-                
-            }else{
-                res.send({success:false,message:"Password did not match"});
+        let announce = await announcement.model.findOne({
+            where:{
+                announcement_id: req.params.id
             }
         })
+
+        await attachment.model.destroy({
+            where:{
+                attachment_line_id : announce.attachment_line_id
+            }
+        });
+        await attachment_line.model.destroy({
+            where:{
+                attachment_line_id : announce.attachment_line_id
+            }
+        })
+
+        announce = await announcement.model.destroy({
+            where:{
+                announcement_id:req.params.id
+            }
+        })
+        if(announce !== 0){
+            res.send({success:true,message:"Announcement successfully Deleted"});
+        }else{
+            res.send({success:false,message:"Failed to delete Announcement"});
+        }
+}
+
+
+exports.deleteAnnouncementNew = async(req, res) => {
+    if(req.body.accessToken){
+
+        let announce = await announcement.model.destroy({
+            where:{
+                announcement_id:req.params.id
+            }
+        })
+        if(announce){
+            res.send({success:true,message:"Announcement successfully Deleted"});
+        }else{
+            res.send({success:false,message:"Failed to delete Announcement"});
+        }
         
     }
 }

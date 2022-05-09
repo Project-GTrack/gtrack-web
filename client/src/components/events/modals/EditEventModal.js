@@ -180,7 +180,7 @@ export default function EditEventModal(props) {
       purok:props.data.purok,
       barangay:props.data.barangay,
       town:props.data.town,
-      postal_code: props.postal_code,
+      postal_code: props.data.postal_code,
       target_participants:props.data.target_participants,
       status:props.data.status,
       registration_form_url:props.data.registration_form_url
@@ -360,7 +360,7 @@ export default function EditEventModal(props) {
           <FormControl sx={{ width:'100%' }}>
             <InputLabel htmlFor="status">Status</InputLabel>
               <Select
-                value={values.user_type}
+                value={values.status}
                 onChange={handleChange('status')}
                 onBlur={handleBlur('status')}
                 label="status"

@@ -53,15 +53,12 @@ export default function DeleteReportModal(props) {
   const {enqueueSnackbar} = useSnackbar();
   const [loading, setLoading] = React.useState(false);
   const {refetch}= useReportsandConcernsPageContext();
-  const passwordValidationSchema = yup.object().shape({
-    password: yup
-      .string()
-      .required('Password is required'),
-  })
+
+
   const handleFormSubmit = async() =>{
     setLoading(true);
     axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/report/deleteReport/${props.data.report_id}`,
-    {password:values.password,accessToken:Cookies.get("user_id")})
+    {accessToken:Cookies.get("user_id")})
     .then(res=>{
       setLoading(false);
       if(res.data.success){
@@ -73,12 +70,18 @@ export default function DeleteReportModal(props) {
       }
     })
   }
+
+  const handleCancelDelete = async() =>{
+    enqueueSnackbar("Report record was not deleted",   { variant:'error'});
+    props.setOpenDeleteModal(false);
+  }
+
+
   const { handleChange, handleSubmit,handleBlur, values, errors,isValid,touched } = useFormik({
-    initialValues:{ password:""},
-    enableReinitialize:true,
-    validationSchema:passwordValidationSchema,
     onSubmit: handleFormSubmit
   });
+
+
   return (
     <BootstrapDialog
       onClose={()=>props.setOpenDeleteModal(false)}
@@ -94,10 +97,10 @@ export default function DeleteReportModal(props) {
       <DialogContent dividers>
         <Box sx={{ width: "100%" }}>
         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-    <Grid item xs={6} marginTop={2}>
-    Confirm using your password
+    <Grid item xs={20} marginTop={2}>
+    Do you wish to delete this report
     </Grid>
-    <Grid item xs={6} marginTop={-2}>
+    {/* <Grid item xs={6} marginTop={-2}>
       {(errors.password && touched.password) &&
         <p className="text-danger small mt-2">{errors.password}</p>
       }
@@ -112,12 +115,14 @@ export default function DeleteReportModal(props) {
         fullWidth
         variant="standard"
       />
-    </Grid>
+    </Grid> */}
   </Grid>
         </Box>
       </DialogContent>
       <DialogActions>
-        <button className='btn btn-danger' disabled={!isValid||loading} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Deleting...</>:"Delete"}</button>
+
+        <button className='btn btn-success' disabled={loading} type="submit" onClick={handleFormSubmit}>{loading?<><CircularProgress size={20}/> Yes</>:"Yes"}</button>
+        <button className='btn btn-danger' disabled={loading} type="submit" onClick={handleCancelDelete}>{loading?<><CircularProgress size={20}/> No</>:"No"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

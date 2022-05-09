@@ -9,12 +9,12 @@ router.get("/get", reportController.getReports);
 
 //report routes
 router.post("/resolveReport/:id", reportController.resolveReport);
-router.post("/deleteReport/:id", reportController.deleteReport);
+router.post("/deleteReport/:id", reportController.deleteReportNew);
 router.get("/viewReport/:id", reportController.viewReport);
 
 //Concerns routes
 router.post("/resolveConcern/:id", reportController.resolveConcern);
-router.post("/deleteConcern/:id", reportController.deleteConcern);
+router.post("/deleteConcern/:id", reportController.deleteConcernNew);
 router.get("/viewConcern/:id", reportController.viewConcern);
 
 

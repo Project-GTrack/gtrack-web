@@ -63,16 +63,14 @@ const DeleteAssignment = (props) => {
   const assignmentErrorHandling = yup.object().shape({
     password: yup.string().required("Password is required"),
   });
-  const handleFormSubmit = (values, { resetForm }) => {
+
+  const handleFormSubmit = async() => {
     setLoading(true);
-    axios
-      .post(
-        `${process.env.REACT_APP_BACKEND_URL}/admin/assignment/delete-assignment/${props.data[0]}`,
-        { password: values.password, accessToken: Cookies.get("user_id") }
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/admin/assignment/delete-assignment/${props.data[0]}`,
+        {accessToken: Cookies.get("user_id") }
       )
       .then((res) => {
         setLoading(false);
-        resetForm();
         if(res.data.success){
           refetch();
           props.setDeleteModal(false);
@@ -83,11 +81,16 @@ const DeleteAssignment = (props) => {
         
       });
   };
+
+  const handleCancelDelete = async() =>{
+    enqueueSnackbar("Report record was not deleted",   { variant:'error'});
+    props.setDeleteModal(false);
+  }
+
+
+
   const { handleChange, handleSubmit, handleBlur, values, errors, touched,isValid } =
     useFormik({
-      initialValues: { password: "" },
-      enableReinitialize: true,
-      validationSchema: assignmentErrorHandling,
       onSubmit: handleFormSubmit,
     });
   return (
@@ -109,31 +112,15 @@ const DeleteAssignment = (props) => {
             rowSpacing={1}
             columnSpacing={{ xs: 1, sm: 2, md: 3 }}
           >
-            <Grid item xs={6} marginTop={2}>
-              Confirm using your password
-            </Grid>
-            <Grid item xs={6} marginTop={-2}>
-              <TextField
-                autoFocus
-                margin="dense"
-                id="password"
-                label="Enter password here"
-                type="password"
-                fullWidth
-                value={values.password}
-                onChange={handleChange("password")}
-                onBlur={handleBlur("password")}
-                variant="standard"
-              />
-              {errors.password && touched.password && (
-                <p className="text-danger small ">{errors.password}</p>
-              )}
+            <Grid item xs={20} marginTop={2}>
+              Do you wish to delete this truck assignment?
             </Grid>
           </Grid>
         </Box>
       </DialogContent>
       <DialogActions>
-        <button className='btn btn-danger' disabled={!isValid || loading} type="submit" onClick={handleSubmit}>{loading?<><CircularProgress size={20}/> Deleting...</>:"Delete"}</button>
+        <button className='btn btn-success' disabled={loading} type="submit" onClick={handleFormSubmit}>{loading?<><CircularProgress size={20}/> Yes</>:"Yes"}</button>
+        <button className='btn btn-danger' disabled={loading} type="submit" onClick={handleCancelDelete}>{loading?<><CircularProgress size={20}/> No </>:"No"}</button>
       </DialogActions>
     </BootstrapDialog>
   );

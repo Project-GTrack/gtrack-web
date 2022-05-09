@@ -196,13 +196,11 @@ const EventsComponent = () => {
     const handleCloseEditModal = () => setOpenEditModal(false);
 
     const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
- 
-    const handleOpenDeleteModal = (dataIndex) => {
+    const handleOpenDeleteModal = () => setOpenDeleteModal(true);
+    const handleCloseDeleteModal = (dataIndex) => {
         setIndex(dataIndex)
-        setOpenDeleteModal(true);
+        setOpenDeleteModal(false);
     }
-
-    const handleCloseDeleteModal = () => setOpenDeleteModal(false);
 
 
     const options = {
@@ -215,7 +213,8 @@ const EventsComponent = () => {
                 selectedRows={selectedRows}
                 displayData={displayData}
             />
-        )
+        ),
+   
 
     };
     return (

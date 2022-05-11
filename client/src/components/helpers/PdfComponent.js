@@ -38,7 +38,7 @@ const PdfComponent = forwardRef(({ isFilter,type, dashcards, chartData, monthDat
                     </table>
                     <p><i>Figure 1. Number of Assets and Collections within the month of {moment().format("MMMM")}</i></p>
                 </center>
-                {(()=>{
+                {/* {(()=>{
                     if(type === "All"){
                         return (<><div xs={12} style={{ marginTop: "20vh", marginBottom: "4vh" }}>
                         <p><strong>Total Garbage Weight Collected Per Week </strong></p>
@@ -116,7 +116,7 @@ const PdfComponent = forwardRef(({ isFilter,type, dashcards, chartData, monthDat
                         </center>
                     </div></>);
                     }else if(type === "Weekly"){
-                        return (<>
+                        return (<> */}
                             <div xs={12} style={{ marginTop: "20vh", marginBottom: "4vh" }}>
                                 <p><strong>Total Garbage Weight Collected Per Week </strong></p>
                                 <p style={{ textIndent: "50px" }}>The total garbage weight collected per week {isFilter && chartData ? "from "+moment(chartData[0].week.split('&')[0]).format("MMMM DD")+" to "+moment(chartData[chartData.length-1].week.split('&')[1]).format("MMMM DD, YYYY"):"within the month of "+moment().format("MMMM")} is <b>{chartData.reduce((total, currentValue) => total = total + currentValue.weight, 0)} </b> Tons</p>
@@ -142,7 +142,7 @@ const PdfComponent = forwardRef(({ isFilter,type, dashcards, chartData, monthDat
                                     <p><i>Figure 2. Total Garbage Weight (in Tons) per week {isFilter && chartData ? "from "+moment(chartData[0].week.split('&')[0]).format("MMMM DD")+" to "+moment(chartData[chartData.length-1].week.split('&')[1]).format("MMMM DD, YYYY"):"within the month of "+moment().format("MMMM")}</i></p>
                                 </center>
                             </div>
-                        </>)
+                        {/* </>)
                     }else if(type === "Monthly"){
                         return (
                             <>
@@ -204,7 +204,7 @@ const PdfComponent = forwardRef(({ isFilter,type, dashcards, chartData, monthDat
                             </>
                         )
                     }
-                })()}
+                })()} */}
                 
             </div>
 

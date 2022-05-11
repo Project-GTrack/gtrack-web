@@ -74,13 +74,19 @@ exports.viewDashboard= async(req, res)=>{
             let queryString1 = "SELECT SUM(collection_weight_volume) AS weight,CONCAT(STR_TO_DATE(CONCAT(YEARWEEK(collection_date, 2), ' Sunday'), '%X%V %W'),'&',STR_TO_DATE(CONCAT(YEARWEEK(collection_date, 2), ' Sunday'), '%X%V %W') + INTERVAL 6 DAY) AS week FROM waste_collections WHERE MONTH(collection_date) = MONTH(CURRENT_DATE()) GROUP BY YEARWEEK(collection_date, 2) ORDER BY YEARWEEK(collection_date, 2) ";
             let queryString2 = "SELECT  MONTHNAME(collection_date) as month,SUM(collection_weight_volume) as weight FROM waste_collections GROUP BY MONTH(collection_date);";
             let queryString3 ="SELECT  YEAR(collection_date) as year,SUM(collection_weight_volume) as weight FROM waste_collections GROUP BY YEAR(collection_date);";
+            let queryString4 = "SELECT collection_date, collection_weight_volume FROM waste_collections ORDER BY collection_date ASC";
+            let queryString5 = "SELECT SUM(collection_weight_volume) AS weight,MONTH(collection_date) AS month,YEAR(collection_date) AS year FROM waste_collections GROUP BY MONTH(collection_date)+'-'+YEAR(collection_date) ORDER BY MONTH(collection_date)+'-'+YEAR(collection_date) ASC";
+            let queryString6 = "SELECT SUM(collection_weight_volume) AS weight,YEAR(collection_date) AS year FROM waste_collections GROUP BY YEAR(collection_date) ORDER BY YEAR(collection_date) ASC";
             let chartDataCount = await sequelize.query(queryString1,{type: sequelize.QueryTypes.SELECT});
             let monthlyData = await sequelize.query(queryString2,{type: sequelize.QueryTypes.SELECT});
             let yearlyData = await sequelize.query(queryString3,{type: sequelize.QueryTypes.SELECT});
+            let weekly = await sequelize.query(queryString4,{type: sequelize.QueryTypes.SELECT});
+            let monthly = await sequelize.query(queryString5,{type: sequelize.QueryTypes.SELECT});
+            let yearly = await sequelize.query(queryString6,{type: sequelize.QueryTypes.SELECT});
          
             
             res.send({data:admin, drivers:driversCount, trucks:trucksCount, dumpsters:dumpstersCount,
-                        collections:collectionsCount,chartData:chartDataCount,monthData:monthlyData,yearData:yearlyData});
+                        collections:collectionsCount,chartData:chartDataCount,monthData:monthlyData,yearData:yearlyData,weekly:weekly,monthly:monthly,yearly:yearly});
             
         })
     }else{

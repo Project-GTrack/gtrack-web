@@ -14,7 +14,6 @@ import TextField from '@mui/material/TextField';
 import CloseIcon from "@mui/icons-material/Close";
 import Cookies from "js-cookie";
 import Grid from "@mui/material/Grid";
-import { DateRange } from 'react-date-range';
 import { useSchedulesPageContext } from "../../../pages/SchedulesPage";
 import * as yup from "yup";
 import { useFormik } from "formik";
@@ -25,12 +24,10 @@ import PdfComponent from '../../helpers/PdfComponent';
 import ReactToPrint from 'react-to-print';
 import { useSnackbar } from "notistack";
 import { Alert, CircularProgress } from '@mui/material'; 
-import 'react-date-range/dist/styles.css';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
-import MonthYearPicker from 'react-month-year-picker';
 import moment from 'moment';
 import { useReactToPrint } from "react-to-print";
-import 'react-date-range/dist/theme/default.css'; 
+
 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({

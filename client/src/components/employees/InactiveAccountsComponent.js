@@ -60,7 +60,11 @@ const InactiveAccountsComponent = ({statusToast,setStatusToast}) => {
                 selectedRows={selectedRows} 
                 displayData={displayData}
             />   
-        )
+        ),
+        onRowClick:(rowData, rowMeta) => {
+            handleOpenViewModal(rowMeta.dataIndex);
+           
+        }
     };
     return (
         <div>

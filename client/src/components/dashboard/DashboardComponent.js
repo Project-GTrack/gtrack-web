@@ -4,7 +4,7 @@ import { Paper,Grid} from '@mui/material';
 import DashboardCard from './DashboardCard'
 import Chart from '../ChartComponent';
 
-const DashboardComponent = ({dashcards,data,chartData}) => {
+const DashboardComponent = ({dashcards,data,chartData,monthData,yearData}) => {
 
   return (
        <div>
@@ -25,7 +25,7 @@ const DashboardComponent = ({dashcards,data,chartData}) => {
                     maxWidth: 'lg'
                     }}
                 >
-                    {chartData && <Chart chartData={chartData} />}
+                    {chartData && <Chart chartData={chartData} monthData={monthData} yearData={yearData} />}
                 </Paper>
             </Grid>
         </Grid>

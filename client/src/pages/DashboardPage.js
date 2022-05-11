@@ -57,7 +57,7 @@ const DashboardPage = () => {
       </Helmet>
       <div>
       <Button onClick={()=>setOpenModal(true)} variant="contained" style={{float: 'right'}} startIcon={<ArticleIcon/>} color="success" disabled={drivers || trucks || dumpsters || chartData || collections ? false:true}>Generate Report</Button>
-      <DashboardComponent dashcards={dashcards} data={data} chartData={chartData}/>  
+      <DashboardComponent dashcards={dashcards} data={data} chartData={chartData} monthData={monthData} yearData={yearData}/>  
       </div>
       <SelectionModal 
         dashcards={dashcards}

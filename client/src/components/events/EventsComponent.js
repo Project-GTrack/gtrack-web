@@ -8,6 +8,30 @@ import ViewEventModal from "./modals/ViewEventModal";
 import EditEventModal from "./modals/EditEventModal";
 import DeleteEventModal from "./modals/DeleteEventModal";
 import { ButtonGroup } from '@mui/material';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+const theme = createTheme({
+    components: {
+        MUIDataTableBodyRow: {
+          styleOverrides:{
+            root: {
+                "&.MuiTableRow-hover": {
+                    "&:hover": {
+                      cursor:'pointer'
+                    }
+                  }
+            }
+          }
+        },
+        MUIDataTableBodyCell: {
+            styleOverrides:{
+              root: {
+                  textOverflow: 'ellipsis',
+                  overflow: 'hidden'       
+              }
+            }
+          }
+      }
+  });
 const EventsComponent = () => {
     const { queryResult } = useEventPageContext();
     const events = queryResult.data.data;
@@ -62,6 +86,14 @@ const EventsComponent = () => {
             options: {
                 filter: true,
                 sort: true,
+                setCellProps:(cellValue, rowIndex, columnIndex) =>{
+                    return {
+                       style: {
+                           whiteSpace: 'nowrap',
+                           maxWidth: '250px',   
+                       }
+                   };
+}
             }
         },
         {
@@ -129,7 +161,7 @@ const EventsComponent = () => {
                 sort: false,
                 customBodyRenderLite: (dataIndex) => (
                     <ButtonGroup>
-                        <button onClick={() => handleOpenViewModal(dataIndex)} className="btn btn-primary mx-1 "><i className="fa fa-info-circle" aria-hidden="true"></i></button>
+                        {/* <button onClick={() => handleOpenViewModal(dataIndex)} className="btn btn-primary mx-1 "><i className="fa fa-info-circle" aria-hidden="true"></i></button> */}
                         <button onClick={() => handleOpenEditModal(dataIndex)} className="btn btn-warning "><i className="fa fa-pencil" aria-hidden="true"></i></button>
                         <button onClick={() => handleOpenDeleteModal(dataIndex)} className="btn btn-danger mx-1"><i className="fa fa-trash" aria-hidden="true"></i></button>
                     </ButtonGroup>
@@ -196,11 +228,11 @@ const EventsComponent = () => {
     const handleCloseEditModal = () => setOpenEditModal(false);
 
     const [openDeleteModal, setOpenDeleteModal] = React.useState(false);
-    const handleOpenDeleteModal = () => setOpenDeleteModal(true);
-    const handleCloseDeleteModal = (dataIndex) => {
+    const handleOpenDeleteModal = (dataIndex) => {
         setIndex(dataIndex)
-        setOpenDeleteModal(false);
+        setOpenDeleteModal(true);
     }
+    const handleCloseDeleteModal = () => setOpenDeleteModal(false);
 
 
     const options = {
@@ -214,6 +246,11 @@ const EventsComponent = () => {
                 displayData={displayData}
             />
         ),
+        onRowClick:(rowData, rowMeta) => {
+            handleOpenViewModal(rowMeta.dataIndex);
+           
+            }
+      
    
 
     };
@@ -248,12 +285,16 @@ const EventsComponent = () => {
                 setDeleteModal={setOpenDeleteModal}
                 handleCloseDeleteModal={handleCloseDeleteModal}
             />
-            <MUIDataTable
-                title={"Event List"}
-                data={data}
-                columns={columns}
-                options={options}
-            />
+            
+            <ThemeProvider theme={theme}>
+                <MUIDataTable
+                    title={"Event List"}
+                    data={data}
+                    columns={columns}
+                    options={options}
+                />
+            </ThemeProvider>
+       
         </div>
     )
 }

@@ -108,7 +108,7 @@ const ViewReportModal = (props) => {
             <b style={{fontSize: 15}}>Sender Details: </b> 
           </Typography>
           <Typography variant="body2" mt={2} color="text.dark">
-            <b>Name:</b> {props.data&&props.data.reportDriver.fname+" "+props.data&&props.data.reportDriver.lname}
+            <b>Name:</b> {`${props.data&&props.data.reportDriver.fname} ${props.data&&props.data.reportDriver.lname}`}
           </Typography>
           <Typography align='justify' variant="body2" color="text.dark">
             <b>Address:</b> {`${props.data&&props.data.reportDriver.purok?props.data.reportDriver.purok:''} ${props.data&&props.data.reportDriver.street?props.data.reportDriver.street:''} ${props.data&&props.data.reportDriver.barangay?props.data.reportDriver.barangay:''}`}

@@ -7,7 +7,21 @@ import ViewDumpsterModal from './modals/ViewDumpsterModal';
 import EditDumpsterModal from './modals/EditDumpsterModal';
 import DeleteDumpsterModal from './modals/DeleteDumpsterModal';
 import { ButtonGroup } from '@mui/material';
-
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+const theme = createTheme({
+  components: {
+      MUIDataTableBodyRow: {
+        styleOverrides:{
+          root: {
+              "&.MuiTableRow-hover": {
+                  "&:hover": {
+                    cursor:'pointer'
+                  }
+                }
+          }
+        }
+      },
+    }})
 const DumpstersComponent = ({statusToast, setStatusToast}) => {
   const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = () => setOpenModal(true);
@@ -43,11 +57,13 @@ const DumpstersComponent = ({statusToast, setStatusToast}) => {
         setOpenViewModal(true);
         setRowData(rowData);
     }
-    const handleOpenEditModal = (rowData) => {
+    const handleOpenEditModal = (e,rowData) => {
+        e.stopPropagation();
         setEditModal(true);
         setRowData(rowData);
     }
-    const handleDeleteModal = (rowData) => {
+    const handleDeleteModal = (e,rowData) => {
+        e.stopPropagation();
         setDeleteModal(true);
         setRowData(rowData);
     }
@@ -122,9 +138,9 @@ const DumpstersComponent = ({statusToast, setStatusToast}) => {
                     customBodyRender: (value,tableMeta,updateValue)=>{
                         return (
                             <ButtonGroup>
-                                <button onClick={()=>handleOpenViewModal(tableMeta.rowData)} className="btn btn-primary mx-1"><i className="fa fa-info-circle" aria-hidden="true"></i></button>
-                                <button onClick={()=>handleOpenEditModal(tableMeta.rowData)} className="btn btn-warning "><i className="fa fa-pencil" aria-hidden="true"></i></button>
-                                <button onClick={()=>handleDeleteModal(tableMeta.rowData)} className="btn btn-danger mx-1"><i className="fa fa-trash" aria-hidden="true"></i></button>
+                                {/* <button onClick={()=>handleOpenViewModal(tableMeta.rowData)} className="btn btn-primary mx-1"><i className="fa fa-info-circle" aria-hidden="true"></i></button> */}
+                                <button onClick={(e)=>handleOpenEditModal(e,tableMeta.rowData)} className="btn btn-warning "><i className="fa fa-pencil" aria-hidden="true"></i></button>
+                                <button onClick={(e)=>handleDeleteModal(e,tableMeta.rowData)} className="btn btn-danger mx-1"><i className="fa fa-trash" aria-hidden="true"></i></button>
                             </ButtonGroup>
                         )
                     }
@@ -138,7 +154,10 @@ const DumpstersComponent = ({statusToast, setStatusToast}) => {
     filterType: 'dropdown',
     customToolbarSelect:(selectedRows,displayData)=>(
         <DumpsterCustomToolbar selectedRows={selectedRows} displayData={displayData}/>
-    )
+    ),
+    onRowClick:(rowData, rowMeta) => {
+        handleOpenViewModal(rowData);
+    }
     };
     return (
         <div>
@@ -153,12 +172,14 @@ const DumpstersComponent = ({statusToast, setStatusToast}) => {
             <ViewDumpsterModal data={rowData} openModal={openViewModal} setOpenModal={setOpenViewModal} handleCloseModal={()=>setOpenViewModal(false)}/>
             <EditDumpsterModal data={rowData} openModal={openEditModal} setOpenModal={setEditModal} handleCloseModal={()=>setEditModal(false)}/>
             <DeleteDumpsterModal data={rowData} openDeleteModal={openDeleteModal} setDeleteModal={setDeleteModal} handleCloseDeleteModal={()=>setDeleteModal(false)}/>
+            <ThemeProvider theme={theme}>
             <MUIDataTable
                 title={"Dumpsters List"}
                 data={data}
                 columns={columns}
                 options={options}
             />
+            </ThemeProvider>
         </div>
         
         

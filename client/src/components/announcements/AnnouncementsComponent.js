@@ -8,6 +8,30 @@ import ViewAnnouncementModal from './modals/ViewAnnouncementModal';
 import EditAnnouncementModal from './modals/EditAnnouncementModal';
 import DeleteAnnouncementModal from './modals/DeleteAnnouncementModal';
 import { ButtonGroup } from '@mui/material';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+const theme = createTheme({
+    components: {
+        MUIDataTableBodyRow: {
+          styleOverrides:{
+            root: {
+                "&.MuiTableRow-hover": {
+                    "&:hover": {
+                      cursor:'pointer'
+                    }
+                  }
+            }
+          }
+        },
+        MUIDataTableBodyCell: {
+            styleOverrides:{
+              root: {
+                  textOverflow: 'ellipsis',
+                  overflow: 'hidden'       
+              }
+            }
+          }
+      }
+  });
 const AnnouncementsComponent = () => {
     const {queryResult}=useAnnouncementPageContext();
     const announcements = queryResult.data.posts;
@@ -88,6 +112,14 @@ const AnnouncementsComponent = () => {
         options: {
             filter:true,
             sort:true,
+             setCellProps:(cellValue, rowIndex, columnIndex) =>{
+                    return {
+                       style: {
+                           whiteSpace: 'nowrap',
+                           maxWidth: '250px',   
+                       }
+                   };
+}
         }
     },
     {
@@ -123,9 +155,13 @@ const AnnouncementsComponent = () => {
                 sort:false,
               customBodyRenderLite: (dataIndex) => (
                 <ButtonGroup>
-                    <button  onClick={()=>handleOpenViewModal(dataIndex)} className="btn btn-primary mx-1 "><i className="fa fa-info-circle" aria-hidden="true"></i></button>
-                    <button onClick={()=>handleOpenEditModal(dataIndex)} className="btn btn-warning "><i className="fa fa-pencil" aria-hidden="true"></i></button>
-                    <button  onClick={()=>handleOpenDeleteModal(dataIndex)} className="btn btn-danger mx-1"><i className="fa fa-trash" aria-hidden="true"></i></button>
+                    {/* <button  onClick={()=>handleOpenViewModal(dataIndex)} className="btn btn-primary mx-1 "><i className="fa fa-info-circle" aria-hidden="true"></i></button> */}
+                    <button onClick={(e) =>{
+                            e.stopPropagation();
+                            handleOpenEditModal(dataIndex)}} className="btn btn-warning "><i className="fa fa-pencil" aria-hidden="true"></i></button>
+                    <button  onClick={(e) =>{ 
+                            e.stopPropagation();
+                            handleOpenDeleteModal(dataIndex)}} className="btn btn-danger mx-1"><i className="fa fa-trash" aria-hidden="true"></i></button>
                 </ButtonGroup>
                
                 
@@ -145,7 +181,11 @@ const AnnouncementsComponent = () => {
             selectedRows={selectedRows} 
             displayData={displayData}
         />
-    )
+    ),
+    onRowClick:(rowData, rowMeta) => {
+        handleOpenViewModal(rowMeta.dataIndex);
+       
+    }
     };
     
     
@@ -176,12 +216,15 @@ const AnnouncementsComponent = () => {
                 setDeleteModal={setOpenDeleteModal}
                 handleCloseDeleteModal={handleCloseDeleteModal}
             />
-            <MUIDataTable
+            <ThemeProvider theme={theme}>
+              <MUIDataTable
                 title={"Announcement List"}
                 data={data}
                 columns={columns}
                 options={options}
-            />
+               />
+            </ThemeProvider>
+           
         </div>
     )
 }

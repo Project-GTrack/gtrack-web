@@ -162,8 +162,12 @@ const EventsComponent = () => {
                 customBodyRenderLite: (dataIndex) => (
                     <ButtonGroup>
                         {/* <button onClick={() => handleOpenViewModal(dataIndex)} className="btn btn-primary mx-1 "><i className="fa fa-info-circle" aria-hidden="true"></i></button> */}
-                        <button onClick={() => handleOpenEditModal(dataIndex)} className="btn btn-warning "><i className="fa fa-pencil" aria-hidden="true"></i></button>
-                        <button onClick={() => handleOpenDeleteModal(dataIndex)} className="btn btn-danger mx-1"><i className="fa fa-trash" aria-hidden="true"></i></button>
+                        <button onClick={(e) =>{
+                            e.stopPropagation();
+                            handleOpenEditModal(dataIndex)}} className="btn btn-warning "><i className="fa fa-pencil" aria-hidden="true"></i></button>
+                        <button onClick={(e) =>{ 
+                            e.stopPropagation();
+                            handleOpenDeleteModal(dataIndex)}} className="btn btn-danger mx-1"><i className="fa fa-trash" aria-hidden="true"></i></button>
                     </ButtonGroup>
 
                 )
@@ -212,7 +216,6 @@ const EventsComponent = () => {
     const [openViewModal, setOpenViewModal] = React.useState(false);
     const handleOpenViewModal = (dataIndex) => {
         setIndex(dataIndex);
-
         setOpenViewModal(true);
     }
 
@@ -246,10 +249,10 @@ const EventsComponent = () => {
                 displayData={displayData}
             />
         ),
-        onRowClick:(rowData, rowMeta) => {
+        onRowClick:(rowData ,rowMeta) => {
             handleOpenViewModal(rowMeta.dataIndex);
            
-            }
+        }
       
    
 

@@ -95,7 +95,7 @@ const ViewConcernModal = (props) => {
             Sender Details
           </Typography>
           <Typography variant="body2" mt={2} color="text.dark">
-            <b>Name:</b> {props.data&&props.data.concernResident.fname+" "+props.data&&props.data.concernResident.lname}
+            <b>Name:</b> {`${props.data&&props.data.concernResident.fname} ${props.data&&props.data.concernResident.lname}`}
           </Typography>
           <Typography align='justify' variant="body2" color="text.dark">
             <b>Address:</b> {`${props.data&&props.data.concernResident.purok?props.data.concernResident.purok:''}  ${props.data&&props.data.concernResident.street?props.data.concernResident.street:''} ${props.data&&props.data.concernResident.barangay?props.data.concernResident.barangay:''}`}

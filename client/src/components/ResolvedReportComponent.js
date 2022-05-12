@@ -60,7 +60,7 @@ const ResolvedReportsComponent = () => {
                 return (
                     <ButtonGroup>
                         {/* <button onClick={()=>handleModalViewOpen(dataIndex)} className="btn btn-primary"><i className="fa fa-info-circle" aria-hidden="true"></i></button> */}
-                        <button onClick={()=>handleModalDeleteOpen(dataIndex)} className="btn btn-danger mx-1"><i className="fa fa-trash" aria-hidden="true"></i></button>
+                        <button onClick={(e)=>handleModalDeleteOpen(e,dataIndex)} className="btn btn-danger mx-1"><i className="fa fa-trash" aria-hidden="true"></i></button>
                     </ButtonGroup>
                 )
             }

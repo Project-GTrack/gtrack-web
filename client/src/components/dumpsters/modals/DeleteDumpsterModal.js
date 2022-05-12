@@ -98,7 +98,7 @@ const DeleteDumpsterModal = (props) => {
         id="customized-dialog-title"
         onClose={props.handleCloseDeleteModal}
       >
-        Delete this Dumpster Location?
+        Delete this Dumpster?
       </BootstrapDialogTitle>
       <DialogContent dividers>
         <Box sx={{ width: "100%" }}>

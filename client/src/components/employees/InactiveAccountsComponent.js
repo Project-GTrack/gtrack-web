@@ -6,7 +6,21 @@ import { useEmployeePageContext } from '../../pages/EmployeesPage';
 import ViewEmployeeModal from './modals/ViewEmployeeModal';
 import ReactivateModal from './modals/ReactivateModal';
 import { ButtonGroup } from '@mui/material';
-
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+const theme = createTheme({
+  components: {
+      MUIDataTableBodyRow: {
+        styleOverrides:{
+          root: {
+              "&.MuiTableRow-hover": {
+                  "&:hover": {
+                    cursor:'pointer'
+                  }
+                }
+          }
+        }
+      },
+    }})
 const InactiveAccountsComponent = ({statusToast,setStatusToast}) => {
     const {queryResult}=useEmployeePageContext();
     const inactives=queryResult.data.data.inactives;
@@ -18,7 +32,8 @@ const InactiveAccountsComponent = ({statusToast,setStatusToast}) => {
       setOpenViewModal(true);
       setRowData(rowData);
     }
-    const handleDeleteModal=(rowData)=>{
+    const handleDeleteModal=(e,rowData)=>{
+        e.stopPropagation();
       setDeleteModal(true)
       setRowData(rowData);
     }
@@ -26,11 +41,18 @@ const InactiveAccountsComponent = ({statusToast,setStatusToast}) => {
         var temp=[];
         // eslint-disable-next-line array-callback-return
         inactives && inactives.map((item) => {
-            temp.push([item.fname && item.fname,item.lname && item.lname,item.email && item.email,item.contact_no && item.contact_no,`${item.purok?item.purok:""} ${item.street?item.street:""} ${item.barangay?item.barangay:""}`,item.birthday && moment().diff(item.birthday, 'years'),item.gender && item.gender,item.createdAt && moment(item.createdAt).format("MMMM DD, YYYY"),item.status && item.status===true?'Active':'Inactive']);
+            temp.push([item.fname && item.fname,item.lname && item.lname,item.email && item.email,item.contact_no && item.contact_no,`${item.purok?item.purok:""} ${item.street?item.street:""} ${item.barangay?item.barangay:""}`,item.birthday && moment().diff(item.birthday, 'years'),item.gender && item.gender,item.createdAt && moment(item.createdAt).format("MMMM DD, YYYY"),item.status && item.status===true?'Active':'Inactive',item.image]);
         })
         setData(temp);
     }, [inactives])
-    const columns = ["First Name", "Last Name", "Email", "Contact Number","Address","Age","Gender","Date Added","Status",{
+    const columns = ["First Name", "Last Name", "Email", "Contact Number","Address","Age","Gender","Date Added","Status",
+    {
+        name:"Image",
+        label:"Image",
+        options:{
+          display:false,
+        }
+    },{
         name:"Actions",
         label:"Actions",
         options:{
@@ -39,8 +61,8 @@ const InactiveAccountsComponent = ({statusToast,setStatusToast}) => {
             customBodyRender: (value,tableMeta,updateValue)=>{
                 return (
                     <ButtonGroup>
-                        <button onClick={()=>handleOpenViewModal(tableMeta.rowData)} className="btn btn-primary mx-1"><i className="fa fa-info-circle" aria-hidden="true"></i></button>
-                        <button onClick={()=>handleDeleteModal(tableMeta.rowData)} className={(tableMeta.rowData[8] === "Active")?"btn btn-danger":"btn btn-success"}><i className={(tableMeta.rowData[8] === "Active")?"fa fa-minus-circle":"fa fa-eye"} aria-hidden="true"></i></button>
+                        {/* <button onClick={()=>handleOpenViewModal(tableMeta.rowData)} className="btn btn-primary mx-1"><i className="fa fa-info-circle" aria-hidden="true"></i></button> */}
+                        <button onClick={(e)=>handleDeleteModal(e,tableMeta.rowData)} className={(tableMeta.rowData[8] === "Active")?"btn btn-danger":"btn btn-success"}><i className={(tableMeta.rowData[8] === "Active")?"fa fa-minus-circle":"fa fa-eye"} aria-hidden="true"></i></button>
                     </ButtonGroup>
                 )
             }
@@ -62,20 +84,21 @@ const InactiveAccountsComponent = ({statusToast,setStatusToast}) => {
             />   
         ),
         onRowClick:(rowData, rowMeta) => {
-            handleOpenViewModal(rowMeta.dataIndex);
-           
+            handleOpenViewModal(rowData)
         }
     };
     return (
         <div>
             <ViewEmployeeModal data={rowData} openModal={openViewModal} setOpenModal={setOpenViewModal} handleCloseModal={()=>setOpenViewModal(false)}/>
             <ReactivateModal data={rowData} openDeleteModal={openDeleteModal} setDeleteModal={setDeleteModal}/>
+            <ThemeProvider theme={theme}>
             <MUIDataTable
                 title={"Inactive Accounts List"}
                 data={data}
                 columns={columns}
                 options={options}
             />
+            </ThemeProvider>
         </div>
     )
 }

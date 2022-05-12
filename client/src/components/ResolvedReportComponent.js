@@ -6,7 +6,21 @@ import { useReportsandConcernsPageContext } from '../pages/ReportsPage';
 import ViewReportModal from './Reports/ViewReportModal';
 import DeleteReportModal from './Reports/DeleteReportModal';
 import { ButtonGroup } from '@mui/material';
-
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+const theme = createTheme({
+  components: {
+      MUIDataTableBodyRow: {
+        styleOverrides:{
+          root: {
+              "&.MuiTableRow-hover": {
+                  "&:hover": {
+                    cursor:'pointer'
+                  }
+                }
+          }
+        }
+      },
+    }})
 const ResolvedReportsComponent = () => {
     const {queryResult}= useReportsandConcernsPageContext();
     const reportsResolved = queryResult.data.data.reportsResolved
@@ -19,7 +33,8 @@ const ResolvedReportsComponent = () => {
         setOpenViewModal(true);
         setRowData(rowData);
     }
-    const handleModalDeleteOpen=(rowData)=>{
+    const handleModalDeleteOpen=(e,rowData)=>{
+        e.stopPropagation();
         setOpenDeleteModal(true);
         setRowData(rowData);
     }
@@ -44,7 +59,7 @@ const ResolvedReportsComponent = () => {
             customBodyRenderLite: (dataIndex, rowIndex)=>{
                 return (
                     <ButtonGroup>
-                        <button onClick={()=>handleModalViewOpen(dataIndex)} className="btn btn-primary"><i className="fa fa-info-circle" aria-hidden="true"></i></button>
+                        {/* <button onClick={()=>handleModalViewOpen(dataIndex)} className="btn btn-primary"><i className="fa fa-info-circle" aria-hidden="true"></i></button> */}
                         <button onClick={()=>handleModalDeleteOpen(dataIndex)} className="btn btn-danger mx-1"><i className="fa fa-trash" aria-hidden="true"></i></button>
                     </ButtonGroup>
                 )
@@ -69,16 +84,21 @@ const ResolvedReportsComponent = () => {
                 selectedRows={selectedRows} 
                 displayData={displayData}
             />
-        )
+        ),
+        onRowClick:(rowData, rowMeta) => {
+            handleModalViewOpen(rowMeta.dataIndex);
+        }
     };
     return (
         <div>
+            <ThemeProvider theme={theme}>
             <MUIDataTable
                     title={"Resolved Reports"}
                     data={data}
                     columns={columns}
                     options={options}
             />
+            </ThemeProvider>
             <ViewReportModal data={reportsResolved[rowData]} openViewModal={openViewModal} setOpenViewModal={setOpenViewModal}/>
             <DeleteReportModal data={reportsResolved[rowData]} openDeleteModal={openDeleteModal} setOpenDeleteModal={setOpenDeleteModal}/>
         </div>
